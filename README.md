@@ -38,13 +38,6 @@
 
 - Java
 
-- Crea la siguiente estructura de carpetas en el servidor web
-
-- ->imagenes
-- --->Thumb
-- --->gif
-- ----->Thumb
-
 ## Pasos
 
 - Copia la carpeta "Periquito" en el servidor
