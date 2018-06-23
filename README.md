@@ -40,7 +40,6 @@
 
 ## Pasos
 
-# Version 1.1 en adelante
 - Copia la carpeta "Periquito" en el servidor
 
 - Crea dentro de esta, una carpeta llamada imagenes con esta estructura
@@ -58,8 +57,6 @@
 - Crea una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
 
 ----
-
-# Version 1.1 en adelante
 
 - Copia o mueve tus imagenes a la carpeta imagenes
 
