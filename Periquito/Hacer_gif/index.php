@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 date_default_timezone_set('Europe/Madrid');
 
 function redimensionarJPG($max_ancho, $max_alto, $ruta) {
@@ -77,6 +77,7 @@ function png_a_jpg($ruta) {
     }
 }
 
+unlink("img/desktop.ini");
 $imagenes = check_images("img");
 
 jpeg_jpg($imagenes, "img");
