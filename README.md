@@ -50,14 +50,14 @@
 - --->gif
 - ----->Thumb
 
-//////////////////////////////////////////////
+---
 # Version 1.2 en adelante
 
 - Crea una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
 
 - Crea una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
 
-////////////////////////////////////////////
+----
 
 # Version 1.1 en adelante
 
