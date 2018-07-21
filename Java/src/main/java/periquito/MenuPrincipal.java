@@ -367,7 +367,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				}
 
 				if (comprobacion.compareTo("Folder empty") == 0) {
-					System.out.println(comprobacion);
 					mensaje("No hay imagenes en la carpeta de los gif");
 				}
 
