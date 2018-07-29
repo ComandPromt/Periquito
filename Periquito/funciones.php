@@ -1,5 +1,4 @@
 <?php
-
 function caracteres($cadena) {
     $salida = array();
     $posicion = strpos($cadena, " ");
@@ -19,7 +18,6 @@ function caracteres($cadena) {
     }
     return $salida;
 }
-
 function check_images($path, $extension) {
     $dir = opendir($path);
     $files = array();
@@ -36,14 +34,10 @@ function check_images($path, $extension) {
     }
     return $files;
 }
-
 function comprobar_imagenes($ruta) {
     $imagenes = ver($ruta);
-
     for ($x = 0; $x < count($imagenes); $x++) {
-
         $extension = strtolower(substr($imagenes[$x], -3));
-
         switch ($extension) {
             case "peg":
             case "PEG":
@@ -62,7 +56,6 @@ function comprobar_imagenes($ruta) {
     }
     png_a_jpg($ruta . "/");
 }
-
 function comprobar_ficheros() {
     if (!file_exists("imagenes/Thumb")) {
         mkdir("imagenes/Thumb", 777, true);
@@ -82,7 +75,6 @@ function comprobar_ficheros() {
         }
     }
 }
-
 function showFiles($path) {
     $dir = opendir($path);
     $files = array();
@@ -92,7 +84,6 @@ function showFiles($path) {
                 showFiles($path . $current . '/');
             } else {
                 if (substr($current, -4, 1) == "." || substr($current, -3, 1) == "." || substr($current, -5, 1) == ".") {
-
                     $files[] = $current;
                 }
             }
@@ -100,7 +91,6 @@ function showFiles($path) {
     }
     return $files;
 }
-
 function ver($path) {
     $dir = opendir($path);
     $files = array();
@@ -115,15 +105,13 @@ function ver($path) {
     }
     return $files;
 }
-
 function jpeg_jpg(array $imagenes) {
     for ($x = 0; $x < count($imagenes); $x++) {
         if (substr($current, -4) == "jpeg") {
-            rename("imagenes/" . $imagenes, "imagenes/" . substr($imagenes, 0, -4) . ".jpg");
+            rename("imagenes/" . $imagenes[$x], "imagenes/" . substr($imagenes[$x], 0, -4) . ".jpg");
         }
     }
 }
-
 function gif_a_jpg(array $imagenes, $ruta) {
     for ($x = 0; $x < count($imagenes); $x++) {
         $origen = $ruta . substr($imagenes[$x], 0, -4) . substr($imagenes[$x], -4);
@@ -131,10 +119,8 @@ function gif_a_jpg(array $imagenes, $ruta) {
         imagejpeg(imagecreatefromstring(file_get_contents($origen)), $destino);
     }
 }
-
 function mover_imagenes($ruta) {
     $imagenes = showFiles($ruta);
-
     for ($x = 0; $x < count($imagenes); $x++) {
         $origen = $ruta . $imagenes[$x];
         $destino = $ruta . "Thumb/" . $imagenes[$x];
@@ -145,19 +131,14 @@ function mover_imagenes($ruta) {
         }
     }
 }
-
 function cambiarExtension($ruta) {
-
     $imagenes = showFiles("imagenes/");
     $nombre = date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s");
     $x = 1;
-
     for ($i = 0; $i < count($imagenes); $i++) {
-
         $cadena = $ruta . "/" . $imagenes[$i];
         $extension = substr($imagenes[$i], -4);
         $origen = "imagenes/" . $imagenes[$i];
-
         switch ($extension) {
             case ".png":
             case ".PNG":
@@ -165,14 +146,12 @@ function cambiarExtension($ruta) {
                     $ok = true;
                 } else {
                     $ok = false;
-
                     while ($ok == false) {
                         if (file_exists($nombre . "_" . $x . ".jpg")) {
                             $x++;
                         } else {
                             $destino = "imagenes/" . $nombre . "_" . $x . ".png";
                             rename($origen, $destino);
-
                             unlink($destino);
                             $x++;
                             $ok = true;
@@ -180,19 +159,17 @@ function cambiarExtension($ruta) {
                     }
                 }
                 break;
-
             case ".GIF":
             case ".gif":
                 if ($_SESSION['categoria'] == 9) {
                     $destino = "imagenes/gif/" . $nombre . "_" . $x . ".gif";
-
                     rename($origen, $destino);
                 }
                 break;
-
             case "JPEG":
             case "jpeg":
             case ".jpg":
+			case ".JPG":
                 if ($_SESSION['categoria'] != 9) {
                     $destino = "imagenes/" . $nombre . "_" . $x . ".jpg";
                     rename($origen, $destino);
@@ -202,10 +179,8 @@ function cambiarExtension($ruta) {
         $x++;
     }
 }
-
 function png_a_jpg($ruta) {
     $imagenes = check_images("imagenes", "png");
-
     for ($x = 0; $x < count($imagenes); $x++) {
         $jpg = $ruta . substr($imagenes[$x], 0, -3) . "jpg";
         $image = imagecreatefrompng($ruta . $imagenes[$x]);
@@ -213,11 +188,8 @@ function png_a_jpg($ruta) {
         unlink($ruta . $imagenes[$x]);
     }
 }
-
 function redimensionarJPG($max_ancho, $max_alto, $ruta, $gif) {
-
     $imagenes = check_images($ruta, "jpg");
-
     $calidad = 100;
     for ($x = 0; $x < count($imagenes); $x++) {
         if ($gif) {
@@ -235,7 +207,6 @@ function redimensionarJPG($max_ancho, $max_alto, $ruta, $gif) {
             //Se calcula ancho y alto de la imagen final
             $x_ratio = $max_ancho / $ancho;
             $y_ratio = $max_alto / $alto;
-
             //Si el ancho y el alto de la imagen no superan los maximos, 
             //ancho final y alto final son los que tiene actualmente
             if (($ancho <= $max_ancho) && ($alto <= $max_alto)) {//Si ancho 
@@ -248,21 +219,13 @@ function redimensionarJPG($max_ancho, $max_alto, $ruta, $gif) {
                 $ancho_final = ceil($y_ratio * $ancho);
                 $alto_final = $max_alto;
             }
-
-
             $tmp = imagecreatetruecolor($ancho_final, $alto_final);
-
-
             imagecopyresampled($tmp, $img_original, 0, 0, 0, 0, $ancho_final, $alto_final, $ancho, $alto);
-
             imagedestroy($img_original);
-
-
             imagejpeg($tmp, $salida, $calidad);
         }
     }
 }
-
 function encontrar($nombre, $imagen, $extension) {
     $x = 0;
     $size = false;
@@ -271,12 +234,9 @@ function encontrar($nombre, $imagen, $extension) {
         $consulta = "SELECT image_media_file FROM 4images_images WHERE image_media_file='$imagen'";
         $resultado = $mysqli->query($consulta);
         $fila = $resultado->fetch_row();
-
         if ($fila[0] != "" || $fila[0] != NULL) {
-
             if ($size) {
                 $nombre = substr($nombre, 0, -1);
-
                 if ($x >= 10) {
                     $nombre = substr($nombre, 0, -1);
                 }
@@ -286,7 +246,6 @@ function encontrar($nombre, $imagen, $extension) {
                 if ($x >= 1000) {
                     $nombre = substr($nombre, 0, -1);
                 }
-
                 if ($x >= 10000) {
                     $nombre = substr($nombre, 0, -1);
                 }
@@ -308,22 +267,17 @@ function encontrar($nombre, $imagen, $extension) {
                 if ($x >= 10000000000) {
                     $nombre = substr($nombre, 0, -1);
                 }
-
                 $nombre .= $x;
                 $imagen = $nombre . $extension;
             }
-
             $x += 1;
-
             $size = true;
         } else {
-
             $subida = true;
         }
     } while ($subida == false);
     return $imagen;
 }
-
 function consecutivos($array) {
     if ($array[0] != null && $array[0] == 1) {
         $numAnt = array();
@@ -348,7 +302,6 @@ function consecutivos($array) {
             $validar = false;
             for ($x = 0; $x < count($numAnt); $x++) {
                 if ($numero == null) {
-
                     if ($numAnt[$x] + 1 == $numAnt[$x + 1]) {
                         $validar = true;
                     } else {
