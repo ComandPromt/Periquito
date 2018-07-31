@@ -9,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
@@ -33,6 +34,7 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 		setResizable(false);
 		
 		JTextArea txtrAdvertenciaLa = new JTextArea();
+		txtrAdvertenciaLa.setFont(new Font("Arial", Font.BOLD, 15));
 		txtrAdvertenciaLa.setWrapStyleWord(true);
 		txtrAdvertenciaLa.setEditable(false);
 		txtrAdvertenciaLa.setLineWrap(true);
@@ -41,22 +43,20 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 		layout.setHorizontalGroup(
 			layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-					.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 359, GroupLayout.PREFERRED_SIZE)
-					.addGap(139)
+					.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 325, GroupLayout.PREFERRED_SIZE)
+					.addGap(173)
 					.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 		);
 		layout.setVerticalGroup(
 			layout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addGap(389)
-							.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 528, Short.MAX_VALUE))
-					.addContainerGap())
+					.addGap(389)
+					.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(164, Short.MAX_VALUE))
+				.addComponent(txtrAdvertenciaLa, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 553, Short.MAX_VALUE)
 		);
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(256, 540));
+		setSize(new Dimension(326, 596));
 		setLocationRelativeTo(null);
 	}
 
