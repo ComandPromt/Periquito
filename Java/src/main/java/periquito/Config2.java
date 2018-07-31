@@ -5,10 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -56,43 +54,22 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		}
 	}
 
-	public static String[] leerFicheroArray() {
-		String[] salida = new String[2];
-		String texto = "";
-		int i = 0;
-		try {
-			FileReader flE = new FileReader("Config2.txt");
-			BufferedReader fE = new BufferedReader(flE);
-			while (texto != null) {
-				texto = fE.readLine();
-				if (texto != null) {
-					salida[i] = texto;
-					i++;
-				}
-			}
-			fE.close();
-		} catch (IOException e) {
-
-		}
-		return salida;
-	}
-
 	public static String eliminarUltimoElemento(String cadena) {
 		if (cadena.length() > 1) {
 			if (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47) {
 				cadena = cadena.substring(0, cadena.length() - 1);
 			}
-		
+
 		}
 		return cadena;
 	}
-	
+
 	public void buscarArchivoConf() {
 		File af = new File("config2.txt");
 
 		if (af.exists()) {
 			String[] lectura;
-			lectura = leerFicheroArray();
+			lectura = Config.leerFicheroArray("config2.txt", 2);
 
 			// Comprobar si el texto tiene un archivo php
 			// o html o htm, si lo tiene no se cambia
@@ -102,14 +79,13 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			if (lectura[0] == null) {
 				lectura[1] = "";
 			}
-			
-			lectura[0]=eliminarUltimoElemento(lectura[0]);
-			lectura[1]=eliminarUltimoElemento(lectura[1]);
-			
-			
+
+			lectura[0] = eliminarUltimoElemento(lectura[0]);
+			lectura[1] = eliminarUltimoElemento(lectura[1]);
+
 			jTextField1.setText(lectura[0]);
 			textField.setText(lectura[1]);
-			
+
 			guardarDatos(false);
 		}
 	}
@@ -123,12 +99,13 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			fS.newLine();
 			fS.write(textField.getText());
 			fS.close();
-			if(mensaje) {
-			mensaje2("Archivo guardado con exito!", "/sonidos/gong1.wav");}
+			if (mensaje) {
+				mensaje2("Archivo guardado con exito!", "/sonidos/gong1.wav");
+			}
 			this.setVisible(false);
 		} catch (IOException e) {
-			if(mensaje) {
-			mensaje1("Error al crear el fichero de configuracion");
+			if (mensaje) {
+				mensaje1("Error al crear el fichero de configuracion");
 			}
 		}
 	}
@@ -238,7 +215,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public Config2() {
-		setTitle("Periquito v2.0 Config Remote");
+		setTitle("Periquito v2.0 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
@@ -300,72 +277,63 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		btnNewButton.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/save.png")));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-		
-				if(jTextField1.getText().substring(0, 2).equals("\\\\")) {
-					jTextField1.setText(jTextField1.getText().substring(2,jTextField1.getText().length()));
+
+				if (jTextField1.getText().substring(0, 2).equals("\\\\")) {
+					jTextField1.setText(jTextField1.getText().substring(2, jTextField1.getText().length()));
 				}
-				if(textField.getText().substring(0, 2).equals("\\\\")) {
-					textField.setText(textField.getText().substring(2,textField.getText().length()));
+				if (textField.getText().substring(0, 2).equals("\\\\")) {
+					textField.setText(textField.getText().substring(2, textField.getText().length()));
 				}
-								
+
 				guardarDatos(true);
 
 			}
 		});
-		
+
 		lblThumbnails = new JLabel("Thumbnails");
 		lblThumbnails.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/folder.png")));
 		lblThumbnails.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addGap(28)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblThumbnails)
-								.addComponent(jLabel1))
-							.addGap(10)
-							.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(jTextField1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
-								.addComponent(textField, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)))
-						.addGroup(layout.createSequentialGroup()
-							.addGap(498)
-							.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(97)))
-					.addGap(57))
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap(368, Short.MAX_VALUE)
-					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addGap(76)
-					.addComponent(lblNewLabel)
-					.addGap(81))
-		);
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
-					.addGap(24)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(28)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblThumbnails).addComponent(jLabel1))
+										.addGap(10)
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(jTextField1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														372, Short.MAX_VALUE)
+												.addComponent(textField, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														372, Short.MAX_VALUE)))
+								.addGroup(layout.createSequentialGroup().addGap(498)
+										.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(97)))
+								.addGap(57))
+						.addGroup(layout.createSequentialGroup().addContainerGap(368, Short.MAX_VALUE)
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+								.addGap(76).addComponent(lblNewLabel).addGap(81)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
+				.addGap(24)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabel1))
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(35).addComponent(lblThumbnails))
+						.addGroup(layout.createSequentialGroup().addGap(55).addComponent(textField,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+				.addGap(38)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
-							.addGap(35)
-							.addComponent(lblThumbnails))
-						.addGroup(layout.createSequentialGroup()
-							.addGap(55)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(38)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(208)
-							.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addGap(208).addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
 						.addComponent(lblNewLabel))
-					.addContainerGap())
-		);
+				.addContainerGap()));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(613, 340));
 		setLocationRelativeTo(null);
