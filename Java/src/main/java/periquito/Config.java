@@ -281,7 +281,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public Config() {
-		setTitle("Periquito v2.0 Config Local");
+		setTitle("Periquito v2.1 Config Local");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
