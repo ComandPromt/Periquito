@@ -9,12 +9,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.LinkedList;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -38,6 +32,32 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	private JTextField textField;
 	private JLabel lblThumbnails;
 
+	public static String eliminarUltimoElemento(String cadena) {
+		if (cadena.length() > 1) {
+			if (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47) {
+				cadena = cadena.substring(0, cadena.length() - 1);
+			}
+
+		}
+		return cadena;
+	}
+
+	public void mensaje2(String mensaje, String url) {
+		AudioClip clip;
+
+		clip = java.applet.Applet.newAudioClip(getClass().getResource(url));
+		if (mute.isSelected() == true) {
+			clip.stop();
+		} else {
+			clip.loop();
+		}
+		JOptionPane.showMessageDialog(null, mensaje);
+		int option = JOptionPane.CLOSED_OPTION;
+		if (option == -1) {
+			clip.stop();
+		}
+	}
+
 	public void mensaje1(String mensaje) {
 		AudioClip clip;
 
@@ -52,16 +72,6 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		if (option == -1) {
 			clip.stop();
 		}
-	}
-
-	public static String eliminarUltimoElemento(String cadena) {
-		if (cadena.length() > 1) {
-			if (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47) {
-				cadena = cadena.substring(0, cadena.length() - 1);
-			}
-
-		}
-		return cadena;
 	}
 
 	public void buscarArchivoConf() {
@@ -110,132 +120,12 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		}
 	}
 
-	public void abrirCarpeta(String ruta) {
-		try {
-
-			Runtime.getRuntime().exec("cmd /c start " + ruta);
-		} catch (IOException e) {
-			mensaje1("Ruta invalida");
-		}
-	}
-
-	public void mensaje(String mensaje, String url) {
-		AudioClip clip;
-
-		clip = java.applet.Applet.newAudioClip(getClass().getResource(url));
-		if (mute.isSelected() == true) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		JOptionPane.showMessageDialog(null, mensaje);
-		int option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
-
-	public void cerrarNavegador(int navegador) {
-		try {
-			Runtime aplicacion = Runtime.getRuntime();
-			switch (navegador) {
-			case 1:
-				aplicacion.exec("cmd.exe /K start C:\\cerrar.bat");
-				break;
-			case 2:
-				aplicacion.exec("cmd.exe /K start C:\\cerrarchrome.bat");
-				break;
-			}
-
-		} catch (IOException e2) {
-
-		}
-	}
-
-	public void notificacion(int salida, String directorio, String tipo) throws MalformedURLException {
-		if (salida > 0) {
-			mensaje(salida + " archivo/s copiado/s", "/sonidos/gong1.wav");
-		} else {
-			mensaje1("No hay archivos " + tipo + " en la carpeta " + directorio);
-		}
-	}
-
-	public static int salida(String origen, String destino, int opcion) throws IOException {
-
-		LinkedList<String> imagenes = new LinkedList<String>();
-
-		if (opcion != 9 || (opcion == 9 && origen.contains("Thumb"))) {
-			imagenes = directorio(origen, ".jpg");
-		}
-
-		else {
-			imagenes = directorio(origen, ".gif");
-		}
-
-		int mensaje;
-
-		if (imagenes.size() > 0) {
-
-			if (imagenes.size() == 1) {
-				destino += "\\" + imagenes.get(0);
-				Path origenPath = FileSystems.getDefault().getPath(origen + "\\" + imagenes.get(0));
-				Path destinoPath = FileSystems.getDefault().getPath(destino);
-				Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
-			} else {
-				for (int x = 0; x < imagenes.size(); x++) {
-					Path origenPath = FileSystems.getDefault().getPath(origen + "\\" + imagenes.get(x));
-					Path destinoPath = FileSystems.getDefault().getPath(destino + "\\" + imagenes.get(x));
-					Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
-				}
-			}
-			mensaje = imagenes.size();
-		} else {
-			mensaje = 0;
-		}
-		return mensaje;
-	}
-
-	public static LinkedList<String> directorio(String ruta, String extension) {
-
-		LinkedList<String> lista = new LinkedList<String>();
-		String directorio = ruta;
-		File f = new File(directorio);
-
-		if (f.exists()) {
-
-			File[] ficheros = f.listFiles();
-			for (int x = 0; x < ficheros.length; x++) {
-				String fichero = ficheros[x].getName();
-				if (fichero.indexOf(extension) != -1) {
-					lista.add(fichero);
-				}
-			}
-		}
-		return lista;
-	}
-
 	public Config2() {
 		setTitle("Periquito v2.0 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 
-	}
-
-	public void mensaje2(String mensaje, String url) {
-		AudioClip clip;
-
-		clip = java.applet.Applet.newAudioClip(getClass().getResource(url));
-		if (mute.isSelected() == true) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		JOptionPane.showMessageDialog(null, mensaje);
-		int option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
 	}
 
 	private void initComponents() {
@@ -339,12 +229,10 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		setLocationRelativeTo(null);
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
 	}
 
-	@Override
 	public void stateChanged(ChangeEvent e) {
 	}
 }
