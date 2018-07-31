@@ -159,16 +159,22 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			public void actionPerformed(ActionEvent arg0) {
 				if (jTextField1.getText() != null && jTextField1.getText().length() >= 2 && textField.getText() != null
 						&& textField.getText().length() >= 2) {
-
-					if (jTextField1.getText().substring(0, 2).equals("\\\\")) {
-
-						jTextField1.setText(jTextField1.getText().substring(2, jTextField1.getText().length()));
+					String comprobacion1 = jTextField1.getText().replace("  ", " ");
+					String comprobacion2 = textField.getText().replace("  ", " ");
+					comprobacion1 = jTextField1.getText().replace(" ", "");
+					comprobacion2 = textField.getText().replace(" ", "");
+					comprobacion1 = jTextField1.getText().trim();
+					comprobacion2 = textField.getText().trim();
+					if (comprobacion1.length() >= 2 && comprobacion2.length() >= 2) {
+						if (comprobacion1.substring(0, 2).equals("\\\\")) {
+							jTextField1.setText(comprobacion1.substring(2, comprobacion1.length()));
+						}
+						if (comprobacion2.substring(0, 2).equals("\\\\")) {
+							textField.setText(comprobacion2.substring(2, comprobacion2.length()));
+						}
+						guardarDatos(true);
 					}
-					if (textField.getText().substring(0, 2).equals("\\\\")) {
-						textField.setText(textField.getText().substring(2, textField.getText().length()));
-					}
 
-					guardarDatos(true);
 				}
 			}
 		});
