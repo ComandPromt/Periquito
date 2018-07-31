@@ -65,11 +65,11 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public void buscarArchivoConf() {
-		File af = new File("config2.txt");
+		File af = new File("Config2.txt");
 
 		if (af.exists()) {
 			String[] lectura;
-			lectura = Config.leerFicheroArray("config2.txt", 2);
+			lectura = Config.leerFicheroArray("Config2.txt", 2);
 
 			// Comprobar si el texto tiene un archivo php
 			// o html o htm, si lo tiene no se cambia
