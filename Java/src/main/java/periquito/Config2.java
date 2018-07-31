@@ -157,16 +157,19 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		btnNewButton.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/save.png")));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (jTextField1.getText() != null && jTextField1.getText().length() >= 2 && textField.getText() != null
+						&& textField.getText().length() >= 2) {
 
-				if (jTextField1.getText().substring(0, 2).equals("\\\\")) {
-					jTextField1.setText(jTextField1.getText().substring(2, jTextField1.getText().length()));
+					if (jTextField1.getText().substring(0, 2).equals("\\\\")) {
+
+						jTextField1.setText(jTextField1.getText().substring(2, jTextField1.getText().length()));
+					}
+					if (textField.getText().substring(0, 2).equals("\\\\")) {
+						textField.setText(textField.getText().substring(2, textField.getText().length()));
+					}
+
+					guardarDatos(true);
 				}
-				if (textField.getText().substring(0, 2).equals("\\\\")) {
-					textField.setText(textField.getText().substring(2, textField.getText().length()));
-				}
-
-				guardarDatos(true);
-
 			}
 		});
 
