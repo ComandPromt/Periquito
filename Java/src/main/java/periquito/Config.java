@@ -61,8 +61,8 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		}
 	}
 
-	public static String[] leerFicheroArray(String fichero) {
-		String[] salida = new String[6];
+	public static String[] leerFicheroArray(String fichero, int longitud) {
+		String[] salida = new String[longitud];
 		String texto = "";
 		int i = 0;
 		try {
@@ -82,38 +82,38 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		return salida;
 	}
 
-	String comprobarImagenes(String cadena,String comprobacion) {
-		
-		if(cadena.length()>=10 && cadena.substring(cadena.length() -9, cadena.length()).compareTo(comprobacion) != 0) {
-			if(comprobacion.substring(0,1).compareTo("\\")!=0) {
-				cadena+="\\"+comprobacion;
+	String comprobarImagenes(String cadena, String comprobacion) {
+
+		if (cadena.length() >= 10
+				&& cadena.substring(cadena.length() - 9, cadena.length()).compareTo(comprobacion) != 0) {
+			if (comprobacion.substring(0, 1).compareTo("\\") != 0) {
+				cadena += "\\" + comprobacion;
+			} else {
+
+				cadena += comprobacion;
+
 			}
-			else {
-				
-				cadena+=comprobacion;
-				
-			}
-				cadena=cadena.replace("\\\\", "\\");
+			cadena = cadena.replace("\\\\", "\\");
 		}
 		return cadena;
 	}
-	
+
 	public static String eliminarUltimoElemento(String cadena) {
 		if (cadena.length() > 1) {
 			if (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47) {
 				cadena = cadena.substring(0, cadena.length() - 1);
 			}
-		
+
 		}
 		return cadena;
 	}
-	
+
 	public void buscarArchivoConf(String fichero) {
 		File af = new File(fichero);
 
 		if (af.exists()) {
 			String[] lectura;
-			lectura = leerFicheroArray(fichero);
+			lectura = leerFicheroArray(fichero, 6);
 
 			// Comprobar si el texto tiene un archivo php
 			// o html o htm, si lo tiene no se cambia
@@ -126,18 +126,18 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 			if (lectura[0] == null) {
 				lectura[1] = "";
 			}
-			lectura[0]=eliminarUltimoElemento(lectura[0]);
-			lectura[0]=comprobarImagenes(lectura[0],"\\imagenes");
-			lectura[0]=lectura[0].replace("\\\\", "\\");
-			
-			lectura[2]=eliminarUltimoElemento(lectura[2]);
-			lectura[2]=comprobarImagenes(lectura[2],"Hacer_gif");
-			lectura[2]=lectura[2].replace("\\\\", "\\");
-			
-			lectura[4]=eliminarUltimoElemento(lectura[4]);
-			lectura[4]=comprobarImagenes(lectura[4],"GifFrames");
-			lectura[4]=lectura[4].replace("\\\\", "\\");
-			
+			lectura[0] = eliminarUltimoElemento(lectura[0]);
+			lectura[0] = comprobarImagenes(lectura[0], "\\imagenes");
+			lectura[0] = lectura[0].replace("\\\\", "\\");
+
+			lectura[2] = eliminarUltimoElemento(lectura[2]);
+			lectura[2] = comprobarImagenes(lectura[2], "Hacer_gif");
+			lectura[2] = lectura[2].replace("\\\\", "\\");
+
+			lectura[4] = eliminarUltimoElemento(lectura[4]);
+			lectura[4] = comprobarImagenes(lectura[4], "GifFrames");
+			lectura[4] = lectura[4].replace("\\\\", "\\");
+
 			jTextField1.setText(lectura[0]);
 			textField_2.setText(MenuPrincipal.convertirCadena(lectura[1], lectura[0]));
 			textField.setText(lectura[2]);
@@ -165,12 +165,13 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 			fS.newLine();
 			fS.write(textField_4.getText());
 			fS.close();
-			if(mensaje) {
-			mensaje2("Archivo guardado con exito!", "/sonidos/gong1.wav");}
+			if (mensaje) {
+				mensaje2("Archivo guardado con exito!", "/sonidos/gong1.wav");
+			}
 			this.setVisible(false);
 		} catch (IOException e) {
-			if(mensaje) {
-			mensaje1("Error al crear el fichero de configuracion");
+			if (mensaje) {
+				mensaje1("Error al crear el fichero de configuracion");
 			}
 		}
 	}
@@ -376,69 +377,57 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addGap(400)
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-							.addGap(35)
-							.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(33)
-							.addComponent(lblNewLabel))
-						.addGroup(layout.createSequentialGroup()
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
-									.addGap(18)
-									.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addComponent(jLabel1)
-										.addComponent(jLabel2)))
-								.addGroup(layout.createSequentialGroup()
-									.addContainerGap()
-									.addComponent(lblFolderOfGif, GroupLayout.PREFERRED_SIZE, 231, GroupLayout.PREFERRED_SIZE)))
-							.addGap(10)
-							.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(jTextField1, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-								.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-								.addComponent(textField_3, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-								.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-								.addComponent(textField_4, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))))
-					.addGap(13))
-		);
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
-					.addGap(24)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabel1)
-						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-					.addGap(22)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jLabel2)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(32)
-					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(400)
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+								.addGap(35)
+								.addComponent(
+										filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(33).addComponent(lblNewLabel))
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(18)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(jLabel1)
+												.addComponent(jLabel2)))
+								.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblFolderOfGif,
+										GroupLayout.PREFERRED_SIZE, 231, GroupLayout.PREFERRED_SIZE)))
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(jTextField1, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+										.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+										.addComponent(textField_3, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+										.addComponent(textField, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+										.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+										.addComponent(textField_4, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))))
+						.addGap(13)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
+				.addGap(24)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE).addGap(22)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel2).addComponent(textField,
+						GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addComponent(
+						textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(32)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblFolderOfGif, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-					.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-							.addGap(69)
-							.addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup()
-							.addGap(18)
-							.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lblNewLabel, Alignment.LEADING))))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+				.addPreferredGap(ComponentPlacement.UNRELATED)
+				.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(69).addComponent(filler1,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(18)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(lblNewLabel, Alignment.LEADING))))
+				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(658, 519));
 		setLocationRelativeTo(null);
