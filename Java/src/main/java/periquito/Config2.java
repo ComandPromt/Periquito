@@ -32,16 +32,6 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	private JTextField textField;
 	private JLabel lblThumbnails;
 
-	public static String eliminarUltimoElemento(String cadena) {
-		if (cadena.length() > 1) {
-			if (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47) {
-				cadena = cadena.substring(0, cadena.length() - 1);
-			}
-
-		}
-		return cadena;
-	}
-
 	public void mensaje2(String mensaje, String url) {
 		AudioClip clip;
 
@@ -90,8 +80,8 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 				lectura[1] = "";
 			}
 
-			lectura[0] = eliminarUltimoElemento(lectura[0]);
-			lectura[1] = eliminarUltimoElemento(lectura[1]);
+			lectura[0] = Config.eliminarUltimoElemento(lectura[0]);
+			lectura[1] = Config.eliminarUltimoElemento(lectura[1]);
 
 			jTextField1.setText(lectura[0]);
 			textField.setText(lectura[1]);
