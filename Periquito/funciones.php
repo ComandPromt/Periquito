@@ -57,7 +57,7 @@ function comprobar_imagenes($ruta) {
     png_a_jpg($ruta . "/");
 }
 function comprobar_ficheros() {
-    if (!file_exists("imagenes/Thumb")) {
+       if (!file_exists("imagenes/Thumb")) {
         mkdir("imagenes/Thumb", 777, true);
     }
     if (!file_exists("imagenes/gif")) {
@@ -65,14 +65,12 @@ function comprobar_ficheros() {
     }
     if (file_exists("imagenes/Thumbs.db")) {
         unlink('imagenes/Thumbs.db');
-    } else {
-        if (file_exists("imagenes/gif/Thumbs.db")) {
-            unlink('imagenes/gif/Thumbs.db');
-        } else {
-            if (file_exists("imagenes/Thumb/Thumbs.db")) {
-                unlink('imagenes/Thumb/Thumbs.db');
-            }
-        }
+    } 
+    if (file_exists("imagenes/gif/Thumbs.db")) {
+        unlink('imagenes/gif/Thumbs.db');
+    } 
+    if (file_exists("imagenes/Thumb/Thumbs.db")) {
+        unlink('imagenes/Thumb/Thumbs.db');
     }
 }
 function showFiles($path) {
