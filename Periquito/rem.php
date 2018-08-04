@@ -13,7 +13,7 @@ if ($_SESSION['categoria'] != 9) {
     $imagenes = check_images("imagenes/gif","gif");
     gif_a_jpg($imagenes, "imagenes/gif/");
     redimensionarJPG(100, 125, "imagenes/gif/Thumb", true);
-    $imagenes = showFiles("imagenes/gif","jpg");
+    $imagenes = check_images("imagenes/gif","jpg");
 }
 
 $hostbd = "192.168.1.2";
