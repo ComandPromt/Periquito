@@ -172,9 +172,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		lectura[3] = convertirCadena(lectura[3], "gif");
 		lectura[3] = urlPredeterminada(lectura[3]);
 		String comprobacion = null;
+		String imagen = null;
 		DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
 		firefox.getDriver().get(lectura[3]);
 		comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
+		imagen = firefox.getDriver().findElement(By.name("imagen")).getText();
 		Config.cerrarNavegador();
 
 		if (comprobacion.compareTo("Folder empty") == 0) {
@@ -185,12 +187,13 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		else {
 			try {
 				int salida = salida(lectura[2] + "\\Output", lectura[0], 9);
-				notificacion(salida, lectura[0], "JPG", true);
+				notificacion(salida, lectura[0], "JPG");
 				abrirCarpeta(lectura[0], true);
 				mensaje(salida + " imagen/es subida/s", false);
-				if (salida != 0) {
-
+				if (salida > 0) {
 					abrirCarpeta(lectura[0], true);
+					DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
+					firefox1.getDriver().get("file:///"+lectura[0]+"/"+imagen);
 				}
 			} catch (IOException e1) {
 			}
@@ -224,13 +227,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
-	public void notificacion(int salida, String directorio, String tipo, Boolean abrir) throws MalformedURLException {
+	public void notificacion(int salida, String directorio, String tipo) throws MalformedURLException {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, true);
-		}
-		if (abrir) {
 			abrirCarpeta(directorio, true);
 		}
+
 	}
 
 	private void mover_imagenes(int opcion, String lectura) throws IOException {
@@ -241,15 +243,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			int salida;
 			if (opcion == 9) {
 				salida = salida(lectura + "\\gif", "\\\\" + destino[0] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\gif", "GIF", true);
+				notificacion(salida, lectura + "\\gif", "GIF");
 				salida = salida(lectura + "\\gif\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\gif\\Thumb", "JPG", false);
+				notificacion(salida, lectura + "\\gif\\Thumb", "JPG");
 				mensaje(salida + " imagen/es subida/s", false);
 			} else {
 				salida = salida(lectura, "\\\\" + destino[0] + "\\" + opcion, opcion);
-				notificacion(salida, lectura, "JPG", true);
+				notificacion(salida, lectura, "JPG");
 				salida = salida(lectura + "\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\Thumb", "JPG", false);
+				notificacion(salida, lectura + "\\Thumb", "JPG");
 				mensaje(salida + " imagen/es subida/s", false);
 			}
 		} else {
@@ -394,12 +396,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				String comprobacion = null;
 				String[] lectura;
 				lectura = Config.leerFicheroArray("Config.txt", 6);
-
 				DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
 				firefox.getDriver().get(
 						lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
 				comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
-
 				Config.cerrarNavegador();
 
 				switch (comprobacion) {
@@ -783,28 +783,36 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						}
 						String cat = (String) jComboBox1.getSelectedItem();
 						int opcion = 0;
+
 						lectura[1] = convertirCadena(lectura[1], "boton");
-						opcion = automatizacion(lectura[1], comprobacion, cat);
 
-						if (lectura[0].length() > 1) {
-							if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
-								if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
-									lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
+							DriverSeleniumFirefox prueba = new DriverSeleniumFirefox();
+							prueba.getDriver().get(lectura[1]);
+							prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
+							Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
+							drpCountry.selectByVisibleText(cat);
+							prueba.getDriver().findElement(By.name("envio")).click();
+							prueba.getDriver().findElement(By.name("si")).click();
+							opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
+
+							if (lectura[0].length() > 1) {
+								if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
+									if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
+										lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
+									}
+									lectura[0] += "\\";
 								}
-								lectura[0] += "\\";
+								Config guardar = new Config();
+								Config.jTextField1.setText(lectura[0]);
+								guardar.guardarDatos(false);
 							}
-							Config guardar = new Config();
-							Config.jTextField1.setText(lectura[0]);
-							guardar.guardarDatos(false);
-						}
-
-						if (!lectura[0].isEmpty()) {
+				
 							try {
 								mover_imagenes(opcion, lectura[0]);
 							} catch (IOException e) {
 								new Config().setVisible(true);
 							}
-						}
+						
 					} else {
 						mensaje("Introduce un texto", true);
 					}
@@ -828,21 +836,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				verPanelCategorias();
 			}
 		}
-	}
-
-	private int automatizacion(String lectura, String comprobacion, String cat) {
-		int opcion;
-		DriverSelenium prueba;
-		prueba = new DriverSeleniumFirefox();
-		prueba.getDriver().get(lectura);
-		prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
-		Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
-		drpCountry.selectByVisibleText(cat);
-		prueba.getDriver().findElement(By.name("envio")).click();
-		prueba.getDriver().findElement(By.name("si")).click();
-		prueba.getDriver().get(lectura);
-		opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
-		return opcion;
 	}
 
 	private void verPanelCategorias() {
