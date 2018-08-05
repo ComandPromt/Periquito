@@ -192,7 +192,7 @@ public class Categorias extends javax.swing.JFrame implements ActionListener, Ch
 
 	Categorias() {
 		frmprincipal = new JFrame();
-		frmprincipal.setTitle("Periquito v2.1 Categorias");
+		frmprincipal.setTitle("Periquito v2.2 Categorias");
 		frmprincipal.setType(Type.UTILITY);
 		frmprincipal.setResizable(false);
 		frmprincipal.setSize(451, 287);
