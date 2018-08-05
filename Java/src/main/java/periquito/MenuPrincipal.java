@@ -56,7 +56,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private static JCheckBox mute;
 	private JButton boton1;
 	private JRadioButton rdbtnNewRadioButton;
-	private JRadioButton rdbtnChrome;
 	private JMenuBar jmenubarra;
 	private JMenuBar menuBar;
 	private JMenu mnMenu;
@@ -173,22 +172,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		lectura[3] = convertirCadena(lectura[3], "gif");
 		lectura[3] = urlPredeterminada(lectura[3]);
 		String comprobacion = null;
-		int navegador = 0;
-
-		if (rdbtnNewRadioButton.isSelected()) {
-			DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-			firefox.getDriver().get(lectura[3]);
-			comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
-			navegador = 1;
-		}
-
-		if (rdbtnChrome.isSelected()) {
-			DriverSeleniumChrome chrome = new DriverSeleniumChrome();
-			chrome.getDriver().get(lectura[3]);
-			comprobacion = chrome.getDriver().findElement(By.name("salida")).getText();
-			navegador = 2;
-		}
-		Config.cerrarNavegador(navegador);
+		DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
+		firefox.getDriver().get(lectura[3]);
+		comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
+		Config.cerrarNavegador();
 
 		if (comprobacion.compareTo("Folder empty") == 0) {
 			mensaje("No hay imagenes en " + lectura[2] + "\\img", true);
@@ -198,7 +185,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		else {
 			try {
 				int salida = salida(lectura[2] + "\\Output", lectura[0], 9);
-				notificacion(salida, lectura[0], "JPG");
+				notificacion(salida, lectura[0], "JPG", true);
 				abrirCarpeta(lectura[0], true);
 				mensaje(salida + " imagen/es subida/s", false);
 				if (salida != 0) {
@@ -237,30 +224,32 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
-	public void notificacion(int salida, String directorio, String tipo) throws MalformedURLException {
+	public void notificacion(int salida, String directorio, String tipo, Boolean abrir) throws MalformedURLException {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, true);
 		}
-		abrirCarpeta(directorio, true);
+		if (abrir) {
+			abrirCarpeta(directorio, true);
+		}
 	}
 
-	private void mover_imagenes(int opcion, int navegador, String lectura) throws IOException {
-		Config.cerrarNavegador(navegador);
+	private void mover_imagenes(int opcion, String lectura) throws IOException {
+		Config.cerrarNavegador();
 		String[] destino;
 		destino = Config.leerFicheroArray("Config2.txt", 2);
 		if (opcion > 0 && !destino[0].isEmpty() && !destino[1].isEmpty()) {
 			int salida;
 			if (opcion == 9) {
 				salida = salida(lectura + "\\gif", "\\\\" + destino[0] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\gif", "GIF");
+				notificacion(salida, lectura + "\\gif", "GIF", true);
 				salida = salida(lectura + "\\gif\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\gif\\Thumb", "JPG");
+				notificacion(salida, lectura + "\\gif\\Thumb", "JPG", false);
 				mensaje(salida + " imagen/es subida/s", false);
 			} else {
 				salida = salida(lectura, "\\\\" + destino[0] + "\\" + opcion, opcion);
-				notificacion(salida, lectura, "JPG");
+				notificacion(salida, lectura, "JPG", true);
 				salida = salida(lectura + "\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\Thumb", "JPG");
+				notificacion(salida, lectura + "\\Thumb", "JPG", false);
 				mensaje(salida + " imagen/es subida/s", false);
 			}
 		} else {
@@ -314,7 +303,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		setResizable(false);
-		setTitle("Periquito 2.1");
+		setTitle("Periquito 2.2");
 		setSize(600, 600);
 		getContentPane().setLayout(new BorderLayout());
 		jmenubarra = new JMenuBar();
@@ -364,22 +353,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					lectura = Config.leerFicheroArray("Config.txt", 6);
 					if (!lectura[4].isEmpty() && lectura[4] != null && !lectura[5].isEmpty() && lectura[5] != null) {
 						String comprobacion = null;
-						int navegador = 0;
-						if (rdbtnNewRadioButton.isSelected()) {
-							DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-							firefox.getDriver().get(lectura[5] = convertirCadena(lectura[5], "firefox"));
-							comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
-							navegador = 1;
-						}
+						DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
+						firefox.getDriver().get(lectura[5] = convertirCadena(lectura[5], "firefox"));
+						comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
 
-						if (rdbtnChrome.isSelected()) {
-							DriverSeleniumChrome chrome = new DriverSeleniumChrome();
-							chrome.getDriver().get(lectura[5] = convertirCadena(lectura[5], "chrome"));
-							comprobacion = chrome.getDriver().findElement(By.name("salida")).getText();
-							navegador = 2;
-						}
-
-						Config.cerrarNavegador(navegador);
+						Config.cerrarNavegador();
 
 						switch (comprobacion) {
 						case "Ya has convertido un gif a frames!":
@@ -414,26 +392,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_7.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				String comprobacion = null;
-				int navegador = 0;
 				String[] lectura;
 				lectura = Config.leerFicheroArray("Config.txt", 6);
-				if (rdbtnNewRadioButton.isSelected()) {
-					DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-					firefox.getDriver().get(
-							lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
-					comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
-					navegador = 1;
-				}
 
-				if (rdbtnChrome.isSelected()) {
-					DriverSeleniumChrome chrome = new DriverSeleniumChrome();
-					chrome.getDriver().get(
-							lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "chrome"));
-					comprobacion = chrome.getDriver().findElement(By.name("salida")).getText();
-					navegador = 2;
-				}
+				DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
+				firefox.getDriver().get(
+						lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
+				comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
 
-				Config.cerrarNavegador(navegador);
+				Config.cerrarNavegador();
 
 				switch (comprobacion) {
 				case "Ya has convertido un video a frames!":
@@ -660,15 +627,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 									if (cat != null) {
 										int opcion = searchString(categorias, cat) + 1;
 										try {
-											int navegador = 0;
-											if (rdbtnNewRadioButton.isSelected()) {
-												navegador = 1;
-											}
-											if (rdbtnChrome.isSelected()) {
-												navegador = 2;
-											}
 											lectura[0] = Config.eliminarUltimoElemento(lectura[0]);
-											mover_imagenes(opcion, navegador, lectura[0]);
+											mover_imagenes(opcion, lectura[0]);
 										} catch (IOException e1) {
 											mensaje("Error al copiar las imagenes", true);
 										}
@@ -708,29 +668,24 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		rdbtnNewRadioButton = new JRadioButton("");
 		rdbtnNewRadioButton.setSelected(true);
 		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 18));
-		rdbtnChrome = new JRadioButton("");
-		rdbtnChrome.setFont(new Font("Tahoma", Font.BOLD, 18));
 		ButtonGroup grupo = new ButtonGroup();
 		grupo.add(rdbtnNewRadioButton);
-		grupo.add(rdbtnChrome);
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/Firefox.png")));
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/chrome.gif")));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(11)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup().addGap(3).addComponent(label).addGap(18)
 										.addComponent(rdbtnNewRadioButton)
-										.addPreferredGap(ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-										.addComponent(lblNewLabel_1).addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(rdbtnChrome).addGap(181).addComponent(lblNewLabel).addGap(62))
+										.addPreferredGap(ComponentPlacement.RELATED, 335, Short.MAX_VALUE)
+										.addComponent(lblNewLabel).addGap(62))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 105,
 												GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(layout
+												.createParallelGroup(Alignment.TRAILING)
 												.addGroup(layout.createSequentialGroup()
 														.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
 																.addComponent(jLabel2, GroupLayout.DEFAULT_SIZE,
@@ -770,13 +725,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				.addGroup(layout.createParallelGroup(Alignment.LEADING, false).addGroup(layout.createSequentialGroup()
 						.addGap(31)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(rdbtnChrome, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
 								.addComponent(label, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)
 								.addComponent(rdbtnNewRadioButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 										Short.MAX_VALUE)))
 						.addGroup(layout.createSequentialGroup().addGap(16).addComponent(lblNewLabel,
 								GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -826,17 +777,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							comprobacion = comprobacion.replace("  ", " ");
 						}
 						String cat = (String) jComboBox1.getSelectedItem();
-						int navegador = 0;
 						int opcion = 0;
 						lectura[1] = convertirCadena(lectura[1], "boton");
-						if (rdbtnNewRadioButton.isSelected()) {
-							opcion = automatizacion(lectura[1], comprobacion, cat, true);
-							navegador = 1;
-						}
-						if (rdbtnChrome.isSelected()) {
-							opcion = automatizacion(lectura[1], comprobacion, cat, false);
-							navegador = 2;
-						}
+						opcion = automatizacion(lectura[1], comprobacion, cat);
+
 						if (lectura[0].length() > 1) {
 							if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
 								if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
@@ -851,7 +795,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 						if (!lectura[0].isEmpty()) {
 							try {
-								mover_imagenes(opcion, navegador, lectura[0]);
+								mover_imagenes(opcion, lectura[0]);
 							} catch (IOException e) {
 								new Config().setVisible(true);
 							}
@@ -881,14 +825,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
-	private int automatizacion(String lectura, String comprobacion, String cat, Boolean navegador) {
+	private int automatizacion(String lectura, String comprobacion, String cat) {
 		int opcion;
 		DriverSelenium prueba;
-		if (navegador) {
-			prueba = new DriverSeleniumFirefox();
-		} else {
-			prueba = new DriverSeleniumChrome();
-		}
+		prueba = new DriverSeleniumFirefox();
 		prueba.getDriver().get(lectura);
 		prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
 		Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
