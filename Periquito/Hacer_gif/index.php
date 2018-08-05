@@ -122,8 +122,10 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
             unlink("img/" . $imagenes[$x]);
         }
         print '<h1 name="salida">Success</h1>';
+	print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
     }
 } else {
      print '<h1 name="salida">Folder empty</h1>';
+     print '<h2 name="imagen"></h2>';
 }
 ?>
