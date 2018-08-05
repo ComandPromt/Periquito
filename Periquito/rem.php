@@ -13,13 +13,12 @@ if ($_SESSION['categoria'] != 9) {
     $imagenes = check_images("imagenes/gif","gif");
     gif_a_jpg($imagenes, "imagenes/gif/");
     redimensionarJPG(100, 125, "imagenes/gif/Thumb", true);
-    $imagenes = check_images("imagenes/gif","jpg");
+    $imagenes = ver("imagenes/gif","jpg");
 }
 
 $hostbd = "192.168.1.2";
 $userbd = "root";
 $passbd = "root";
-
 
 $ids = array();
 
