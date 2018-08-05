@@ -59,6 +59,7 @@ if(count($numimkv)==1 && $videos[0]==null){
 				}
 			}
 	print '<h1 name="salida">Exito!</h1>';
+	unlink('video/'.$videos[0]);
 	}
 }
 if (file_exists("tmp")) {
