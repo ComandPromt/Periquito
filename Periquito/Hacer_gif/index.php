@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 date_default_timezone_set('Europe/Madrid');
-if (!file_exists("output")) {
+if (!file_exists("Output")) {
     mkdir("Output", 777, true);
 }
 if (!file_exists("img")) {
