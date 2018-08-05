@@ -494,9 +494,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_8 = new JMenuItem("FrameExtractor");
 		mntmNewMenuItem_8.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
-				String[] lectura;
-				lectura = Config.leerFicheroArray("Config.txt", 6);
-				abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
+				File af = new File("Config.txt");
+				if (af.exists()) {
+					String[] lectura;
+					lectura = Config.leerFicheroArray("Config.txt", 6);
+					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
+				} else {
+					new Config().setVisible(true);
+				}
 			}
 		});
 
