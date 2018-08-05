@@ -1,7 +1,12 @@
 <?php
 error_reporting(0);
 date_default_timezone_set('Europe/Madrid');
-
+if (!file_exists("output")) {
+    mkdir("Output", 777, true);
+}
+if (!file_exists("img")) {
+    mkdir("img", 777, true);
+}
 function redimensionarJPG($max_ancho, $max_alto, $ruta) {
 
     $imagenes = check_images_ext($ruta, "jpg");
