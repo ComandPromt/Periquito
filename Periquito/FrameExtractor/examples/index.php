@@ -45,7 +45,7 @@ if(count($numimkv)==1 && $videos[0]==null){
 		include_once 'includes/bootstrap.php';
 
 			$video = new Video('video/'.$videos[0]);
-			$process = $video->extractFrames(new Timecode(10), new Timecode(10))
+			$process = $video->extractFrames(new Timecode(1), new Timecode(1))
 				->save('output/'.substr($videos[0],0,-4).'_frame_%timecode.jpg', null, Media::OVERWRITE_EXISTING);
 			$frames = $process->getOutput();
 			$frame_paths = array();
