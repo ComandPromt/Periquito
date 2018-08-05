@@ -224,58 +224,7 @@ function redimensionarJPG($max_ancho, $max_alto, $ruta, $gif) {
         }
     }
 }
-function encontrar($nombre, $imagen, $extension) {
-    $x = 0;
-    $size = false;
-    do {
-        $mysqli = new mysqli('192.168.1.2', 'root', 'pass', 'folder');
-        $consulta = "SELECT image_media_file FROM 4images_images WHERE image_media_file='$imagen'";
-        $resultado = $mysqli->query($consulta);
-        $fila = $resultado->fetch_row();
-        if ($fila[0] != "" || $fila[0] != NULL) {
-            if ($size) {
-                $nombre = substr($nombre, 0, -1);
-                if ($x >= 10) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 100) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 1000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 10000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 100000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 1000000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 10000000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 100000000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 1000000000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                if ($x >= 10000000000) {
-                    $nombre = substr($nombre, 0, -1);
-                }
-                $nombre .= $x;
-                $imagen = $nombre . $extension;
-            }
-            $x += 1;
-            $size = true;
-        } else {
-            $subida = true;
-        }
-    } while ($subida == false);
-    return $imagen;
-}
+
 function consecutivos($array) {
     if ($array[0] != null && $array[0] == 1) {
         $numAnt = array();
