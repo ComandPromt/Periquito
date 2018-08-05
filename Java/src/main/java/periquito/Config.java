@@ -201,20 +201,11 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		}
 	}
 
-	public static void cerrarNavegador(int navegador) {
+	public static void cerrarNavegador() {
 		try {
 			Runtime aplicacion = Runtime.getRuntime();
-			switch (navegador) {
-			case 1:
-				aplicacion.exec("cmd.exe /K start C:\\cerrar.bat");
-				break;
-			case 2:
-				aplicacion.exec("cmd.exe /K start C:\\cerrarchrome.bat");
-				break;
-			}
-
+			aplicacion.exec("cmd.exe /K start C:\\cerrar.bat");
 		} catch (IOException e2) {
-
 		}
 	}
 
