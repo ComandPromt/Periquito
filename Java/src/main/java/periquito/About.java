@@ -16,7 +16,7 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 	private javax.swing.Box.Filler filler1;
 
 	public About() {
-		setTitle("Periquito v2.1 About");
+		setTitle("Periquito v2.2 About");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
