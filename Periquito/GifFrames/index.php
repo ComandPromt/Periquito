@@ -6,7 +6,7 @@ if (!file_exists("frames")) {
 
 include("../funciones.php");
 
-if(count(check_images("C:\AppServ\www\Periquito\Gif-a-frames\\frames","png"))>=1){
+if(count(check_images("C:\AppServ\www\Periquito\GifFrames\\frames","png"))>=1){
 	print '<h1 name="salida">Ya has convertido un gif a frames!</h1>';
 }
 
@@ -14,7 +14,7 @@ else{
 
     include_once ( str_replace('\\','/',dirname(__FILE__) ) ."/GIFDecoder.class.php" );
 	
-	$numimagenes=check_images("C:\AppServ\www\Periquito\Gif-a-frames","gif");
+	$numimagenes=check_images("C:\AppServ\www\Periquito\GifFrames","gif");
 	
 	if(count($numimagenes)==1){
 		
