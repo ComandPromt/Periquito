@@ -1,9 +1,7 @@
 <?php
-
 session_start();
 date_default_timezone_set('Europe/Madrid');
 include("funciones.php");
-
 if ($_SESSION['categoria'] != 9) {
     redimensionarJPG(640, 480, "imagenes/", false);
     redimensionarJPG(100, 125, "imagenes/", false);
@@ -15,17 +13,13 @@ if ($_SESSION['categoria'] != 9) {
     redimensionarJPG(100, 125, "imagenes/gif/Thumb", true);
     $imagenes = check_images("imagenes/gif","jpg");
 }
-
 $hostbd = "192.168.1.2";
 $userbd = "root";
 $passbd = "root";
-
 $ids = array();
-
 if ($ids[0] == NULL) {
     $id = 1;
 }
-
 $conexion = mysqli_connect($hostbd, $userbd, $passbd, "folder");
 mysqli_select_db($conexion, 'folder');
 	 $consulta = mysqli_query($conexion, "SELECT MAX(image_id)+1 FROM 4images_images ORDER BY image_id");
@@ -50,7 +44,6 @@ $consulta = mysqli_query($conexion, "SELECT word_id FROM 4images_wordlist where 
         if ($id == null) {
             $id = consecutivos($ids);
         }
-
         for ($y = 0; $y < count($cadenas); $y++) {
             $consulta = "INSERT INTO 4images_wordlist VALUES('$cadenas[$y]', $id)";
 			
