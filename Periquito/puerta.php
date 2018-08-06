@@ -18,30 +18,24 @@
 		</div><hr/>
 
 <?php
-
 session_start();
 date_default_timezone_set('Europe/Madrid');
 include("funciones.php");
 comprobar_ficheros();
-
 if($_SESSION['categoria']==9){
 	$ruta="imagenes/gif/";
 	cambiarExtension("imagenes/gif");
 }
-
 else{
 	comprobar_imagenes("imagenes");
 	$ruta="imagenes/";
 }
-
 $imagenes=showFiles($ruta);
 jpeg_jpg($imagenes);
 png_a_jpg("imagenes/");
-
 if($imagenes[0]==null){
 	print '<h1 style="color:red;">NO HAY IMAGENES</h1>';
 }
-
 else{
 		cambiarExtension("imagenes");
 		$imagenes=ver($ruta);
