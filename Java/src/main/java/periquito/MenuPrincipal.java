@@ -810,7 +810,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							try {
 								mover_imagenes(opcion, lectura[0]);
 							} catch (IOException e) {
-								new Config().setVisible(true);
+								mensaje("Error al copiar las imagenes", true);
 							}
 						
 					} else {
