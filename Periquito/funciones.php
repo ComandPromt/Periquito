@@ -224,7 +224,6 @@ function redimensionarJPG($max_ancho, $max_alto, $ruta, $gif) {
         }
     }
 }
-
 function consecutivos($array) {
     if ($array[0] != null && $array[0] == 1) {
         $numAnt = array();
