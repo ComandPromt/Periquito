@@ -3,9 +3,7 @@ namespace PHPVideoToolkit;
 if (!file_exists("output")) {
     mkdir("output", 777, true);
 }
-if (file_exists("tmp")) {
-    rmdir("tmp");
-}
+
 if (!file_exists("tmp")) {
     mkdir("tmp", 777, true);
 }
@@ -62,7 +60,5 @@ if(count($numimkv)==1 && $videos[0]==null){
 	unlink('video/'.$videos[0]);
 	}
 }
-if (file_exists("tmp")) {
-    rmdir("tmp");
-}
+
 ?>
