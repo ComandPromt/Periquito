@@ -187,13 +187,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		else {
 			try {
 				int salida = salida(lectura[2] + "\\Output", lectura[0], 9);
-				notificacion(salida, lectura[0], "JPG");
-				abrirCarpeta(lectura[0], true);
+				notificacion(salida, lectura[0], "JPG", true);
 				mensaje(salida + " imagen/es subida/s", false);
 				if (salida > 0) {
 					abrirCarpeta(lectura[0], true);
 					DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
-					firefox1.getDriver().get("file:///"+lectura[0]+"/"+imagen);
+					firefox1.getDriver().get("file:///" + lectura[0] + "/" + imagen);
 				}
 			} catch (IOException e1) {
 			}
@@ -227,31 +226,35 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
-	public void notificacion(int salida, String directorio, String tipo) throws MalformedURLException {
+	public void notificacion(int salida, String directorio, String tipo, Boolean abrir) throws MalformedURLException {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, true);
-			abrirCarpeta(directorio, true);
+			if (abrir) {
+				abrirCarpeta(directorio, true);
+			}
 		}
 
 	}
 
-	private void mover_imagenes(int opcion, String lectura) throws IOException {
-		Config.cerrarNavegador();
+	private void mover_imagenes(int opcion, String lectura, Boolean cerrarNavegador) throws IOException {
+		if (cerrarNavegador) {
+			Config.cerrarNavegador();
+		}
 		String[] destino;
 		destino = Config.leerFicheroArray("Config2.txt", 2);
 		if (opcion > 0 && !destino[0].isEmpty() && !destino[1].isEmpty()) {
 			int salida;
 			if (opcion == 9) {
 				salida = salida(lectura + "\\gif", "\\\\" + destino[0] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\gif", "GIF");
+				notificacion(salida, lectura + "gif", "GIF", true);
 				salida = salida(lectura + "\\gif\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\gif\\Thumb", "JPG");
+				notificacion(salida, lectura + "gif\\Thumb", "JPG", false);
 				mensaje(salida + " imagen/es subida/s", false);
 			} else {
 				salida = salida(lectura, "\\\\" + destino[0] + "\\" + opcion, opcion);
-				notificacion(salida, lectura, "JPG");
+				notificacion(salida, lectura, "JPG", true);
 				salida = salida(lectura + "\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
-				notificacion(salida, lectura + "\\Thumb", "JPG");
+				notificacion(salida, lectura + "Thumb", "JPG", false);
 				mensaje(salida + " imagen/es subida/s", false);
 			}
 		} else {
@@ -633,7 +636,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 										int opcion = searchString(categorias, cat) + 1;
 										try {
 											lectura[0] = Config.eliminarUltimoElemento(lectura[0]);
-											mover_imagenes(opcion, lectura[0]);
+											mover_imagenes(opcion, lectura[0], true);
 										} catch (IOException e1) {
 											mensaje("Error al copiar las imagenes", true);
 										}
@@ -782,37 +785,35 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							comprobacion = comprobacion.replace("  ", " ");
 						}
 						String cat = (String) jComboBox1.getSelectedItem();
-						int opcion = 0;
-
+						int opcion = -1;
 						lectura[1] = convertirCadena(lectura[1], "boton");
+						DriverSeleniumFirefox prueba = new DriverSeleniumFirefox();
+						prueba.getDriver().get(lectura[1]);
+						prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
+						Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
+						drpCountry.selectByVisibleText(cat);
+						prueba.getDriver().findElement(By.name("envio")).click();
+						prueba.getDriver().findElement(By.name("si")).click();
+						opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
 
-							DriverSeleniumFirefox prueba = new DriverSeleniumFirefox();
-							prueba.getDriver().get(lectura[1]);
-							prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
-							Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
-							drpCountry.selectByVisibleText(cat);
-							prueba.getDriver().findElement(By.name("envio")).click();
-							prueba.getDriver().findElement(By.name("si")).click();
-							opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
-
-							if (lectura[0].length() > 1) {
-								if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
-									if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
-										lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
-									}
-									lectura[0] += "\\";
+						if (lectura[0].length() > 1) {
+							if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
+								if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
+									lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
 								}
-								Config guardar = new Config();
-								Config.jTextField1.setText(lectura[0]);
-								guardar.guardarDatos(false);
+								lectura[0] += "\\";
 							}
-				
-							try {
-								mover_imagenes(opcion, lectura[0]);
-							} catch (IOException e) {
-								mensaje("Error al copiar las imagenes", true);
-							}
-						
+							Config guardar = new Config();
+							Config.jTextField1.setText(lectura[0]);
+							guardar.guardarDatos(false);
+						}
+
+						try {
+							mover_imagenes(opcion, lectura[0], true);
+						} catch (IOException e) {
+							mensaje("Error al copiar las imagenes", true);
+						}
+
 					} else {
 						mensaje("Introduce un texto", true);
 					}
