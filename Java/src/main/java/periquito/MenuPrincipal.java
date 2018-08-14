@@ -637,6 +637,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 										try {
 											lectura[0] = Config.eliminarUltimoElemento(lectura[0]);
 											mover_imagenes(opcion, lectura[0], true);
+											check5.setSelected(false);
 										} catch (IOException e1) {
 											mensaje("Error al copiar las imagenes", true);
 										}
