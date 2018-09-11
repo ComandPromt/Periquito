@@ -1,5 +1,6 @@
 <?php
 namespace PHPVideoToolkit;
+session_start();
 if (!file_exists("output")) {
     mkdir("output", 777, true);
 }
@@ -82,6 +83,16 @@ else{
 			}
 	print '<h1 name="salida">Exito!</h1>';
 	unlink('video/'.$videos[0]);
+	if($_SESSION['video2gif']){
+		$frames=array();
+		$frames=check_images("output/","jpg");
+		for($x=0;$x<count($frames);$x++){
+			rename("output/".$frames[$x],"../../Hacer_gif/img/".$frames[$x]);
+		}
+	
+		header("Location: ../../Hacer_gif/index.php");
+	
+	}
 	}
 }
 ?>
