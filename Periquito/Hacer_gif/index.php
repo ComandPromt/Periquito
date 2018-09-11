@@ -1,5 +1,6 @@
 <?php
 error_reporting(0);
+session_start();
 date_default_timezone_set('Europe/Madrid');
 if (!file_exists("Output")) {
     mkdir("Output", 777, true);
@@ -126,11 +127,15 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
 
             unlink("img/" . $imagenes[$x]);
         }
+		
         print '<h1 name="salida">Success</h1>';
-	print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
-    }
+		print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
+		if($_SESSION['video2gif']){
+			rename("Output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif","../VID-2-GIF/output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
+		}
+	}
 } else {
      print '<h1 name="salida">Folder empty</h1>';
-     print '<h2 name="imagen"></h2>';
+	 print '<h2 name="imagen"></h2>';
 }
 ?>
