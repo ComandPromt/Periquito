@@ -3,21 +3,16 @@ namespace PHPVideoToolkit;
 if (!file_exists("output")) {
     mkdir("output", 777, true);
 }
-
 if (!file_exists("tmp")) {
     mkdir("tmp", 777, true);
 }
-
 if (!file_exists("video")) {
     mkdir("video", 777, true);
 }
-
 include("../../funciones.php");
-
 if(count(check_images("output","jpg"))>=1){
 	print '<h1 name="salida">Ya has convertido un video a frames!</h1>';
 }
-
 else{
 	$numimmp4=check_images("./","mp4");
 	$numiflv=check_images("./","flv");
@@ -29,7 +24,6 @@ else{
 	$numimov=check_images("./","mov");
 	$numiwmv=check_images("./","wmv");
 	$videos=array();
-
 	if(count($numimmp4)==1){
 		$videos[0]=$numimmp4[0];
 	
@@ -74,7 +68,6 @@ else{
 	else{
 		date_default_timezone_set('Europe/Madrid');
 		include_once 'includes/bootstrap.php';
-
 			$video = new Video('video/'.$videos[0]);
 			$process = $video->extractFrames(new Timecode(1), new Timecode(1))
 				->save('output/'.substr($videos[0],0,-4).'_frame_%timecode.jpg', null, Media::OVERWRITE_EXISTING);
@@ -91,5 +84,4 @@ else{
 	unlink('video/'.$videos[0]);
 	}
 }
-
 ?>
