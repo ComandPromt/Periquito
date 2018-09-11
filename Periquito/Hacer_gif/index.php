@@ -120,7 +120,7 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
 
         	$anim = new GifCreator\AnimGif();
 
-        	$anim->create("img/", array(20))
+        	$anim->create("img/", array(5))
                 ->save("Output/" . date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
 
         	for ($x = 0; $x < count($imagenes); $x++) {
