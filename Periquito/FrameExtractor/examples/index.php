@@ -14,15 +14,15 @@ if(count(check_images("output","jpg"))>=1){
 	print '<h1 name="salida">Ya has convertido un video a frames!</h1>';
 }
 else{
-	$numimmp4=check_images("./","mp4");
-	$numiflv=check_images("./","flv");
-	$numim3u8=check_images("./","m3u8");
-	$numimkv=check_images("./","mkv");
-	$numimts=check_images("./","ts");
-	$numiavi=check_images("./","avi");
-	$numi3gp=check_images("./","3gp");
-	$numimov=check_images("./","mov");
-	$numiwmv=check_images("./","wmv");
+	$numimmp4=check_images("video/","mp4");
+	$numiflv=check_images("video/","flv");
+	$numim3u8=check_images("video/","m3u8");
+	$numimkv=check_images("video/","mkv");
+	$numimts=check_images("video/","ts");
+	$numiavi=check_images("video/","avi");
+	$numi3gp=check_images("video/","3gp");
+	$numimov=check_images("video/","mov");
+	$numiwmv=check_images("video/","wmv");
 	$videos=array();
 	if(count($numimmp4)==1){
 		$videos[0]=$numimmp4[0];
