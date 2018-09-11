@@ -129,7 +129,7 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
         	}
 		
  		if($_SESSION['video2gif']){
-			rename("Output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif","../VID-2-GIF/output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
+			rename("Output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif","../imagenes/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
 			print '<h1 name="salida">Exito</h1>';
 		}
 		else{
