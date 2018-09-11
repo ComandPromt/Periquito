@@ -116,22 +116,25 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
 	
     if (count($imagenes) > 1) {
 
-        require "src/GifCreator/AnimGif.php";
+        	require "src/GifCreator/AnimGif.php";
 
-        $anim = new GifCreator\AnimGif();
+        	$anim = new GifCreator\AnimGif();
 
-        $anim->create("img/", array(20))
+        	$anim->create("img/", array(20))
                 ->save("Output/" . date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
 
-        for ($x = 0; $x < count($imagenes); $x++) {
+        	for ($x = 0; $x < count($imagenes); $x++) {
 
-            unlink("img/" . $imagenes[$x]);
-        }
+            	unlink("img/" . $imagenes[$x]);
+        	}
 		
-        print '<h1 name="salida">Success</h1>';
-		print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
-		if($_SESSION['video2gif']){
+ 		if($_SESSION['video2gif']){
 			rename("Output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif","../VID-2-GIF/output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
+			print '<h1 name="salida">Exito</h1>';
+		}
+		else{
+			print '<h1 name="salida">Success</h1>';
+			print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
 		}
 	}
 } else {
