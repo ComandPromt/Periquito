@@ -7,6 +7,18 @@ if(isset($_POST['envio'])&& $_POST['nombre']!=""){
 	$_SESSION['categoria']=$_POST['categoria'];
 	header("Location: puerta.php");
 }
+if (!file_exists("imagenes")) {
+    mkdir("imagenes", 777, true);
+}
+if (!file_exists("imagenes/Thumb")) {
+    mkdir("imagenes/Thumb", 777, true);
+}
+if (!file_exists("imagenes/gif")) {
+    mkdir("imagenes/gif", 777, true);
+}
+if (!file_exists("imagenes/gif/Thumb")) {
+    mkdir("imagenes/gif/Thumb", 777, true);
+}
 ?>
 <html>
 	<body>
