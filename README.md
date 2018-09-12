@@ -1,6 +1,9 @@
 # Periquito
 
 - Sube imagenes al servidor de forma masiva
+- Creación de GIF animados
+- Conversión de Vídeo a GIF (Version 2.3)
+- Extraer frames de GIF
 
 ## Este programa está pensado para
 
