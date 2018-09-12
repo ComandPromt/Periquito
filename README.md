@@ -1,11 +1,4 @@
-# Periquito
-
-- Sube imagenes al servidor de forma masiva
-- Creación de GIF animados
-- Conversión de Vídeo a GIF (Version 2.3)
-- Extraer frames de GIF
-
-## Este programa está pensado para
+## Este programa está pensado principalmente para
 
 - Redimensionar imagenes
 
@@ -13,7 +6,7 @@
 
 - Subir las imagenes a nuestro CMS
 
-# Parte HTL Y PHP
+# Parte HTML Y PHP
 
 ## Funcionamiento
 
@@ -41,11 +34,11 @@
 
 - Java
 
-## Pasos
+## Pasos a seguir
 
-- Copia la carpeta "Periquito" en el servidor
+- Debes tener una carpeta "Periquito" en el servidor
 
-- Crea dentro de esta, una carpeta llamada imagenes con esta estructura
+- Debes tener dentro de esta, una carpeta llamada imagenes con esta estructura
 
 - ->imagenes
 - --->Thumb
@@ -53,7 +46,6 @@
 - ----->Thumb
 
 ---
-# Requisitos, pasos a seguir
 
 - Debes tener una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
 
