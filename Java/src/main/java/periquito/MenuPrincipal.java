@@ -564,7 +564,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				if (af.exists()) {
 					String[] lectura = leerArchivoConf();
 					if (lectura[0].compareTo("") != 0) {
-						abrirCarpeta(lectura[0] + "..\\FrameExtractor\\examples\\video", true);
+						abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
 					} else {
 						new Config().setVisible(true);
 					}
@@ -594,7 +594,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 					String[] lectura = leerArchivoConf();
 					if (lectura[0].compareTo("") != 0) {
-						abrirCarpeta(lectura[0] + "..\\VID-2-GIF\\", true);
+						abrirCarpeta(lectura[0] + "\\..\\VID-2-GIF\\", true);
 					} else {
 						new Config().setVisible(true);
 					}
