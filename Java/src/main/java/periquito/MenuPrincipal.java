@@ -472,7 +472,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					abrirCarpeta(lectura[0] + "\\..\\VID-2-GIF", true);
 					break;
 				case "Exito!":
-					abrirCarpeta(lectura[0] + "..\\imagenes", true);
+					abrirCarpeta(lectura[0] + "\\..\\imagenes", true);
 					if (!lectura[0].isEmpty() && lectura[0].compareTo("") != 0 && lectura[0] != null) {
 						DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
 						firefox1.getDriver().get("file:///" + lectura[0] + "/" + imagen);
