@@ -5,7 +5,7 @@
 - Crear imagenes de miniatura
 
 - Subir las imagenes a nuestro CMS
-
+---
 # Parte HTML Y PHP
 
 ## Funcionamiento
@@ -17,7 +17,7 @@
 - Cambia las imagenes a jpg (automaticamente)
 
 - Redimensiona imagenes (automaticamente)
-
+---
 # Parte Java
 
 ## Funcionamiento
@@ -45,13 +45,9 @@
 - --->gif
 - ----->Thumb
 
----
-
 - Debes tener una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
 
 - Debes tener una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
-
-----
 
 - Copia o mueve tus imagenes a la carpeta imagenes
 
@@ -75,10 +71,10 @@
 - Modifica las rutas de origen y salida de imagenes
 
 - Ejecutar Empezar.java
-
+----
 # Manual
 
-# Subir imagenes masivas al servidor
+# 1.Subir imagenes masivas al servidor
 - Escribir el nombre comun de las imagenes
 
 - Ej. Si tenemos tres imagenes de perros y escojemos el nombre de dog
@@ -89,10 +85,10 @@
 
 - Listo!!
 
-# Funciones de crear gif, extraer gif,gif a frames y video a gif
+# 2.Funciones de crear gif, extraer gif,gif a frames y video a gif
 
 - Tenemos que pegar el archivo requerido en cada carpeta del programa
 - Hacer clic en la accion que queramos
 
-# Ayuda
+# 3.Ayuda
 - En la seccion ayuda se nos muestran los pasos para las configuraciones del programa
