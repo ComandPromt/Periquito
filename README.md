@@ -53,7 +53,7 @@
 - ----->Thumb
 
 ---
-# Requisitos
+# Requisitos, pasos a seguir
 
 - Debes tener una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
 
@@ -77,19 +77,30 @@
 
 - Cambia las sentencias SQL por tus tablas
 
-- Edita el archivo MenuPrincipal.java (Cambia Option 1 por las distintas categorias de las imagenes) hasta la version 2.1
-- La version 2.2 en adelante no hace falta hacer este paso.
+- Edita el archivo MenuPrincipal.java (Cambia Option 1 por las distintas categorias de las imagenes) hasta la version 2.0
+- A partir de la version 2.1 en adelante no hay que hacer este paso.
 
 - Modifica las rutas de origen y salida de imagenes
 
 - Ejecutar Empezar.java
 
-- Escribir el nombre comun de las imagenes (se insertaran en la BD con el mismo nombre de imagen y no de archivo)
+# Manual
+
+# Subir imagenes masivas al servidor
+- Escribir el nombre comun de las imagenes
 
 - Ej. Si tenemos tres imagenes de perros y escojemos el nombre de dog
 
-- Se subiran las tres imagenes con el nombre dog (para la parte web,es decir, la base de datos) pero con distinto nombre de archivo
+- Se subiran las tres imagenes con el nombre dog 
 
 - Seleccionar la categoria y pulsar enter
 
 - Listo!!
+
+# Funciones de crear gif, extraer gif,gif a frames y video a gif
+
+- Tenemos que pegar el archivo requerido en cada carpeta del programa
+- Hacer clic en la accion que queramos
+
+# Ayuda
+- En la seccion ayuda se nos muestran los pasos para las configuraciones del programa
