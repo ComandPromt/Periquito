@@ -77,7 +77,8 @@
 
 - Cambia las sentencias SQL por tus tablas
 
-- Edita el archivo MenuPrincipal.java (Cambia Option 1 por las distintas categorias de las imagenes)
+- Edita el archivo MenuPrincipal.java (Cambia Option 1 por las distintas categorias de las imagenes) hasta la version 2.1
+- La version 2.2 en adelante no hace falta hacer este paso.
 
 - Modifica las rutas de origen y salida de imagenes
 
