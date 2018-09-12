@@ -82,6 +82,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_5;
 	private JSeparator separator_6;
 	private JSeparator separator_7;
+	private JMenuItem mntmNewMenuItem_9;
+	private JSeparator separator_8;
+	private JMenuItem mntmNewMenuItem_10;
+	private JSeparator separator_9;
 
 	static int numeroLineas(String fichero) {
 		File input = new File("Categorias.txt");
@@ -99,6 +103,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			numLines = 0;
 		}
 		return numLines;
+	}
+
+	private String[] leerArchivoConf() {
+		String[] lectura;
+		lectura = Config.leerFicheroArray("Config.txt", 6);
+		for (int i = 0; i < lectura.length; i++) {
+			if (lectura[i] == null) {
+				lectura[0] = "";
+			}
+		}
+
+		return lectura;
 	}
 
 	public static String eliminarIndices(String cadena) {
@@ -172,7 +188,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		lectura[3] = convertirCadena(lectura[3], "gif");
 		lectura[3] = urlPredeterminada(lectura[3]);
 		String comprobacion = null;
-		String imagen = null;
+		String imagen;
 		DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
 		firefox.getDriver().get(lectura[3]);
 		comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
@@ -188,7 +204,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			try {
 				int salida = salida(lectura[2] + "\\Output", lectura[0], 9);
 				notificacion(salida, lectura[0], "JPG", true);
-				mensaje(salida + " imagen/es subida/s", false);
+				mensaje(salida + " GIF creado correctamente", false);
 				if (salida > 0) {
 					abrirCarpeta(lectura[0], true);
 					DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
@@ -308,7 +324,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		setResizable(false);
-		setTitle("Periquito 2.2");
+		setTitle("Periquito 2.3");
 		setSize(600, 600);
 		getContentPane().setLayout(new BorderLayout());
 		jmenubarra = new JMenuBar();
@@ -399,6 +415,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				String comprobacion = null;
 				String[] lectura;
 				lectura = Config.leerFicheroArray("Config.txt", 6);
+				if (lectura[1] == null || lectura[1].compareTo("") == 0) {
+					Config guardar = new Config();
+					guardar.guardarDatos(false);
+				}
 				DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
 				firefox.getDriver().get(
 						lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
@@ -426,6 +446,44 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_7.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmNewMenuItem_7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
 		mnMenu.add(mntmNewMenuItem_7);
+
+		separator_9 = new JSeparator();
+		mnMenu.add(separator_9);
+
+		mntmNewMenuItem_10 = new JMenuItem("Video 2 GIF");
+		mntmNewMenuItem_10.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String comprobacion = null;
+				String[] lectura;
+				lectura = Config.leerFicheroArray("Config.txt", 6);
+				if (lectura[1] == null || lectura[1].compareTo("") == 0) {
+					Config guardar = new Config();
+					guardar.guardarDatos(false);
+				}
+				DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
+				firefox.getDriver().get(lectura[5] = convertirCadena(lectura[1] + "/VID-2-GIF/index.php", "firefox"));
+				comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
+				String imagen = firefox.getDriver().findElement(By.name("imagen")).getText();
+				Config.cerrarNavegador();
+				switch (comprobacion) {
+				case "No tienes videos":
+					mensaje("Debes tener un video en la carpeta de conversion", true);
+					abrirCarpeta(lectura[0] + "\\..\\VID-2-GIF", true);
+					break;
+				case "Exito!":
+					abrirCarpeta(lectura[0] + "..\\imagenes", true);
+					if (!lectura[0].isEmpty() && lectura[0].compareTo("") != 0 && lectura[0] != null) {
+						DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
+						firefox1.getDriver().get("file:///" + lectura[0] + "/" + imagen);
+					}
+					break;
+				}
+			}
+		});
+		mntmNewMenuItem_10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
+		mntmNewMenuItem_10.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		mnMenu.add(mntmNewMenuItem_10);
 		mntmNewMenuItem = new JMenu("   ");
 		mntmNewMenuItem.setBackground(Color.BLACK);
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -437,12 +495,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent e) {
 				File af = new File("Config.txt");
 				if (af.exists()) {
-					String[] lectura;
-					lectura = Config.leerFicheroArray("Config.txt", 6);
+					String[] lectura = leerArchivoConf();
+
 					abrirCarpeta(lectura[0], true);
+
 				} else {
 					new Config().setVisible(true);
 				}
+
 			}
 		});
 		mntmImages.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
@@ -452,18 +512,21 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmImages_1.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+
 				File af = new File("Config.txt");
 				if (af.exists()) {
-					String[] lectura;
-					lectura = Config.leerFicheroArray("Config.txt", 6);
-					if (!lectura[2].isEmpty()) {
+					String[] lectura = leerArchivoConf();
+					if (lectura[2].compareTo("") != 0) {
 						abrirCarpeta(lectura[2] + "\\img", true);
+
 					} else {
-						abrirCarpeta(lectura[2], true);
+						new Config().setVisible(true);
 					}
+
 				} else {
 					new Config().setVisible(true);
 				}
+
 			}
 		});
 
@@ -481,12 +544,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent e) {
 				File af = new File("Config.txt");
 				if (af.exists()) {
-					String[] lectura;
-					lectura = Config.leerFicheroArray("Config.txt", 6);
+					String[] lectura = leerArchivoConf();
 					abrirCarpeta(lectura[4], true);
 				} else {
 					new Config().setVisible(true);
 				}
+
 			}
 		});
 
@@ -494,14 +557,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem.add(separator_2);
 		mntmCxvxv.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/GIF_Extract.png")));
 		mntmNewMenuItem.add(mntmCxvxv);
-		mntmNewMenuItem_8 = new JMenuItem("FrameExtractor");
+		mntmNewMenuItem_8 = new JMenuItem("Video 2 Frame");
 		mntmNewMenuItem_8.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				File af = new File("Config.txt");
 				if (af.exists()) {
-					String[] lectura;
-					lectura = Config.leerFicheroArray("Config.txt", 6);
-					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
+					String[] lectura = leerArchivoConf();
+					if (lectura[0].compareTo("") != 0) {
+						abrirCarpeta(lectura[0] + "..\\FrameExtractor\\examples\\video", true);
+					} else {
+						new Config().setVisible(true);
+					}
+
 				} else {
 					new Config().setVisible(true);
 				}
@@ -513,6 +580,35 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_8.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		mntmNewMenuItem_8.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmNewMenuItem.add(mntmNewMenuItem_8);
+
+		separator_8 = new JSeparator();
+		mntmNewMenuItem.add(separator_8);
+
+		mntmNewMenuItem_9 = new JMenuItem("Video 2 GIF");
+		mntmNewMenuItem_9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+
+				File af = new File("Config.txt");
+				if (af.exists()) {
+
+					String[] lectura = leerArchivoConf();
+					if (lectura[0].compareTo("") != 0) {
+						abrirCarpeta(lectura[0] + "..\\VID-2-GIF\\", true);
+					} else {
+						new Config().setVisible(true);
+					}
+
+				} else {
+					new Config().setVisible(true);
+				}
+
+			}
+
+		});
+		mntmNewMenuItem_9.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		mntmNewMenuItem_9.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
+		mntmNewMenuItem.add(mntmNewMenuItem_9);
 		mntmNewMenuItem_1 = new JMenu("Config");
 		mntmNewMenuItem_1.setBackground(Color.BLACK);
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 24));
