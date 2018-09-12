@@ -253,6 +253,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	}
 
 	private void mover_imagenes(int opcion, String lectura, Boolean cerrarNavegador) throws IOException {
+		Config guardar = new Config();
+		guardar.guardarDatos(false);
+		Config2 guardar2 = new Config2();
+		guardar2.guardarDatos(false);
 		if (cerrarNavegador) {
 			Config.cerrarNavegador();
 		}
@@ -900,9 +904,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 								}
 								lectura[0] += "\\";
 							}
-							Config guardar = new Config();
+
 							Config.jTextField1.setText(lectura[0]);
-							guardar.guardarDatos(false);
+
 						}
 
 						try {
