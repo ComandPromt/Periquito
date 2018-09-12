@@ -50,11 +50,11 @@
 - ----->Thumb
 
 ---
-# Version 1.2 en adelante
+# Requisitos
 
-- Crea una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
+- Debes tener una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
 
-- Crea una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
+- Debes tener una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
 
 ----
 
@@ -84,7 +84,7 @@
 
 - Ej. Si tenemos tres imagenes de perros y escojemos el nombre de dog
 
-- Se subiran las tres imagenes con el nombre dog (para la parte web) pero con distinto nombre de archivo
+- Se subiran las tres imagenes con el nombre dog (para la parte web,es decir, la base de datos) pero con distinto nombre de archivo
 
 - Seleccionar la categoria y pulsar enter
 
