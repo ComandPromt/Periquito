@@ -167,6 +167,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		return cadena;
 	}
 
+	public void verConfiguraciones() {
+		new Config().setVisible(true);
+		new Config2().setVisible(true);
+	}
+
 	public static String urlPredeterminada(String cadena) {
 		if (cadena.length() >= 5) {
 			if (cadena.substring(cadena.length() - 4, cadena.length()).compareTo(".php") == 0
@@ -253,10 +258,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	}
 
 	private void mover_imagenes(int opcion, String lectura, Boolean cerrarNavegador) throws IOException {
-		Config guardar = new Config();
-		guardar.guardarDatos(false);
-		Config2 guardar2 = new Config2();
-		guardar2.guardarDatos(false);
 		if (cerrarNavegador) {
 			Config.cerrarNavegador();
 		}
@@ -713,53 +714,68 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		btnNewButton.setEnabled(false);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				File af = new File("Categorias.txt");
-				File config = new File("Config.txt");
-				File config2 = new File("Config2.txt");
-				if (af.exists() && config.exists() && config2.exists()) {
-					if (numeroLineas("Categorias.txt") == 0) {
-						verPanelCategorias();
-					} else {
-						if (numeroLineas("Config.txt") == 0) {
-							new Config().setVisible(true);
+
+				if (!validarURL()) {
+					mensaje("La URL proporcionada no existe", true);
+					new Config2().setVisible(true);
+				}
+
+				else {
+
+					File af = new File("Categorias.txt");
+					File config = new File("Config.txt");
+					File config2 = new File("Config2.txt");
+					if (af.exists() && config.exists() && config2.exists()) {
+						if (numeroLineas("Categorias.txt") == 0) {
+							verPanelCategorias();
 						} else {
-							if (numeroLineas("Config2.txt") == 0) {
-								new Config2().setVisible(true);
+							if (numeroLineas("Config.txt") == 0) {
+								new Config().setVisible(true);
 							} else {
-								String[] lectura;
-								lectura = Config.leerFicheroArray("Config.txt", 6);
-								String[] categorias = Config.leerFicheroArray("Categorias.txt",
-										numeroLineas("Categorias.txt"));
-								if (!lectura[0].isEmpty()) {
-									String cat = (String) jComboBox1.getSelectedItem();
-									if (cat != null) {
-										int opcion = searchString(categorias, cat) + 1;
-										try {
-											lectura[0] = Config.eliminarUltimoElemento(lectura[0]);
-											mover_imagenes(opcion, lectura[0], true);
-											check5.setSelected(false);
-										} catch (IOException e1) {
-											mensaje("Error al copiar las imagenes", true);
-										}
-									}
+								if (numeroLineas("Config2.txt") == 0) {
+
+									new Config2().setVisible(true);
 								} else {
-									new Config().setVisible(true);
+									String[] lectura;
+									lectura = Config.leerFicheroArray("Config.txt", 6);
+									String[] categorias = Config.leerFicheroArray("Categorias.txt",
+											numeroLineas("Categorias.txt"));
+									if (!lectura[0].isEmpty() && !lectura[1].isEmpty() && lectura[0] != null
+											&& lectura[1] != null) {
+										String cat = (String) jComboBox1.getSelectedItem();
+										if (cat != null) {
+											int opcion = searchString(categorias, cat) + 1;
+											try {
+												lectura[0] = Config.eliminarUltimoElemento(lectura[0]);
+												mover_imagenes(opcion, lectura[0], true);
+
+											} catch (IOException e1) {
+												mensaje("Error al copiar las imagenes", true);
+												verConfiguraciones();
+											}
+										}
+										check5.setSelected(false);
+									} else {
+										new Config().setVisible(true);
+									}
 								}
 							}
 						}
-					}
-				} else {
-					if (!af.exists()) {
-						verPanelCategorias();
-					}
-					if (!config.exists()) {
-						new Config().setVisible(true);
-					}
-					if (!config2.exists()) {
-						new Config2().setVisible(true);
+					} else {
+						if (!af.exists()) {
+							verPanelCategorias();
+						}
+						if (!config.exists()) {
+							new Config().setVisible(true);
+						}
+						if (!config2.exists()) {
+
+							new Config2().setVisible(true);
+						}
 					}
 				}
 			}
+
 		});
 
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -857,85 +873,121 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
+	public Boolean validarURL() {
+		boolean comprobacion;
+		File url = new File("Config2.txt");
+
+		if (url.exists()) {
+			String[] lecturaurl;
+			lecturaurl = Config.leerFicheroArray("Config2.txt", 6);
+
+			File archivo = new File("\\\\" + lecturaurl[0]);
+			File archivo2 = new File("\\\\" + lecturaurl[1]);
+			if (archivo.exists() && archivo2.exists()) {
+				comprobacion = true;
+			} else {
+				comprobacion = false;
+			}
+
+		} else {
+			comprobacion = false;
+		}
+		if (comprobacion) {
+			return true;
+
+		} else {
+			return false;
+		}
+	}
+
 	@SuppressWarnings("static-access")
 	private void button1ActionPerformed(java.awt.event.ActionEvent evt) {
 		File categoria = new File("Categorias.txt");
 		File af = new File("Config.txt");
-		if (af.exists() && categoria.exists()) {
-			String[] lectura;
-			String[] categoriias;
-			lectura = Config.leerFicheroArray("Config.txt", 6);
-			if (numeroLineas("categorias.txt") > 0) {
-				categoriias = Config.leerFicheroArray("categorias.txt", numeroLineas("categorias.txt"));
-				if (!lectura[0].isEmpty() && lectura[0] != null && !lectura[1].isEmpty() && lectura[1] != null
-						&& !categoriias[0].isEmpty() && categoriias[0] != null) {
-					String comprobacion = jTextField1.getText();
-					comprobacion = comprobacion.trim();
-					if (comprobacion.length() != 0) {
-						comprobacion = comprobacion.replace("  ", " ");
-						comprobacion = comprobacion.replace("   ", " ");
-						comprobacion = comprobacion.replace("  ", " ");
-						comprobacion = comprobacion.replace("   ", " ");
-						comprobacion = comprobacion.replace("  ", " ");
-						int resultado = comprobacion.indexOf(" ");
-						resultado = Integer.parseInt((comprobacion.valueOf(resultado + 1)));
-						if (resultado > 0) {
-							comprobacion = comprobacion.replace("  ", " ");
-							comprobacion = comprobacion.replace("  ", " ");
-							comprobacion = comprobacion.replace("  ", " ");
-							comprobacion = comprobacion.replace("  ", " ");
-						}
-						String cat = (String) jComboBox1.getSelectedItem();
-						int opcion = -1;
-						lectura[1] = convertirCadena(lectura[1], "boton");
-						DriverSeleniumFirefox prueba = new DriverSeleniumFirefox();
-						prueba.getDriver().get(lectura[1]);
-						prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
-						Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
-						drpCountry.selectByVisibleText(cat);
-						prueba.getDriver().findElement(By.name("envio")).click();
-						prueba.getDriver().findElement(By.name("si")).click();
-						opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
 
-						if (lectura[0].length() > 1) {
-							if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
-								if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
-									lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
+		if (!validarURL()) {
+			mensaje("La URL proporcionada no existe", true);
+			new Config2().setVisible(true);
+		}
+
+		else {
+			if (af.exists() && categoria.exists()) {
+				String[] lectura;
+				String[] categoriias;
+				lectura = Config.leerFicheroArray("Config.txt", 6);
+				if (numeroLineas("categorias.txt") > 0) {
+					categoriias = Config.leerFicheroArray("categorias.txt", numeroLineas("categorias.txt"));
+					if (!lectura[0].isEmpty() && lectura[0] != null && !lectura[1].isEmpty() && lectura[1] != null
+							&& !categoriias[0].isEmpty() && categoriias[0] != null) {
+						String comprobacion = jTextField1.getText();
+						comprobacion = comprobacion.trim();
+						if (comprobacion.length() != 0) {
+							comprobacion = comprobacion.replace("  ", " ");
+							comprobacion = comprobacion.replace("   ", " ");
+							comprobacion = comprobacion.replace("  ", " ");
+							comprobacion = comprobacion.replace("   ", " ");
+							comprobacion = comprobacion.replace("  ", " ");
+							int resultado = comprobacion.indexOf(" ");
+							resultado = Integer.parseInt((comprobacion.valueOf(resultado + 1)));
+							if (resultado > 0) {
+								comprobacion = comprobacion.replace("  ", " ");
+								comprobacion = comprobacion.replace("  ", " ");
+								comprobacion = comprobacion.replace("  ", " ");
+								comprobacion = comprobacion.replace("  ", " ");
+							}
+							String cat = (String) jComboBox1.getSelectedItem();
+							int opcion = -1;
+							lectura[1] = convertirCadena(lectura[1], "boton");
+							DriverSeleniumFirefox prueba = new DriverSeleniumFirefox();
+							prueba.getDriver().get(lectura[1]);
+							prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
+							Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
+							drpCountry.selectByVisibleText(cat);
+							prueba.getDriver().findElement(By.name("envio")).click();
+							prueba.getDriver().findElement(By.name("si")).click();
+							opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
+
+							if (lectura[0].length() > 1) {
+								if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
+									if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
+										lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
+									}
+									lectura[0] += "\\";
 								}
-								lectura[0] += "\\";
+								Config guardar = new Config();
+								Config.jTextField1.setText(lectura[0]);
+								guardar.guardarDatos(false);
 							}
 
-							Config.jTextField1.setText(lectura[0]);
+							try {
+								mover_imagenes(opcion, lectura[0], true);
+							} catch (IOException e) {
+								mensaje("Error al copiar las imagenes", true);
+								verConfiguraciones();
+							}
 
+						} else {
+							mensaje("Introduce un texto", true);
 						}
-
-						try {
-							mover_imagenes(opcion, lectura[0], true);
-						} catch (IOException e) {
-							mensaje("Error al copiar las imagenes", true);
-						}
-
 					} else {
-						mensaje("Introduce un texto", true);
-					}
-				} else {
-					if ((lectura[0].isEmpty() || lectura[1].isEmpty())) {
-						new Config().setVisible(true);
-					} else {
-						if (!af.exists() && categoria.exists()) {
+						if ((lectura[0].isEmpty() || lectura[1].isEmpty())) {
 							new Config().setVisible(true);
 						} else {
-							if (!categoria.exists() && af.exists()) {
-								verPanelCategorias();
-							} else {
+							if (!af.exists() && categoria.exists()) {
 								new Config().setVisible(true);
-								verPanelCategorias();
+							} else {
+								if (!categoria.exists() && af.exists()) {
+									verPanelCategorias();
+								} else {
+									new Config().setVisible(true);
+									verPanelCategorias();
+								}
 							}
 						}
 					}
+				} else {
+					verPanelCategorias();
 				}
-			} else {
-				verPanelCategorias();
 			}
 		}
 	}
