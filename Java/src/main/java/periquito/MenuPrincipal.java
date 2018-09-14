@@ -326,6 +326,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	}
 
 	public MenuPrincipal() {
+		Config guardar = new Config();
+		guardar.guardarDatos(false);
+		Config2 guardar2 = new Config2();
+		guardar2.guardarDatos(false);
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		setResizable(false);
