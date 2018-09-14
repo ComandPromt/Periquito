@@ -141,4 +141,5 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
      print '<h1 name="salida">Folder empty</h1>';
 	 print '<h2 name="imagen"></h2>';
 }
+session_destroy();
 ?>
