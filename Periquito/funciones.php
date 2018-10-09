@@ -120,12 +120,22 @@ function comprobar_imagenes($ruta) {
     png_a_jpg($ruta . "/");
 }
 function comprobar_ficheros() {
-       if (!file_exists("imagenes/Thumb")) {
+    if (!file_exists("imagenes/Thumb")) {
         mkdir("imagenes/Thumb", 777, true);
     }
+	
     if (!file_exists("imagenes/gif")) {
         mkdir("imagenes/gif", 777, true);
     }
+	
+    if (!file_exists("imagenes/tmp")) {
+        mkdir("imagenes/tmp", 777, true);
+    }
+	
+    if (file_exists("imagenes/desktop.ini")) {
+        unlink('imagenes/desktop.ini');
+    }
+	
     if (file_exists("imagenes/Thumbs.db")) {
         unlink('imagenes/Thumbs.db');
     } 
