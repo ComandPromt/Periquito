@@ -37,9 +37,27 @@ if($imagenes[0]==null){
 	print '<h1 style="color:red;">NO HAY IMAGENES</h1>';
 }
 else{
-		cambiarExtension("imagenes");
-		$imagenes=ver($ruta);
-	
+	cambiarExtension("imagenes");
+	$imagenes=ver($ruta);
+	$vueltas = count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg"));
+
+	if ($vueltas > 40) {
+		$vueltas /= 40;
+		if (gettype($vueltas) != "integer") {
+			$vueltas = floor($vueltas) + 1;
+		}
+
+		mover(false);
+
+	} else {
+
+		if (count(check_images("imagenes/tmp", "jpg")) > 0) {
+			mover(true);
+		}
+
+		$vueltas = 1;
+	}
+	print '<h1 id="vueltas" name="vueltas">'.$vueltas.'</h1>';
 		print '<div id="myCarousel" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
   		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>';
