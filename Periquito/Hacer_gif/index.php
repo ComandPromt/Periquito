@@ -119,8 +119,13 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
         	require "src/GifCreator/AnimGif.php";
 
         	$anim = new GifCreator\AnimGif();
-
-        	$anim->create("img/", array(5))
+		if (count($imagenes) <= 10) {
+				$rapidez=20;
+			}
+			else{
+				$rapidez=5;
+			}
+        	$anim->create("img/", array($rapidez))
                 ->save("Output/" . date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
 
         	for ($x = 0; $x < count($imagenes); $x++) {
