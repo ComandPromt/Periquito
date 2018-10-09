@@ -1,4 +1,67 @@
 <?php
+function mover($imagenes){
+    if ($imagenes) {
+        mover_cuarenta("imagenes/tmp", "imagenes", 0);
+    } else {
+        if (count(check_images("imagenes", "jpg")) > 40 && count(check_images("imagenes", "jpg")) > 0) {
+            mover_cuarenta("imagenes", "imagenes/tmp", 40);
+        }
+
+        if (count(check_images("imagenes/tmp", "jpg")) > 40 && count(check_images("imagenes/tmp", "jpg")) > 0 && count(check_images("imagenes", "jpg")) == 0) {
+            mover_cuarenta("imagenes/tmp", "imagenes", 40);
+        }
+
+        if (count(check_images("imagenes/tmp", "jpg")) < 40 && count(check_images("imagenes/tmp", "jpg")) > 0 && count(check_images("imagenes", "jpg")) > 0 && count(check_images("imagenes", "jpg")) < 40
+        ) {
+
+            if (count(check_images("imagenes/tmp", "jpg")) >= 40) {
+                while (count(check_images("imagenes", "jpg")) < 40) {
+                    mover_cuarenta("imagenes/tmp", "imagenes", 40 - count(check_images("imagenes", "jpg")));
+                }
+            } else {
+                if (count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg")) <= 40) {
+                    mover_cuarenta("imagenes/tmp", "imagenes", 0);
+                } else {
+
+                    mover_cuarenta("imagenes/tmp", "imagenes", (count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg")) - 40));
+                }
+            }
+
+        }
+
+        if (count(check_images("imagenes/tmp", "jpg")) >= 40 && count(check_images("imagenes", "jpg")) > 0) {
+
+            $numero = count(check_images("imagenes", "jpg"));
+            if (count(check_images("imagenes/tmp", "jpg")) > 40) {
+
+                $numero += count(check_images("imagenes/tmp", "jpg")) - 40;
+            }
+
+            for ($x = $numero; $x < 40; $x++) {
+                mover_cuarenta("imagenes/tmp", "imagenes", $numero);
+            }
+
+        }
+    }
+}
+
+function mover_cuarenta($origen, $destino, $numero){
+    if (substr($origen, -1) != "/") {
+        $origen .= "/";
+    }
+    if (substr($destino, -1) != "/") {
+        $destino .= "/";
+    }
+
+    if (count(check_images($origen, "jpg")) > 0) {
+        $num_archivos = count(check_images($origen, "jpg")) - $numero;
+        $imagenes = check_images($origen, "jpg");
+        for ($x = 0; $x < $num_archivos; $x++) {
+            rename($origen . $imagenes[count($imagenes) - ($x + 1)], $destino . $imagenes[count($imagenes) - ($x + 1)]);
+        }
+    }
+}
+
 function caracteres($cadena) {
     $salida = array();
     $posicion = strpos($cadena, " ");
