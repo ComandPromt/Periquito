@@ -22,11 +22,16 @@ session_start();
 date_default_timezone_set('Europe/Madrid');
 include("funciones.php");
 comprobar_ficheros();
+			
 if($_SESSION['categoria']==9){
 	$ruta="imagenes/gif/";
 	cambiarExtension("imagenes/gif");
 }
 else{
+	if (count(check_images("imagenes/tmp", "jpg")) > 0
+	&& count(check_images("imagenes", "jpg"))==0 && count(check_images("imagenes", "png"))==0) {
+			mover(true);
+		}
 	comprobar_imagenes("imagenes");
 	$ruta="imagenes/";
 }
