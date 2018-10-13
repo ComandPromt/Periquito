@@ -86,6 +86,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_8;
 	private JMenuItem mntmNewMenuItem_10;
 	private JSeparator separator_9;
+	private JLabel check6;
 
 	static int numeroLineas(String fichero) {
 		File input = new File("Categorias.txt");
@@ -707,6 +708,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		check5.addChangeListener(this);
 		check5.setFont(new Font("Tahoma", Font.BOLD, 25));
 		getContentPane().add(check5);
+		check6 = new JLabel("");
+		check6.setBounds(140, 250, 300, 60);
+		check6.setFont(new Font("Tahoma", Font.BOLD, 18));
+		getContentPane().add(check6);
 		mute = new JCheckBox("");
 		mute.setBounds(530, 270, 80, 60);
 		mute.addChangeListener(this);
@@ -948,6 +953,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
 							drpCountry.selectByVisibleText(cat);
 							prueba.getDriver().findElement(By.name("envio")).click();
+							int vueltas = Integer
+									.parseInt(prueba.getDriver().findElement(By.name("vueltas")).getText());
+
+							if (vueltas > 1) {
+								check6.setText("Nº de veces al play: " + vueltas--);
+							}
 							prueba.getDriver().findElement(By.name("si")).click();
 							opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
 
@@ -993,7 +1004,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					verPanelCategorias();
 				}
 			}
+			if (check6.getText() != "") {
+				int veces = Integer
+						.parseInt(check6.getText().substring(check6.getText().length() - 1, check6.getText().length()));
+				veces--;
+				check6.setText(check6.getText().substring(0, check6.getText().length() - 1) + veces);
+			}
 		}
+
 	}
 
 	private void verPanelCategorias() {
