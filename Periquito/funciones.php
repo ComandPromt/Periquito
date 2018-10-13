@@ -1,51 +1,52 @@
 <?php
-function mover($imagenes){
+
+function mover($imagenes,$extension){
     if ($imagenes) {
-        mover_cuarenta("imagenes/tmp", "imagenes", 0);
+        mover_cuarenta("imagenes/tmp", "imagenes", 0,$extension);
     } else {
-        if (count(check_images("imagenes", "jpg")) > 40 && count(check_images("imagenes", "jpg")) > 0) {
-            mover_cuarenta("imagenes", "imagenes/tmp", 40);
+        if (count(check_images("imagenes", $extension)) > 40 && count(check_images("imagenes", $extension)) > 0) {
+            mover_cuarenta("imagenes", "imagenes/tmp", 40,$extension);
         }
 
-        if (count(check_images("imagenes/tmp", "jpg")) > 40 && count(check_images("imagenes/tmp", "jpg")) > 0 && count(check_images("imagenes", "jpg")) == 0) {
-            mover_cuarenta("imagenes/tmp", "imagenes", 40);
+        if (count(check_images("imagenes/tmp", $extension)) > 40 && count(check_images("imagenes/tmp", $extension)) > 0 && count(check_images("imagenes", $extension)) == 0) {
+            mover_cuarenta("imagenes/tmp", "imagenes", 40,$extension);
         }
 
-        if (count(check_images("imagenes/tmp", "jpg")) < 40 && count(check_images("imagenes/tmp", "jpg")) > 0 && count(check_images("imagenes", "jpg")) > 0 && count(check_images("imagenes", "jpg")) < 40
+        if (count(check_images("imagenes/tmp", $extension)) < 40 && count(check_images("imagenes/tmp", $extension)) > 0 && count(check_images("imagenes", $extension)) > 0 && count(check_images("imagenes", $extension)) < 40
         ) {
 
-            if (count(check_images("imagenes/tmp", "jpg")) >= 40) {
-                while (count(check_images("imagenes", "jpg")) < 40) {
-                    mover_cuarenta("imagenes/tmp", "imagenes", 40 - count(check_images("imagenes", "jpg")));
+            if (count(check_images("imagenes/tmp", $extension)) >= 40) {
+                while (count(check_images("imagenes", $extension)) < 40) {
+                    mover_cuarenta("imagenes/tmp", "imagenes", 40 - count(check_images("imagenes", $extension)),$extension);
                 }
             } else {
-                if (count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg")) <= 40) {
-                    mover_cuarenta("imagenes/tmp", "imagenes", 0);
+                if (count(check_images("imagenes/tmp", $extension)) + count(check_images("imagenes", $extension)) <= 40) {
+                    mover_cuarenta("imagenes/tmp", "imagenes", 0,$extension);
                 } else {
 
-                    mover_cuarenta("imagenes/tmp", "imagenes", (count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg")) - 40));
+                    mover_cuarenta("imagenes/tmp", "imagenes", (count(check_images("imagenes/tmp", $extension)) + count(check_images("imagenes", $extension)) - 40),$extension);
                 }
             }
 
         }
 
-        if (count(check_images("imagenes/tmp", "jpg")) >= 40 && count(check_images("imagenes", "jpg")) > 0) {
+        if (count(check_images("imagenes/tmp", $extension)) >= 40 && count(check_images("imagenes", $extension)) > 0) {
 
-            $numero = count(check_images("imagenes", "jpg"));
-            if (count(check_images("imagenes/tmp", "jpg")) > 40) {
+            $numero = count(check_images("imagenes", $extension));
+            if (count(check_images("imagenes/tmp", $extension)) > 40) {
 
-                $numero += count(check_images("imagenes/tmp", "jpg")) - 40;
+                $numero += count(check_images("imagenes/tmp", $extension)) - 40;
             }
 
             for ($x = $numero; $x < 40; $x++) {
-                mover_cuarenta("imagenes/tmp", "imagenes", $numero);
+                mover_cuarenta("imagenes/tmp", "imagenes", $numero,$extension);
             }
 
         }
     }
 }
 
-function mover_cuarenta($origen, $destino, $numero){
+function mover_cuarenta($origen, $destino, $numero,$extension){
     if (substr($origen, -1) != "/") {
         $origen .= "/";
     }
@@ -53,9 +54,9 @@ function mover_cuarenta($origen, $destino, $numero){
         $destino .= "/";
     }
 
-    if (count(check_images($origen, "jpg")) > 0) {
-        $num_archivos = count(check_images($origen, "jpg")) - $numero;
-        $imagenes = check_images($origen, "jpg");
+    if (count(check_images($origen, $extension)) > 0) {
+        $num_archivos = count(check_images($origen, $extension)) - $numero;
+        $imagenes = check_images($origen, $extension);
         for ($x = 0; $x < $num_archivos; $x++) {
             rename($origen . $imagenes[count($imagenes) - ($x + 1)], $destino . $imagenes[count($imagenes) - ($x + 1)]);
         }
@@ -120,22 +121,18 @@ function comprobar_imagenes($ruta) {
     png_a_jpg($ruta . "/");
 }
 function comprobar_ficheros() {
-    if (!file_exists("imagenes/Thumb")) {
+       if (!file_exists("imagenes/Thumb")) {
         mkdir("imagenes/Thumb", 777, true);
     }
-	
     if (!file_exists("imagenes/gif")) {
         mkdir("imagenes/gif", 777, true);
     }
-	
-    if (!file_exists("imagenes/tmp")) {
+	if (!file_exists("imagenes/tmp")) {
         mkdir("imagenes/tmp", 777, true);
     }
-	
-    if (file_exists("imagenes/desktop.ini")) {
+	if (file_exists("imagenes/desktop.ini")) {
         unlink('imagenes/desktop.ini');
     }
-	
     if (file_exists("imagenes/Thumbs.db")) {
         unlink('imagenes/Thumbs.db');
     } 
