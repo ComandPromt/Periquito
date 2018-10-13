@@ -28,7 +28,7 @@ if($_SESSION['categoria']==9){
 	cambiarExtension("imagenes/gif");
 }
 else{
-	if (count(check_images("imagenes/tmp", "jpg")) > 0
+	if (count(check_images("imagenes/tmp", "jpg")) > 0 || count(check_images("imagenes/tmp", "png")) > 0
 	&& count(check_images("imagenes", "jpg"))==0 && count(check_images("imagenes", "png"))==0) {
 			mover(true);
 		}
