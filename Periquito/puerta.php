@@ -59,12 +59,12 @@ else{
 			$vueltas = floor($vueltas) + 1;
 		}
 
-		mover(false);
+		mover(false,"jpg");
 
 	} else {
 
 		if (count(check_images("imagenes/tmp", "jpg")) > 0) {
-			mover(true);
+			mover(true,"jpg");
 		}
 
 		$vueltas = 1;
