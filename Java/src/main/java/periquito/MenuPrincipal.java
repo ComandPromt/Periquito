@@ -3,10 +3,13 @@ package periquito;
 import java.applet.AudioClip;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
@@ -86,7 +89,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_8;
 	private JMenuItem mntmNewMenuItem_10;
 	private JSeparator separator_9;
-	private JLabel check6;
+	private Label check6;
 
 	static int numeroLineas(String fichero) {
 		File input = new File("Categorias.txt");
@@ -326,7 +329,31 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		return result;
 	}
 
-	public MenuPrincipal() {
+	
+	private void comprobarFichero(String ruta,String texto) throws IOException {
+		File archivo = new File(ruta);
+
+		if(!archivo.exists()) {
+			BufferedWriter bw ;
+			bw = new BufferedWriter(new FileWriter(archivo));
+			bw.write(texto);
+			bw.close();
+		} 
+
+	}
+	
+	public MenuPrincipal() throws IOException {
+		
+		comprobarFichero("Categorias.txt","Sample");
+		comprobarFichero("Config.txt","C:\\AppServ\\www\\Periquito\\imagenes\\\r\n" + 
+				"http://localhost/Periquito\r\n" + 
+				"C:\\AppServ\\www\\Periquito\\Hacer_gif\r\n" + 
+				"http://localhost/Periquito\\Hacer_gif\r\n" + 
+				"C:\\AppServ\\www\\Periquito\\GifFrames\r\n" + 
+				"http://localhost/Periquito\\GifFrames");
+		comprobarFichero("Config2.txt","localhost\\media\\images\r\n" + 
+				"localhost\\media\\thumbnails");
+
 		Config guardar = new Config();
 		guardar.guardarDatos(false);
 		Config2 guardar2 = new Config2();
@@ -708,7 +735,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		check5.addChangeListener(this);
 		check5.setFont(new Font("Tahoma", Font.BOLD, 25));
 		getContentPane().add(check5);
-		check6 = new JLabel("");
+		check6 = new Label("");
 		check6.setBounds(140, 250, 300, 60);
 		check6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		getContentPane().add(check6);
@@ -1008,8 +1035,13 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				int veces = Integer
 						.parseInt(check6.getText().substring(check6.getText().length() - 1, check6.getText().length()));
 				veces--;
+				if(veces==0) {
+					check6.setText("");	
+				}
+				else {
 				check6.setText(check6.getText().substring(0, check6.getText().length() - 1) + veces);
-			}
+				}
+				}
 		}
 
 	}
