@@ -40,6 +40,8 @@ if (!file_exists("imagenes/gif/Thumb")) {
 				</option>
 				<option value="7">Option 7
 				</option>
+				<option value="8">Option 8
+				</option>
 				<option value="9">Option 9
 				</option>
 				<option value="10">Option 10
