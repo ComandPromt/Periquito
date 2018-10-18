@@ -26,31 +26,31 @@ if (!file_exists("imagenes/gif/Thumb")) {
 			<legend>Elige la categor&iacute;a</legend>
 			<input name="nombre" type="text" placeholder="Pon el nombre de las fotos"/>
 			<select name="categoria">
-				<option value="1">Option 1
+				<option value="1">Models
 				</option>
-				<option value="2">Option 2
+				<option value="2">Girls/Womans
 				</option>
-				<option value="3">Option 3
+				<option value="3">XXX
 				</option>
-				<option value="4">Option 4
+				<option value="4">Singers
 				</option>
-				<option value="5">Option 5
+				<option value="5">WebCam
 				</option>
-				<option value="6">Option 6
+				<option value="6">Films/Cartoon
 				</option>
-				<option value="7">Option 7
+				<option value="7">Dangles
 				</option>
-				<option value="8">Option 8
+				<option value="8">Links
 				</option>
-				<option value="9">Option 9
+				<option value="9">GIF
 				</option>
-				<option value="10">Option 10
+				<option value="10">Sado
 				</option>
-				<option value="11">Option 11
+				<option value="11">Earrings
 				</option>
 			</select>
-			<input type="radio" name="check" value="SI">SI</input>
-			<input type="radio" name="check" checked="checked" value="NO">NO</input>
+			<input type="radio" name="check" checked="checked" value="SI">SI</input>
+			<input type="radio" name="check"  value="NO">NO</input>
 			<input name="envio" type="submit"/>
 		</form>
 	</body>
