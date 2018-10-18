@@ -2,7 +2,7 @@
 session_start();
 $_POST['nombre']=trim($_POST['nombre']);
 
-if(isset($_POST['envio'])&& $_POST['nombre']!=""){
+if(isset($_POST['envio'])&& $_POST['nombre']!="" && $_POST['check']=="SI"){
 	$_SESSION['nombre']=$_POST['nombre'];
 	$_SESSION['categoria']=$_POST['categoria'];
 	header("Location: puerta.php");
