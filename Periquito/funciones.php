@@ -294,48 +294,26 @@ function redimensionarJPG($max_ancho, $max_alto, $ruta, $gif) {
         }
     }
 }
-function consecutivos($array) {
-    if ($array[0] != null && $array[0] == 1) {
-        $numAnt = array();
-        $x = 0;
-        foreach ($array as $pos => $num) {
-            if ($pos > 0) {
-                if (!($numAnt[($pos - 1)] + 1) == $num) {
-                    $noc = array();
-                    $noc1 = $numAnt[($pos - 1)];
-                    $noc[] = $noc1;
-                    if ($noc[1] - $noc[0] != 1) {
-                        $numero = $noc[0] + 1;
-                    }
-                }
+function consecutivos(array $array){
+	if(count($array)>0 && $array[0]!=null && $array[0]==1){
+        asort($array);
+        for($x=0;$x<count($array);$x++){
+            if($x+1<count($array)){
+            if($array[$x]+1!=$array[$x+1]){
+                $numero=$array[$x]+1;
+                $x=count($array);
+                $noc=true;
             }
-            $numAnt[$pos] = $num;
-            $x++;
-        }
-        if ($numAnt[0] != 1 && $array[0] != 1) {
-            $numero = $numAnt[0] - 1;
-        } else {
-            $validar = false;
-            for ($x = 0; $x < count($numAnt); $x++) {
-                if ($numero == null) {
-                    if ($numAnt[$x] + 1 == $numAnt[$x + 1]) {
-                        $validar = true;
-                    } else {
-                        $numero = $numAnt[$x] + 1;
-                    }
-                }
-            }
-            if ($numero == null) {
-                if (!$validar) {
-                    $numero = $array[$x - 1] - 1;
-                } else {
-                    $numero = array_pop($array) + 1;
-                }
             }
         }
-    } else {
-        $numero = 1;
+        if(!isset($noc)){
+            $numero=count($array)+1;
+        }
+  
     }
-    return $numero;
+    else{
+        $numero=1;
+    }
+	return $numero;
 }
 ?>
