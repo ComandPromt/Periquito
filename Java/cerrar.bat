@@ -1,3 +1,3 @@
 @echo off
-taskkill /F /IM geckodriver.exe /T
+taskkill /F /IM chromedriver.exe /T
 exit
