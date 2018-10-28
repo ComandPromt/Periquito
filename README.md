@@ -26,7 +26,7 @@
 
 ## Requisitos
 
-- Mozilla Firefox
+- Google Chrome
 
 - Servidor web
 
@@ -55,7 +55,9 @@
 
 - Copia el archivo "copiar.bat" en C:\
 
-- Copia el archivo "geckodriver.exe" en C:\
+- Descarga el archivo "chromedriver.exe" de [Chrome Driver](http://chromedriver.chromium.org/downloads) o [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+
+- Ppéga el archivo en C:\
 
 - Edita el archivo "index.php" (Cambia Option 1 por las distintas categorias de las imagenes)
 
