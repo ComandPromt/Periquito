@@ -1,24 +1,26 @@
 package periquito;
 
 import java.applet.AudioClip;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Label;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.util.LinkedList;
 import java.util.Scanner;
-import javax.swing.ButtonGroup;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,25 +29,20 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JOptionPane;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Select;
-import javax.swing.JRadioButton;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import java.awt.ComponentOrientation;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 @SuppressWarnings("serial")
 
@@ -53,12 +50,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private static javax.swing.JComboBox<String> jComboBox1;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JLabel jLabel2;
+
 	private javax.swing.JTextField jTextField1;
 	private JButton btnNewButton;
 	private JCheckBox check5;
 	private static JCheckBox mute;
 	private JButton boton1;
-	private JRadioButton rdbtnNewRadioButton;
 	private JMenuBar jmenubarra;
 	private JMenuBar menuBar;
 	private JMenu mnMenu;
@@ -90,6 +87,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem mntmNewMenuItem_10;
 	private JSeparator separator_9;
 	private Label check6;
+	private JLabel reiniciar;
 
 	static int numeroLineas(String fichero) {
 		File input = new File("Categorias.txt");
@@ -198,10 +196,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		lectura[3] = urlPredeterminada(lectura[3]);
 		String comprobacion = null;
 		String imagen;
-		DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-		firefox.getDriver().get(lectura[3]);
-		comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
-		imagen = firefox.getDriver().findElement(By.name("imagen")).getText();
+		WebDriver firefox = new ChromeDriver();
+		firefox.get(lectura[3]);
+		comprobacion = firefox.findElement(By.name("salida")).getText();
+		imagen = firefox.findElement(By.name("imagen")).getText();
 		Config.cerrarNavegador();
 
 		if (comprobacion.compareTo("Folder empty") == 0) {
@@ -211,13 +209,13 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 		else {
 			try {
-				int salida = salida(lectura[2] + "\\Output", lectura[0], 9);
+				int salida = Config.salida(lectura[2] + "\\Output", lectura[0], 9);
 				notificacion(salida, lectura[0], "JPG", true);
 				mensaje(salida + " GIF creado correctamente", false);
 				if (salida > 0) {
 					abrirCarpeta(lectura[0], true);
-					DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
-					firefox1.getDriver().get("file:///" + lectura[0] + "/" + imagen);
+					WebDriver firefox1 = new ChromeDriver();
+					firefox1.get("file:///" + lectura[0] + "/" + imagen);
 				}
 			} catch (IOException e1) {
 			}
@@ -270,50 +268,21 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		if (opcion > 0 && !destino[0].isEmpty() && !destino[1].isEmpty()) {
 			int salida;
 			if (opcion == 9) {
-				salida = salida(lectura + "\\gif", "\\\\" + destino[0] + "\\" + opcion, opcion);
+				salida = Config.salida(lectura + "\\gif", "\\\\" + destino[0] + "\\" + opcion, opcion);
 				notificacion(salida, lectura + "gif", "GIF", true);
-				salida = salida(lectura + "\\gif\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
+				salida = Config.salida(lectura + "\\gif\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
 				notificacion(salida, lectura + "gif\\Thumb", "JPG", false);
 				mensaje(salida + " imagen/es subida/s", false);
 			} else {
-				salida = salida(lectura, "\\\\" + destino[0] + "\\" + opcion, opcion);
+				salida = Config.salida(lectura, "\\\\" + destino[0] + "\\" + opcion, opcion);
 				notificacion(salida, lectura, "JPG", true);
-				salida = salida(lectura + "\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
+				salida = Config.salida(lectura + "\\Thumb", "\\\\" + destino[1] + "\\" + opcion, opcion);
 				notificacion(salida, lectura + "Thumb", "JPG", false);
 				mensaje(salida + " imagen/es subida/s", false);
 			}
 		} else {
 			new Config2().setVisible(true);
 		}
-	}
-
-	public static int salida(String origen, String destino, int opcion) throws IOException {
-		LinkedList<String> imagenes = new LinkedList<String>();
-		if (opcion != 9 || (opcion == 9 && origen.contains("Thumb"))) {
-			imagenes = Config.directorio(origen, ".jpg");
-		} else {
-			imagenes = Config.directorio(origen, ".gif");
-		}
-		int mensaje;
-
-		if (imagenes.size() > 0) {
-			if (imagenes.size() == 1) {
-				destino += "\\" + imagenes.get(0);
-				Path origenPath = FileSystems.getDefault().getPath(origen + "\\" + imagenes.get(0));
-				Path destinoPath = FileSystems.getDefault().getPath(destino);
-				Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
-			} else {
-				for (int x = 0; x < imagenes.size(); x++) {
-					Path origenPath = FileSystems.getDefault().getPath(origen + "\\" + imagenes.get(x));
-					Path destinoPath = FileSystems.getDefault().getPath(destino + "\\" + imagenes.get(x));
-					Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
-				}
-			}
-			mensaje = imagenes.size();
-		} else {
-			mensaje = 0;
-		}
-		return mensaje;
 	}
 
 	private int searchString(String[] findArray, String stringSearch) {
@@ -329,39 +298,24 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		return result;
 	}
 
-	
-	private void comprobarFichero(String ruta,String texto) throws IOException {
+	private static void comprobarFichero(String ruta, String texto) throws IOException {
 		File archivo = new File(ruta);
-
-		if(!archivo.exists()) {
-			BufferedWriter bw ;
+		if (!archivo.exists()) {
+			BufferedWriter bw;
 			bw = new BufferedWriter(new FileWriter(archivo));
 			bw.write(texto);
 			bw.close();
-		} 
+		}
 
 	}
-	
-	public MenuPrincipal() throws IOException {
-		
-		comprobarFichero("Categorias.txt","Sample");
-		comprobarFichero("Config.txt","C:\\AppServ\\www\\Periquito\\imagenes\\\r\n" + 
-				"http://localhost/Periquito\r\n" + 
-				"C:\\AppServ\\www\\Periquito\\Hacer_gif\r\n" + 
-				"http://localhost/Periquito\\Hacer_gif\r\n" + 
-				"C:\\AppServ\\www\\Periquito\\GifFrames\r\n" + 
-				"http://localhost/Periquito\\GifFrames");
-		comprobarFichero("Config2.txt","localhost\\media\\images\r\n" + 
-				"localhost\\media\\thumbnails");
 
-		Config guardar = new Config();
-		guardar.guardarDatos(false);
-		Config2 guardar2 = new Config2();
-		guardar2.guardarDatos(false);
+	public MenuPrincipal() throws IOException {
+
+		guardarConfig();
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		setResizable(false);
-		setTitle("Periquito 2.3");
+		setTitle("Periquito 2.4");
 		setSize(600, 600);
 		getContentPane().setLayout(new BorderLayout());
 		jmenubarra = new JMenuBar();
@@ -411,9 +365,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					lectura = Config.leerFicheroArray("Config.txt", 6);
 					if (!lectura[4].isEmpty() && lectura[4] != null && !lectura[5].isEmpty() && lectura[5] != null) {
 						String comprobacion = null;
-						DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-						firefox.getDriver().get(lectura[5] = convertirCadena(lectura[5], "firefox"));
-						comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
+						WebDriver firefox = new ChromeDriver();
+						firefox.get(lectura[5] = convertirCadena(lectura[5], "firefox"));
+						comprobacion = firefox.findElement(By.name("salida")).getText();
 
 						Config.cerrarNavegador();
 
@@ -431,6 +385,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							abrirCarpeta(lectura[4], true);
 							break;
 						case "Exito!":
+							Config.eliminarDuplicados("FrameExtractor\\examples\\output");
 							abrirCarpeta(lectura[4] + "\\frames", true);
 							break;
 						}
@@ -456,10 +411,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					Config guardar = new Config();
 					guardar.guardarDatos(false);
 				}
-				DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-				firefox.getDriver().get(
-						lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
-				comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
+				WebDriver firefox = new ChromeDriver();
+				firefox.get(lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
+				comprobacion = firefox.findElement(By.name("salida")).getText();
 				Config.cerrarNavegador();
 
 				switch (comprobacion) {
@@ -472,6 +426,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
 					break;
 				case "Exito!":
+					Config.eliminarDuplicados("FrameExtractor\\examples\\output");
 					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\output", true);
 					break;
 				}
@@ -498,10 +453,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					Config guardar = new Config();
 					guardar.guardarDatos(false);
 				}
-				DriverSeleniumFirefox firefox = new DriverSeleniumFirefox();
-				firefox.getDriver().get(lectura[5] = convertirCadena(lectura[1] + "/VID-2-GIF/index.php", "firefox"));
-				comprobacion = firefox.getDriver().findElement(By.name("salida")).getText();
-				String imagen = firefox.getDriver().findElement(By.name("imagen")).getText();
+				WebDriver firefox = new ChromeDriver();
+				firefox.get(lectura[5] = convertirCadena(lectura[1] + "/VID-2-GIF/index.php", "firefox"));
+				comprobacion = firefox.findElement(By.name("salida")).getText();
+				String imagen = firefox.findElement(By.name("imagen")).getText();
 				Config.cerrarNavegador();
 				switch (comprobacion) {
 				case "No tienes videos":
@@ -511,8 +466,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				case "Exito!":
 					abrirCarpeta(lectura[0] + "\\..\\imagenes", true);
 					if (!lectura[0].isEmpty() && lectura[0].compareTo("") != 0 && lectura[0] != null) {
-						DriverSeleniumFirefox firefox1 = new DriverSeleniumFirefox();
-						firefox1.getDriver().get("file:///" + lectura[0] + "/" + imagen);
+						WebDriver firefox1 = new ChromeDriver();
+						firefox1.get("file:///" + lectura[0] + "/" + imagen);
 					}
 					break;
 				}
@@ -654,6 +609,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmLocal = new JMenuItem("Local");
 		mntmLocal.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				try {
+					MenuPrincipal.guardarConfig();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				new Config().setVisible(true);
 			}
 		});
@@ -663,6 +623,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_5 = new JMenuItem("Remoto");
 		mntmNewMenuItem_5.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				try {
+					MenuPrincipal.guardarConfig();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				new Config2().setVisible(true);
 			}
 		});
@@ -712,6 +677,20 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		this.setVisible(true);
 	}
 
+	public static void guardarConfig() throws IOException {
+		comprobarFichero("Categorias.txt", "Sample");
+		comprobarFichero("Config.txt",
+				"C:\\AppServ\\www\\Periquito\\imagenes\\\r\n" + "http://localhost/Periquito\r\n"
+						+ "C:\\AppServ\\www\\Periquito\\Hacer_gif\r\n" + "http://localhost/Periquito\\Hacer_gif\r\n"
+						+ "C:\\AppServ\\www\\Periquito\\GifFrames\r\n" + "http://localhost/Periquito\\GifFrames");
+		comprobarFichero("Config2.txt", "localhost\\media\\images\r\n" + "localhost\\media\\thumbnails");
+
+		Config guardar = new Config();
+		guardar.guardarDatos(false);
+		Config2 guardar2 = new Config2();
+		guardar2.guardarDatos(false);
+	}
+
 	private void initComponents() {
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -725,9 +704,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		jTextField1.setFont(new Font("Tahoma", Font.BOLD, 24));
-		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 28));
 		ponerCategorias();
-		jLabel2.setFont(new Font("Tahoma", Font.BOLD, 28));
 		btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
 		check5 = new JCheckBox("Fix");
@@ -739,6 +716,20 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		check6.setBounds(140, 250, 300, 60);
 		check6.setFont(new Font("Tahoma", Font.BOLD, 18));
 		getContentPane().add(check6);
+		reiniciar = new JLabel("");
+		reiniciar.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent arg0) {
+				try {
+					guardarConfig();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		reiniciar.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
+		reiniciar.setBounds(30, 280, 70, 82);
+		reiniciar.setFont(new Font("Tahoma", Font.BOLD, 18));
+		getContentPane().add(reiniciar);
 		mute = new JCheckBox("");
 		mute.setBounds(530, 270, 80, 60);
 		mute.addChangeListener(this);
@@ -826,21 +817,13 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				button1ActionPerformed(arg0);
 			}
 		});
-		rdbtnNewRadioButton = new JRadioButton("");
-		rdbtnNewRadioButton.setSelected(true);
-		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 18));
-		ButtonGroup grupo = new ButtonGroup();
-		grupo.add(rdbtnNewRadioButton);
-		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/Firefox.png")));
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(11)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(3).addComponent(label).addGap(18)
-										.addComponent(rdbtnNewRadioButton)
-										.addPreferredGap(ComponentPlacement.RELATED, 335, Short.MAX_VALUE)
-										.addComponent(lblNewLabel).addGap(62))
+								.addGroup(Alignment.TRAILING,
+										layout.createSequentialGroup().addComponent(lblNewLabel).addGap(62))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 105,
 												GroupLayout.PREFERRED_SIZE)
@@ -883,15 +866,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 								.addGap(19)
 								.addComponent(boton1, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
-				.addGroup(layout.createParallelGroup(Alignment.LEADING, false).addGroup(layout.createSequentialGroup()
-						.addGap(31)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(label, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(rdbtnNewRadioButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)))
-						.addGroup(layout.createSequentialGroup().addGap(16).addComponent(lblNewLabel,
-								GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+				.addGap(16)
+				.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addContainerGap()));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(573, 478));
@@ -974,20 +950,19 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							String cat = (String) jComboBox1.getSelectedItem();
 							int opcion = -1;
 							lectura[1] = convertirCadena(lectura[1], "boton");
-							DriverSeleniumFirefox prueba = new DriverSeleniumFirefox();
-							prueba.getDriver().get(lectura[1]);
-							prueba.getDriver().findElement(By.name("nombre")).sendKeys(comprobacion);
-							Select drpCountry = new Select(prueba.getDriver().findElement(By.name("categoria")));
+							WebDriver prueba = new ChromeDriver();
+							prueba.get(lectura[1]);
+							prueba.findElement(By.name("nombre")).sendKeys(comprobacion);
+							Select drpCountry = new Select(prueba.findElement(By.name("categoria")));
 							drpCountry.selectByVisibleText(cat);
-							prueba.getDriver().findElement(By.name("envio")).click();
-							int vueltas = Integer
-									.parseInt(prueba.getDriver().findElement(By.name("vueltas")).getText());
+							prueba.findElement(By.name("envio")).click();
+							int vueltas = Integer.parseInt(prueba.findElement(By.name("vueltas")).getText());
 
 							if (vueltas > 1) {
 								check6.setText("Nº de veces al play: " + vueltas--);
 							}
-							prueba.getDriver().findElement(By.name("si")).click();
-							opcion = Integer.parseInt(prueba.getDriver().findElement(By.name("salida")).getText());
+							prueba.findElement(By.name("si")).click();
+							opcion = Integer.parseInt(prueba.findElement(By.name("salida")).getText());
 
 							if (lectura[0].length() > 1) {
 								if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
@@ -1035,13 +1010,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				int veces = Integer
 						.parseInt(check6.getText().substring(check6.getText().length() - 1, check6.getText().length()));
 				veces--;
-				if(veces==0) {
-					check6.setText("");	
+				if (veces == 0) {
+					check6.setText("");
+				} else {
+					check6.setText(check6.getText().substring(0, check6.getText().length() - 1) + veces);
 				}
-				else {
-				check6.setText(check6.getText().substring(0, check6.getText().length() - 1) + veces);
-				}
-				}
+			}
 		}
 
 	}
