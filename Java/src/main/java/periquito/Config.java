@@ -8,14 +8,19 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -217,6 +222,24 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		}
 	}
 
+	public static byte[] createChecksum(String filename) throws Exception {
+		InputStream fis = new FileInputStream(filename);
+
+		byte[] buffer = new byte[1024];
+		MessageDigest complete = MessageDigest.getInstance("SHA-256");
+		int numRead;
+
+		do {
+			numRead = fis.read(buffer);
+			if (numRead > 0) {
+				complete.update(buffer, 0, numRead);
+			}
+		} while (numRead != -1);
+
+		fis.close();
+		return complete.digest();
+	}
+
 	public static int salida(String origen, String destino, int opcion) throws IOException {
 
 		LinkedList<String> imagenes = new LinkedList<String>();
@@ -252,6 +275,64 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		return mensaje;
 	}
 
+	public static String getSHA256Checksum(String filename) throws Exception {
+		byte[] b = createChecksum(filename);
+		String result = "";
+
+		for (int i = 0; i < b.length; i++) {
+			result += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
+		}
+		return result;
+	}
+
+	public static void eliminarDuplicados(String ruta) {
+
+		String[] lectura;
+		lectura = Config.leerFicheroArray("Config.txt", 6);
+
+		LinkedList<String> imagenes = new LinkedList<String>();
+		imagenes = Config.directorio(lectura[0].substring(0, lectura[0].length() - 8) + ruta, "jpg");
+
+		if (imagenes.size() > 0) {
+			Iterator<String> it = imagenes.iterator();
+			ArrayList<String> scanimagenes = new ArrayList<String>();
+			String imagen;
+
+			while (it.hasNext()) {
+				try {
+
+					imagen = getSHA256Checksum(
+							lectura[0].substring(0, lectura[0].length() - 8) + ruta + "\\" + it.next());
+
+					scanimagenes.add(imagen);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+
+			if (imagenes.size() == scanimagenes.size()) {
+
+				for (int i = 0; i < scanimagenes.size(); i++) {
+
+					if (scanimagenes.get(i) == scanimagenes.get(scanimagenes.size() - 1)) {
+						i--;
+					}
+
+					if (scanimagenes.get(i) == scanimagenes.get(i++)) {
+						System.out.println(i + "\n");
+						File fichero = new File(
+								lectura[0].substring(0, lectura[0].length() - 8) + ruta + "\\" + imagenes.get(i++));
+						fichero.delete();
+					}
+
+				}
+			}
+		}
+
+	}
+
 	public static LinkedList<String> directorio(String ruta, String extension) {
 
 		LinkedList<String> lista = new LinkedList<String>();
@@ -272,7 +353,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public Config() {
-		setTitle("Periquito v2.2 Config Local");
+		setTitle("Periquito v2.4 Config Local");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
