@@ -385,7 +385,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							abrirCarpeta(lectura[4], true);
 							break;
 						case "Exito!":
-							Config.eliminarDuplicados("FrameExtractor\\examples\\output");
+							Config.eliminarDuplicados(lectura[0] + "\\..\\GifFrames\\frames");
 							abrirCarpeta(lectura[4] + "\\frames", true);
 							break;
 						}
@@ -426,7 +426,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
 					break;
 				case "Exito!":
-					Config.eliminarDuplicados("FrameExtractor\\examples\\output");
+					Config.eliminarDuplicados(lectura[0] + "\\..\\FrameExtractor\\examples\\output");
 					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\output", true);
 					break;
 				}
