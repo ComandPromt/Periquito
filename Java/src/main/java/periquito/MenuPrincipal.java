@@ -200,7 +200,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		firefox.get(lectura[3]);
 		comprobacion = firefox.findElement(By.name("salida")).getText();
 		imagen = firefox.findElement(By.name("imagen")).getText();
-		Config.cerrarNavegador();
 
 		if (comprobacion.compareTo("Folder empty") == 0) {
 			mensaje("No hay imagenes en " + lectura[2] + "\\img", true);
@@ -214,8 +213,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				mensaje(salida + " GIF creado correctamente", false);
 				if (salida > 0) {
 					abrirCarpeta(lectura[0], true);
-					WebDriver firefox1 = new ChromeDriver();
-					firefox1.get("file:///" + lectura[0] + "/" + imagen);
+					firefox.get("file:///" + lectura[0] + "/" + imagen);
 				}
 			} catch (IOException e1) {
 			}
@@ -346,6 +344,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					if (!lectura[0].isEmpty() && lectura[0] != null && !lectura[2].isEmpty() && lectura[2] != null
 							&& !lectura[3].isEmpty() && lectura[3] != null) {
 						creargif(lectura);
+
 					} else {
 						new Config().setVisible(true);
 					}
@@ -422,6 +421,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\output", true);
 					break;
 				case "No tienes videos":
+				case "No se encuentra el video!":
 					mensaje("No tienes videos para convertir a frames", true);
 					abrirCarpeta(lectura[0] + "\\..\\FrameExtractor\\examples\\video", true);
 					break;
@@ -456,22 +456,23 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				WebDriver firefox = new ChromeDriver();
 				firefox.get(lectura[5] = convertirCadena(lectura[1] + "/VID-2-GIF/index.php", "firefox"));
 				comprobacion = firefox.findElement(By.name("salida")).getText();
-				String imagen = firefox.findElement(By.name("imagen")).getText();
-				Config.cerrarNavegador();
-				switch (comprobacion) {
-				case "No tienes videos":
+
+				if (comprobacion == "No tienes videos") {
+
+					Config.cerrarNavegador();
 					mensaje("Debes tener un video en la carpeta de conversion", true);
 					abrirCarpeta(lectura[0] + "\\..\\VID-2-GIF", true);
-					break;
-				case "Exito!":
+
+				} else {
+					String imagen = firefox.findElement(By.name("imagen")).getText();
+
 					abrirCarpeta(lectura[0] + "\\..\\imagenes", true);
 					if (!lectura[0].isEmpty() && lectura[0].compareTo("") != 0 && lectura[0] != null) {
-						WebDriver firefox1 = new ChromeDriver();
-						firefox1.get("file:///" + lectura[0] + "/" + imagen);
+						firefox.get("file:///" + lectura[0] + "/" + imagen);
 					}
-					break;
 				}
 			}
+
 		});
 		mntmNewMenuItem_10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
 		mntmNewMenuItem_10.setFont(new Font("Segoe UI", Font.BOLD, 18));
