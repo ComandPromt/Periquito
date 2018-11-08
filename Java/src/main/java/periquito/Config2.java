@@ -111,6 +111,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public Config2() {
+		setAlwaysOnTop(true);
 		setTitle("Periquito v2.4 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();
