@@ -353,6 +353,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public Config() {
+		setAlwaysOnTop(true);
 		setTitle("Periquito v2.4 Config Local");
 		setType(Type.UTILITY);
 		initComponents();
