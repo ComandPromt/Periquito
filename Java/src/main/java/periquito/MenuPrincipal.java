@@ -957,6 +957,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							Select drpCountry = new Select(prueba.findElement(By.name("categoria")));
 							drpCountry.selectByVisibleText(cat);
 							prueba.findElement(By.name("envio")).click();
+							String error = prueba.findElement(By.name("salida")).getText();
+							if (error.equals("NO HAY IMAGENES")) {
+								Config.cerrarNavegador();
+								mensaje("No hay imágenes en " + lectura[0], true);
+								abrirCarpeta(lectura[0], false);
+							}
 							int vueltas = Integer.parseInt(prueba.findElement(By.name("vueltas")).getText());
 
 							if (vueltas > 1) {
