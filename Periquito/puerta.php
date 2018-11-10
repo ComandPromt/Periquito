@@ -2,105 +2,105 @@
 <html>
 
 	<head>
-		 <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-
+		<meta charset="utf-8">
+  		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="css/bootstrap.min.css">
+  		<script src="js/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
 	</head>
-	
+
 	<body style="overflow-y: hidden;background-color:green;">
-		<h1 style="color:black;text-align:center;">Continuar<h1>
+		<h1 style="color:black;text-align:center;">Continuar</h1>
 		<div style="text-align:center;margin:auto;">
-		<a style="color:black;" href="index.php">NO</a>
-		<a name="si" style="color:black;" href="rem.php">SI</a><br/>
-		</div><hr/>
+			<a style="color:black;" href="index.php">NO</a>
+			<a name="si" style="color:black;" href="rem.php">SI</a><br/>
+		</div>
+		<hr/>
 
 <?php
 session_start();
 date_default_timezone_set('Europe/Madrid');
-include("funciones.php");
+include "funciones.php";
 comprobar_ficheros();
 
-
-
-if($_SESSION['categoria']==9){
-	
-	$ruta="imagenes/gif/";
-	cambiarExtension("imagenes/gif");
+if ($_SESSION['categoria'] == 9) {
+    $ruta = "imagenes/gif/";
+    cambiarExtension("imagenes/gif");
 }
-else{
+else {
 
-	if (count(check_images("imagenes/tmp", "jpg")) > 0 && count(check_images("imagenes", "jpg"))==0){
-		mover(true,"jpg");
-	}
-	if (count(check_images("imagenes/tmp", "png")) > 0 && count(check_images("imagenes", "png"))==0){
-		mover(true,"png");
-	}
+    if (count(check_images("imagenes/tmp", "jpg")) > 0 && count(check_images("imagenes", "jpg")) == 0) {
+        mover(true, "jpg");
+    }
+    if (count(check_images("imagenes/tmp", "png")) > 0 && count(check_images("imagenes", "png")) == 0) {
+        mover(true, "png");
+    }
 
-	comprobar_imagenes("imagenes");
-	$ruta="imagenes/";
+    comprobar_imagenes("imagenes");
+    $ruta = "imagenes/";
 }
-$imagenes=showFiles($ruta);
+
+$imagenes = showFiles($ruta);
 jpeg_jpg($imagenes);
 png_a_jpg("imagenes/");
-if($imagenes[0]==null){
-	print '<h1 style="color:red;">NO HAY IMAGENES</h1>';
+
+if ($imagenes[0] == null) {
+    print '<h1 name="salida" style="color:red;">NO HAY IMAGENES</h1>';
 }
-else{
-	cambiarExtension("imagenes");
-	$imagenes=ver($ruta);
-	$vueltas = count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg"));
+else {
+    cambiarExtension("imagenes");
+    $imagenes = ver($ruta);
+    $vueltas = count(check_images("imagenes/tmp", "jpg")) + count(check_images("imagenes", "jpg"));
 
-	if ($vueltas > 40) {
+    if ($vueltas > 40) {
 		$vueltas /= 40;
-		if (gettype($vueltas) != "integer") {
-			$vueltas = floor($vueltas) + 1;
-		}
 
-		mover(false,"jpg");
+        if (gettype($vueltas) != "integer") {
+            $vueltas = floor($vueltas) + 1;
+        }
 
-	} else {
+        mover(false, "jpg");
 
-		if (count(check_images("imagenes/tmp", "jpg")) > 0) {
-			mover(true,"jpg");
-		}
-
-		$vueltas = 1;
 	}
-	print '<h1 id="vueltas" name="vueltas">'.$vueltas.'</h1>';
-		print '<div id="myCarousel" class="carousel slide" data-ride="carousel">
+	else {
+
+        if (count(check_images("imagenes/tmp", "jpg")) > 0) {
+            mover(true, "jpg");
+        }
+
+        $vueltas = 1;
+	}
+
+    print '<h1 id="vueltas" name="vueltas">' . $vueltas . '</h1>';
+    print '<div id="myCarousel" class="carousel slide" data-ride="carousel">
 				<ol class="carousel-indicators">
   		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>';
-		
-		for($x=1;$x<count($imagenes);$x++){
-			print '<li data-target="#myCarousel" data-slide-to="'.$x.'"></li>';
-		}
-	
-		print '</ol>
+
+    for ($x = 1; $x < count($imagenes); $x++) {
+        print '<li data-target="#myCarousel" data-slide-to="' . $x . '"></li>';
+    }
+
+    print '</ol>
 	<div class="carousel-inner">
     <div class="item active">
-			<img style="width:350px;height:350px;" src='.$ruta.$imagenes[0].'>
+			<img style="width:350px;height:350px;" src=' . $ruta . $imagenes[0] . '>
 		</div>';
-		
-		for($x=1;$x<count($imagenes);$x++){
-			print '
+
+    for ($x = 1; $x < count($imagenes); $x++) {
+        print '
 			<div class="item">
-				<img style="width:350px;height:350px;" src='.$ruta.$imagenes[$x].'>
-			</div>';   
-		}
-	}
+				<img style="width:350px;height:350px;" src=' . $ruta . $imagenes[$x] . '>
+			</div>';
+    }
+}
 ?>
-			<a class="left carousel-control" href="#myCarousel" data-slide="prev">
-			<span class="glyphicon glyphicon-chevron-left"></span>
-			<span class="sr-only">Previous</span>
-			</a>
-			<a class="right carousel-control" href="#myCarousel" data-slide="next">
-			<span class="glyphicon glyphicon-chevron-right"></span>
-			<span class="sr-only">Next</span>
-			</a>
-		</div>
-		</div>
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+		<span class="glyphicon glyphicon-chevron-left"></span>
+		<span class="sr-only">Previous</span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+		<span class="glyphicon glyphicon-chevron-right"></span>
+		<span class="sr-only">Next</span>
+		</a>
 	</body>
 </html>
