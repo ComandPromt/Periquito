@@ -6,7 +6,7 @@
 
 ## 1.1 Este programa está pensado principalmente para
 
-- Redimensionamiento masivo de imagenes y creación de miniaturas para subir a un CMS de gestión de imágenes 
+- Redimensionamiento masivo de imagenes y creación de miniaturas para subirlas a un CMS de gestión de imágenes 
 
 ---
 
@@ -14,7 +14,7 @@
 
 - Crea carpetas para su funcionamiento
 
-- Cada imagen se redimensiona y se renombra con la fecha y hora actual y se convierte a jgp 
+- Cada imagen se redimensiona y se renombra con la fecha y hora actual y se convierte a JPG 
 
 - Mueve las imagenes al servidor (por red, es decir, mediante una carpeta compartida)
 
