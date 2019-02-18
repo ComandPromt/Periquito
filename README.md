@@ -4,13 +4,11 @@
 
 # 1. ¿Qué es Periquito v3.0?
 
-## 1.1 Este programa está pensado principalmente para
-
-- Redimensionamiento masivo de imágenes y creación de miniaturas para subirlas a un CMS de gestión de imágenes 
+- Este programa principalmente está pensado para subir imágenes masivas a un CMS de imágenes creando imágenes ( 640 x 480 px ) con su correspondiente miniatura (100 x 125 px )
 
 ---
 
-## 1.2 Acciones automáticas
+## 1.1 Acciones automáticas
 
 - Crea carpetas para su funcionamiento
 
@@ -19,7 +17,7 @@
 - Mueve las imágenes procesadas al servidor
 ---
 
-## 1.3 Requisitos
+## 1.2 Requisitos
 
 - Google Chrome
 
@@ -57,11 +55,11 @@ sudo systemctl restart apache2
 
 ----
 
-## 1.4 Instalación CMS
+## 1.3 Instalación CMS
 
 - Accede a http://localhost/4images/install.php (cambia "localhost" por la IP o dominio del servidor)
 
-## 1.5 Configuración la aplicación PHP para subir imágenes masivas al CMS
+## 1.4 Configuración la aplicación PHP para subir imágenes masivas al CMS
 
 - Descarga el archivo "chromedriver.exe" de [Chrome Driver](http://chromedriver.chromium.org/downloads) o [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
