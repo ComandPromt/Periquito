@@ -6,7 +6,7 @@
 
 ## 1.1 Este programa está pensado principalmente para
 
-- Redimensionamiento masivo de imagenes y creación de miniaturas para subirlas a un CMS de gestión de imágenes 
+- Redimensionamiento masivo de imágenes y creación de miniaturas para subirlas a un CMS de gestión de imágenes 
 
 ---
 
@@ -16,8 +16,7 @@
 
 - Cada imagen se redimensiona y se renombra con la fecha y hora actual y se convierte a JPG 
 
-- Mueve las imagenes al servidor (por red, es decir, mediante una carpeta compartida)
-
+- Mueve las imágenes procesadas al servidor
 ---
 
 ## 1.3 Requisitos
@@ -70,9 +69,9 @@ sudo systemctl restart apache2
 
 - Debes tener una carpeta "Periquito" en el servidor
 
-- Dentro de esta, debes tener una carpeta llamada "imagenes" con esta estructura
+- Dentro de esta, debes tener una carpeta llamada "imágenes" con esta estructura
 
-- ->imagenes
+- ->imágenes
 - --->Thumb
 - --->gif
 - ----->Thumb
@@ -81,9 +80,9 @@ sudo systemctl restart apache2
 
 - Debes tener una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
 
-- Copia o mueve tus imagenes a la carpeta imagenes
+- Copia o mueve tus imágenes a la carpeta imágenes
 
-- Los archivos .gif también van en la carpeta imagenes
+- Los archivos .gif también van en la carpeta imágenes
 
 ----
 
@@ -93,9 +92,9 @@ Ejecutar "Empezar.java" o el ".jar" de la aplicación
 
 ![Preview](previews/0.png)
 
-- Escribir el nombre común de las imagenes
+- Escribir el nombre común de las imágenes
 
-- Seleccionar la categoria y pulsar el botón "Play"
+- Seleccionar la categoría y pulsar el botón "Play"
 
 - Listo!!
 
@@ -121,7 +120,7 @@ Ejecutar "Empezar.java" o el ".jar" de la aplicación
 
 # 3. Ayuda
 
-- En la seccion ayuda se nos muestran los pasos para las configuraciones del programa
+- En la sección ayuda se nos muestran los pasos para las configuraciones del programa
 
 - Enlace a una página web para convertir fotos en blanco y negro a color
 
