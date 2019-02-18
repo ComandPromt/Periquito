@@ -60,7 +60,7 @@ sudo systemctl restart apache2
 
 ## 1.4 Instalación CMS
 
-- Accede a http://localhost/4images/install.php
+- Accede a http://localhost/4images/install.php (cambia "localhost" por la IP o dominio del servidor)
 
 ## 1.5 Configuración la aplicación PHP para subir imágenes masivas al CMS
 
