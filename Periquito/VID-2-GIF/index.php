@@ -13,6 +13,7 @@ include("../funciones.php");
 	$numi3gp=check_images("./","3gp");
 	$numimov=check_images("./","mov");
 	$numiwmv=check_images("./","wmv");
+	$numiwebm=check_images("./","ebm");
 $videos=array();
 
 if(count($numimmp4)==1){
@@ -49,6 +50,10 @@ if(count($numimov)==1 && $videos[0]==null){
 
 if(count($numiwmv)==1 && $videos[0]==null){
 	$videos[0]=$numiwmv[0];
+}
+
+if(count($numiwebm)==1 && $videos[0]==null){
+	$videos[0]=$numiwebm[0];
 }
 
   if(count($videos)==1){ 

@@ -119,7 +119,7 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
         	require "src/GifCreator/AnimGif.php";
 
         	$anim = new GifCreator\AnimGif();
-		if (count($imagenes) <= 10) {
+			if (count($imagenes) <= 10) {
 				$rapidez=20;
 			}
 			else{
@@ -135,12 +135,12 @@ if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != 
 		
  		if($_SESSION['video2gif']){
 			rename("Output/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif","../imagenes/".date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif");
-			print '<h1 name="salida">Exito</h1>';
+			print '<h1 name="salida">Exito!</h1>';
 		}
 		else{
 			print '<h1 name="salida">Success</h1>';
 		}
-	    	print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
+		print '<h2 name="imagen">'.date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s") . ".gif".'</h2>';
 	}
 } else {
      print '<h1 name="salida">Folder empty</h1>';
