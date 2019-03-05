@@ -76,9 +76,7 @@ sudo systemctl restart apache2
 
 # 2. Manual del programa Java
 
-- Nota: antes de nada debes tener un archivo llamado "chromedriver.exe" dentro de la carpeta "Utils". Si el programa falla se debe de actualizar el driver descargándolo desde [Chrome Driver](http://chromedriver.chromium.org/downloads) o [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-
-- Pega/Reemplaza el archivo "chromedriver.exe"
+- Nota: antes de nada debes tener un archivo llamado "chromedriver.exe" en la carpeta de la aplicación. Se puede descargar desde [Chrome Driver](http://chromedriver.chromium.org/downloads) o [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
 
 ## Iniciar la aplicación
 
