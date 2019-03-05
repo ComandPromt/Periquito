@@ -4,7 +4,7 @@
 
 # 1. ¿Qué es Periquito v3.0?
 
-- Este programa principalmente está pensado para subir imágenes masivas a un CMS de imágenes creando imágenes ( 640 x 480 px ) con su correspondiente miniatura (100 x 125 px )
+- Este programa principalmente está pensado para subir imágenes masivas a un CMS de gestión de imágenes creando imágenes ( 640 x 480 px ) con su correspondiente miniatura (100 x 125 px )
 
 ---
 
@@ -23,7 +23,7 @@
 
 [Chrome](https://www.google.com/intl/es_ALL/chrome/)
 
-- Servidor web con base de datos MySQL (WAMP O LAMP)
+- Servidor web con base de datos MySQL (WAMP ,LAMP o XAMPP)
 
 [Windows](http://prdownloads.sourceforge.net/appserv/appserv-win32-8.6.0.exe?download)
 
@@ -59,60 +59,60 @@ sudo systemctl restart apache2
 
 - Accede a http://localhost/4images/install.php (cambia "localhost" por la IP o dominio del servidor)
 
-## 1.4 Configuración la aplicación PHP para subir imágenes masivas al CMS
+## 1.4 Configuración de la aplicación PHP para subir imágenes masivas al CMS
 
-- Descarga el archivo "chromedriver.exe" de [Chrome Driver](http://chromedriver.chromium.org/downloads) o [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
-
-- Pega el archivo en la misma carpeta que "copiar.bat"
-
-- Debes tener una carpeta "Periquito" en el servidor
+- Debes tener una carpeta llamada "Periquito" en la carpeta raíz del servidor web
 
 - Dentro de esta, debes tener una carpeta llamada "imágenes" con esta estructura
 
 - ->imágenes
 - --->Thumb
 - --->gif
-- ----->Thumb
+- ----->Thumb (dentro de la carpeta gif)
 
-- Debes tener una carpeta llamada "img" dentro de la carpeta "Hacer_gif"
-
-- Debes tener una carpeta llamada "Output" dentro de la carpeta "Hacer_gif"
-
-- Copia o mueve tus imágenes a la carpeta imágenes
-
-- Los archivos .gif también van en la carpeta imágenes
+- Copia o mueve tus imágenes (JPG,PNG,GIF) a la carpeta imágenes
 
 ----
 
 # 2. Manual del programa Java
 
-Ejecutar "Empezar.java" o el ".jar" de la aplicación
+- Nota: antes de nada debes tener un archivo llamado "chromedriver.exe" dentro de la carpeta "Utils". Si el programa falla se debe de actualizar el driver descargándolo desde [Chrome Driver](http://chromedriver.chromium.org/downloads) o [Chrome Driver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+
+- Pega/Reemplaza el archivo "chromedriver.exe"
+
+## Iniciar la aplicación
+
+Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
+
+## Uso de la utilidad principal
+
+- Escribir el nombre común de las imágenes (En este caso subiremos varias imágenes de perros)
 
 ![Preview](previews/0.png)
 
-- Escribir el nombre común de las imágenes
-
-- Seleccionar la categoría y pulsar el botón "Play"
+- Seleccionar la categoría correspondiente y pulsar el botón "Play"
 
 - Listo!!
 
+### Nota: se debe tener en cuenta que se mostrará un mensaje de las veces que tienes que pulsar el botón de play en el caso de que se quieran subir más de 40 imágenes al CMS
+
 ----
 
-## 2.1 Utilidades de conversión (Crear GIF, GIF a frames,Video a GIF,Video a frames)
+## 2.1 Casilla Fix
+
+- Esta opción copia las imágenes al CMS (se aconseja usar esta utilidad en caso de fallo de la aplicación)
+
+![Preview](previews/1.png)
+
+----
+
+## 2.2 Utilidades de conversión (Crear GIF, GIF a frames, Video a GIF, Video a frames)
 
 - Tenemos que pegar el archivo requerido en cada carpeta del programa
 
-- Hacer clic en la accion que queramos
+- Hacer clic en la acción que queramos
 
 ![Preview](previews/2.png)
-
-----
-
-## 2.2 Casilla Fix
-
-- Esta opción cierra el navegador y copia las imágenes por red al CMS
-
-![Preview](previews/1.png)
 
 ----
 
