@@ -19,11 +19,13 @@
 
 ## 1.2 Requisitos
 
+- Ffmpeg (se instala en el servidor,es decir, en el equipo del CMS)
+
 - Google Chrome
 
 [Chrome](https://www.google.com/intl/es_ALL/chrome/)
 
-- Servidor web con base de datos MySQL (WAMP ,LAMP o XAMPP)
+- Servidor web con base de datos MySQL (WAMP ,LAMP,MAMP o XAMPP)
 
 [Windows](http://prdownloads.sourceforge.net/appserv/appserv-win32-8.6.0.exe?download)
 
@@ -55,7 +57,7 @@ sudo systemctl restart apache2
 
 ----
 
-## 1.3 Instalación CMS
+## 1.3 Instalación del CMS
 
 - Accede a http://localhost/4images/install.php (cambia "localhost" por la IP o dominio del servidor)
 
@@ -65,8 +67,10 @@ sudo systemctl restart apache2
 
 - Dentro de esta, debes tener una carpeta llamada "imágenes" con esta estructura
 
-- ->imágenes
-- --->Thumb
+- Nota: el programa las crea automáticamente
+
+- ->imagenes
+- --->Thumb (dentro de la carpeta imagenes)
 - --->gif
 - ----->Thumb (dentro de la carpeta gif)
 
