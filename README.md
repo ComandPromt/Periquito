@@ -76,6 +76,8 @@ sudo systemctl restart apache2
 
 - Copia o mueve tus imágenes (JPG,PNG,GIF) a la carpeta imágenes
 
+- Opcional: para las utilidades (Video a GIF, frames a GIF y video a frames) tienes que tener una carpeta llamada "Utilidades" dentro de la carpeta "Periquito"
+
 ----
 
 # 2. Manual del programa Java
@@ -146,6 +148,8 @@ Video 2 Frames
 
 ---
 Image API
+
+*Nota: se usa esta API para asegurar que las imágenes se suben en orden alfabético, es decir, en el mismo orden que tenían antes de ser renombradas
 
 [API](https://dashboard.heroku.com/apps/apiperiquito)
 [Source](https://github.com/ComandPromt/Images-Periquito-API)
