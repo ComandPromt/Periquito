@@ -61,22 +61,9 @@ sudo systemctl restart apache2
 
 - Accede a http://localhost/4images/install.php (cambia "localhost" por la IP o dominio del servidor)
 
-## 1.4 Configuración de la aplicación PHP para subir imágenes masivas al CMS
+## 1.4 Configuración de las Utilidades
 
-- Debes tener una carpeta llamada "Periquito" en la carpeta raíz del servidor web
-
-- Dentro de esta, debes tener una carpeta llamada "imágenes" con esta estructura
-
-- Nota: el programa las crea automáticamente
-
-- ->imagenes
-- --->Thumb (dentro de la carpeta imagenes)
-- --->gif
-- ----->Thumb (dentro de la carpeta gif)
-
-- Copia o mueve tus imágenes (JPG,PNG,GIF) a la carpeta imágenes
-
-- Opcional: para las utilidades (Video a GIF, frames a GIF y video a frames) tienes que tener una carpeta llamada "Utilidades" dentro de la carpeta "Periquito"
+Para las utilidades (Video a GIF, frames a GIF y video a frames) tienes que tener una carpeta llamada "Utilidades" dentro de la carpeta "Periquito" en la carpeta raíz del servidor web
 
 ----
 
@@ -149,7 +136,7 @@ Video 2 Frames
 ---
 Image API
 
-*Nota: se usa esta API para asegurar que las imágenes se suben en orden alfabético, es decir, en el mismo orden que tenían antes de ser renombradas
+*Nota: se usa esta API para asegurar que las imágenes se suben en orden alfabético, es decir, en el mismo orden que tenían antes de ser renombradas. Esta API se usará en el programa Java para que el usuario sólo tenga en el servidor web las utilidades del programa
 
 [API](https://dashboard.heroku.com/apps/apiperiquito)
 [Source](https://github.com/ComandPromt/Images-Periquito-API)
