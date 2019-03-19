@@ -125,3 +125,27 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 - Enlace a una página web para convertir fotos en blanco y negro a color
 
 ![Preview](previews/3.png)
+
+# 4. Utilidades
+---
+GIF 2 Frames
+
+[GIF 2 Frames](https://gifframes.herokuapp.com/)
+
+[Source](https://github.com/ComandPromt/GifFrames-API)
+
+---
+Frames 2 GIF
+
+[Source](https://github.com/ComandPromt/Frames-to-GIF)
+
+---
+Video 2 Frames
+
+[Source](https://github.com/ComandPromt/Video-to-frames-php)
+
+---
+Image API
+
+[API](https://dashboard.heroku.com/apps/apiperiquito)
+[Source](https://github.com/ComandPromt/Images-Periquito-API)
