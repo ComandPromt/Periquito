@@ -2,7 +2,7 @@
 error_reporting(0);
 session_start();
 
-include("../funciones.php");
+include("funciones.php");
 
     $numimmp4=check_images("./","mp4");
 	$numiflv=check_images("./","flv");
