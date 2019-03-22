@@ -55,6 +55,10 @@ sudo systemctl restart apache2
 
 [Java](https://www.java.com/es/download/)
 
+- CMS
+
+[CMS](https://github.com/ComandPromt/4images-UPDATED)
+
 ----
 
 ## 1.3 Instalación del CMS
@@ -140,7 +144,3 @@ Image API
 
 [API](https://dashboard.heroku.com/apps/apiperiquito)
 [Source](https://github.com/ComandPromt/Images-Periquito-API)
-
----
-CMS
-[CMS](https://github.com/ComandPromt/4images-UPDATED)
