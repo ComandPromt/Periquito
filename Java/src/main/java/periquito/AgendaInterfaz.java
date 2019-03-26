@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -171,10 +172,12 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 							new Agregar().setVisible(true);
 						});
 					} else {
+						Connection conexion = Metodos.conexionBD();
 
-						s = Metodos.conectarbd();
+						s = conexion.createStatement();
+
 						if (jList1.getModel().getSize() == 0) {
-							rs = s.executeQuery("select Nombre from usuarios");
+							rs = s.executeQuery("select Nombre from usuarios order by Nombre");
 							while (rs.next()) {
 
 								modelo.addElement(rs.getString("Nombre"));
@@ -185,7 +188,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 							try {
 
 								rs = s.executeQuery("select Nombre,tipo,descripcion from usuarios WHERE Nombre='"
-										+ jList1.getSelectedValue().toString() + "'");
+										+ jList1.getSelectedValue().toString() + "' order by Nombre");
 								rs.next();
 								cnombre = rs.getString("Nombre");
 								ctipo = rs.getString("tipo");
@@ -194,8 +197,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 								tipo.setText(rs.getString("tipo"));
 								nota.setText(rs.getString("descripcion"));
 
-								rs = s.executeQuery(
-										"select id from usuarios WHERE Nombre='" + rs.getString("Nombre") + "'");
+								rs = s.executeQuery("select id from usuarios WHERE Nombre='" + rs.getString("Nombre")
+										+ "' order by Nombre");
 								rs.next();
 								iduser = rs.getString("id");
 
@@ -471,9 +474,11 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 	public static void verUsuarios() throws SQLException, IOException {
 		modelo.removeAllElements();
+		Connection conexion = Metodos.conexionBD();
 
-		Statement s = Metodos.conectarbd();
-		ResultSet rs = s.executeQuery("select Nombre from usuarios");
+		Statement s = conexion.createStatement();
+
+		ResultSet rs = s.executeQuery("select Nombre from usuarios order by Nombre");
 
 		while (rs.next()) {
 			modelo.addElement(rs.getString("Nombre"));
@@ -493,8 +498,10 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 			if (JOptionPane.OK_OPTION == confirmado) {
 
 				try {
+					Connection conexion = Metodos.conexionBD();
 
-					s = Metodos.conectarbd();
+					s = conexion.createStatement();
+
 					s.executeUpdate("DELETE FROM usuarios WHERE Nombre='" + jList1.getSelectedValue() + "'");
 					vaciarDatos();
 					verUsuarios();

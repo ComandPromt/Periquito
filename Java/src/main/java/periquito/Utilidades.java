@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
@@ -184,7 +185,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setSize(new Dimension(613, 323));
 		setLocationRelativeTo(null);
 		prefijoTablas.setText(prefijoTablas.getText().trim());
-		Metodos.ponerCategoriasBd(comboBox);
+		try {
+			Metodos.ponerCategoriasBd(comboBox);
+		} catch (SQLException e1) {
+
+		}
 		{
 			javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
 			new DragAndDrop(System.out, imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
@@ -202,7 +207,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							String tabla = prefijo + "images";
 							int categoria = comboBox.getSelectedIndex() + 1;
 							int id;
-							s = Metodos.conectarbd();
+
+							Connection conexion = Metodos.conexionBD();
+
+							s = conexion.createStatement();
+
 							rs = s.executeQuery("select MAX(image_id)+1 FROM " + tabla);
 							rs.next();
 							id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
@@ -211,8 +220,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							rs.close();
 
 							String thumb;
+							conexion = Metodos.conexionBD();
 
-							s = Metodos.conectarbd();
+							s = conexion.createStatement();
 
 							FileWriter flS = new FileWriter("Config/SQL.sql");
 							BufferedWriter fS = new BufferedWriter(flS);
@@ -231,7 +241,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 								id++;
 							}
 							fS.close();
-							Connection conexion = Metodos.conexionBD("");
+							conexion = Metodos.conexionBD();
+
+							s = conexion.createStatement();
 							InputStream archivo = new FileInputStream("SQL.sql");
 							Metodos.executeScript(conexion, archivo);
 							Metodos.eliminarFichero("SQL.sql");

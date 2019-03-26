@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -39,7 +38,6 @@ import javax.swing.event.ChangeListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
 
 import Utils.DragAndDrop;
 import Utils.Metodos;
@@ -95,16 +93,13 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem mntmNewMenuItem_12;
 	private JSeparator separator_12;
 	final static javax.swing.JTextArea imagenes = new javax.swing.JTextArea();
-	static ArrayList<String> categorias;
 
-	public static ArrayList<String> getCategorias() {
-		return categorias;
-	}
-
-	String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 6);
+	String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
 	String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
-	String[] lecturacategorias;
+	String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+
 	private JSeparator separator_13;
 	private JMenuItem mntmNewMenuItem_13;
 	private JMenu mnNewMenu;
@@ -188,10 +183,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		lectura[3] = urlPredeterminada(lectura[3]);
 		String comprobacion = null;
 		String imagen;
-		WebDriver firefox = new ChromeDriver();
-		firefox.get(lectura[3]);
-		comprobacion = firefox.findElement(By.name("salida")).getText();
-		imagen = firefox.findElement(By.name("imagen")).getText();
+		WebDriver chrome = new ChromeDriver();
+		chrome.get(lectura[3]);
+		comprobacion = chrome.findElement(By.name("salida")).getText();
+		imagen = chrome.findElement(By.name("imagen")).getText();
 		if (comprobacion.equals("Folder empty")) {
 			mensaje("No hay imagenes en " + lectura[2] + "\\img", true);
 			Metodos.abrirCarpeta(lectura[2] + "\\img", true);
@@ -202,7 +197,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				mensaje(salida + " GIF creado correctamente", false);
 				if (salida > 0) {
 					Metodos.abrirCarpeta(lectura[0], true);
-					firefox.get("file:///" + lectura[0] + "/" + imagen);
+					chrome.get("file:///" + lectura[0] + "/" + imagen);
 				}
 			} catch (IOException e1) {
 				mensaje("Error en la creación de archivos GIF", true);
@@ -270,6 +265,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 	public MenuPrincipal() throws IOException {
 
+		Metodos.guardarConfig(3);
+
 		if (lectura[0] == null) {
 			Metodos.guardarConfig(1);
 		}
@@ -282,16 +279,24 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			Metodos.guardarConfig(4);
 		}
 
-		try {
-			lecturacategorias = Metodos.leerFicheroArray("Config/Categorias.txt", 1);
-			if (lecturacategorias[0] == null) {
-				Metodos.guardarConfig(3);
+		if (lecturabd[0] == null) {
+			Metodos.crearFichero("Config/Bd.txt", "", false);
+			new Bd().setVisible(true);
+		}
+
+		if (lecturabackup[0] == null && lecturaos[0] != null) {
+
+			switch (Integer.parseInt(lecturaos[0])) {
+			case 1:
+				Metodos.crearFichero("Config/Backup.txt", "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop",
+						false);
+				break;
+			case 2:
+				Metodos.crearFichero("Config/Backup.txt", "1", false);
+				break;
 			}
-		}
 
-		catch (ArrayIndexOutOfBoundsException e) {
 		}
-
 		getContentPane().setFont(new Font("Arial", Font.PLAIN, 11));
 		File config = new File("Config/");
 		if (!config.exists()) {
@@ -328,17 +333,20 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGif.add(mnGifAnimator);
 		mnGifAnimator.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				File af = new File("Config/Config.txt");
-				if (af.exists()) {
-					try {
-						if (!lectura[0].isEmpty() && lectura[0] != null && !lectura[2].isEmpty() && lectura[2] != null
-								&& !lectura[3].isEmpty() && lectura[3] != null) {
-							creargif(lectura);
-						} else {
-							new Config().setVisible(true);
+
+				if (Metodos.probarconexion(Metodos.saberServidor(lectura[3]))) {
+					File af = new File("Config/Config.txt");
+					if (af.exists()) {
+						try {
+							if (!lectura[0].isEmpty() && lectura[0] != null && !lectura[2].isEmpty()
+									&& lectura[2] != null && !lectura[3].isEmpty() && lectura[3] != null) {
+								creargif(lectura);
+							} else {
+								new Config().setVisible(true);
+							}
+						} catch (ArrayIndexOutOfBoundsException e1) {
+							mensaje("Error en el archivo Config.txt", true);
 						}
-					} catch (ArrayIndexOutOfBoundsException e1) {
-						mensaje("Error en el archivo Config.txt", true);
 					}
 				}
 			}
@@ -351,44 +359,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGif.add(mnGifExtractor);
 		mnGifExtractor.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				File af = new File("Config/Config.txt");
-				if (af.exists()) {
-					try {
-						if (!lectura[4].isEmpty() && lectura[4] != null && !lectura[5].isEmpty()
-								&& lectura[5] != null) {
-							int comprobacion = 0;
-							WebDriver firefox = new ChromeDriver();
-							firefox.get(lectura[5] = convertirCadena(lectura[5], "firefox"));
-							comprobacion = Integer.parseInt(firefox.findElement(By.name("salida")).getText());
-							Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
-							switch (comprobacion) {
-							case 1:
-								mensaje("Ya has convertido un gif a frames!", true);
-								Metodos.abrirCarpeta(lectura[4] + "\\frames", true);
-								break;
-							case 2:
-								mensaje("Debes de tener solo un archivo en la carpeta gif", true);
-								Metodos.abrirCarpeta(lectura[4], true);
-								break;
-							case 3:
-								mensaje("No hay 1 archivo gif para extraer", true);
-								Metodos.abrirCarpeta(lectura[4], true);
-								break;
-							case 4:
-								Metodos.eliminarDuplicados(lectura[0] + "\\..\\GifFrames\\frames");
-								Metodos.abrirCarpeta(lectura[4] + "\\frames", true);
-								break;
-							}
-						} else {
-							new Config().setVisible(true);
-						}
-						Metodos.eliminarFichero("cerrar.bat");
-					} catch (ArrayIndexOutOfBoundsException e1) {
-						mensaje("Error en el archivo Config.txt", true);
-					}
+				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "\\GifFrames")) == 1) {
+					WebDriver chrome = new ChromeDriver();
+					chrome.get("https://gifframes.herokuapp.com");
+					chrome.findElement(By.id("imagen")).sendKeys(lectura[0] + "\\GifFrames\\picture.gif");
+					chrome.findElement(By.name("enviar")).click();
+					Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
+					Metodos.eliminarFichero("cerrar.bat");
 				}
+
 			}
+
 		});
 		mnGifExtractor.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/carpeta.png")));
 		mnGifExtractor.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -409,10 +391,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						Config guardar = new Config();
 						guardar.guardarDatos(false);
 					}
-					WebDriver firefox = new ChromeDriver();
-					firefox.get(
-							lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "firefox"));
-					comprobacion = Integer.parseInt(firefox.findElement(By.name("salida")).getText());
+					WebDriver chrome = new ChromeDriver();
+					chrome.get(
+							lectura[5] = convertirCadena(lectura[1] + "/FrameExtractor/examples/index.php", "chrome"));
+					comprobacion = Integer.parseInt(chrome.findElement(By.name("salida")).getText());
 					Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
 					switch (comprobacion) {
@@ -454,19 +436,19 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					Config guardar = new Config();
 					guardar.guardarDatos(false);
 				}
-				WebDriver firefox = new ChromeDriver();
-				firefox.get(lectura[5] = convertirCadena(lectura[1] + "/VID-2-GIF/index.php", "firefox"));
-				comprobacion = firefox.findElement(By.name("salida")).getText();
+				WebDriver chrome = new ChromeDriver();
+				chrome.get(lectura[5] = convertirCadena(lectura[1] + "/VID-2-GIF/index.php", "chrome"));
+				comprobacion = chrome.findElement(By.name("salida")).getText();
 				if (comprobacion.equals("No tienes videos")) {
 					Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
 					mensaje("Debes tener un video en la carpeta de conversion", true);
 					Metodos.abrirCarpeta(lectura[0] + "\\..\\VID-2-GIF", true);
 				} else {
-					String imagen = firefox.findElement(By.name("imagen")).getText();
+					String imagen = chrome.findElement(By.name("imagen")).getText();
 					Metodos.abrirCarpeta(lectura[0] + "\\..\\imagenes", true);
 					if (!lectura[0].isEmpty() && !lectura[0].equals("") && lectura[0] != null) {
-						firefox.get("file:///" + lectura[0] + "/" + imagen);
+						chrome.get("file:///" + lectura[0] + "/" + imagen);
 					}
 				}
 				Metodos.eliminarFichero("cerrar.bat");
@@ -480,7 +462,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmUploads.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				new AgendaInterfaz().setVisible(true);
+
+				try {
+					if (Metodos.comprobarConfiguracion()) {
+
+						new AgendaInterfaz().setVisible(true);
+					}
+				} catch (IOException e) {
+				}
+
 			}
 		});
 		separator_11 = new JSeparator();
@@ -491,19 +481,17 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				categorias = new ArrayList<String>();
+
 				try {
-					categorias = Metodos.verCategorias();
-
-					new Utilidades().setVisible(true);
-				} catch (SQLException | IOException e) {
-
-					try {
-						new Bd().setVisible(true);
-					} catch (IOException e1) {
+					if (Metodos.comprobarConfiguracion()) {
+						try {
+							new Utilidades().setVisible(true);
+						} catch (IOException e) {
+						}
 					}
-
+				} catch (IOException e) {
 				}
+
 			}
 
 		});
@@ -525,8 +513,27 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_13.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				Metodos.exportarBd(1);
-				Metodos.eliminarFichero("backupbd.bat");
+
+				try {
+					File archivo = new File("Config/Backup.txt");
+
+					if (!archivo.exists()) {
+						Metodos.crearFichero("Config/Backup.txt",
+								"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
+
+					} else {
+
+						if (Metodos.comprobarConfiguracion()) {
+
+							Metodos.exportarBd(1);
+							Metodos.eliminarFichero("backupbd.bat");
+							Metodos.eliminarFichero("reiniciar_explorer.bat");
+						}
+
+					}
+				} catch (IOException e) {
+				}
+
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem_13);
@@ -547,11 +554,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmImages.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				try {
-					comprobarConexion("Config/Config.txt", lectura[0]);
-				} catch (ArrayIndexOutOfBoundsException e1) {
-					mensaje("Error en el archivo Config.txt", true);
-				}
+				Metodos.abrirCarpeta("imagenes", false);
 			}
 		});
 		mntmImages.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
@@ -561,11 +564,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmImages_1.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+
 				try {
-					comprobarConexion("Config/Config.txt", lectura[2]);
+
+					comprobarConexion("Config/Config.txt", lectura[0] + "\\Hacer_gif\\img");
+
 				} catch (ArrayIndexOutOfBoundsException e1) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
+
 			}
 		});
 		separator_1 = new JSeparator();
@@ -581,7 +588,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmCxvxv.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				try {
-					comprobarConexion("Config/Config.txt", lectura[4]);
+					comprobarConexion("Config/Config.txt", lectura[0] + "\\FrameExtractor\\examples\\video");
 				} catch (ArrayIndexOutOfBoundsException e1) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
@@ -595,7 +602,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem_8.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					comprobarConexion("Config/Config.txt", lectura[0] + "\\..\\FrameExtractor\\examples\\video");
+					comprobarConexion("Config/Config.txt", lectura[0] + "\\FrameExtractor\\examples\\video");
 				} catch (ArrayIndexOutOfBoundsException e) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
@@ -695,7 +702,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					Metodos.crearFichero("Config/OS.txt", "1");
+					Metodos.crearFichero("Config/OS.txt", "1", false);
 				} catch (IOException e) {
 					mensaje("No se ha podido guardar el archivo OS.txt", true);
 				}
@@ -717,7 +724,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.crearFichero("Config/OS.txt", "2");
+					Metodos.crearFichero("Config/OS.txt", "2", false);
 				} catch (IOException e1) {
 					mensaje("No se ha podido guardar el archivo OS.txt", true);
 				}
@@ -756,18 +763,20 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	}
 
 	public void initComponents() throws IOException {
+		Metodos.crearCarpetas();
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.LEFT);
 		jLabel1 = new javax.swing.JLabel();
 		jLabel1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
 		jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 		jComboBox1 = new javax.swing.JComboBox<>();
-		// ponerCategorias();
+
 		try {
-			categorias = Metodos.verCategorias();
-			Metodos.ponerCategoriasBd(jComboBox1);
+			if (Metodos.comprobarConexion()) {
+				Metodos.ponerCategoriasBd(jComboBox1);
+			}
 		} catch (SQLException e3) {
-			new Bd().setVisible(true);
+
 		}
 
 		jLabel2 = new javax.swing.JLabel();
@@ -829,7 +838,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		btnNewButton.addActionListener(this);
 		btnNewButton.setEnabled(false);
 
-		if (!Metodos.probarconexion()) {
+		if (!Metodos.probarconexion("www.google.com")) {
 			mensaje("No hay conexión a internet", true);
 		}
 		Metodos.comprobarArchivo("Config");
@@ -853,17 +862,16 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 								new Config2().setVisible(true);
 							} else {
 								try {
-									String[] categorias = Metodos.leerFicheroArray("Config/Categorias.txt",
-											Metodos.numeroLineas("Categorias.txt"));
+
 									if (!lectura[0].isEmpty() && !lectura[1].isEmpty() && lectura[0] != null
 											&& lectura[1] != null) {
 										String cat = (String) jComboBox1.getSelectedItem();
 										if (cat != null) {
-											int opcion = Metodos.searchString(categorias, cat) + 1;
+
 											try {
 												lectura[0] = Metodos.eliminarUltimoElemento(lectura[0]);
-												mover_imagenes(opcion, lectura[0], true);
-											} catch (IOException e1) {
+												// mover_imagenes(opcion, lectura[0], true);
+											} catch (Exception e1) {
 												mensaje("Error al copiar las imagenes", true);
 												try {
 													verConfiguraciones();
@@ -901,13 +909,22 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		boton1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/start.png")));
 		boton1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (Metodos.probarconexion()) {
-					try {
-						button1ActionPerformed(arg0);
-					} catch (IOException e) {
+
+				try {
+					if (Metodos.comprobarConfiguracion()) {
+						if (!jTextField1.getText().trim().equals("")) {
+
+							button1ActionPerformed(arg0);
+
+						} else {
+							mensaje("Debes introducir un nombre para las imagenes", true);
+						}
 					}
+				} catch (IOException e) {
 				}
+
 			}
+
 		});
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -1010,109 +1027,74 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		return comprobacion;
 	}
 
-	@SuppressWarnings("static-access")
 	private void button1ActionPerformed(java.awt.event.ActionEvent evt) throws IOException {
-
-		File af = new File("Config/Config.txt");
-		if (!validarURL(2)) {
-			mensaje("Error en la URL proporcionada o en la carpeta de imágenes", true);
-			new Config2().setVisible(true);
-			new Config().setVisible(true);
+		File carpeta = new File("imagenes");
+		if (Metodos.listarFicherosPorCarpeta(carpeta) == 0) {
+			Metodos.mensaje("No hay imágenes en la carpeta", 3);
+			Metodos.abrirCarpeta("imagenes", false);
 		} else {
-			if (!validarURL(1)) {
-				mensaje("Configuración errónea", true);
+			if (!validarURL(2)) {
+				mensaje("Error en la URL proporcionada o en la carpeta de imágenes", true);
+				new Config2().setVisible(true);
 				new Config().setVisible(true);
-			}
-			if (af.exists()) {
-				String[] categoriias;
-				if (Metodos.numeroLineas("Categorias.txt") > 0) {
-					categoriias = Metodos.leerFicheroArray("Config/Categorias.txt",
-							Metodos.numeroLineas("Categorias.txt"));
-					if (!lectura[0].isEmpty() && lectura[0] != null && !lectura[1].isEmpty() && lectura[1] != null
-							&& !categoriias[0].isEmpty() && categoriias[0] != null) {
+			} else {
+				if (validarURL(1) || Metodos.comprobarConexion()) {
+
+					if (jComboBox1.getItemCount() > 0) {
+
 						String comprobacion = jTextField1.getText().trim();
-						final File carpeta = new File(lectura[0]);
+						comprobacion = comprobacion.replaceAll("  ", " ");
 
 						if (Metodos.listarFicherosPorCarpeta(carpeta) <= 0) {
-							mensaje("No hay imágenes en " + lectura[0], true);
-							Metodos.abrirCarpeta(lectura[0], false);
+							mensaje("No hay imágenes en la carpeta imágenes", true);
+							Metodos.abrirCarpeta("imagenes", false);
 						} else {
 							if (comprobacion.length() != 0 && Metodos.listarFicherosPorCarpeta(carpeta) >= 1) {
 
-								comprobacion = comprobacion.replace("  ", " ");
-								comprobacion = comprobacion.replace("   ", " ");
-								comprobacion = comprobacion.replace("  ", " ");
-								comprobacion = comprobacion.replace("   ", " ");
-								comprobacion = comprobacion.replace("  ", " ");
-								int resultado = comprobacion.indexOf(" ");
-								resultado = Integer.parseInt((comprobacion.valueOf(resultado + 1)));
-								if (resultado > 0) {
-									comprobacion = comprobacion.replaceAll("  ", " ");
-								}
+								// Metodos.png_a_jpg("asdas.png");
+
 								String cat = (String) jComboBox1.getSelectedItem();
 								int opcion = -1;
-								lectura[1] = convertirCadena(lectura[1], "boton");
+								Metodos.obtenerJSON();
 								WebDriver prueba = new ChromeDriver();
-								prueba.get(lectura[1]);
-								prueba.findElement(By.name("nombre")).sendKeys(comprobacion);
-								Select drpCountry = new Select(prueba.findElement(By.name("categoria")));
-								drpCountry.selectByVisibleText(cat);
-								prueba.findElement(By.name("envio")).click();
-
-								int vueltas = Integer.parseInt(prueba.findElement(By.name("vueltas")).getText());
-								if (vueltas > 1) {
-									check6.setEnabled(true);
-									check6.setText("Nº de veces al play: " + vueltas--);
-								}
-								prueba.findElement(By.name("si")).click();
-								opcion = Integer.parseInt(prueba.findElement(By.name("salida")).getText());
-								if (lectura[0].length() > 1) {
-									if (lectura[0].charAt(lectura[0].length() - 1) != 92) {
-										if (lectura[0].charAt(lectura[0].length() - 1) == 47) {
-											lectura[0] = lectura[0].substring(0, lectura[0].length() - 1);
-										}
-										lectura[0] += "\\";
-									}
-									Config guardar = new Config();
-									Config.jTextField1.setText(lectura[0]);
-									guardar.guardarDatos(false);
-								}
-								try {
-									mover_imagenes(opcion, lectura[0], true);
-								} catch (IOException e) {
-									mensaje("Error al mover las imagenes", true);
-									verConfiguraciones();
-								}
-
-							} else {
-								mensaje("Introduce un texto", true);
+								prueba.get("http://google.es");
+								/*
+								 * dddddddddddddddd WebDriver prueba = new ChromeDriver();
+								 * prueba.get(lectura[1]);
+								 * prueba.findElement(By.name("nombre")).sendKeys(comprobacion); Select
+								 * drpCountry = new Select(prueba.findElement(By.name("categoria")));
+								 * drpCountry.selectByVisibleText(cat);
+								 * prueba.findElement(By.name("envio")).click();
+								 * 
+								 * int vueltas =
+								 * Integer.parseInt(prueba.findElement(By.name("vueltas")).getText()); if
+								 * (vueltas > 1) { check6.setEnabled(true);
+								 * check6.setText("Nº de veces al play: " + vueltas--); }
+								 * prueba.findElement(By.name("si")).click(); opcion =
+								 * Integer.parseInt(prueba.findElement(By.name("salida")).getText()); if
+								 * (lectura[0].length() > 1) { if (lectura[0].charAt(lectura[0].length() - 1) !=
+								 * 92) { if (lectura[0].charAt(lectura[0].length() - 1) == 47) { lectura[0] =
+								 * lectura[0].substring(0, lectura[0].length() - 1); } lectura[0] += "\\"; }
+								 * Config guardar = new Config(); Config.jTextField1.setText(lectura[0]);
+								 * guardar.guardarDatos(false); } try { mover_imagenes(opcion, lectura[0],
+								 * true); } catch (IOException e) { mensaje("Error al mover las imagenes",
+								 * true); verConfiguraciones(); }
+								 */
 							}
 						}
-					} else {
-						if ((lectura[0].isEmpty() || lectura[1].isEmpty())) {
-							new Config().setVisible(true);
-						} else {
-							if (!af.exists()) {
-								new Config().setVisible(true);
-							} else {
-								if (!af.exists()) {
 
-									new Config().setVisible(true);
-
-								}
-							}
-						}
 					}
 				}
-			}
-			if (check6.getText() != "") {
-				int veces = Integer
-						.parseInt(check6.getText().substring(check6.getText().length() - 1, check6.getText().length()));
-				veces--;
-				if (veces == 0) {
-					check6.setText("");
-				} else {
-					check6.setText(check6.getText().substring(0, check6.getText().length() - 1) + veces);
+				if (check6.getText() != "") {
+
+					int veces = Integer.parseInt(
+							check6.getText().substring(check6.getText().length() - 1, check6.getText().length()));
+					veces--;
+					if (veces == 0) {
+						check6.setText("");
+					} else {
+						check6.setText(check6.getText().substring(0, check6.getText().length() - 1) + veces);
+					}
 				}
 			}
 		}

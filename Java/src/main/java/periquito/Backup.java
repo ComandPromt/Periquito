@@ -79,10 +79,15 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 
 	void guardarDatos(Boolean mensaje) {
 		try {
+			String texto = jTextField1.getText().trim();
+			if (texto.isEmpty() || texto == null) {
+				texto = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop";
+			}
+
 			FileWriter flS = new FileWriter("Config/Backup.txt");
 			BufferedWriter fS = new BufferedWriter(flS);
 
-			fS.write(jTextField1.getText().trim());
+			fS.write(texto);
 			fS.newLine();
 
 			fS.close();
@@ -93,14 +98,16 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 			}
 
 		} catch (IOException e) {
+
 			if (mensaje) {
 				mensaje("Error al crear el fichero de configuracion", true);
 			}
+
 		}
 	}
 
 	public Backup() {
-		setTitle("Periquito v3 Config Backup");
+		setTitle("Periquito v3 Backup");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);

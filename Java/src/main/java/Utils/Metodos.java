@@ -1,6 +1,8 @@
 package Utils;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,8 +12,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,20 +34,81 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+import javax.json.JsonException;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.json.JSONObject;
+
+import periquito.Bd;
 import periquito.Config;
 import periquito.Config2;
-import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
-	public static boolean probarconexion() {
-		String dirWeb = "www.google.com";
+	public static void png_a_jpg(String imagen) {
+		BufferedImage bufferedImage;
+		try {
+
+			// read image file
+			bufferedImage = ImageIO.read(new File(imagen));
+
+			// create a blank, RGB, same width and height, and a white background
+			BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
+					BufferedImage.TYPE_INT_RGB);
+			newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
+
+			// write to jpeg file
+			ImageIO.write(newBufferedImage, "jpg", new File(imagen.substring(0, imagen.length() - 3) + "jpg"));
+
+			Metodos.eliminarFichero(imagen);
+
+		} catch (IOException e) {
+
+		}
+	}
+
+	private static String readAll(Reader rd) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		int cp;
+		while ((cp = rd.read()) != -1) {
+			sb.append((char) cp);
+		}
+		return sb.toString();
+	}
+
+	public static JSONObject readJsonFromUrl(String url) throws IOException, JsonException {
+		InputStream is = new URL(url).openStream();
+		try {
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+			String jsonText = readAll(rd);
+			JSONObject json = new JSONObject(jsonText);
+			return json;
+		} finally {
+			is.close();
+		}
+	}
+
+	public static void obtenerJSON() throws IOException {
+
+		/*
+		 * JSONObject json = readJsonFromUrl(
+		 * "https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=b.jpg,a.jpg");
+		 * JSONArray imagenes = json.getJSONArray("imagenes"); JSONArray imagenes_bd =
+		 * json.getJSONArray("imagenes_bd");
+		 * 
+		 * for (int i = 0; i < imagenes_bd.length(); i++) {
+		 * System.out.println(imagenes.get(i).toString() + " - " +
+		 * imagenes_bd.get(i).toString()); }
+		 */
+	}
+
+	public static boolean probarconexion(String web) {
+		String dirWeb = web;
 		int puerto = 80;
 		try {
 			@SuppressWarnings("resource")
@@ -82,17 +150,37 @@ public abstract class Metodos {
 		String imagen;
 		String comprobacion;
 		boolean filtro = false;
-		String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 6);
+		String origen;
+		String destino;
+
 		for (int i = 0; i < files.length; i++) {
+
 			imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf("\\") + 1,
 					files[i].getCanonicalPath().length());
 			comprobacion = imagen.substring(imagen.length() - 3, imagen.length());
+
 			if (comprobacion.equals("jpg") || comprobacion.equals("peg") || comprobacion.equals("png")
 					|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
-				Files.move(FileSystems.getDefault().getPath(files[i].getCanonicalPath()),
-						FileSystems.getDefault().getPath(lectura[0] + "\\" + imagen),
-						StandardCopyOption.REPLACE_EXISTING);
-				mensaje("Los archivos se han movido correctamente", 2);
+
+				origen = files[i].getCanonicalPath();
+				destino = new File(".").getCanonicalPath() + "\\imagenes";
+
+				if (origen.substring(0, origen.lastIndexOf("\\")).equals(destino)) {
+					Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
+				}
+
+				else {
+
+					Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
+
+							destino + "\\" + origen.substring(origen.lastIndexOf("\\") + 1, origen.length())
+
+					), StandardCopyOption.REPLACE_EXISTING);
+
+					mensaje("Los archivos se han movido correctamente", 2);
+
+				}
+
 			} else {
 				filtro = true;
 			}
@@ -157,20 +245,10 @@ public abstract class Metodos {
 		return salida;
 	}
 
-	public static Statement conectarbd() throws SQLException {
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 5);
-		Connection conexion = conexionBD(lectura[0]);
-
-		Statement s = conexion.createStatement();
-		return s;
-	}
-
 	public static void exportarBd(int tipo) {
 
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 5);
+		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
-		String[] config = Metodos.leerFicheroArray("Config/Config2.txt", 2);
-		config[0] = config[0].substring(0, config[0].indexOf("\\"));
 
 		String ruta = "";
 
@@ -190,9 +268,10 @@ public abstract class Metodos {
 		}
 
 		try {
-			crearScript("backupbd.bat", ruta + "mysqldump.exe --no-defaults -h " + config[0] + " -u " + lectura[1]
-					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "\\backupbd.sql", false);
 
+			crearScript("backupbd.bat", ruta + "mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1]
+					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "\\backupbd.sql", false);
+			crearScript("reiniciar_explorer.bat", "TASKKILL /F /IM explorer.exe\r\n" + "start explorer.exe", true);
 			Metodos.mensaje("Backup realizado correctamente", 2);
 
 			abrirCarpeta(backup[0], false);
@@ -226,30 +305,46 @@ public abstract class Metodos {
 
 		Process p = Runtime.getRuntime().exec("cmd.exe");
 		p.destroy();
+
 	}
 
-	@SuppressWarnings("unchecked")
-	public static void ponerCategoriasBd(@SuppressWarnings("rawtypes") JComboBox combobox) {
+	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {
 		combobox.setFont(new Font("Tahoma", Font.BOLD, 24));
-		for (int x = 0; x < MenuPrincipal.getCategorias().size(); x++) {
-			combobox.addItem(MenuPrincipal.getCategorias().get(x));
+		ArrayList<String> categorias = verCategorias();
+		if (categorias != null) {
+			try {
+				for (int x = 0; x < categorias.size(); x++) {
+					combobox.addItem(categorias.get(x));
+				}
+			} catch (Exception e) {
+
+			}
 		}
 	}
 
-	public static ArrayList<String> verCategorias() throws SQLException {
-		ArrayList<String> categorias = new ArrayList<String>();
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 5);
-		ResultSet rs = null;
-		Statement s;
-		s = Metodos.conectarbd();
-		rs = s.executeQuery("select cat_name FROM " + lectura[3] + "categories ORDER BY cat_id");
+	public static ArrayList<String> verCategorias() throws SQLException, IOException {
+		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 
-		while (rs.next()) {
-			categorias.add(rs.getString("cat_name"));
+		if (!lectura[3].isEmpty() && conexionBD() != null) {
+			ArrayList<String> categorias = new ArrayList<String>();
+
+			ResultSet rs = null;
+			Connection conexion = conexionBD();
+
+			Statement s = conexion.createStatement();
+
+			rs = s.executeQuery("select cat_name FROM " + lectura[3] + "categories ORDER BY cat_id");
+
+			while (rs.next()) {
+				categorias.add(rs.getString("cat_name"));
+			}
+			s.close();
+			rs.close();
+
+			return categorias;
+		} else {
+			return null;
 		}
-		s.close();
-		rs.close();
-		return categorias;
 	}
 
 	public static void eliminarFichero(String archivo) {
@@ -260,23 +355,94 @@ public abstract class Metodos {
 
 	}
 
-	public static Connection conexionBD(String bd) throws SQLException {
-		String[] lectura = leerFicheroArray("Config/Config2.txt", 2);
+	public static boolean comprobarConexion() throws IOException {
 
-		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 5);
+		boolean error = false;
+		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
-		if (!bd.equals("") || lectura2[0].equals("") || lectura2[0] == null) {
-			lectura2[0] = bd;
+		if (lectura2[5] == null || lectura2[5].isEmpty()) {
+			error = true;
+		} else {
+			try {
+				InetAddress ping;
+
+				ping = InetAddress.getByName(lectura2[5]);
+				if (!ping.isReachable(140)) {
+					error = true;
+				}
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		if (!error) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean comprobarConfiguracion() throws IOException {
+
+		boolean error = false;
+
+		if (!Metodos.comprobarConexion()) {
+			error = true;
 		}
 
-		lectura[0] = lectura[0].replace("https", "");
-		lectura[0] = lectura[0].replace("http", "");
-		lectura[0] = lectura[0].replace("://", "");
-		lectura[0] = lectura[0].substring(0, lectura[0].indexOf("\\")).trim();
+		if (!Metodos.probarconexion("www.google.com")) {
+			error = true;
+			mensaje("No tienes Internet", 1);
+		}
 
-		Connection conexion = DriverManager.getConnection("jdbc:mysql://" + lectura[0] + "/" + lectura2[0], lectura2[1],
-				lectura2[2]);
-		return conexion;
+		if (!error) {
+			try {
+				if (conexionBD() == null) {
+					error = true;
+				}
+			} catch (SQLException e) {
+
+			}
+		}
+
+		if (error) {
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+
+	public static void mensaje_error() throws IOException {
+		mensaje("Configuración errónea", 1);
+		new Bd().setVisible(true);
+		new Config2().setVisible(true);
+
+	}
+
+	public static Connection conexionBD() throws SQLException, IOException {
+
+		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
+
+		if (comprobarConexion()) {
+
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0],
+					lectura2[1], lectura2[2]);
+
+			return conexion;
+		}
+
+		else {
+			return null;
+
+		}
+	}
+
+	public static String saberServidor(String cadena) {
+		cadena = cadena.replace("https", "");
+		cadena = cadena.replace("http", "");
+		cadena = cadena.replace("://", "");
+		cadena = cadena.substring(0, cadena.indexOf("\\")).trim();
+		return cadena;
 	}
 
 	public static String eliminarUltimoElemento(String cadena) {
@@ -320,34 +486,46 @@ public abstract class Metodos {
 	public static void guardarConfig(int opcion) throws IOException {
 		switch (opcion) {
 		case 1:
-			Metodos.crearFichero("Config/Config.txt",
-					"C:\\AppServ\\www\\Periquito\\imagenes\r\n" + "http://localhost/Periquito\r\n"
-							+ "C:\\AppServ\\www\\Periquito\\Hacer_gif\r\n" + "http://localhost/Periquito\\Hacer_gif\r\n"
-							+ "C:\\AppServ\\www\\Periquito\\GifFrames\r\n" + "http://localhost/Periquito\\GifFrames");
+			Metodos.crearFichero("Config/Config.txt", "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads",
+					false);
 			Config guardar = new Config();
 			guardar.guardarDatos(false);
 			break;
 
 		case 2:
-			Metodos.crearFichero("Config/Config2.txt", "localhost\\media\\images\r\n" + "localhost\\media\\thumbnails");
+
+			Metodos.crearFichero("Config/Config2.txt", "localhost\\media\\images\r\n" + "localhost\\media\\thumbnails",
+					false);
 			Config2 guardar2 = new Config2();
+
 			guardar2.guardarDatos(false);
+
+			break;
+
+		case 3:
+			Metodos.crearFichero("Config", "", true);
 			break;
 
 		case 4:
-			Metodos.crearFichero("Config/OS.txt", "1");
+			Metodos.crearFichero("Config/OS.txt", "1", false);
 			break;
 
 		}
 
 	}
 
-	public static void crearFichero(String ruta, String texto) throws IOException {
+	public static void crearFichero(String ruta, String texto, boolean carpeta) throws IOException {
 		File archivo = new File(ruta);
-		BufferedWriter bw;
-		bw = new BufferedWriter(new FileWriter(archivo));
-		bw.write(texto);
-		bw.close();
+		if (carpeta) {
+			if (!archivo.exists()) {
+				archivo.mkdir();
+			}
+		} else {
+			BufferedWriter bw;
+			bw = new BufferedWriter(new FileWriter(archivo));
+			bw.write(texto);
+			bw.close();
+		}
 	}
 
 	public static String comprobarImagenes(String cadena, String comprobacion) {
@@ -366,13 +544,41 @@ public abstract class Metodos {
 		return cadena;
 	}
 
-	public static int listarFicherosPorCarpeta(final File carpeta) {
+	public static int listarFicherosPorCarpeta(final File carpeta, String filtro) {
 		int ocurrencias = 0;
+
+		String extension = "";
+
 		for (final File ficheroEntrada : carpeta.listFiles()) {
-			if (ficheroEntrada.getName().indexOf(".") > 0) {
+			extension = ficheroEntrada.getName().substring(ficheroEntrada.getName().length() - 3,
+					ficheroEntrada.getName().length());
+
+			if (extension.equals(filtro)) {
+
 				ocurrencias++;
 			}
 
+		}
+		return ocurrencias;
+	}
+
+	public static int listarFicherosPorCarpeta(final File carpeta) {
+		int ocurrencias = 0;
+		String extension = "";
+		ArrayList<String> permitidos = new ArrayList<String>();
+		permitidos.add(".jpg");
+		permitidos.add("jpeg");
+		permitidos.add(".png");
+		permitidos.add(".gif");
+		for (final File ficheroEntrada : carpeta.listFiles()) {
+			if (ficheroEntrada.getName().indexOf(".") > 0) {
+				extension = ficheroEntrada.getName().substring(ficheroEntrada.getName().length() - 4,
+						ficheroEntrada.getName().length());
+				if (permitidos.contains(extension)) {
+					ocurrencias++;
+
+				}
+			}
 		}
 		return ocurrencias;
 	}
@@ -409,6 +615,7 @@ public abstract class Metodos {
 		case 1:
 			try {
 				crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true);
+
 			} catch (Exception e) {
 			}
 
@@ -536,11 +743,22 @@ public abstract class Metodos {
 		return result;
 	}
 
+	public static void crearCarpetas() {
+		File directorio = new File("imagenes");
+		directorio.mkdir();
+		directorio = new File("imagenes/Thumb");
+		directorio.mkdir();
+		directorio = new File("imagenes/gif");
+		directorio.mkdir();
+		directorio = new File("imagenes/gif/Thumb");
+		directorio.mkdir();
+	}
+
 	public static void eliminarDuplicados(String ruta) {
 
 		String[] lectura;
 		try {
-			lectura = Metodos.leerFicheroArray("Config/Config.txt", 6);
+			lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
 
 			LinkedList<String> imagenes = new LinkedList<String>();
 			imagenes = directorio(lectura[0].substring(0, lectura[0].length() - 8) + ruta, "jpg");

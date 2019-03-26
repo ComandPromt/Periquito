@@ -36,7 +36,6 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	private JLabel lblThumbnails;
 
 	public void mensaje(String mensaje, Boolean error) {
-		dispose();
 		JLabel alerta = new JLabel(mensaje);
 		alerta.setFont(new Font("Arial", Font.BOLD, 18));
 		AudioClip clip;
@@ -115,7 +114,6 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public Config2() {
-		setAlwaysOnTop(true);
 		setTitle("Periquito v3 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();
@@ -125,7 +123,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	public void initComponents() {
 
 		jTextField1 = new javax.swing.JTextField();
-		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
+		jTextField1.setHorizontalAlignment(SwingConstants.LEFT);
 		jTextField1.setToolTipText("");
 
 		jLabel1 = new javax.swing.JLabel();
@@ -150,7 +148,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		lblNewLabel.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/WAV_00002.png")));
 
 		textField = new JTextField();
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
+		textField.setHorizontalAlignment(SwingConstants.LEFT);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		buscarArchivoConf();
@@ -174,7 +172,9 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 						if (comprobacion2.substring(0, 2).equals("\\\\")) {
 							textField.setText(comprobacion2.substring(2, comprobacion2.length()));
 						}
+						dispose();
 						guardarDatos(true);
+
 					}
 				}
 			}

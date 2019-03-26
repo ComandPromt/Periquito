@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -106,6 +107,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 			public void actionPerformed(ActionEvent arg0) {
 
 				String usuariobd = usuario.getText().trim();
+				usuariobd = usuariobd.substring(0, 1).toUpperCase() + usuariobd.substring(1);
 				String tipobd = tipo.getText().trim();
 				String notabd = nota.getText().trim();
 
@@ -113,7 +115,9 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 
 					try {
 
-						Statement s = Metodos.conectarbd();
+						Connection conexion = Metodos.conexionBD();
+
+						Statement s = conexion.createStatement();
 
 						try {
 
