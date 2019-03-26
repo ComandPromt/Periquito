@@ -67,7 +67,10 @@ sudo systemctl restart apache2
 
 ## 1.4 Configuración de las Utilidades
 
-Para las utilidades (Video a GIF, frames a GIF y video a frames) tienes que tener una carpeta llamada "Utilidades" dentro de la carpeta "Periquito" en la carpeta raíz del servidor web
+- Descarga las utilidades en la sección "Download"
+- Descomprime y pega cada utilidad en la carpeta raíz del servidor web
+
+![Preview](previews/4.png)
 
 ----
 
