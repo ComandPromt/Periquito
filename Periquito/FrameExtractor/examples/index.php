@@ -10,9 +10,9 @@ if (!file_exists("tmp")) {
 if (!file_exists("video")) {
     mkdir("video", 777, true);
 }
-include("../../funciones.php");
+include("funciones.php");
 if(count(check_images("output","jpg"))>=1){
-	print '<h1 name="salida">1</h1>';
+	print '<h1 name="salida">Ya has convertido un video a frames!</h1>';
 }
 else{
 	$numimmp4=check_images("video/","mp4");
@@ -63,7 +63,7 @@ else{
 	}
 	
 	if(count($videos)==0){
-			print '<h1 name="salida">2</h1>';
+			print '<h1 name="salida">No tienes videos</h1>';
 	}
 	
 	else{
@@ -81,7 +81,7 @@ else{
 					array_push($frame_paths, $frame->getMediaPath());
 				}
 			}
-	print '<h1 name="salida">3</h1>';
+	print '<h1 name="salida">Exito!</h1>';
 	unlink('video/'.$videos[0]);
 	if($_SESSION['video2gif']){
 		$frames=array();
@@ -90,7 +90,7 @@ else{
 			rename("output/".$frames[$x],"../../Hacer_gif/img/".$frames[$x]);
 		}
 	
-		header("Location: ../../Hacer_gif/index.php");
+		header("Location: ../../Hacer_gif/crear_gif.php");
 	
 	}
 	}
