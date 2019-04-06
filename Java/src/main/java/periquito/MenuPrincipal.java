@@ -67,7 +67,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmNewMenuItem_4;
-	private JSeparator separator;
 	private JSeparator separator_1;
 	private JSeparator separator_2;
 	private JMenuItem mntmLocal;
@@ -94,7 +93,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_12;
 	final static javax.swing.JTextArea imagenes = new javax.swing.JTextArea();
 
-	String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
+	public static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
 	String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
 	String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
@@ -103,8 +102,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_13;
 	private JMenuItem mntmNewMenuItem_13;
 	private JMenu mnNewMenu;
-	private JMenuItem mntmNewMenuItem_14;
-	private JSeparator separator_14;
 	private JSeparator separator_15;
 	private JMenuItem mntmNewMenuItem_15;
 	private JMenu mnNewMenu_1;
@@ -114,6 +111,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_17;
 	private JLabel lblNewLabel_2;
 	private JSeparator separator_22;
+	private JMenuItem mntmNewMenuItem_6;
+	private JMenu mnNewMenu_2;
+	private JMenuItem mntmNewMenuItem_16;
+	private JMenuItem mntmNewMenuItem_17;
+	private JSeparator separator_16;
+	private JSeparator separator_18;
+	private JSeparator separator;
+	private JSeparator separator_10;
 
 	public void comprobarConexion(String archivo, String ruta) {
 		File af = new File(archivo);
@@ -264,7 +269,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	}
 
 	public MenuPrincipal() throws IOException {
-
+		Metodos.crearFichero("GifFrames", "", true);
+		Metodos.crearFichero("GifFrames", "", true);
 		Metodos.guardarConfig(3);
 
 		if (lectura[0] == null) {
@@ -360,13 +366,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGifExtractor.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "\\GifFrames")) == 1) {
+				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "\\GifFrames"), "gif") == 1) {
+
 					WebDriver chrome = new ChromeDriver();
 					chrome.get("https://gifframes.herokuapp.com");
 					chrome.findElement(By.id("imagen")).sendKeys(lectura[0] + "\\GifFrames\\picture.gif");
 					chrome.findElement(By.name("enviar")).click();
 					Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 					Metodos.eliminarFichero("cerrar.bat");
+
 				}
 
 			}
@@ -378,7 +386,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnMenu.add(separator_6);
 		mnVideo = new JMenu("Video");
 		mnVideo.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		mnVideo.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
+		mnVideo.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_frame.png")));
 		mnMenu.add(mnVideo);
 		mntmNewMenuItem_7 = new JMenuItem("Video 2 Frame");
 		mnVideo.add(mntmNewMenuItem_7);
@@ -454,7 +462,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				Metodos.eliminarFichero("cerrar.bat");
 			}
 		});
-		mntmNewMenuItem_10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
+		mntmNewMenuItem_10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
 		mntmNewMenuItem_10.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmUploads = new JMenuItem("Usuarios");
 		mntmUploads.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -539,12 +547,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnNewMenu.add(mntmNewMenuItem_13);
 		mntmNewMenuItem_13.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem_13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
-
-		separator_14 = new JSeparator();
-		mnNewMenu.add(separator_14);
-
-		mntmNewMenuItem_14 = new JMenuItem("Restaurar BD");
-		mnNewMenu.add(mntmNewMenuItem_14);
 		mntmNewMenuItem = new JMenu("   ");
 		mntmNewMenuItem.setBackground(Color.BLACK);
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -588,7 +590,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmCxvxv.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				try {
-					comprobarConexion("Config/Config.txt", lectura[0] + "\\FrameExtractor\\examples\\video");
+					comprobarConexion("Config/Config.txt", lectura[0] + "\\GifFrames");
 				} catch (ArrayIndexOutOfBoundsException e1) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
@@ -620,7 +622,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					comprobarConexion("Config/Config.txt", lectura[0] + "\\..\\VID-2-GIF\\");
+					comprobarConexion("Config/Config.txt", lectura[0] + "\\VID-2-GIF");
+
 				} catch (ArrayIndexOutOfBoundsException e) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
@@ -744,26 +747,63 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				new About().setVisible(true);
 			}
 		});
-		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mntmNewMenuItem_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/about.png")));
-		mntmNewMenuItem_2.add(mntmNewMenuItem_3);
-		separator = new JSeparator();
-		mntmNewMenuItem_2.add(separator);
+
+		mnNewMenu_2 = new JMenu("Downloads");
+		mnNewMenu_2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
+		mnNewMenu_2.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mntmNewMenuItem_2.add(mnNewMenu_2);
+
+		mntmNewMenuItem_6 = new JMenuItem("Frames 2 GIF");
+		mnNewMenu_2.add(mntmNewMenuItem_6);
+		mntmNewMenuItem_6.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mntmNewMenuItem_6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/Frames_2_gif.gif")));
+
+		separator_18 = new JSeparator();
+		mnNewMenu_2.add(separator_18);
+
+		mntmNewMenuItem_16 = new JMenuItem("Video 2 Frames");
+		mntmNewMenuItem_16.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mntmNewMenuItem_16.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
+		mnNewMenu_2.add(mntmNewMenuItem_16);
+
+		separator_16 = new JSeparator();
+		mnNewMenu_2.add(separator_16);
+
+		mntmNewMenuItem_17 = new JMenuItem("Video 2 GIF");
+		mntmNewMenuItem_17.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mntmNewMenuItem_17.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
+		mnNewMenu_2.add(mntmNewMenuItem_17);
 		mntmNewMenuItem_4 = new JMenuItem("IMG 2 Color");
 		mntmNewMenuItem_4.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/", false);
 			}
 		});
+
+		separator = new JSeparator();
+		mntmNewMenuItem_2.add(separator);
 		mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		mntmNewMenuItem_4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/30-07-2018 1-07-31.png")));
 		mntmNewMenuItem_2.add(mntmNewMenuItem_4);
+
+		separator_10 = new JSeparator();
+		mntmNewMenuItem_2.add(separator_10);
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mntmNewMenuItem_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/about.png")));
+		mntmNewMenuItem_2.add(mntmNewMenuItem_3);
 		initComponents();
 		this.setVisible(true);
 	}
 
 	public void initComponents() throws IOException {
+
 		Metodos.crearCarpetas();
+
+		if (Metodos.comprobarArchivo("Config/Config.txt", true)) {
+
+			Metodos.guardarConfig(5);
+		}
+
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.LEFT);
 		jLabel1 = new javax.swing.JLabel();
@@ -841,7 +881,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		if (!Metodos.probarconexion("www.google.com")) {
 			mensaje("No hay conexión a internet", true);
 		}
-		Metodos.comprobarArchivo("Config");
+		Metodos.comprobarArchivo("Config", false);
 
 		btnNewButton.addActionListener(new ActionListener() {
 

@@ -121,11 +121,11 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 
 						try {
 
-							s.executeUpdate("INSERT INTO usuarios (nombre,tipo,descripcion) VALUES('" + usuariobd
-									+ "','" + tipobd + "','" + notabd + "')");
+							s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + usuariobd + "','"
+									+ tipobd + "','" + notabd + "')");
 							AgendaInterfaz.verUsuarios();
 							dispose();
-							mensaje("El usuario se ha insertado correctamente", false);
+							mensaje("La nota se ha insertado correctamente", false);
 
 						} catch (SQLException e1) {
 							dispose();

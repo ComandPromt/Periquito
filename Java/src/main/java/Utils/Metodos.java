@@ -47,6 +47,7 @@ import org.json.JSONObject;
 import periquito.Bd;
 import periquito.Config;
 import periquito.Config2;
+import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
@@ -510,6 +511,13 @@ public abstract class Metodos {
 			Metodos.crearFichero("Config/OS.txt", "1", false);
 			break;
 
+		case 5:
+			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\FrameExtractor\\examples\\output", "", true);
+			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\FrameExtractor\\examples\\tmp", "", true);
+			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\FrameExtractor\\examples\\video", "", true);
+			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\Hacer_gif\\img", "", true);
+			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\Hacer_gif\\Output", "", true);
+			break;
 		}
 
 	}
@@ -547,13 +555,18 @@ public abstract class Metodos {
 	public static int listarFicherosPorCarpeta(final File carpeta, String filtro) {
 		int ocurrencias = 0;
 
-		String extension = "";
-
+		String extension;
+		String nombre_archivo;
 		for (final File ficheroEntrada : carpeta.listFiles()) {
-			extension = ficheroEntrada.getName().substring(ficheroEntrada.getName().length() - 3,
-					ficheroEntrada.getName().length());
+			nombre_archivo = ficheroEntrada.getName();
+			extension = nombre_archivo.substring(nombre_archivo.length() - 3, nombre_archivo.length());
 
 			if (extension.equals(filtro)) {
+				if (ocurrencias == 0) {
+					File f1 = new File(MenuPrincipal.lectura[0] + "\\GifFrames\\" + nombre_archivo);
+					File f2 = new File(MenuPrincipal.lectura[0] + "\\GifFrames\\picture.gif");
+					f1.renameTo(f2);
+				}
 
 				ocurrencias++;
 			}
@@ -570,13 +583,15 @@ public abstract class Metodos {
 		permitidos.add("jpeg");
 		permitidos.add(".png");
 		permitidos.add(".gif");
+
 		for (final File ficheroEntrada : carpeta.listFiles()) {
+
 			if (ficheroEntrada.getName().indexOf(".") > 0) {
 				extension = ficheroEntrada.getName().substring(ficheroEntrada.getName().length() - 4,
 						ficheroEntrada.getName().length());
+
 				if (permitidos.contains(extension)) {
 					ocurrencias++;
-
 				}
 			}
 		}
@@ -696,11 +711,27 @@ public abstract class Metodos {
 		return complete.digest();
 	}
 
-	public static void comprobarArchivo(String archivo) {
+	public static boolean comprobarArchivo(String archivo, boolean tipo) {
 		File carpeta = new File(archivo);
+		if (!tipo) {
+			if (!carpeta.exists()) {
+				carpeta.mkdir();
+			}
+			return false;
+		} else {
 
-		if (!carpeta.exists()) {
-			carpeta.mkdir();
+			File config = new File(archivo);
+
+			if (config.exists()) {
+
+				if (Metodos.numeroLineas(archivo.substring(archivo.indexOf("/") + 1, archivo.length())) > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
 		}
 	}
 
