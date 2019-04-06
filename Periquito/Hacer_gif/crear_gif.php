@@ -167,22 +167,20 @@ if ($comprobacion[0] != 'error') {
             $anim->create("img/", array($rapidez))
                 ->save('Output/' . $archivo . '.gif');
 
-            header("Content-disposition: attachment; filename=Output/$archivo.gif");
-            header("Content-type: MIME");
-            readfile("Output/$archivo.gif");
-            unlink('Output/' . $archivo . '.gif');
         }
     } else {
         print '<h1 name="salida">Folder empty</h1>';
-        print '<h2 name="imagen"></h2>';
+
     }
 }
 
 }
 
+$borrar = showFiles("img/");
+
 if ($num_imagenes > 0) {
+
     for ($x = 0; $x < count($borrar); $x++) {
-        print "img/" . $borrar[$x];
         unlink("img/" . $borrar[$x]);
     }
 }
