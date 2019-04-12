@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,16 +39,17 @@ import Utils.interfaz;
 @SuppressWarnings("serial")
 
 public class Utilidades extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
-	static JCheckBox mute;
-	private JTextArea imagenes;
+	static JCheckBox mute = new JCheckBox("");
+	private JTextArea imagenes = new JTextArea();
 	String comprobacion;
 	Statement s;
 	boolean filtro = false;
 	ResultSet rs;
 	private JTextField prefijoTablas;
 	String[] categorias;
-	static JComboBox<String> comboBox;
-	private JLabel lblNombreDeImgenes;
+	static JComboBox<String> comboBox = new JComboBox<>();
+
+	private JLabel lblNombreDeImgenes = new JLabel("Nombre");
 	private JTextField nombre;
 
 	public void mensaje(String mensaje, Boolean error) {
@@ -61,7 +61,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		} else {
 			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
 		}
-		if (mute.isSelected() == true) {
+		if (mute.isSelected()) {
 			clip.stop();
 		} else {
 			clip.loop();
@@ -78,25 +78,6 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		}
 	}
 
-	public void buscarArchivoConf() {
-		File af = new File("Config/Config2.txt");
-		if (af.exists()) {
-			String[] lectura;
-			try {
-				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
-				if (lectura[0] == null) {
-					lectura[0] = "";
-				}
-				if (lectura[1] == null) {
-					lectura[1] = "";
-				}
-				lectura[0] = Metodos.eliminarUltimoElemento(lectura[0]);
-				lectura[1] = Metodos.eliminarUltimoElemento(lectura[1]);
-			} catch (ArrayIndexOutOfBoundsException e) {
-			}
-		}
-	}
-
 	public Utilidades() throws IOException {
 		setTitle("Periquito v3 Recomponer Imágenes");
 		setType(Type.UTILITY);
@@ -109,15 +90,13 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
-		mute = new JCheckBox("");
+
 		mute.setBounds(553, 225, 20, 20);
 		mute.addChangeListener(this);
 		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
 		getContentPane().add(mute);
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Utilidades.class.getResource("/imagenes/WAV_00002.png")));
-		buscarArchivoConf();
-		imagenes = new JTextArea();
 		imagenes.setText("  Arrastra los archivos aqui");
 		imagenes.setForeground(Color.DARK_GRAY);
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -132,8 +111,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		lblPrefijoDeLas.setFont(new Font("Tahoma", Font.BOLD, 20));
 		JLabel lblCategoraAInsertar = new JLabel("Categoría a insertar");
 		lblCategoraAInsertar.setFont(new Font("Tahoma", Font.BOLD, 20));
-		comboBox = new JComboBox<String>();
-		lblNombreDeImgenes = new JLabel("Nombre");
+
 		lblNombreDeImgenes.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNombreDeImgenes.setFont(new Font("Tahoma", Font.BOLD, 20));
 		nombre = new JTextField();
@@ -189,76 +167,76 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 			if (Metodos.comprobarConexion()) {
 				Metodos.ponerCategoriasBd(comboBox);
 			}
-			
-			
+
 		} catch (SQLException e1) {
-
+			comboBox.setEnabled(false);
 		}
-		{
-			javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
-			new DragAndDrop(System.out, imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
-				public void filesDropped(java.io.File[] files) {
-					String nombre_input = nombre.getText().trim();
-					String prefijo = prefijoTablas.getText().trim();
-					if (!prefijo.equals("") && !nombre_input.equals("")) {
-						try {
-							String imagen;
-							int fecha = (int) new Date().getTime();
-							if (fecha < 0) {
-								fecha *= -1;
-							}
 
-							String tabla = prefijo + "images";
-							int categoria = comboBox.getSelectedIndex() + 1;
-							int id;
-
-							Connection conexion = Metodos.conexionBD();
-
-							s = conexion.createStatement();
-
-							rs = s.executeQuery("select MAX(image_id)+1 FROM " + tabla);
-							rs.next();
-							id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
-
-							s.close();
-							rs.close();
-
-							String thumb;
-							conexion = Metodos.conexionBD();
-
-							s = conexion.createStatement();
-
-							FileWriter flS = new FileWriter("Config/SQL.sql");
-							BufferedWriter fS = new BufferedWriter(flS);
-
-							for (int i = 0; i < files.length; i++) {
-								imagen = files[i].toString();
-								imagen = imagen.substring(imagen.lastIndexOf("\\") + 1, imagen.length());
-
-								thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
-
-								fS.write("INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'"
-										+ nombre_input + "','',''," + fecha + ",DEFAULT,'" + imagen + "','" + thumb
-										+ "', '',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,0);");
-								fS.newLine();
-
-								id++;
-							}
-							fS.close();
-							conexion = Metodos.conexionBD();
-
-							s = conexion.createStatement();
-							InputStream archivo = new FileInputStream("SQL.sql");
-							Metodos.executeScript(conexion, archivo);
-							Metodos.eliminarFichero("SQL.sql");
-							mensaje("Insert recuperados correctamente!", false);
-						} catch (Exception e) {
-							mensaje("Error al recuperar la BD", true);
+		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
+		new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
+			public void filesDropped(java.io.File[] files) {
+				String nombre_input = nombre.getText().trim();
+				String prefijo = prefijoTablas.getText().trim();
+				if (!prefijo.equals("") && !nombre_input.equals("")) {
+					try {
+						String imagen;
+						int fecha = (int) new Date().getTime();
+						if (fecha < 0) {
+							fecha *= -1;
 						}
+
+						String tabla = prefijo + "images";
+						int categoria = comboBox.getSelectedIndex() + 1;
+						int id;
+
+						Connection conexion = Metodos.conexionBD();
+
+						s = conexion.createStatement();
+
+						rs = s.executeQuery("select MAX(image_id)+1 FROM " + tabla);
+						rs.next();
+						id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
+
+						s.close();
+						rs.close();
+
+						String thumb;
+						conexion = Metodos.conexionBD();
+
+						s = conexion.createStatement();
+
+						FileWriter flS = new FileWriter("Config/SQL.sql");
+						BufferedWriter fS = new BufferedWriter(flS);
+
+						for (int i = 0; i < files.length; i++) {
+							imagen = files[i].toString();
+							imagen = imagen.substring(imagen.lastIndexOf("\\") + 1, imagen.length());
+
+							thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
+
+							fS.write("INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'" + nombre_input
+									+ "','',''," + fecha + ",DEFAULT,'" + imagen + "','" + thumb
+									+ "', '',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,0);");
+							fS.newLine();
+
+							id++;
+						}
+						fS.close();
+						flS.close();
+						conexion = Metodos.conexionBD();
+
+						s = conexion.createStatement();
+						InputStream archivo = new FileInputStream("SQL.sql");
+						Metodos.executeScript(conexion, archivo);
+						Metodos.eliminarFichero("SQL.sql");
+						mensaje("Insert recuperados correctamente!", false);
+					} catch (Exception e) {
+						mensaje("Error al recuperar la BD", true);
 					}
 				}
-			});
-		}
+			}
+		});
+
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

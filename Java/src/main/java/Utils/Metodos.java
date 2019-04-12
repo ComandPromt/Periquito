@@ -367,15 +367,16 @@ public abstract class Metodos {
 
 			rs.next();
 
-			if(!rs.getString("Nombre").equals("")) {
+			if (!rs.getString("Nombre").equals("")) {
 				return true;
+			} else {
+				return false;
 			}
-			else {return false;}
 		} catch (Exception e) {
-		return false;
+			return false;
 		}
 	}
-	
+
 	public static boolean comprobarConexion() throws IOException {
 
 		boolean error = false;
@@ -532,11 +533,11 @@ public abstract class Metodos {
 			break;
 
 		case 5:
-			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\FrameExtractor\\examples\\output", "", true);
-			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\FrameExtractor\\examples\\tmp", "", true);
-			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\FrameExtractor\\examples\\video", "", true);
-			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\Hacer_gif\\img", "", true);
-			Metodos.crearFichero(MenuPrincipal.lectura[0] + "\\Hacer_gif\\Output", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\FrameExtractor\\examples\\output", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\FrameExtractor\\examples\\tmp", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\FrameExtractor\\examples\\video", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\Hacer_gif\\img", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\Hacer_gif\\Output", "", true);
 			break;
 		}
 
@@ -583,8 +584,8 @@ public abstract class Metodos {
 
 			if (extension.equals(filtro)) {
 				if (ocurrencias == 0) {
-					File f1 = new File(MenuPrincipal.lectura[0] + "\\GifFrames\\" + nombre_archivo);
-					File f2 = new File(MenuPrincipal.lectura[0] + "\\GifFrames\\picture.gif");
+					File f1 = new File("GifFrames\\" + nombre_archivo);
+					File f2 = new File("GifFrames\\picture.gif");
 					f1.renameTo(f2);
 				}
 

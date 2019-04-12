@@ -2,17 +2,19 @@ package Utils;
 
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetEvent;
+import java.io.PrintStream;
 
 public class DragAndDrop {
 
 	private transient java.awt.dnd.DropTargetListener dropListener;
 
-	public DragAndDrop(final java.io.PrintStream out, final java.awt.Component c,
-			final javax.swing.border.Border dragBorder, final boolean recursive, final Listener listener) {
+	public DragAndDrop(final java.awt.Component c, final javax.swing.border.Border dragBorder, final boolean recursive,
+			final Listener listener) {
 
 		dropListener = new java.awt.dnd.DropTargetListener() {
 			public void dragEnter(java.awt.dnd.DropTargetDragEvent evt) {
 
+				PrintStream out = null;
 				if (isDragOk(out, evt)) {
 
 					if (c instanceof javax.swing.JComponent) {
@@ -69,6 +71,7 @@ public class DragAndDrop {
 			}
 		};
 
+		PrintStream out = null;
 		makeDropTarget(out, c, recursive);
 
 	}
