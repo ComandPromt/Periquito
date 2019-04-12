@@ -123,7 +123,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 
 							s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + usuariobd + "','"
 									+ tipobd + "','" + notabd + "')");
-							AgendaInterfaz.verUsuarios();
+							AgendaInterfaz.verNotas();
 							dispose();
 							mensaje("La nota se ha insertado correctamente", false);
 
@@ -137,7 +137,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 						}
 
 					} catch (SQLException | IOException e) {
-
+dispose();
 					}
 				} else {
 					mensaje("Rellene todos los campos", true);

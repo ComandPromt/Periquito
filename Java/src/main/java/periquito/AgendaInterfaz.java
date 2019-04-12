@@ -64,7 +64,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 	String ctipo;
 	String cnota;
 
-	public AgendaInterfaz() {
+	public AgendaInterfaz() throws IOException {
+		
 		try {
 			initComponents();
 		} catch (Exception e) {
@@ -84,7 +85,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		editar.setToolTipText("Editar");
 
 		this.setLocationRelativeTo(null);
-
+		
 	}
 
 	public void vaciarDatos() {
@@ -177,7 +178,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 						s = conexion.createStatement();
 
 						if (jList1.getModel().getSize() == 0) {
-							rs = s.executeQuery("select Nombre from usuarios order by Nombre");
+							rs = s.executeQuery("select Nombre from notas order by Nombre");
 							while (rs.next()) {
 
 								modelo.addElement(rs.getString("Nombre"));
@@ -187,7 +188,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 							try {
 
-								rs = s.executeQuery("select Nombre,tipo,descripcion from usuarios WHERE Nombre='"
+								rs = s.executeQuery("select Nombre,tipo,descripcion from notas WHERE Nombre='"
 										+ jList1.getSelectedValue().toString() + "' order by Nombre");
 								rs.next();
 								cnombre = rs.getString("Nombre");
@@ -197,7 +198,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 								tipo.setText(rs.getString("tipo"));
 								nota.setText(rs.getString("descripcion"));
 
-								rs = s.executeQuery("select id from usuarios WHERE Nombre='" + rs.getString("Nombre")
+								rs = s.executeQuery("select id from notas WHERE Nombre='" + rs.getString("Nombre")
 										+ "' order by Nombre");
 								rs.next();
 								iduser = rs.getString("id");
@@ -207,7 +208,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 								nota.setEditable(true);
 
 							} catch (NullPointerException e) {
-								Metodos.mensaje("Seleccione un usuario para editar", 2);
+								Metodos.mensaje("Seleccione un registro para editar", 2);
 
 								s.close();
 							}
@@ -233,25 +234,22 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 						try {
 							String usuario = nombre.getText();
-							s.executeUpdate("UPDATE usuarios SET nombre='" + nombre.getText() + "',tipo='"
+							s.executeUpdate("UPDATE notas SET nombre='" + nombre.getText() + "',tipo='"
 									+ tipo.getText() + "',descripcion='" + nota.getText() + "' WHERE id=" + iduser);
 
 							rs.close();
 							s.close();
 							vaciarDatos();
-							verUsuarios();
-							System.out.println("aaaa" + nombre.getText());
-							Metodos.mensaje("El usuario " + usuario + " se ha actualizado correctamente", 2);
+							verNotas();
+							Metodos.mensaje("La nota " + usuario + " se ha actualizado correctamente", 2);
 
 						} catch (SQLException e1) {
 
-							Metodos.mensaje("El usuario " + nombre.getText() + " ya está en la BD", 3);
+							Metodos.mensaje("La nota " + nombre.getText() + " ya está en la BD", 3);
 
 							vaciarDatos();
 						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+								}
 
 					}
 
@@ -459,26 +457,23 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 		if (jList1.getModel().getSize() == 0) {
 			try {
-				verUsuarios();
+				verNotas();
 			} catch (Exception e) {
 
-				e.printStackTrace();
-				/*
-				 * this.dispose(); new Bd().setVisible(true);
-				 */
+				
 			}
 		}
 
 		pack();
 	}
-
-	public static void verUsuarios() throws SQLException, IOException {
+	
+	public static void verNotas() throws SQLException, IOException {
 		modelo.removeAllElements();
 		Connection conexion = Metodos.conexionBD();
 
 		Statement s = conexion.createStatement();
 
-		ResultSet rs = s.executeQuery("select Nombre from usuarios order by Nombre");
+		ResultSet rs = s.executeQuery("select Nombre from notas order by Nombre");
 
 		while (rs.next()) {
 			modelo.addElement(rs.getString("Nombre"));
@@ -502,16 +497,16 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 					s = conexion.createStatement();
 
-					s.executeUpdate("DELETE FROM usuarios WHERE Nombre='" + jList1.getSelectedValue() + "'");
+					s.executeUpdate("DELETE FROM notas WHERE Nombre='" + jList1.getSelectedValue() + "'");
 					vaciarDatos();
-					verUsuarios();
+					verNotas();
 					s.close();
 				} catch (SQLException e) {
 				}
 
 			}
 		} else {
-			Metodos.mensaje("Seleccione un usuario para borrar", 2);
+			Metodos.mensaje("Seleccione un registro para borrar", 2);
 		}
 	}
 
@@ -524,7 +519,9 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		}
 	}
 
-	public static void main(String args[]) {
+	public static void main(String args[])  {
+	
+	
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -547,9 +544,14 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		}
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new AgendaInterfaz().setVisible(true);
+				try {
+					new AgendaInterfaz().setVisible(true);
+				} catch (IOException e) {
+	
+				}
 			}
 		});
+		
 	}
 
 }

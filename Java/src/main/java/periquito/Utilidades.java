@@ -186,7 +186,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setLocationRelativeTo(null);
 		prefijoTablas.setText(prefijoTablas.getText().trim());
 		try {
-			Metodos.ponerCategoriasBd(comboBox);
+			if (Metodos.comprobarConexion()) {
+				Metodos.ponerCategoriasBd(comboBox);
+			}
+			
+			
 		} catch (SQLException e1) {
 
 		}

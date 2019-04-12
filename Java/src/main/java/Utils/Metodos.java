@@ -356,6 +356,26 @@ public abstract class Metodos {
 
 	}
 
+	public static boolean comprobarConexionBd() {
+
+		try {
+			Connection conexion = Metodos.conexionBD();
+
+			Statement s = conexion.createStatement();
+
+			ResultSet rs = s.executeQuery("select Nombre from notas order by Nombre");
+
+			rs.next();
+
+			if(!rs.getString("Nombre").equals("")) {
+				return true;
+			}
+			else {return false;}
+		} catch (Exception e) {
+		return false;
+		}
+	}
+	
 	public static boolean comprobarConexion() throws IOException {
 
 		boolean error = false;

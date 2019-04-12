@@ -111,12 +111,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator_17;
 	private JLabel lblNewLabel_2;
 	private JSeparator separator_22;
-	private JMenuItem mntmNewMenuItem_6;
-	private JMenu mnNewMenu_2;
-	private JMenuItem mntmNewMenuItem_16;
-	private JMenuItem mntmNewMenuItem_17;
-	private JSeparator separator_16;
-	private JSeparator separator_18;
 	private JSeparator separator;
 	private JSeparator separator_10;
 
@@ -339,7 +333,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGif.add(mnGifAnimator);
 		mnGifAnimator.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-
+System.out.println(lectura[3]);
 				if (Metodos.probarconexion(Metodos.saberServidor(lectura[3]))) {
 					File af = new File("Config/Config.txt");
 					if (af.exists()) {
@@ -366,7 +360,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGifExtractor.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "\\GifFrames"), "gif") == 1) {
+				if (Metodos.listarFicherosPorCarpeta(new File("GifFrames"), "gif")==1) {
 
 					WebDriver chrome = new ChromeDriver();
 					chrome.get("https://gifframes.herokuapp.com");
@@ -376,7 +370,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					Metodos.eliminarFichero("cerrar.bat");
 
 				}
+				else{
+				
+						Metodos.mensaje("Copia o mueve un archivo GIF", 1);
 
+					Metodos.abrirCarpeta("GifFrames",false);
+				}
 			}
 
 		});
@@ -464,13 +463,22 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 		mntmNewMenuItem_10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
 		mntmNewMenuItem_10.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		mntmUploads = new JMenuItem("Usuarios");
+		mntmUploads = new JMenuItem("Notas");
 		mntmUploads.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmUploads.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
 		mntmUploads.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				if(!Metodos.comprobarConexionBd()) {
+					try {
+						Metodos.mensaje("Compuebe que exista una tabla llamada notas en la base de datos", 1);
+						new Bd().setVisible(true);
+					} catch (IOException e) {
+	
+					}
 
+				}
+				else {
 				try {
 					if (Metodos.comprobarConfiguracion()) {
 
@@ -478,7 +486,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					}
 				} catch (IOException e) {
 				}
-
+			}
 			}
 		});
 		separator_11 = new JSeparator();
@@ -527,12 +535,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 					if (!archivo.exists()) {
 						Metodos.crearFichero("Config/Backup.txt",
-								"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
+					"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
 
 					} else {
 
 						if (Metodos.comprobarConfiguracion()) {
-
 							Metodos.exportarBd(1);
 							Metodos.eliminarFichero("backupbd.bat");
 							Metodos.eliminarFichero("reiniciar_explorer.bat");
@@ -567,13 +574,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages_1.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				try {
+				lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
+				comprobarConexion("Config/Config.txt", lectura[0] + "\\Hacer_gif\\img");
+				
 
-					comprobarConexion("Config/Config.txt", lectura[0] + "\\Hacer_gif\\img");
-
-				} catch (ArrayIndexOutOfBoundsException e1) {
-					mensaje("Error en el  archivo Config.txt", true);
-				}
+				
 
 			}
 		});
@@ -589,11 +594,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmCxvxv.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmCxvxv.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				try {
-					comprobarConexion("Config/Config.txt", lectura[0] + "\\GifFrames");
-				} catch (ArrayIndexOutOfBoundsException e1) {
-					mensaje("Error en el  archivo Config.txt", true);
-				}
+
+				Metodos.abrirCarpeta("GifFrames",false);
 			}
 		});
 		separator_2 = new JSeparator();
@@ -747,32 +749,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				new About().setVisible(true);
 			}
 		});
-
-		mnNewMenu_2 = new JMenu("Downloads");
-		mnNewMenu_2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
-		mnNewMenu_2.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mntmNewMenuItem_2.add(mnNewMenu_2);
-
-		mntmNewMenuItem_6 = new JMenuItem("Frames 2 GIF");
-		mnNewMenu_2.add(mntmNewMenuItem_6);
-		mntmNewMenuItem_6.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mntmNewMenuItem_6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/Frames_2_gif.gif")));
-
-		separator_18 = new JSeparator();
-		mnNewMenu_2.add(separator_18);
-
-		mntmNewMenuItem_16 = new JMenuItem("Video 2 Frames");
-		mntmNewMenuItem_16.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mntmNewMenuItem_16.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
-		mnNewMenu_2.add(mntmNewMenuItem_16);
-
-		separator_16 = new JSeparator();
-		mnNewMenu_2.add(separator_16);
-
-		mntmNewMenuItem_17 = new JMenuItem("Video 2 GIF");
-		mntmNewMenuItem_17.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mntmNewMenuItem_17.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
-		mnNewMenu_2.add(mntmNewMenuItem_17);
 		mntmNewMenuItem_4 = new JMenuItem("IMG 2 Color");
 		mntmNewMenuItem_4.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
@@ -1094,7 +1070,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 								// Metodos.png_a_jpg("asdas.png");
 
 								String cat = (String) jComboBox1.getSelectedItem();
-								int opcion = -1;
+		
 								Metodos.obtenerJSON();
 								WebDriver prueba = new ChromeDriver();
 								prueba.get("http://google.es");
