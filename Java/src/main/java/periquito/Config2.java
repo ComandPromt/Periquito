@@ -23,8 +23,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.Metodos;
+import utils.interfaz;
 
 @SuppressWarnings("serial")
 
@@ -218,8 +218,10 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {
+		//
 	}
 }

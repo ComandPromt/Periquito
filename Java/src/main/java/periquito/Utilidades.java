@@ -32,9 +32,9 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Utils.DragAndDrop;
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.DragAndDrop;
+import utils.Metodos;
+import utils.interfaz;
 
 @SuppressWarnings("serial")
 
@@ -42,9 +42,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	static JCheckBox mute = new JCheckBox("");
 	private JTextArea imagenes = new JTextArea();
 	String comprobacion;
-	Statement s;
+	transient Statement s;
 	boolean filtro = false;
-	ResultSet rs;
+	transient ResultSet rs;
 	private JTextField prefijoTablas;
 	String[] categorias;
 	static JComboBox<String> comboBox = new JComboBox<>();
@@ -82,17 +82,20 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setTitle("Periquito v3 Recomponer Imágenes");
 		setType(Type.UTILITY);
 		initComponents();
+
 		this.setVisible(true);
 	}
 
+	@SuppressWarnings("all")
 	public void initComponents() throws IOException {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
 
-		mute.setBounds(553, 225, 20, 20);
+		mute.setBounds(553, 210, 20, 20);
 		mute.addChangeListener(this);
+
 		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
 		getContentPane().add(mute);
 		JLabel lblNewLabel = new JLabel("");
@@ -163,12 +166,13 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setSize(new Dimension(613, 323));
 		setLocationRelativeTo(null);
 		prefijoTablas.setText(prefijoTablas.getText().trim());
+
 		try {
 			if (Metodos.comprobarConexion()) {
+
 				Metodos.ponerCategoriasBd(comboBox);
 			}
-
-		} catch (SQLException e1) {
+		} catch (SQLException e3) {
 			comboBox.setEnabled(false);
 		}
 
@@ -240,9 +244,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {
+		//
 	}
 
 }

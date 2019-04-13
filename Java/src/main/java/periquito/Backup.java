@@ -23,8 +23,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.Metodos;
+import utils.interfaz;
 
 @SuppressWarnings("serial")
 

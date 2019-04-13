@@ -50,9 +50,10 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-
+//
 	}
 
 	public void stateChanged(ChangeEvent e) {
+		//
 	}
 }

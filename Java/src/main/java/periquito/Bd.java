@@ -25,8 +25,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.Metodos;
+import utils.interfaz;
 
 @SuppressWarnings("serial")
 
@@ -97,7 +97,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 				textField_1.setText(lectura[3]);
 
 			} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-
+//
 			}
 
 		}
@@ -191,7 +191,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		try {
 			buscarArchivoConf();
 		} catch (SQLException e1) {
-
+//
 		}
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/save.png")));
@@ -225,7 +225,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 						try {
 							guardarDatos(true);
 						} catch (SQLException e) {
-
+//
 						}
 
 					}
@@ -353,8 +353,10 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {
+		//
 	}
 }

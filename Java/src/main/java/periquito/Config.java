@@ -19,18 +19,20 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.Metodos;
+import utils.interfaz;
 
-@SuppressWarnings("serial")
-
+@SuppressWarnings("all")
 public class Config extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
 	private javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
+	private JLabel label;
+	private JTextField txtHttplocalhost;
 
 	public void mensaje(String mensaje, Boolean error) {
 		JLabel alerta = new JLabel(mensaje);
@@ -56,19 +58,25 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		}
 	}
 
+	@SuppressWarnings("all")
 	public void buscarArchivoConf() {
 		File af = new File("Config/Config.txt");
 
 		if (af.exists()) {
 			String[] lectura;
 			try {
-				lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
+				lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "1";
 				}
 
+				if (lectura[1] == null) {
+					lectura[1] = "http://localhost/Periquito";
+				}
+
 				jTextField1.setText(lectura[0]);
+				txtHttplocalhost.setText(lectura[1]);
 
 			} catch (ArrayIndexOutOfBoundsException e) {
 
@@ -80,8 +88,14 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	public void guardarDatos(Boolean mensaje) {
 		try {
 			String texto = jTextField1.getText().trim();
+			String servidor = txtHttplocalhost.getText().trim();
+
 			if (texto.isEmpty() || texto == null) {
 				texto = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop";
+			}
+
+			if (servidor.isEmpty() || servidor == null) {
+				servidor = "http://localhost/Periquito";
 			}
 
 			FileWriter flS = new FileWriter("Config/Config.txt");
@@ -89,8 +103,9 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 
 			fS.write(texto);
 			fS.newLine();
-
+			fS.write(servidor);
 			fS.close();
+
 			dispose();
 
 			if (mensaje) {
@@ -115,9 +130,15 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 
 	public void initComponents() {
 
-		jTextField1 = new javax.swing.JTextField();
+		jTextField1 = new JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField1.setToolTipText("");
+
+		txtHttplocalhost = new JTextField();
+		txtHttplocalhost.setText("http://localhost/Periquito");
+		txtHttplocalhost.setToolTipText("");
+		txtHttplocalhost.setHorizontalAlignment(SwingConstants.CENTER);
+		txtHttplocalhost.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		jLabel1 = new javax.swing.JLabel();
 		jLabel1.setText("Web");
@@ -128,7 +149,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
 
-		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		buscarArchivoConf();
@@ -143,34 +164,70 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 
 				try {
 					jTextField1.setText(files[0].getCanonicalPath());
-					guardarDatos(false);
 				} catch (Exception e1) {
 
 				}
+
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Backup.class.getResource("/imagenes/save.png")));
+		btnNewButton.setIcon(new ImageIcon(Config.class.getResource("/imagenes/abrir.png")));
+
+		label = new JLabel();
+		label.setIcon(new ImageIcon(Config.class.getResource("/imagenes/remote.png")));
+		label.setText("Web");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("Tahoma", Font.BOLD, 20));
+
+		JButton btnNewButton_1 = new JButton("");
+		btnNewButton_1.setIcon(new ImageIcon(Config.class.getResource("/imagenes/save.png")));
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				guardarDatos(true);
+			}
+		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addGap(26)
-						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-						.addGap(31)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(45, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(24)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(layout.createSequentialGroup().addComponent(jLabel1).addGap(26)
+								.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(label, GroupLayout.PREFERRED_SIZE, 114, GroupLayout.PREFERRED_SIZE)
+								.addGap(26).addComponent(txtHttplocalhost, 0, 0, Short.MAX_VALUE)))
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 64, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING,
-								layout.createParallelGroup(Alignment.BASELINE)
+						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(btnNewButton_1, 0, 0,
+								Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(45).addComponent(btnNewButton,
+								GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
+				.addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(24)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 										.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
 										.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)))
-				.addGap(223)));
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(18))
+						.addGroup(
+								Alignment.TRAILING,
+								layout.createSequentialGroup().addContainerGap()
+										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 47,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(26)))
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addComponent(label, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addGroup(layout.createSequentialGroup().addGap(13)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 51,
+														Short.MAX_VALUE)
+												.addComponent(txtHttplocalhost, GroupLayout.PREFERRED_SIZE, 35,
+														GroupLayout.PREFERRED_SIZE))))
+						.addGap(32)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(532, 129));
+		setSize(new Dimension(532, 231));
 		setLocationRelativeTo(null);
 	}
 

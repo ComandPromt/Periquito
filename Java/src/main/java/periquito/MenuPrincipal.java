@@ -43,9 +43,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import Utils.DragAndDrop;
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.DragAndDrop;
+import utils.Metodos;
+import utils.interfaz;
 
 @SuppressWarnings("serial")
 
@@ -95,8 +95,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem mntmNewMenuItem12;
 	private JSeparator separator12;
 	static javax.swing.JTextArea imagenes = new javax.swing.JTextArea();
+
 	@SuppressWarnings("all")
-	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
+	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 	@SuppressWarnings("all")
 	String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	@SuppressWarnings("all")
@@ -118,7 +119,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JLabel lblNewLabel2;
 	private JSeparator separator;
 	private JSeparator separator10;
-	String servidor = Metodos.saberServidor(lecturaurl[0]);
 
 	public void comprobarConexion(String archivo, String ruta) {
 		File af = new File(archivo);
@@ -275,49 +275,63 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGif.add(mnGifAnimator);
 		mnGifAnimator.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+				if (Metodos.listarFicherosPorCarpeta(new File(lectura[1] + "/Hacer_gif/img"), ".") <= 1) {
+					Metodos.mensaje("Tienes que tener más imágenes para crear un GIF", 3);
+				} else {
+					if (Metodos.listarFicherosPorCarpeta(new File(lectura[1] + "/Hacer_gif/img"), ".") > 163) {
+						Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 1);
+					} else {
+						File af = new File("Config/Config.txt");
 
-				File af = new File("Config/Config.txt");
+						if (af.exists()) {
+							try {
+								if (!getLectura()[0].isEmpty() && getLectura()[0] != null) {
 
-				if (af.exists()) {
-					try {
-						if (!getLectura()[0].isEmpty() && getLectura()[0] != null) {
+									WebDriver chrome = new ChromeDriver();
 
-							WebDriver chrome = new ChromeDriver();
+									chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
 
-							chrome.get("http://localhost/Hacer_gif/crear_gif.php");
-							Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
-							chrome.close();
+									Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
-							LinkedList<String> imagenes = new LinkedList<String>();
-							LinkedList<String> frames = new LinkedList<String>();
+									chrome.close();
 
-							imagenes = Metodos.directorio(getLectura()[0] + "\\Hacer_gif\\Output", "gif");
-							frames = Metodos.directorio(getLectura()[0] + "\\Hacer_gif\\img", ".");
+									LinkedList<String> imagenes = new LinkedList<String>();
+									LinkedList<String> frames = new LinkedList<String>();
 
-							File miDir = new File(".");
+									imagenes = Metodos.directorio(getLectura()[0] + "\\Hacer_gif\\Output", "gif");
+									frames = Metodos.directorio(getLectura()[0] + "\\Hacer_gif\\img", ".");
 
-							for (int x = 0; x < imagenes.size(); x++) {
-								Files.move(
-										FileSystems.getDefault()
-												.getPath(getLectura()[0] + "\\Hacer_gif\\Output\\" + imagenes.get(x)),
-										FileSystems.getDefault().getPath(miDir.getCanonicalPath() + "\\imagenes"),
-										StandardCopyOption.REPLACE_EXISTING);
+									File miDir = new File(".");
+
+									for (int x = 0; x < imagenes.size(); x++) {
+										Files.move(
+												FileSystems.getDefault().getPath(
+														getLectura()[0] + "\\Hacer_gif\\Output\\" + imagenes.get(x)),
+												FileSystems.getDefault().getPath(
+														miDir.getCanonicalPath() + "\\imagenes\\" + imagenes.get(x)),
+												StandardCopyOption.REPLACE_EXISTING);
+									}
+
+									for (int x = 0; x < frames.size(); x++) {
+										Metodos.eliminarFichero(getLectura()[0] + "\\Hacer_gif\\img\\" + frames.get(x));
+									}
+								} else {
+									new Config().setVisible(true);
+								}
+
+							} catch (ArrayIndexOutOfBoundsException e1) {
+
+								new Config().setVisible(true);
+							} catch (IOException e1) {
+								Metodos.mensaje("Error", 1);
 							}
-
-							for (int x = 0; x < frames.size(); x++) {
-								Metodos.eliminarFichero(getLectura()[0] + "\\Hacer_gif\\img\\" + frames.get(x));
-							}
-						} else {
-							new Config().setVisible(true);
+							/*
+							 * catch (Exception e1) {
+							 * mensaje("No tienes el driver de chrome en la carpeta del programa", true); }
+							 */
 						}
-					} catch (ArrayIndexOutOfBoundsException e1) {
-
-						new Config().setVisible(true);
-					} catch (IOException e1) {
-						Metodos.mensaje("Error", 1);
 					}
 				}
-
 			}
 
 		});
@@ -344,7 +358,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						}
 						chrome.findElement(By.name("enviar")).click();
 						Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
-						chrome.close();
+
 						try {
 							Metodos.eliminarFichero(miDir.getCanonicalPath() + "\\GifFrames\\picture.gif");
 						} catch (IOException e1) {
@@ -469,7 +483,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 							new AgendaInterfaz().setVisible(true);
 						}
-					} catch (IOException e) {
+					} catch (IOException | SQLException e) {
 					}
 				}
 			}
@@ -548,6 +562,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmImages.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
+
+				File directorio = new File(lectura[0] + "\\Hacer_gif\\img");
+				directorio.mkdir();
+				directorio = new File(lectura[0] + "\\Hacer_gif\\Output");
+				directorio.mkdir();
+
 				Metodos.abrirCarpeta("imagenes", false);
 			}
 		});
@@ -559,7 +579,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages1.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				setLectura(Metodos.leerFicheroArray("Config/Config.txt", 1));
+				setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
 				comprobarConexion("Config/Config.txt", getLectura()[0] + "\\Hacer_gif\\img");
 
 			}
@@ -957,6 +977,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-
+//
 	}
 }

@@ -27,13 +27,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Utils.Metodos;
-import Utils.interfaz;
+import utils.Metodos;
+import utils.interfaz;
 
 @SuppressWarnings("serial")
 
 public class Agregar extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
-	private javax.swing.JLabel jLabel1;
+
 	static javax.swing.JTextField usuario;
 	static JCheckBox mute;
 	JTextArea nota = new JTextArea("", 0, 50);
@@ -49,7 +49,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
 		}
 
-		if (mute.isSelected() == true) {
+		if (mute.isSelected()) {
 			clip.stop();
 		} else {
 			clip.loop();
@@ -74,12 +74,12 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 		initComponents();
 	}
 
+	@SuppressWarnings("all")
 	public void initComponents() {
-
 		usuario = new javax.swing.JTextField();
 		usuario.setHorizontalAlignment(SwingConstants.CENTER);
 		usuario.setToolTipText("");
-
+		javax.swing.JLabel jLabel1;
 		jLabel1 = new javax.swing.JLabel();
 		jLabel1.setText("Usuario");
 		jLabel1.setIcon(new ImageIcon(Agregar.class.getResource("/imagenes/user.png")));
@@ -137,7 +137,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 						}
 
 					} catch (SQLException | IOException e) {
-dispose();
+						dispose();
 					}
 				} else {
 					mensaje("Rellene todos los campos", true);
@@ -209,8 +209,10 @@ dispose();
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {
+		//
 	}
 }

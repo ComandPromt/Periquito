@@ -1,4 +1,4 @@
-package periquito;
+package utils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class DriverSelenium {
 
-	protected static WebDriver driver;
+	static protected WebDriver driver;
 
 	public WebDriver getDriver() {
 		return DriverSelenium.driver;

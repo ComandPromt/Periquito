@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetEvent;

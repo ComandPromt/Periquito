@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -446,7 +446,7 @@ public abstract class Metodos {
 		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
 		if (comprobarConexion()) {
-
+System.out.println("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0]+" - "+lectura2[1]+" - "+ lectura2[2]);
 			Connection conexion = DriverManager.getConnection("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0],
 					lectura2[1], lectura2[2]);
 
@@ -457,14 +457,6 @@ public abstract class Metodos {
 			return null;
 
 		}
-	}
-
-	public static String saberServidor(String cadena) {
-		cadena = cadena.replace("https", "");
-		cadena = cadena.replace("http", "");
-		cadena = cadena.replace("://", "");
-		cadena = cadena.substring(0, cadena.indexOf("\\")).trim();
-		return cadena;
 	}
 
 	public static String eliminarUltimoElemento(String cadena) {

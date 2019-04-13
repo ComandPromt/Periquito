@@ -27,9 +27,9 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 
-import Utils.Metodos;
+import utils.Metodos;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 public class AgendaInterfaz extends javax.swing.JFrame {
 	static javax.swing.JButton agregar;
 	private javax.swing.JButton buscar;
@@ -64,13 +64,10 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 	String ctipo;
 	String cnota;
 
-	public AgendaInterfaz() throws IOException {
-		
-		try {
-			initComponents();
-		} catch (Exception e) {
+	public AgendaInterfaz() throws IOException, SQLException {
 
-		}
+		initComponents();
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(AgendaInterfaz.class.getResource("/imagenes/name.png")));
 		setResizable(false);
 		setAutoRequestFocus(false);
@@ -85,13 +82,17 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		editar.setToolTipText("Editar");
 
 		this.setLocationRelativeTo(null);
-		
+
 	}
 
 	public void vaciarDatos() {
 		nombre.setText("");
 		tipo.setText("");
 		nota.setText("");
+	}
+
+	public AgendaInterfaz(String msg) {
+		super(msg);
 	}
 
 	private void initComponents() throws SQLException, IOException {
@@ -216,6 +217,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 					}
 				} catch (Exception e) {
+					//
 				}
 			}
 		});
@@ -234,8 +236,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 						try {
 							String usuario = nombre.getText();
-							s.executeUpdate("UPDATE notas SET nombre='" + nombre.getText() + "',tipo='"
-									+ tipo.getText() + "',descripcion='" + nota.getText() + "' WHERE id=" + iduser);
+							s.executeUpdate("UPDATE notas SET nombre='" + nombre.getText() + "',tipo='" + tipo.getText()
+									+ "',descripcion='" + nota.getText() + "' WHERE id=" + iduser);
 
 							rs.close();
 							s.close();
@@ -249,7 +251,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 							vaciarDatos();
 						} catch (IOException e1) {
-								}
+							//
+						}
 
 					}
 
@@ -290,8 +293,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 				try {
 					eliminarContactoMouseClicked(evt);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Metodos.mensaje("No se ha podido eliminar la nota", 1);
 				}
 			}
 		});
@@ -460,13 +462,12 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 				verNotas();
 			} catch (Exception e) {
 
-				
 			}
 		}
 
 		pack();
 	}
-	
+
 	public static void verNotas() throws SQLException, IOException {
 		modelo.removeAllElements();
 		Connection conexion = Metodos.conexionBD();
@@ -519,9 +520,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		}
 	}
 
-	public static void main(String args[])  {
-	
-	
+	public static void main(String args[]) {
+
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
@@ -544,14 +544,16 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		}
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
+
 				try {
 					new AgendaInterfaz().setVisible(true);
-				} catch (IOException e) {
-	
+				} catch (IOException | SQLException e) {
+					//
 				}
+
 			}
 		});
-		
+
 	}
 
 }
