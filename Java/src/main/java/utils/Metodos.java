@@ -446,11 +446,10 @@ public abstract class Metodos {
 		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
 		if (comprobarConexion()) {
-System.out.println("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0]+" - "+lectura2[1]+" - "+ lectura2[2]);
-			Connection conexion = DriverManager.getConnection("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0],
-					lectura2[1], lectura2[2]);
 
-			return conexion;
+			return DriverManager.getConnection("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0], lectura2[1],
+					lectura2[2]);
+
 		}
 
 		else {
@@ -565,6 +564,14 @@ System.out.println("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0]+" - "+lectu
 		return cadena;
 	}
 
+	public static String saberseparador(int os) {
+		if (os == 1) {
+			return "\\";
+		} else {
+			return "/";
+		}
+	}
+
 	public static int listarFicherosPorCarpeta(final File carpeta, String filtro) {
 		int ocurrencias = 0;
 
@@ -574,8 +581,9 @@ System.out.println("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0]+" - "+lectu
 			nombre_archivo = ficheroEntrada.getName();
 			extension = nombre_archivo.substring(nombre_archivo.length() - 3, nombre_archivo.length());
 
-			if (extension.equals(filtro)) {
-				if (ocurrencias == 0) {
+			if (extension.equals(filtro) || filtro.equals(".")) {
+
+				if (ocurrencias == 0 && filtro.equals("gif")) {
 					File f1 = new File("GifFrames\\" + nombre_archivo);
 					File f2 = new File("GifFrames\\picture.gif");
 					f1.renameTo(f2);

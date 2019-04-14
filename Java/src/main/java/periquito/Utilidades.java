@@ -212,9 +212,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						FileWriter flS = new FileWriter("Config/SQL.sql");
 						BufferedWriter fS = new BufferedWriter(flS);
 
+						String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
+
 						for (int i = 0; i < files.length; i++) {
 							imagen = files[i].toString();
-							imagen = imagen.substring(imagen.lastIndexOf("\\") + 1, imagen.length());
+							imagen = imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length());
 
 							thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
 

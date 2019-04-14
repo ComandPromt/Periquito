@@ -101,7 +101,72 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	@SuppressWarnings("all")
 	String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	@SuppressWarnings("all")
-	String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
+	static String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
+
+	private void videoToFrame() {
+		File directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+				+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "video");
+		directorio.mkdir();
+		directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "FrameExtractor"
+				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "tmp");
+		directorio.mkdir();
+		directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "FrameExtractor"
+				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output");
+		directorio.mkdir();
+
+		try {
+			if (lectura[1] == null || lectura[1].equals("")) {
+				Config guardar = new Config();
+				guardar.guardarDatos(false);
+			} else {
+				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/output"),
+						".") > 0) {
+					mensaje("Ya has convertido un video a frames!", true);
+					Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+							+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+							+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output", false);
+				}
+
+				else {
+
+					if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/video"),
+							".") != 1) {
+						Metodos.mensaje("Debes tener un vídeo para poder crear los fotogramas", 3);
+						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video", false);
+					}
+
+					else {
+
+						WebDriver chrome = new ChromeDriver();
+						chrome.get(lectura[1] + "/FrameExtractor/examples/index.php");
+
+						Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
+						chrome.close();
+
+						Metodos.eliminarDuplicados(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+								+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+								+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output");
+						Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+								+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+								+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output", false);
+					}
+
+				}
+			}
+		}
+
+		catch (ArrayIndexOutOfBoundsException e) {
+			mensaje("Error en el archivo Config.txt", true);
+		}
+	}
+
+	public static String[] getLecturaos() {
+		return lecturaos;
+	}
+
 	String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 	@SuppressWarnings("all")
 	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
@@ -119,6 +184,87 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JLabel lblNewLabel2;
 	private JSeparator separator;
 	private JSeparator separator10;
+
+	private void hacerGIF() {
+		if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
+			Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
+			Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+					+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img"
+					+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])), false);
+		} else {
+			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
+				Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
+				Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+						+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img"
+						+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])), false);
+			} else {
+				File af = new File("Config/Config.txt");
+
+				if (af.exists()) {
+					try {
+						if (!lectura[0].isEmpty() && lectura[0] != null) {
+
+							WebDriver chrome = new ChromeDriver();
+
+							chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
+
+							Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
+
+							chrome.close();
+
+							LinkedList<String> imagenes = new LinkedList<String>();
+							LinkedList<String> frames = new LinkedList<String>();
+
+							imagenes = Metodos.directorio(
+									lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Output",
+									"gif");
+							frames = Metodos.directorio(
+									lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img",
+									".");
+
+							File miDir = new File(".");
+
+							for (int x = 0; x < imagenes.size(); x++) {
+								Files.move(FileSystems.getDefault()
+										.getPath(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ "Hacer_gif" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ "Output" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ imagenes.get(x)),
+										FileSystems.getDefault().getPath(miDir.getCanonicalPath()
+												+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "imagenes"
+												+ Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ imagenes.get(x)),
+										StandardCopyOption.REPLACE_EXISTING);
+							}
+
+							for (int x = 0; x < frames.size(); x++) {
+								Metodos.eliminarFichero(lectura[0]
+										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img"
+										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + frames.get(x));
+							}
+							Metodos.abrirCarpeta("imagenes", false);
+						} else {
+							new Config().setVisible(true);
+						}
+
+					} catch (ArrayIndexOutOfBoundsException e1) {
+
+						new Config().setVisible(true);
+					} catch (IOException e1) {
+						Metodos.mensaje("Error", 1);
+					}
+
+					catch (Exception e1) {
+						mensaje("No tienes el driver de chrome en la carpeta del programa", true);
+					}
+
+				}
+			}
+		}
+	}
 
 	public void comprobarConexion(String archivo, String ruta) {
 		File af = new File(archivo);
@@ -210,7 +356,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		Metodos.crearFichero("GifFrames", "", true);
 		Metodos.guardarConfig(3);
 
-		if (getLectura()[0] == null) {
+		if (lectura[0] == null) {
 			Metodos.guardarConfig(1);
 		}
 
@@ -275,63 +421,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnGif.add(mnGifAnimator);
 		mnGifAnimator.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				if (Metodos.listarFicherosPorCarpeta(new File(lectura[1] + "/Hacer_gif/img"), ".") <= 1) {
-					Metodos.mensaje("Tienes que tener más imágenes para crear un GIF", 3);
-				} else {
-					if (Metodos.listarFicherosPorCarpeta(new File(lectura[1] + "/Hacer_gif/img"), ".") > 163) {
-						Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 1);
-					} else {
-						File af = new File("Config/Config.txt");
 
-						if (af.exists()) {
-							try {
-								if (!getLectura()[0].isEmpty() && getLectura()[0] != null) {
-
-									WebDriver chrome = new ChromeDriver();
-
-									chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
-
-									Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
-
-									chrome.close();
-
-									LinkedList<String> imagenes = new LinkedList<String>();
-									LinkedList<String> frames = new LinkedList<String>();
-
-									imagenes = Metodos.directorio(getLectura()[0] + "\\Hacer_gif\\Output", "gif");
-									frames = Metodos.directorio(getLectura()[0] + "\\Hacer_gif\\img", ".");
-
-									File miDir = new File(".");
-
-									for (int x = 0; x < imagenes.size(); x++) {
-										Files.move(
-												FileSystems.getDefault().getPath(
-														getLectura()[0] + "\\Hacer_gif\\Output\\" + imagenes.get(x)),
-												FileSystems.getDefault().getPath(
-														miDir.getCanonicalPath() + "\\imagenes\\" + imagenes.get(x)),
-												StandardCopyOption.REPLACE_EXISTING);
-									}
-
-									for (int x = 0; x < frames.size(); x++) {
-										Metodos.eliminarFichero(getLectura()[0] + "\\Hacer_gif\\img\\" + frames.get(x));
-									}
-								} else {
-									new Config().setVisible(true);
-								}
-
-							} catch (ArrayIndexOutOfBoundsException e1) {
-
-								new Config().setVisible(true);
-							} catch (IOException e1) {
-								Metodos.mensaje("Error", 1);
-							}
-							/*
-							 * catch (Exception e1) {
-							 * mensaje("No tienes el driver de chrome en la carpeta del programa", true); }
-							 */
-						}
-					}
-				}
+				hacerGIF();
 			}
 
 		});
@@ -352,7 +443,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						chrome.get("https://gifframes.herokuapp.com");
 						try {
 							chrome.findElement(By.id("imagen"))
-									.sendKeys(miDir.getCanonicalPath() + "\\GifFrames\\picture.gif");
+									.sendKeys(miDir.getCanonicalPath()
+											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "GifFrames"
+											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "picture.gif");
 						} catch (IOException e1) {
 
 						}
@@ -360,7 +453,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
 						try {
-							Metodos.eliminarFichero(miDir.getCanonicalPath() + "\\GifFrames\\picture.gif");
+							Metodos.eliminarFichero(miDir.getCanonicalPath()
+									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "GifFrames"
+									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "picture.gif");
 						} catch (IOException e1) {
 
 						}
@@ -369,7 +464,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 					else {
 
-						Metodos.mensaje("Copia o mueve un archivo GIF", 2);
+						Metodos.mensaje("Copia o mueve un archivo GIF", 3);
 
 						Metodos.abrirCarpeta("GifFrames", false);
 					}
@@ -390,43 +485,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem7.addMouseListener(new MouseAdapter() {
 
 			public void mousePressed(MouseEvent arg0) {
-				int comprobacion;
-				try {
-					if (getLectura()[1] == null || getLectura()[1].equals("")) {
-						Config guardar = new Config();
-						guardar.guardarDatos(false);
-					}
-					// WebDriver chrome = new ChromeDriver();
-					// chrome.get(getLectura()[5] = convertirCadena(getLectura()[1]
-					// "/FrameExtractor/examples/index.php"
-					// "chrome"));
-					// comprobacion =
-					// Integer.parseInt(chrome.findElement(By.name("salida")).getText());
-					Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
-					// chrome.close();
-					/*
-					 * switch (comprobacion) {
-					 * 
-					 * case 1: mensaje("Ya has convertido un video a frames!", true);
-					 * Metodos.abrirCarpeta(getLectura()[0] +
-					 * "\\..\\FrameExtractor\\examples\\output", true); break;
-					 * 
-					 * case 2: mensaje("No tienes videos para convertir a frames", true);
-					 * Metodos.abrirCarpeta(getLectura()[0] +
-					 * "\\..\\FrameExtractor\\examples\\video", true); break;
-					 * 
-					 * case 3: Metodos.eliminarDuplicados(getLectura()[0] +
-					 * "\\..\\FrameExtractor\\examples\\output");
-					 * Metodos.abrirCarpeta(getLectura()[0] +
-					 * "\\..\\FrameExtractor\\examples\\output", true); break; }
-					 */
-					Metodos.eliminarFichero("cerrar.bat");
-				}
 
-				catch (ArrayIndexOutOfBoundsException e) {
-					mensaje("Error en el archivo Config.txt", true);
-				}
+				videoToFrame();
 			}
+
 		});
 		mntmNewMenuItem7.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmNewMenuItem7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
@@ -437,28 +499,36 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem10.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				String comprobacion = null;
-				if (getLectura()[1] == null || getLectura()[1].equals("")) {
-					Config guardar = new Config();
-					guardar.guardarDatos(false);
-				}
-				WebDriver chrome = new ChromeDriver();
-				// chrome.get(getLectura()[5] = convertirCadena(getLectura()[1]
-				// "/VID-2-GIF/index.php", "chrome"));
-				comprobacion = chrome.findElement(By.name("salida")).getText();
-				if (comprobacion.equals("No tienes videos")) {
-					Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
+				try {
 
-					mensaje("Debes tener un video en la carpeta de conversion", true);
-					Metodos.abrirCarpeta(getLectura()[0] + "\\..\\VID-2-GIF", true);
-				} else {
-					String imagen = chrome.findElement(By.name("imagen")).getText();
-					Metodos.abrirCarpeta(getLectura()[0] + "\\..\\imagenes", true);
-					if (!getLectura()[0].isEmpty() && !getLectura()[0].equals("") && getLectura()[0] != null) {
-						chrome.get("file:///" + getLectura()[0] + "/" + imagen);
+					videoToFrame();
+
+					LinkedList<String> imagenes = new LinkedList<String>();
+					imagenes = Metodos.directorio(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+							+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+							+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output", ".");
+					File miDir = new File(".");
+					for (int x = 0; x < imagenes.size(); x++) {
+
+						Files.move(FileSystems.getDefault()
+								.getPath(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+										+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+										+ "examples" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output"
+										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + imagenes.get(x)),
+								FileSystems.getDefault()
+										.getPath(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ "Hacer_gif" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ "img" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+												+ imagenes.get(x)),
+								StandardCopyOption.REPLACE_EXISTING);
+
 					}
+
+					hacerGIF();
+
+				} catch (IOException e1) {
+					new Config().setVisible(true);
 				}
-				chrome.close();
 			}
 		});
 		mntmNewMenuItem10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
@@ -533,9 +603,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					File archivo = new File("Config/Backup.txt");
 
 					if (!archivo.exists()) {
-						Metodos.crearFichero("Config/Backup.txt",
-								"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
+						if (Integer.parseInt(lecturaos[0]) == 1) {
+							Metodos.crearFichero("Config/Backup.txt",
+									"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
+						} else {
+							Metodos.crearFichero("Config/Backup.txt",
+									"/home/" + System.getProperty("user.name") + "/Desktop", false);
 
+						}
 					} else {
 
 						if (Metodos.comprobarConfiguracion()) {
@@ -563,9 +638,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				File directorio = new File(lectura[0] + "\\Hacer_gif\\img");
+				File directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
+						+ "Hacer_gif" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img");
 				directorio.mkdir();
-				directorio = new File(lectura[0] + "\\Hacer_gif\\Output");
+				directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+						+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Output");
 				directorio.mkdir();
 
 				Metodos.abrirCarpeta("imagenes", false);
@@ -580,7 +657,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent e) {
 
 				setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
-				comprobarConexion("Config/Config.txt", getLectura()[0] + "\\Hacer_gif\\img");
+				comprobarConexion("Config/Config.txt",
+						lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
+								+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img");
 
 			}
 		});
@@ -608,7 +687,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem8.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					comprobarConexion("Config/Config.txt", getLectura()[0] + "\\FrameExtractor\\examples\\video");
+					comprobarConexion("Config/Config.txt",
+							lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "FrameExtractor"
+									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
+									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "video");
 				} catch (ArrayIndexOutOfBoundsException e) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
@@ -626,7 +708,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					comprobarConexion("Config/Config.txt", getLectura()[0] + "\\VID-2-GIF");
+					comprobarConexion("Config/Config.txt",
+							lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "VID-2-GIF");
 
 				} catch (ArrayIndexOutOfBoundsException e) {
 					mensaje("Error en el  archivo Config.txt", true);
