@@ -275,7 +275,7 @@ public abstract class Metodos {
 			crearScript("reiniciar_explorer.bat", "TASKKILL /F /IM explorer.exe\r\n" + "start explorer.exe", true);
 			Metodos.mensaje("Backup realizado correctamente", 2);
 
-			abrirCarpeta(backup[0], false);
+			abrirCarpeta(backup[0]);
 		} catch (Exception e) {
 			Metodos.mensaje("Error", 1);
 		}
@@ -468,18 +468,6 @@ public abstract class Metodos {
 		return cadena;
 	}
 
-	public static String eliminarIndices(String cadena) {
-		cadena = cadena.trim();
-		cadena = cadena.replace("index.php", "");
-		cadena = cadena.replace("index.html", "");
-		cadena = cadena.replace("index.htm", "");
-		cadena = cadena.replace("/", "\\");
-		cadena = cadena.replace("//", "\\");
-		cadena = cadena.replace("c:", "C:");
-		cadena = cadena.replace("http", "C:\\");
-		return cadena;
-	}
-
 	public static int numeroLineas(String fichero) {
 		File input = new File("Config/" + fichero);
 		Scanner iterate;
@@ -619,10 +607,8 @@ public abstract class Metodos {
 		return ocurrencias;
 	}
 
-	public static void abrirCarpeta(String ruta, Boolean retocar) {
-		if (retocar) {
-			ruta = Metodos.eliminarIndices(ruta);
-		}
+	public static void abrirCarpeta(String ruta) {
+
 		if (ruta != null && ruta != "" && !ruta.isEmpty()) {
 			try {
 				Runtime.getRuntime().exec("cmd /c start " + ruta);
@@ -639,7 +625,7 @@ public abstract class Metodos {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
 			if (abrir) {
-				abrirCarpeta(directorio, true);
+				abrirCarpeta(directorio);
 			}
 		}
 	}

@@ -1,15 +1,16 @@
 package periquito;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
-import java.awt.Font;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
@@ -34,7 +35,7 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 		txtrAdvertenciaLa.setEditable(false);
 		txtrAdvertenciaLa.setLineWrap(true);
 		txtrAdvertenciaLa.setText(
-				"---------------------------------------------\r\n           Configuraciones\r\n---------------------------------------------\r\n\r\n C:\\________\\imagenes\r\n \r\n http://______.php \r\n\r\n http://______.html\r\n\r\n\r\n C:\\_________\\Hacer_gif\r\n\r\n C:\\____\\Hacer_gif\\__.php \r\n\r\n C:\\_____\\Hacer_gif\\_.html \r\n\r\n\r\n C:\\_____\\GifFrames\r\n\r\n C:\\_____\\GifFrames\\____.php\r\n\r\n C:\\____\\GifFrames\\___.html ");
+				"---------------------------------------------\r\n                Periquito GUI\r\n---------------------------------------------\r\n\r\n Creado por:\"ComandPromt\"\r\n\r\n Email: smr2gocar@gmail.com");
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(25)

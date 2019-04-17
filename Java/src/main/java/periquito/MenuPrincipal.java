@@ -7,7 +7,6 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Label;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,6 +44,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.DragAndDrop;
 import utils.Metodos;
+import utils.PhotoFrame;
 import utils.interfaz;
 
 @SuppressWarnings("serial")
@@ -83,7 +83,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem mntmNewMenuItem9;
 	private JSeparator separator8;
 	private JMenuItem mntmNewMenuItem10;
-	private Label check6 = new Label("");
 	private JMenu mnVideo;
 	private JMenu mnGif;
 	private JSeparator separator6;
@@ -103,18 +102,21 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	@SuppressWarnings("all")
 	static String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
 
+	String separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+
+	String directorioActual = new File(".").getCanonicalPath() + separador;
+
+	transient LinkedList<String> listaImagenes = new LinkedList<>();
+
+	@SuppressWarnings("all")
 	private void videoToFrame() {
-		File directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-				+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "video");
+		File directorio = new File(
+				lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
 		directorio.mkdir();
-		directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "FrameExtractor"
-				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "tmp");
+		directorio = new File(lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "tmp");
 		directorio.mkdir();
-		directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "FrameExtractor"
-				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-				+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output");
+		directorio = new File(
+				lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output");
 		directorio.mkdir();
 
 		try {
@@ -125,9 +127,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/output"),
 						".") > 0) {
 					mensaje("Ya has convertido un video a frames!", true);
-					Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-							+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-							+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output", false);
+					Metodos.abrirCarpeta(
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output");
 				}
 
 				else {
@@ -135,7 +136,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/video"),
 							".") != 1) {
 						Metodos.mensaje("Debes tener un vídeo para poder crear los fotogramas", 3);
-						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video", false);
+						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video");
 					}
 
 					else {
@@ -146,12 +147,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 						chrome.close();
 
-						Metodos.eliminarDuplicados(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-								+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-								+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output");
-						Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-								+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-								+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output", false);
+						Metodos.eliminarDuplicados(lectura[0] + separador + "FrameExtractor" + separador + "examples"
+								+ separador + "output");
+						Metodos.abrirCarpeta(lectura[0] + separador + "FrameExtractor" + separador + "examples"
+								+ separador + "output");
 					}
 
 				}
@@ -184,19 +183,20 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JLabel lblNewLabel2;
 	private JSeparator separator;
 	private JSeparator separator10;
+	private JMenuItem mntmNewMenuItem111;
+	private JSeparator separator111;
+	private JMenuItem mntmNewMenuItem222;
+	private JSeparator separator222;
 
+	@SuppressWarnings("all")
 	private void hacerGIF() {
 		if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
 			Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
-			Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-					+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img"
-					+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])), false);
+			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 		} else {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
 				Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
-				Metodos.abrirCarpeta(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-						+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img"
-						+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])), false);
+				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 			} else {
 				File af = new File("Config/Config.txt");
 
@@ -212,40 +212,27 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 							chrome.close();
 
-							LinkedList<String> imagenes = new LinkedList<String>();
 							LinkedList<String> frames = new LinkedList<String>();
 
-							imagenes = Metodos.directorio(
-									lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Output",
-									"gif");
-							frames = Metodos.directorio(
-									lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img",
-									".");
+							listaImagenes = Metodos
+									.directorio(lectura[0] + separador + "Hacer_gif" + separador + "Output", "gif");
+							frames = Metodos.directorio(lectura[0] + separador + "Hacer_gif" + separador + "img", ".");
 
-							File miDir = new File(".");
-
-							for (int x = 0; x < imagenes.size(); x++) {
-								Files.move(FileSystems.getDefault()
-										.getPath(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ "Hacer_gif" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ "Output" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ imagenes.get(x)),
-										FileSystems.getDefault().getPath(miDir.getCanonicalPath()
-												+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "imagenes"
-												+ Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ imagenes.get(x)),
+							for (int x = 0; x < listaImagenes.size(); x++) {
+								Files.move(
+										FileSystems.getDefault()
+												.getPath(lectura[0] + separador + "Hacer_gif" + separador + "Output"
+														+ separador + listaImagenes.get(x)),
+										FileSystems.getDefault().getPath(
+												directorioActual + "imagenes" + separador + listaImagenes.get(x)),
 										StandardCopyOption.REPLACE_EXISTING);
 							}
 
 							for (int x = 0; x < frames.size(); x++) {
-								Metodos.eliminarFichero(lectura[0]
-										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img"
-										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + frames.get(x));
+								Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
+										+ separador + frames.get(x));
 							}
-							Metodos.abrirCarpeta("imagenes", false);
+							Metodos.abrirCarpeta("imagenes");
 						} else {
 							new Config().setVisible(true);
 						}
@@ -274,7 +261,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				mensaje("Ruta inválida ", true);
 				new Config().setVisible(true);
 			} else {
-				Metodos.abrirCarpeta(ruta, true);
+				Metodos.abrirCarpeta(ruta);
 			}
 		} else {
 			new Config().setVisible(true);
@@ -437,28 +424,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				if (Metodos.probarconexion("www.google.com")) {
 					if (Metodos.listarFicherosPorCarpeta(new File("GifFrames"), "gif") == 1) {
 
-						File miDir = new File(".");
-
 						WebDriver chrome = new ChromeDriver();
 						chrome.get("https://gifframes.herokuapp.com");
-						try {
-							chrome.findElement(By.id("imagen"))
-									.sendKeys(miDir.getCanonicalPath()
-											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "GifFrames"
-											+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "picture.gif");
-						} catch (IOException e1) {
-
-						}
+						chrome.findElement(By.id("imagen"))
+								.sendKeys(directorioActual + "GifFrames" + separador + "picture.gif");
 						chrome.findElement(By.name("enviar")).click();
 						Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
-						try {
-							Metodos.eliminarFichero(miDir.getCanonicalPath()
-									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "GifFrames"
-									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "picture.gif");
-						} catch (IOException e1) {
-
-						}
+						Metodos.eliminarFichero(directorioActual + "GifFrames" + separador + "picture.gif");
 
 					}
 
@@ -466,7 +439,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 						Metodos.mensaje("Copia o mueve un archivo GIF", 3);
 
-						Metodos.abrirCarpeta("GifFrames", false);
+						Metodos.abrirCarpeta("GifFrames");
 					}
 				}
 			}
@@ -504,22 +477,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					videoToFrame();
 
 					LinkedList<String> imagenes = new LinkedList<String>();
-					imagenes = Metodos.directorio(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-							+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-							+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output", ".");
+					imagenes = Metodos.directorio(
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output",
+							".");
 					File miDir = new File(".");
 					for (int x = 0; x < imagenes.size(); x++) {
 
-						Files.move(FileSystems.getDefault()
-								.getPath(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-										+ "FrameExtractor" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-										+ "examples" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "output"
-										+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + imagenes.get(x)),
+						Files.move(
 								FileSystems.getDefault()
-										.getPath(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ "Hacer_gif" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ "img" + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-												+ imagenes.get(x)),
+										.getPath(lectura[0] + separador + "FrameExtractor" + separador + "examples"
+												+ separador + "output" + separador + imagenes.get(x)),
+								FileSystems.getDefault().getPath(lectura[0] + separador + "Hacer_gif" + separador
+										+ "img" + separador + imagenes.get(x)),
 								StandardCopyOption.REPLACE_EXISTING);
 
 					}
@@ -560,34 +529,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 		separator11 = new JSeparator();
 		mnMenu.add(separator11);
-		mnMenu.add(mntmUploads);
-		mntmNewMenuItem12 = new JMenuItem("Recomponer Inserts");
-		mntmNewMenuItem12.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-
-				try {
-					if (Metodos.comprobarConfiguracion()) {
-						try {
-							new Utilidades().setVisible(true);
-						} catch (IOException e) {
-						}
-					}
-				} catch (IOException e) {
-				}
-
-			}
-
-		});
-		separator12 = new JSeparator();
-		mnMenu.add(separator12);
-		mntmNewMenuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
-		mntmNewMenuItem12.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		mnMenu.add(mntmNewMenuItem12);
-
-		separator13 = new JSeparator();
-		mnMenu.add(separator13);
 
 		mnNewMenu = new JMenu("Base de datos");
 		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -628,6 +569,65 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mnNewMenu.add(mntmNewMenuItem13);
 		mntmNewMenuItem13.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
+
+		separator111 = new JSeparator();
+		mnMenu.add(separator111);
+		mnMenu.add(mntmUploads);
+		mntmNewMenuItem12 = new JMenuItem("Recomponer Inserts");
+		mntmNewMenuItem12.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+
+				try {
+					if (Metodos.comprobarConfiguracion()) {
+						try {
+							new Utilidades().setVisible(true);
+						} catch (IOException e) {
+						}
+					}
+				} catch (IOException e) {
+				}
+
+			}
+
+		});
+		separator12 = new JSeparator();
+		mnMenu.add(separator12);
+		mntmNewMenuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
+		mntmNewMenuItem12.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnMenu.add(mntmNewMenuItem12);
+
+		separator13 = new JSeparator();
+		mnMenu.add(separator13);
+
+		mntmNewMenuItem111 = new JMenuItem("Recortar imagenes");
+		mntmNewMenuItem111.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+
+					listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
+				} catch (NumberFormatException e1) {
+//
+				}
+
+				if (listaImagenes.size() > 0) {
+					Metodos.mensaje("Se están redimensionando las imágenes. Espere, por favor", 2);
+
+					for (int x = 0; x < listaImagenes.size(); x++) {
+						ImageResizer.copyImage(
+								directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x),
+								directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x));
+					}
+				}
+
+				new PhotoFrame().setVisible(true);
+			}
+		});
+		mntmNewMenuItem111.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem111.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
+		mnMenu.add(mntmNewMenuItem111);
 		mntmNewMenuItem = new JMenu("   ");
 		mntmNewMenuItem.setBackground(Color.BLACK);
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -638,14 +638,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmImages.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				File directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0]))
-						+ "Hacer_gif" + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img");
+				File directorio = new File(lectura[0] + separador + "Hacer_gif" + separador + "img");
 				directorio.mkdir();
-				directorio = new File(lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-						+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Output");
+				directorio = new File(lectura[0] + separador + "Hacer_gif" + separador + "Output");
 				directorio.mkdir();
 
-				Metodos.abrirCarpeta("imagenes", false);
+				Metodos.abrirCarpeta("imagenes");
 			}
 		});
 		mntmImages.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
@@ -657,9 +655,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent e) {
 
 				setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
-				comprobarConexion("Config/Config.txt",
-						lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "Hacer_gif"
-								+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "img");
+				comprobarConexion("Config/Config.txt", lectura[0] + separador + "Hacer_gif" + separador + "img");
 
 			}
 		});
@@ -676,7 +672,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmCxvxv.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 
-				Metodos.abrirCarpeta("GifFrames", false);
+				Metodos.abrirCarpeta("GifFrames");
 			}
 		});
 		separator2 = new JSeparator();
@@ -688,9 +684,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent arg0) {
 				try {
 					comprobarConexion("Config/Config.txt",
-							lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "FrameExtractor"
-									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "examples"
-									+ Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "video");
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
 				} catch (ArrayIndexOutOfBoundsException e) {
 					mensaje("Error en el  archivo Config.txt", true);
 				}
@@ -708,8 +702,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					comprobarConexion("Config/Config.txt",
-							lectura[0] + Metodos.saberseparador(Integer.parseInt(lecturaos[0])) + "VID-2-GIF");
+					comprobarConexion("Config/Config.txt", lectura[0] + separador + "VID-2-GIF");
 
 				} catch (ArrayIndexOutOfBoundsException e) {
 					mensaje("Error en el  archivo Config.txt", true);
@@ -719,6 +712,22 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem9.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		mntmNewMenuItem9.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		mntmNewMenuItem.add(mntmNewMenuItem9);
+
+		mntmNewMenuItem222 = new JMenuItem("Crop images");
+		mntmNewMenuItem222.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				File directorio = new File("imagenes_para_recortar");
+				directorio.mkdir();
+				Metodos.abrirCarpeta("imagenes_para_recortar");
+			}
+		});
+
+		separator222 = new JSeparator();
+		mntmNewMenuItem.add(separator222);
+		mntmNewMenuItem222.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		mntmNewMenuItem222.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
+		mntmNewMenuItem.add(mntmNewMenuItem222);
 		mntmNewMenuItem1 = new JMenu("Config");
 		mntmNewMenuItem1.setBackground(Color.BLACK);
 		mntmNewMenuItem1.setFont(new Font("Segoe UI", Font.BOLD, 24));
@@ -837,7 +846,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem4 = new JMenuItem("IMG 2 Color");
 		mntmNewMenuItem4.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent arg0) {
-				Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/", false);
+				Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/");
 			}
 		});
 
@@ -893,11 +902,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		check5.addChangeListener(this);
 		check5.setFont(new Font("Tahoma", Font.BOLD, 25));
 		getContentPane().add(check5);
-
-		check6.setEnabled(false);
-		check6.setBounds(340, 240, 200, 40);
-		check6.setFont(new Font("Tahoma", Font.BOLD, 18));
-		getContentPane().add(check6);
 		imagenes.setForeground(Color.DARK_GRAY);
 		imagenes.setBackground(Color.WHITE);
 		imagenes.setEditable(false);
