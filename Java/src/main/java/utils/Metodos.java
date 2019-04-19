@@ -30,7 +30,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -147,7 +146,7 @@ public abstract class Metodos {
 		s.close();
 	}
 
-	public static void moverArchivosDrop(java.io.File[] files) throws IOException {
+	public static void moverArchivosDrop(java.io.File[] files, String separador) throws IOException {
 		String imagen;
 		String comprobacion;
 		boolean filtro = false;
@@ -156,7 +155,7 @@ public abstract class Metodos {
 
 		for (int i = 0; i < files.length; i++) {
 
-			imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf("\\") + 1,
+			imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
 					files[i].getCanonicalPath().length());
 			comprobacion = imagen.substring(imagen.length() - 3, imagen.length());
 
@@ -164,9 +163,9 @@ public abstract class Metodos {
 					|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
 
 				origen = files[i].getCanonicalPath();
-				destino = new File(".").getCanonicalPath() + "\\imagenes";
+				destino = new File(".").getCanonicalPath() + separador + "imagenes";
 
-				if (origen.substring(0, origen.lastIndexOf("\\")).equals(destino)) {
+				if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 					Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
 				}
 
@@ -174,7 +173,7 @@ public abstract class Metodos {
 
 					Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
 
-							destino + "\\" + origen.substring(origen.lastIndexOf("\\") + 1, origen.length())
+							destino + separador + origen.substring(origen.lastIndexOf(separador) + 1, origen.length())
 
 					), StandardCopyOption.REPLACE_EXISTING);
 
@@ -266,6 +265,8 @@ public abstract class Metodos {
 			ruta = "C:\\xampp\\mysql\\bin\\";
 			break;
 
+		default:
+			break;
 		}
 
 		try {
@@ -301,7 +302,7 @@ public abstract class Metodos {
 			aplicacion.exec("cmd.exe /K " + iniciar + " " + archivo);
 
 		} catch (Exception e) {
-
+			mensaje("Error al cargar el script", 1);
 		}
 
 		Process p = Runtime.getRuntime().exec("cmd.exe");
@@ -484,10 +485,19 @@ public abstract class Metodos {
 		return numLines;
 	}
 
-	public static void guardarConfig(int opcion) throws IOException {
+	public static void guardarConfig(int opcion, String separador) throws IOException {
+
+		String ruta;
+
+		if (separador.equals("/")) {
+			ruta = "/home/";
+		} else {
+			ruta = "C:\\Users\\";
+		}
+
 		switch (opcion) {
 		case 1:
-			Metodos.crearFichero("Config/Config.txt", "C:\\Users\\" + System.getProperty("user.name") + "\\Downloads",
+			Metodos.crearFichero("Config/Config.txt", ruta + System.getProperty("user.name") + separador + "Downloads",
 					false);
 			Config guardar = new Config();
 			guardar.guardarDatos(false);
@@ -512,11 +522,15 @@ public abstract class Metodos {
 			break;
 
 		case 5:
-			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\FrameExtractor\\examples\\output", "", true);
-			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\FrameExtractor\\examples\\tmp", "", true);
-			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\FrameExtractor\\examples\\video", "", true);
-			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\Hacer_gif\\img", "", true);
-			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + "\\Hacer_gif\\Output", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
+					+ separador + "output", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
+					+ separador + "tmp", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
+					+ separador + "video", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "Hacer_gif" + separador + "img", "", true);
+			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "Hacer_gif" + separador + "Output", "",
+					true);
 			break;
 		}
 
@@ -534,22 +548,6 @@ public abstract class Metodos {
 			bw.write(texto);
 			bw.close();
 		}
-	}
-
-	public static String comprobarImagenes(String cadena, String comprobacion) {
-
-		if (cadena.length() >= 10
-				&& cadena.substring(cadena.length() - 9, cadena.length()).compareTo(comprobacion) != 0) {
-			if (comprobacion.substring(0, 1).compareTo("\\") != 0) {
-				cadena += "\\" + comprobacion;
-			} else {
-
-				cadena += comprobacion;
-
-			}
-			cadena = cadena.replace("\\\\", "\\");
-		}
-		return cadena;
 	}
 
 	public static String saberseparador(int os) {
@@ -648,7 +646,7 @@ public abstract class Metodos {
 
 	public static LinkedList<String> directorio(String ruta, String extension) {
 
-		LinkedList<String> lista = new LinkedList<String>();
+		LinkedList<String> lista = new LinkedList<>();
 		String directorio = ruta;
 		File f = new File(directorio);
 
@@ -665,7 +663,7 @@ public abstract class Metodos {
 		return lista;
 	}
 
-	public static int salida(String origen, String destino, int opcion) throws IOException {
+	public static int salida(String origen, String destino, int opcion, String separador) throws IOException {
 
 		LinkedList<String> imagenes = new LinkedList<String>();
 
@@ -682,14 +680,14 @@ public abstract class Metodos {
 		if (imagenes.size() > 0) {
 
 			if (imagenes.size() == 1) {
-				destino += "\\" + imagenes.get(0);
-				Path origenPath = FileSystems.getDefault().getPath(origen + "\\" + imagenes.get(0));
+				destino += separador + imagenes.get(0);
+				Path origenPath = FileSystems.getDefault().getPath(origen + separador + imagenes.get(0));
 				Path destinoPath = FileSystems.getDefault().getPath(destino);
 				Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
 			} else {
 				for (int x = 0; x < imagenes.size(); x++) {
-					Path origenPath = FileSystems.getDefault().getPath(origen + "\\" + imagenes.get(x));
-					Path destinoPath = FileSystems.getDefault().getPath(destino + "\\" + imagenes.get(x));
+					Path origenPath = FileSystems.getDefault().getPath(origen + separador + imagenes.get(x));
+					Path destinoPath = FileSystems.getDefault().getPath(destino + separador + imagenes.get(x));
 					Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
 				}
 			}
@@ -790,49 +788,42 @@ public abstract class Metodos {
 		directorio.mkdir();
 		directorio = new File("imagenes/gif/Thumb");
 		directorio.mkdir();
+		directorio = new File("imagenes_para_recortar");
+		directorio.mkdir();
+		directorio = new File("imagenes_para_recortar/recortes");
+		directorio.mkdir();
 	}
 
-	public static void eliminarDuplicados(String ruta) {
+	public static void eliminarDuplicados(String ruta, String separador) {
 
-		String[] lectura;
 		try {
-			lectura = Metodos.leerFicheroArray("Config/Config.txt", 1);
+			LinkedList<String> imagenes = directorio(ruta, ".");
 
-			LinkedList<String> imagenes = new LinkedList<String>();
-			imagenes = directorio(lectura[0].substring(0, lectura[0].length() - 8) + ruta, "jpg");
-
-			if (imagenes.size() > 0) {
-				Iterator<String> it = imagenes.iterator();
-				ArrayList<String> scanimagenes = new ArrayList<String>();
+			if (!imagenes.isEmpty()) {
+				ArrayList<String> scanimagenes = new ArrayList<>();
 				String imagen;
 
-				while (it.hasNext()) {
+				for (int i = 0; i < imagenes.size(); i++) {
+
 					try {
-
-						imagen = getSHA256Checksum(
-								lectura[0].substring(0, lectura[0].length() - 8) + ruta + "\\" + it.next());
-
+						imagen = getSHA256Checksum(ruta + separador + imagenes.get(i));
 						scanimagenes.add(imagen);
 
 					} catch (Exception e) {
 					}
 
-				}
+					if (imagenes.size() == scanimagenes.size() && imagenes.size() > 1) {
+						String shaimagen;
+						for (i = 0; i < scanimagenes.size(); i++) {
 
-				if (imagenes.size() == scanimagenes.size()) {
+							shaimagen = scanimagenes.get(i);
 
-					for (int i = 0; i < scanimagenes.size(); i++) {
+							if (shaimagen.equals(scanimagenes.get(i) + 1)) {
+								File fichero = new File(ruta + separador + imagenes.get(i++));
+								fichero.delete();
+							}
 
-						if (scanimagenes.get(i) == scanimagenes.get(scanimagenes.size() - 1)) {
-							i--;
 						}
-
-						if (scanimagenes.get(i) == scanimagenes.get(i++)) {
-							File fichero = new File(
-									lectura[0].substring(0, lectura[0].length() - 8) + ruta + "\\" + imagenes.get(i++));
-							fichero.delete();
-						}
-
 					}
 				}
 			}

@@ -10,9 +10,9 @@ import javax.imageio.ImageIO;
 
 public class ImageResizer {
 
-	public static int MAX_WIDTH = 640;
+	public static int MAX_WIDTH = 800;
 
-	public static int MAX_HEIGHT = 480;
+	public static int MAX_HEIGHT = 630;
 
 	public static void copyImage(String filePath, String copyPath) {
 		BufferedImage bimage = loadImage(filePath);

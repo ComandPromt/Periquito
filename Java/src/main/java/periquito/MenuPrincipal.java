@@ -102,9 +102,9 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	@SuppressWarnings("all")
 	static String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
 
-	String separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+	public String separador;
 
-	String directorioActual = new File(".").getCanonicalPath() + separador;
+	String directorioActual;
 
 	transient LinkedList<String> listaImagenes = new LinkedList<>();
 
@@ -148,7 +148,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						chrome.close();
 
 						Metodos.eliminarDuplicados(lectura[0] + separador + "FrameExtractor" + separador + "examples"
-								+ separador + "output");
+								+ separador + "output", separador);
 						Metodos.abrirCarpeta(lectura[0] + separador + "FrameExtractor" + separador + "examples"
 								+ separador + "output");
 					}
@@ -315,15 +315,18 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			if (opcion > 0 && !lecturaurl[0].isEmpty() && !lecturaurl[1].isEmpty()) {
 				int salida;
 				if (opcion == 9) {
-					salida = Metodos.salida(lectura + "\\gif", "\\\\" + lecturaurl[0] + "\\" + opcion, opcion);
+					salida = Metodos.salida(lectura + "\\gif", "\\\\" + lecturaurl[0] + "\\" + opcion, opcion,
+							separador);
 					Metodos.notificacion(salida, lectura + "gif", "GIF", true);
-					salida = Metodos.salida(lectura + "\\gif\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion);
+					salida = Metodos.salida(lectura + "\\gif\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion,
+							separador);
 					Metodos.notificacion(salida, lectura + "gif\\Thumb", "JPG", false);
 					mensaje(salida + " imagen/es subida/s", false);
 				} else {
-					salida = Metodos.salida(lectura, "\\\\" + lecturaurl[0] + "\\" + opcion, opcion);
+					salida = Metodos.salida(lectura, "\\\\" + lecturaurl[0] + "\\" + opcion, opcion, separador);
 					Metodos.notificacion(salida, lectura, "JPG", true);
-					salida = Metodos.salida(lectura + "\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion);
+					salida = Metodos.salida(lectura + "\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion,
+							separador);
 					Metodos.notificacion(salida, lectura + "\\Thumb", "JPG", false);
 					if (salida > 0) {
 						mensaje(salida + " imagen/es subida/s", false);
@@ -341,19 +344,23 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	public MenuPrincipal() throws IOException {
 
 		Metodos.crearFichero("GifFrames", "", true);
-		Metodos.guardarConfig(3);
+		separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+		Metodos.guardarConfig(3, separador);
 
 		if (lectura[0] == null) {
-			Metodos.guardarConfig(1);
+			Metodos.guardarConfig(1, separador);
 		}
 
 		if (lecturaurl[0] == null) {
-			Metodos.guardarConfig(2);
+			Metodos.guardarConfig(2, separador);
 		}
 
 		if (lecturaos[0] == null) {
-			Metodos.guardarConfig(4);
+			Metodos.guardarConfig(4, separador);
 		}
+
+		separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+		directorioActual = new File(".").getCanonicalPath() + separador;
 
 		if (lecturabd[0] == null) {
 			Metodos.crearFichero("Config/Bd.txt", "", false);
@@ -613,15 +620,16 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				}
 
 				if (listaImagenes.size() > 0) {
-					Metodos.mensaje("Se están redimensionando las imágenes. Espere, por favor", 2);
+
+					Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", separador);
 
 					for (int x = 0; x < listaImagenes.size(); x++) {
 						ImageResizer.copyImage(
 								directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x),
 								directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x));
 					}
-				}
 
+				}
 				new PhotoFrame().setVisible(true);
 			}
 		});
@@ -717,8 +725,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem222.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				File directorio = new File("imagenes_para_recortar");
-				directorio.mkdir();
 				Metodos.abrirCarpeta("imagenes_para_recortar");
 			}
 		});
@@ -729,6 +735,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		mntmNewMenuItem222.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		mntmNewMenuItem.add(mntmNewMenuItem222);
 		mntmNewMenuItem1 = new JMenu("Config");
+		mntmNewMenuItem1.setForeground(Color.DARK_GRAY);
 		mntmNewMenuItem1.setBackground(Color.BLACK);
 		mntmNewMenuItem1.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		mntmNewMenuItem1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
@@ -802,6 +809,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent arg0) {
 				try {
 					Metodos.crearFichero("Config/OS.txt", "1", false);
+					separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+					directorioActual = new File(".").getCanonicalPath() + separador;
 				} catch (IOException e) {
 					mensaje("No se ha podido guardar el archivo OS.txt", true);
 				}
@@ -824,6 +833,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			public void mousePressed(MouseEvent e) {
 				try {
 					Metodos.crearFichero("Config/OS.txt", "2", false);
+					separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+					directorioActual = new File(".").getCanonicalPath() + separador;
 				} catch (IOException e1) {
 					mensaje("No se ha podido guardar el archivo OS.txt", true);
 				}
@@ -833,6 +844,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 		mnNewMenu1.add(rdbtnNewRadioButton);
 		mntmNewMenuItem2 = new JMenu("Ayuda");
+		mntmNewMenuItem2.setForeground(Color.DARK_GRAY);
 		mntmNewMenuItem2.setBackground(Color.BLACK);
 		mntmNewMenuItem2.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		mntmNewMenuItem2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/help.png")));
@@ -871,7 +883,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 		if (Metodos.comprobarArchivo("Config/Config.txt", true)) {
 
-			Metodos.guardarConfig(5);
+			Metodos.guardarConfig(5, separador);
 		}
 
 		jTextField1 = new javax.swing.JTextField();
@@ -920,7 +932,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				if (files != null) {
 
 					try {
-						Metodos.moverArchivosDrop(files);
+						Metodos.moverArchivosDrop(files, separador);
 					} catch (IOException e) {
 						mensaje("Error al mover archivos de imagen o video", true);
 					}
@@ -959,7 +971,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Metodos.mensaje("actualizar esta parte", 2);
+				if (jComboBox1.getSelectedIndex() == -1) {
+					try {
+						new Bd().setVisible(true);
+					} catch (IOException e1) {
+						mensaje("Error", true);
+					}
+				} else {
+					Metodos.mensaje("actualizar esta parte", 2);
+				}
 
 			}
 
@@ -1023,7 +1043,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 			public void filesDropped(java.io.File[] files) {
 				try {
-					Metodos.moverArchivosDrop(files);
+					Metodos.moverArchivosDrop(files, separador);
 				} catch (IOException e) {
 					mensaje("Error al mover los archivos", true);
 				}

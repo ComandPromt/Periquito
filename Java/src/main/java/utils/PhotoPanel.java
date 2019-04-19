@@ -24,7 +24,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import periquito.ImageResizer;
 import periquito.MenuPrincipal;
 
 /**
@@ -167,24 +166,26 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		String directorioActual = new File(".").getCanonicalPath() + separador;
 		LinkedList<String> listaImagenes = new LinkedList<>();
 		listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
-		// PhotoFrame.photoPanel.setPhoto(
-		// ImageIO.read(new File(directorioActual + "imagenes_para_recortar" + separador
-		// + "2.jpg")), "prueba");
 
-		if (listaImagenes.size() > 0) {
-			Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar");
-			int count = 1;
-			// Image imagen = new Image(directorioActual +
-			// "imagenes_para_recortar"+separador+"1.jpg");
+		if (!listaImagenes.isEmpty()) {
+			Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", separador);
+
+			count = 1;
+
+			int numeroImagen = Metodos.listarFicherosPorCarpeta(
+					new File(directorioActual + "imagenes_para_recortar" + separador + "recortes"));
+
+			if (numeroImagen > 0) {
+				count += numeroImagen;
+			}
+
 			for (int x = 0; x < listaImagenes.size(); x++) {
 				photo = ImageIO
 						.read(new File(directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x)));
 				tmp_Recorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
-				ImageIO.write(tmp_Recorte, "jpg",
-						new File(directorioActual + "imagenes_para_recortar" + separador + "Image_" + count + ".jpg"));
-				ImageResizer.copyImage(directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x),
-						directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x));
+				ImageIO.write(tmp_Recorte, "jpg", new File(directorioActual + "imagenes_para_recortar" + separador
+						+ "recortes" + separador + "Image_" + count + ".jpg"));
 				count++;
 			}
 
