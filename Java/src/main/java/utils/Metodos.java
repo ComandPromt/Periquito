@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -91,20 +92,6 @@ public abstract class Metodos {
 		} finally {
 			is.close();
 		}
-	}
-
-	public static void obtenerJSON() throws IOException {
-
-		/*
-		 * JSONObject json = readJsonFromUrl(
-		 * "https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=b.jpg,a.jpg");
-		 * JSONArray imagenes = json.getJSONArray("imagenes"); JSONArray imagenes_bd =
-		 * json.getJSONArray("imagenes_bd");
-		 * 
-		 * for (int i = 0; i < imagenes_bd.length(); i++) {
-		 * System.out.println(imagenes.get(i).toString() + " - " +
-		 * imagenes_bd.get(i).toString()); }
-		 */
 	}
 
 	public static boolean probarconexion(String web) {
@@ -380,28 +367,24 @@ public abstract class Metodos {
 
 	public static boolean comprobarConexion() throws IOException {
 
-		boolean error = false;
+		boolean conexion = false;
 		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
-		if (lectura2[5] == null || lectura2[5].isEmpty()) {
-			error = true;
-		} else {
+		if (lectura2[5] != null || !lectura2[5].isEmpty()) {
 			try {
 				InetAddress ping;
 
 				ping = InetAddress.getByName(lectura2[5]);
-				if (!ping.isReachable(140)) {
-					error = true;
+
+				if (!ping.getCanonicalHostName().equals("")) {
+					conexion = true;
 				}
 			} catch (Exception e) {
-				return false;
+				Metodos.mensaje("No tienes conexión con la base de datos", 1);
 			}
 		}
-		if (!error) {
-			return true;
-		} else {
-			return false;
-		}
+		return conexion;
+
 	}
 
 	public static boolean comprobarConfiguracion() throws IOException {
@@ -811,21 +794,31 @@ public abstract class Metodos {
 
 					} catch (Exception e) {
 					}
+				}
+				Collections.sort(scanimagenes);
+				if (imagenes.size() == scanimagenes.size() && imagenes.size() > 1) {
+					String shaimagen;
 
-					if (imagenes.size() == scanimagenes.size() && imagenes.size() > 1) {
-						String shaimagen;
-						for (i = 0; i < scanimagenes.size(); i++) {
+					for (int i = 0; i < scanimagenes.size(); i++) {
 
-							shaimagen = scanimagenes.get(i);
+						shaimagen = scanimagenes.get(i);
 
-							if (shaimagen.equals(scanimagenes.get(i) + 1)) {
-								File fichero = new File(ruta + separador + imagenes.get(i++));
-								fichero.delete();
-							}
+						if (i + 1 != scanimagenes.size() && shaimagen.equals(scanimagenes.get(i + 1))) {
 
+							File fichero = new File(ruta + separador + imagenes.get(i++));
+							fichero.delete();
 						}
+
+					}
+
+					if (scanimagenes.size() % 2 != 0
+							&& scanimagenes.get(0).equals(scanimagenes.get(scanimagenes.size() - 1))) {
+
+						File fichero = new File(ruta + separador + imagenes.get(scanimagenes.size() - 1));
+						fichero.delete();
 					}
 				}
+
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 

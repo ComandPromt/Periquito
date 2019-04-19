@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -17,8 +16,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -31,30 +28,6 @@ import utils.interfaz;
 public class Backup extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
 	private javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
-
-	public void mensaje(String mensaje, Boolean error) {
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-
-		int option;
-		if (error) {
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-
-		} else {
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
 
 	public void buscarArchivoConf() {
 		File af = new File("Config/Backup.txt");
@@ -94,13 +67,13 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 			dispose();
 
 			if (mensaje) {
-				mensaje("Archivo guardado con exito!", false);
+				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
 
 		} catch (IOException e) {
 
 			if (mensaje) {
-				mensaje("Error al crear el fichero de configuracion", true);
+				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
 
 		}

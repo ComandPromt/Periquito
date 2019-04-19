@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -14,10 +13,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -31,38 +28,8 @@ import utils.interfaz;
 public class Config2 extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
 	private javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
-	static JCheckBox mute;
 	private JTextField textField;
 	private JLabel lblThumbnails;
-
-	public void mensaje(String mensaje, Boolean error) {
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-
-		if (mute.isSelected() == true) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		int option;
-		if (error) {
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-
-		} else {
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
 
 	public void buscarArchivoConf() {
 		File af = new File("Config/Config2.txt");
@@ -103,12 +70,12 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			dispose();
 
 			if (mensaje) {
-				mensaje("Archivo guardado con exito!", false);
+				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
 
 		} catch (IOException e) {
 			if (mensaje) {
-				mensaje("Error al crear el fichero de configuracion", true);
+				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
 		}
 	}
@@ -138,14 +105,6 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		mute = new JCheckBox("");
-		mute.setBounds(500, 205, 40, 20);
-		mute.addChangeListener(this);
-		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
-		getContentPane().add(mute);
-
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/WAV_00002.png")));
 
 		textField = new JTextField();
 		textField.setHorizontalAlignment(SwingConstants.LEFT);
@@ -186,7 +145,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 						.addGap(28)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblThumbnails)
 								.addComponent(jLabel1))
@@ -194,9 +153,9 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE).addComponent(
 										jTextField1, GroupLayout.PREFERRED_SIZE, 301, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
+						.addGroup(layout.createSequentialGroup().addContainerGap()
 								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-								.addGap(63).addComponent(lblNewLabel).addGap(12)))
+								.addGap(139)))
 				.addGap(41)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addGap(24)
@@ -208,10 +167,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 						.addGroup(layout.createSequentialGroup().addGap(35).addComponent(lblThumbnails))
 						.addGroup(layout.createSequentialGroup().addGap(55).addComponent(textField,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(lblNewLabel))
-						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(btnNewButton)))
-				.addGap(42)));
+				.addGap(18).addComponent(btnNewButton).addGap(49)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(560, 333));
 		setLocationRelativeTo(null);

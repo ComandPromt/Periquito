@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -15,10 +14,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -35,38 +32,8 @@ import utils.interfaz;
 public class Agregar extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
 
 	static javax.swing.JTextField usuario;
-	static JCheckBox mute;
 	JTextArea nota = new JTextArea("", 0, 50);
 	private JTextField tipo;
-
-	public void mensaje(String mensaje, Boolean error) {
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-
-		if (mute.isSelected()) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		int option;
-		if (error) {
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-
-		} else {
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
 
 	public Agregar() {
 		setTitle("Periquito v3 Agregar Usuario");
@@ -91,15 +58,6 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 
 		usuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 20));
-
-		mute = new JCheckBox("");
-		mute.setBounds(480, 390, 20, 20);
-		mute.addChangeListener(this);
-		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
-
-		getContentPane().add(mute);
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Agregar.class.getResource("/imagenes/WAV_00002.png")));
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Agregar.class.getResource("/imagenes/insert.png")));
 		btnNewButton.addActionListener(new ActionListener() {
@@ -125,11 +83,11 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 									+ tipobd + "','" + notabd + "')");
 							AgendaInterfaz.verNotas();
 							dispose();
-							mensaje("La nota se ha insertado correctamente", false);
+							Metodos.mensaje("La nota se ha insertado correctamente", 2);
 
 						} catch (SQLException e1) {
 							dispose();
-							mensaje("El usuario " + usuario.getText() + " ya está en la BD", true);
+							Metodos.mensaje("El usuario " + usuario.getText() + " ya está en la BD", 3);
 
 						} catch (NullPointerException e1) {
 							dispose();
@@ -140,7 +98,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 						dispose();
 					}
 				} else {
-					mensaje("Rellene todos los campos", true);
+					Metodos.mensaje("Rellene todos los campos", 3);
 				}
 
 			}
@@ -178,10 +136,8 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 366,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(usuario, 366, 366, 366)))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 109,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18).addComponent(lblNewLabel).addGap(54)))
+								.addGroup(layout.createSequentialGroup().addComponent(btnNewButton,
+										GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE).addGap(136)))
 						.addGap(155)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addGap(24)
@@ -195,9 +151,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 						.addGroup(layout.createSequentialGroup().addGap(47).addComponent(lblDescripcion))
 						.addGroup(layout.createSequentialGroup().addGap(6).addComponent(scrollPane,
 								GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)))
-				.addGap(18).addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel)
-						.addComponent(btnNewButton))
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+				.addGap(18).addComponent(btnNewButton).addContainerGap(23, Short.MAX_VALUE)));
 
 		nota.setWrapStyleWord(true);
 		nota.setLineWrap(true);

@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,12 +18,9 @@ import java.util.Date;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -39,7 +35,6 @@ import utils.interfaz;
 @SuppressWarnings("serial")
 
 public class Utilidades extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
-	static JCheckBox mute = new JCheckBox("");
 	private JTextArea imagenes = new JTextArea();
 	String comprobacion;
 	transient Statement s;
@@ -52,38 +47,21 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	private JLabel lblNombreDeImgenes = new JLabel("Nombre");
 	private JTextField nombre;
 
-	public void mensaje(String mensaje, Boolean error) {
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-		if (mute.isSelected()) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		int option;
-		if (error) {
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
-
 	public Utilidades() throws IOException {
-		setTitle("Periquito v3 Recomponer Imágenes");
-		setType(Type.UTILITY);
-		initComponents();
+		try {
+			if (Metodos.comprobarConexion()) {
 
-		this.setVisible(true);
+				Metodos.ponerCategoriasBd(comboBox);
+			}
+			setTitle("Periquito v3 Recomponer Imágenes");
+			setType(Type.UTILITY);
+			initComponents();
+
+			this.setVisible(true);
+		} catch (SQLException e3) {
+			this.dispose();
+		}
+
 	}
 
 	@SuppressWarnings("all")
@@ -92,14 +70,6 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
-
-		mute.setBounds(553, 210, 20, 20);
-		mute.addChangeListener(this);
-
-		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
-		getContentPane().add(mute);
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Utilidades.class.getResource("/imagenes/WAV_00002.png")));
 		imagenes.setText("  Arrastra los archivos aqui");
 		imagenes.setForeground(Color.DARK_GRAY);
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -122,24 +92,22 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		nombre.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		nombre.setColumns(10);
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addGap(20)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 						.addGap(13)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(layout.createSequentialGroup().addComponent(lblPrefijoDeLas).addGap(18)
 										.addComponent(prefijoTablas))
-								.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 545, GroupLayout.PREFERRED_SIZE)
 								.addGroup(layout.createSequentialGroup().addComponent(lblCategoraAInsertar)
 										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
 												Short.MAX_VALUE)
 										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(nombre)
-												.addComponent(comboBox, 0, 328, Short.MAX_VALUE)))))
+												.addComponent(nombre).addComponent(comboBox, 0, 328, Short.MAX_VALUE)))
+								.addComponent(imagenes, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 545,
+										GroupLayout.PREFERRED_SIZE)))
 						.addComponent(lblNombreDeImgenes, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(29, Short.MAX_VALUE))
-				.addGroup(Alignment.TRAILING, layout.createSequentialGroup().addContainerGap(505, Short.MAX_VALUE)
-						.addComponent(lblNewLabel).addGap(38)));
+				.addContainerGap(29, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addGap(23)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -159,22 +127,12 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel).addGap(50)));
+				.addGap(18).addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+				.addGap(113)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(613, 323));
+		setSize(new Dimension(613, 265));
 		setLocationRelativeTo(null);
 		prefijoTablas.setText(prefijoTablas.getText().trim());
-
-		try {
-			if (Metodos.comprobarConexion()) {
-
-				Metodos.ponerCategoriasBd(comboBox);
-			}
-		} catch (SQLException e3) {
-			comboBox.setEnabled(false);
-		}
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
 		new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
@@ -235,9 +193,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						InputStream archivo = new FileInputStream("SQL.sql");
 						Metodos.executeScript(conexion, archivo);
 						Metodos.eliminarFichero("SQL.sql");
-						mensaje("Insert recuperados correctamente!", false);
+						Metodos.mensaje("Insert recuperados correctamente!", 2);
 					} catch (Exception e) {
-						mensaje("Error al recuperar la BD", true);
+						Metodos.mensaje("Error al recuperar la BD", 1);
 					}
 				}
 			}

@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -29,7 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -56,7 +54,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private javax.swing.JTextField jTextField1;
 	private JButton btnNewButton;
 	private JCheckBox check5;
-	private JCheckBox mute;
 	private JButton boton1;
 	private JMenuBar jmenubarra;
 	private JMenuBar menuOpciones;
@@ -126,7 +123,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			} else {
 				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/output"),
 						".") > 0) {
-					mensaje("Ya has convertido un video a frames!", true);
+					Metodos.mensaje("Ya has convertido un video a frames!", 3);
 					Metodos.abrirCarpeta(
 							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output");
 				}
@@ -158,7 +155,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 
 		catch (ArrayIndexOutOfBoundsException e) {
-			mensaje("Error en el archivo Config.txt", true);
+			Metodos.mensaje("Error en el archivo Config.txt", 1);
 		}
 	}
 
@@ -245,7 +242,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					}
 
 					catch (Exception e1) {
-						mensaje("No tienes el driver de chrome en la carpeta del programa", true);
+						Metodos.mensaje("No tienes el driver de chrome en la carpeta del programa", 1);
 					}
 
 				}
@@ -258,7 +255,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		if (af.exists()) {
 			File comprobacion = new File(ruta);
 			if (!comprobacion.exists()) {
-				mensaje("Ruta inválida ", true);
+				Metodos.mensaje("Ruta inválida ", 1);
 				new Config().setVisible(true);
 			} else {
 				Metodos.abrirCarpeta(ruta);
@@ -277,36 +274,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		new Config2().setVisible(true);
 	}
 
-	public void mensaje(String mensaje, Boolean error) {
-
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-		if (mute.isSelected()) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		int option;
-
-		if (error) {
-
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-
-		} else {
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
-
 	private void mover_imagenes(int opcion, String lectura, Boolean cerrarNavegador) throws IOException {
 		if (cerrarNavegador) {
 			Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
@@ -321,7 +288,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					salida = Metodos.salida(lectura + "\\gif\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion,
 							separador);
 					Metodos.notificacion(salida, lectura + "gif\\Thumb", "JPG", false);
-					mensaje(salida + " imagen/es subida/s", false);
+					Metodos.mensaje(salida + " imagen/es subida/s", 2);
 				} else {
 					salida = Metodos.salida(lectura, "\\\\" + lecturaurl[0] + "\\" + opcion, opcion, separador);
 					Metodos.notificacion(salida, lectura, "JPG", true);
@@ -329,7 +296,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							separador);
 					Metodos.notificacion(salida, lectura + "\\Thumb", "JPG", false);
 					if (salida > 0) {
-						mensaje(salida + " imagen/es subida/s", false);
+						Metodos.mensaje(salida + " imagen/es subida/s", 2);
 					}
 				}
 			} else {
@@ -344,7 +311,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	public MenuPrincipal() throws IOException {
 
 		Metodos.crearFichero("GifFrames", "", true);
-		separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+		if (separador == null && lecturaos[0] == null) {
+			separador = "\\";
+		} else {
+			separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+		}
+
 		Metodos.guardarConfig(3, separador);
 
 		if (lectura[0] == null) {
@@ -359,7 +331,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			Metodos.guardarConfig(4, separador);
 		}
 
-		separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+		if (lecturaos[0] != null) {
+			separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
+		}
+
 		directorioActual = new File(".").getCanonicalPath() + separador;
 
 		if (lecturabd[0] == null) {
@@ -694,7 +669,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					comprobarConexion("Config/Config.txt",
 							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
 				} catch (ArrayIndexOutOfBoundsException e) {
-					mensaje("Error en el  archivo Config.txt", true);
+					Metodos.mensaje("Error en el  archivo Config.txt", 1);
 				}
 			}
 		});
@@ -713,7 +688,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					comprobarConexion("Config/Config.txt", lectura[0] + separador + "VID-2-GIF");
 
 				} catch (ArrayIndexOutOfBoundsException e) {
-					mensaje("Error en el  archivo Config.txt", true);
+					Metodos.mensaje("Error en el  archivo Config.txt", 1);
 				}
 			}
 		});
@@ -812,7 +787,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
 					directorioActual = new File(".").getCanonicalPath() + separador;
 				} catch (IOException e) {
-					mensaje("No se ha podido guardar el archivo OS.txt", true);
+					Metodos.mensaje("No se ha podido guardar el archivo OS.txt", 1);
 				}
 			}
 		});
@@ -836,7 +811,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
 					directorioActual = new File(".").getCanonicalPath() + separador;
 				} catch (IOException e1) {
-					mensaje("No se ha podido guardar el archivo OS.txt", true);
+					Metodos.mensaje("No se ha podido guardar el archivo OS.txt", 1);
 				}
 			}
 		});
@@ -934,7 +909,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					try {
 						Metodos.moverArchivosDrop(files, separador);
 					} catch (IOException e) {
-						mensaje("Error al mover archivos de imagen o video", true);
+						Metodos.mensaje("Error al mover archivos de imagen o video", 1);
 					}
 				}
 
@@ -945,25 +920,17 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		importar.setBounds(30, 285, 70, 82);
 		importar.setFont(new Font("Tahoma", Font.BOLD, 18));
 		getContentPane().add(importar);
-		mute = new JCheckBox("");
-		mute.setVerticalAlignment(SwingConstants.BOTTOM);
-		mute.setBounds(520, 295, 20, 20);
-		mute.addChangeListener(this);
-		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
-		getContentPane().add(mute);
 		btnNewButton.setBounds(10, 100, 100, 30);
 		getContentPane().add(btnNewButton);
 		btnNewButton.addActionListener(this);
 		btnNewButton.setEnabled(false);
 
 		if (!Metodos.probarconexion("www.google.com")) {
-			mensaje("No hay conexión a internet", true);
+			Metodos.mensaje("No hay conexión a internet", 3);
 		}
 		Metodos.comprobarArchivo("Config", false);
 
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 24));
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/WAV_00002.png")));
 		boton1 = new JButton("");
 		boton1.setFont(new Font("Tahoma", Font.PLAIN, 6));
 		boton1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/start.png")));
@@ -975,10 +942,69 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					try {
 						new Bd().setVisible(true);
 					} catch (IOException e1) {
-						mensaje("Error", true);
+						Metodos.mensaje("Error", 1);
 					}
 				} else {
-					Metodos.mensaje("actualizar esta parte", 2);
+					if (!jTextField1.getText().trim().isEmpty()) {
+						Metodos.mensaje("actualizar esta parte", 2);
+						listaImagenes = Metodos.directorio("imagenes", ".");
+						String parametros = "";
+
+						if (listaImagenes.size() > 0) {
+							for (int i = 0; i < listaImagenes.size(); i++) {
+								if (listaImagenes.size() == 1) {
+									parametros += i + ".jpg";
+								} else {
+									if (i + 1 == listaImagenes.size()) {
+										parametros += i + ".jpg";
+									} else {
+										parametros += i + ".jpg,";
+									}
+								}
+							}
+
+							if (!parametros.isEmpty()) {
+
+								// JSONObject json;
+								try {
+
+									Metodos.eliminarDuplicados(directorioActual + "imagenes", separador);
+									// System.out.println(Metodos
+									// .getSHA256Checksum(directorioActual + "imagenes" + separador + "a.jpg"));
+//									Connection conexion = Metodos.conexionBD();
+//									Statement s = conexion.createStatement();
+//									ResultSet rs;
+//									rs = s.executeQuery("select MAX(image_id)+1 as maximo from " + lecturabd[3]
+//											+ "images order by image_id");
+//									rs.next();
+//							
+//
+//							
+//									json = Metodos.readJsonFromUrl(
+//											"https://apiperiquito.herokuapp.com/recibo-json.php?imagenes="
+//													+ parametros);
+//									JSONArray imagenes = json.getJSONArray("imagenes");
+//									JSONArray imagenes_bd = json.getJSONArray("imagenes_bd");
+
+									// for (int i = 0; i < imagenes_bd.length(); i++) {
+//
+//										s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
+//												+ rs.getString("maximo") + "','" + (jComboBox1.getSelectedIndex() + 1)
+//												+ "',1,'" + jTextField1.getText() + "',DEFAULT,DEFAULT,DEFAULT,"
+//												+ imagenes_bd.get(i).toString() + ")");
+
+									// }
+									// s.close();
+								} catch (Exception e1) {
+									Metodos.mensaje("Error", 1);
+								}
+
+							}
+						}
+					} else {
+						Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
+					}
+
 				}
 
 			}
@@ -986,17 +1012,16 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(11)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addGap(62))
-								.addGroup(layout.createSequentialGroup()
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								layout.createSequentialGroup().addGap(11)
 										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 105,
 												GroupLayout.PREFERRED_SIZE)
 										.addPreferredGap(ComponentPlacement.RELATED)
 										.addGroup(layout
-												.createParallelGroup(Alignment.TRAILING)
-												.addGroup(layout.createSequentialGroup()
+												.createParallelGroup(Alignment.TRAILING).addGroup(layout
+														.createSequentialGroup()
 														.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
 																.addComponent(jLabel2, GroupLayout.DEFAULT_SIZE,
 																		GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1013,7 +1038,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 														.addGap(39))
 												.addGroup(layout.createSequentialGroup().addComponent(boton1,
 														GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
-														.addGap(53)))))));
+														.addGap(53)))));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addContainerGap()
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -1032,8 +1057,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 								.addGap(19)
 								.addComponent(boton1, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
 						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE))
-				.addGap(16).addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-				.addContainerGap()));
+				.addContainerGap(116, Short.MAX_VALUE)));
 
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(573, 478));
@@ -1045,7 +1069,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				try {
 					Metodos.moverArchivosDrop(files, separador);
 				} catch (IOException e) {
-					mensaje("Error al mover los archivos", true);
+					Metodos.mensaje("Error al mover los archivos", 1);
 				}
 			}
 

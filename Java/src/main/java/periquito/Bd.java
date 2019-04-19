@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -15,10 +14,8 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
@@ -33,7 +30,6 @@ import utils.interfaz;
 public class Bd extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
 	private javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
-	static JCheckBox mute;
 	private static JTextField textField;
 	private JLabel lblThumbnails;
 	private JLabel lblBd;
@@ -43,36 +39,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField direccion;
-
-	public void mensaje(String mensaje, Boolean error) {
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-
-		if (mute.isSelected() == true) {
-			clip.stop();
-		} else {
-			clip.loop();
-		}
-		int option;
-		if (error) {
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-
-		} else {
-			this.dispose();
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
 
 	public void buscarArchivoConf() throws IOException, SQLException {
 		File af = new File("Config/Bd.txt");
@@ -124,7 +90,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			fS.close();
 
 			if (mensaje) {
-				mensaje("Archivo guardado con exito!", false);
+				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
 			if (Metodos.comprobarConexion()) {
 				Metodos.ponerCategoriasBd(MenuPrincipal.jComboBox1);
@@ -132,7 +98,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		} catch (IOException e) {
 			e.printStackTrace();
 			if (mensaje) {
-				mensaje("Error al crear el fichero de configuracion", true);
+				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
 		}
 	}
@@ -154,13 +120,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
 		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		mute = new JCheckBox("");
-		mute.setBounds(610, 460, 20, 20);
-		mute.addChangeListener(this);
-		mute.setFont(new java.awt.Font("Tahoma", 1, 18));
-		getContentPane().add(mute);
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/WAV_00002.png")));
 
 		base = new JTextField();
 		base.setToolTipText("");
@@ -230,7 +189,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 					}
 				} else {
-					mensaje("Algunos datos son demasiado cortos", true);
+					Metodos.mensaje("Algunos datos son demasiado cortos", 3);
 				}
 			}
 		});
@@ -287,8 +246,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 								.addGap(18)
-								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-								.addGap(18).addComponent(lblNewLabel))
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
 						.addComponent(direccion, GroupLayout.PREFERRED_SIZE, 313, GroupLayout.PREFERRED_SIZE)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 								.addComponent(textField_1, Alignment.LEADING).addComponent(base, Alignment.LEADING)
@@ -317,20 +275,15 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblThumbnails)
 								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-								.addGap(18)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 64,
-												Short.MAX_VALUE)
-										.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-												.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-												.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 35,
-														GroupLayout.PREFERRED_SIZE)))
-								.addGap(42))
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 88,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap()))));
+						.addGap(18)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 64,
+										Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+										.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 35,
+												GroupLayout.PREFERRED_SIZE)))
+						.addGap(42)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(666, 588));
 		setLocationRelativeTo(null);
