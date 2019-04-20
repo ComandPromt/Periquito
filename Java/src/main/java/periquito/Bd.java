@@ -93,7 +93,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
 			if (Metodos.comprobarConexion()) {
-				Metodos.ponerCategoriasBd(MenuPrincipal.jComboBox1);
+				Metodos.ponerCategoriasBd(MenuPrincipal.comboBox);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

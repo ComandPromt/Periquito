@@ -375,6 +375,21 @@ public abstract class Metodos {
 		return Integer.toString(c.get(Calendar.YEAR)) + "-" + mes + "-" + Integer.toString(c.get(Calendar.DATE));
 	}
 
+	public static void comprobarConexion(String archivo, String ruta) {
+		File af = new File(archivo);
+		if (af.exists()) {
+			File comprobacion = new File(ruta);
+			if (!comprobacion.exists()) {
+				Metodos.mensaje("Ruta inválida ", 1);
+				new Config().setVisible(true);
+			} else {
+				Metodos.abrirCarpeta(ruta);
+			}
+		} else {
+			new Config().setVisible(true);
+		}
+	}
+
 	public static boolean comprobarConexion() throws IOException {
 
 		boolean conexion = false;
