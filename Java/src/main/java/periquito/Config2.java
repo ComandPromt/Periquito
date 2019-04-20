@@ -94,7 +94,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		jTextField1.setToolTipText("");
 
 		jLabel1 = new javax.swing.JLabel();
-		jLabel1.setText("Images");
+		jLabel1.setText("Servidor");
 		jLabel1.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/folder.png")));
 		jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -139,24 +139,27 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			}
 		});
 
-		lblThumbnails = new JLabel("Thumbnails");
+		lblThumbnails = new JLabel("Carpeta del cms");
 		lblThumbnails.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/folder.png")));
 		lblThumbnails.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-						.addGap(28)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblThumbnails)
-								.addComponent(jLabel1))
-						.addGap(10)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE).addComponent(
-										jTextField1, GroupLayout.PREFERRED_SIZE, 301, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(layout.createSequentialGroup().addContainerGap()
-								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-								.addGap(139)))
-				.addGap(41)));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(28)
+						.addGroup(layout
+								.createParallelGroup(
+										Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblThumbnails).addComponent(jLabel1))
+										.addGap(10)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(jTextField1).addComponent(textField,
+														GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
+										.addGap(34))
+								.addGroup(layout.createSequentialGroup().addComponent(btnNewButton,
+										GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE).addGap(139)))
+						.addGap(41)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addGap(24)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)

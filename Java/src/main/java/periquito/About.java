@@ -35,7 +35,7 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 		txtrAdvertenciaLa.setEditable(false);
 		txtrAdvertenciaLa.setLineWrap(true);
 		txtrAdvertenciaLa.setText(
-				"---------------------------------------------\r\n                Periquito GUI\r\n---------------------------------------------\r\n\r\n Creado por:\"ComandPromt\"\r\n\r\n Email: smr2gocar@gmail.com");
+				"---------------------------------------------\r\n                Periquito GUI\r\n---------------------------------------------\r\n\r\n Creado por: ComandPromt\r\n\r\n Email: smr2gocar@gmail.com");
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(25)

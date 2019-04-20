@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -365,23 +366,36 @@ public abstract class Metodos {
 		}
 	}
 
+	public static String saberFecha() {
+		Calendar c = Calendar.getInstance();
+		String mes = Integer.toString(c.get(Calendar.MONTH) + 1);
+		if (Integer.parseInt(mes) <= 9) {
+			mes = "0" + mes;
+		}
+		return Integer.toString(c.get(Calendar.YEAR)) + "-" + mes + "-" + Integer.toString(c.get(Calendar.DATE));
+	}
+
 	public static boolean comprobarConexion() throws IOException {
 
 		boolean conexion = false;
-		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
+		try {
+			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
-		if (lectura2[5] != null || !lectura2[5].isEmpty()) {
-			try {
-				InetAddress ping;
+			if (lectura2[5] != null || !lectura2[5].isEmpty()) {
+				try {
+					InetAddress ping;
 
-				ping = InetAddress.getByName(lectura2[5]);
+					ping = InetAddress.getByName(lectura2[5]);
 
-				if (!ping.getCanonicalHostName().equals("")) {
-					conexion = true;
+					if (!ping.getCanonicalHostName().equals("")) {
+						conexion = true;
+					}
+				} catch (Exception e) {
+					Metodos.mensaje("No tienes conexión con la base de datos", 1);
 				}
-			} catch (Exception e) {
-				Metodos.mensaje("No tienes conexión con la base de datos", 1);
 			}
+		} catch (Exception e) {
+			Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 2);
 		}
 		return conexion;
 
@@ -488,8 +502,7 @@ public abstract class Metodos {
 
 		case 2:
 
-			Metodos.crearFichero("Config/Config2.txt", "localhost\\media\\images\r\n" + "localhost\\media\\thumbnails",
-					false);
+			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1" + "4images_", false);
 			Config2 guardar2 = new Config2();
 
 			guardar2.guardarDatos(false);

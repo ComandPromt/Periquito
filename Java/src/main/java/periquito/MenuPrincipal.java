@@ -16,7 +16,10 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 
 import javax.swing.GroupLayout;
@@ -36,6 +39,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -99,7 +104,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	@SuppressWarnings("all")
 	static String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
 
-	public String separador;
+	String separador;
 
 	String directorioActual;
 
@@ -272,39 +277,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	public void verConfiguraciones() {
 		new Config().setVisible(true);
 		new Config2().setVisible(true);
-	}
-
-	private void mover_imagenes(int opcion, String lectura, Boolean cerrarNavegador) throws IOException {
-		if (cerrarNavegador) {
-			Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
-		}
-		try {
-			if (opcion > 0 && !lecturaurl[0].isEmpty() && !lecturaurl[1].isEmpty()) {
-				int salida;
-				if (opcion == 9) {
-					salida = Metodos.salida(lectura + "\\gif", "\\\\" + lecturaurl[0] + "\\" + opcion, opcion,
-							separador);
-					Metodos.notificacion(salida, lectura + "gif", "GIF", true);
-					salida = Metodos.salida(lectura + "\\gif\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion,
-							separador);
-					Metodos.notificacion(salida, lectura + "gif\\Thumb", "JPG", false);
-					Metodos.mensaje(salida + " imagen/es subida/s", 2);
-				} else {
-					salida = Metodos.salida(lectura, "\\\\" + lecturaurl[0] + "\\" + opcion, opcion, separador);
-					Metodos.notificacion(salida, lectura, "JPG", true);
-					salida = Metodos.salida(lectura + "\\Thumb", "\\\\" + lecturaurl[1] + "\\" + opcion, opcion,
-							separador);
-					Metodos.notificacion(salida, lectura + "\\Thumb", "JPG", false);
-					if (salida > 0) {
-						Metodos.mensaje(salida + " imagen/es subida/s", 2);
-					}
-				}
-			} else {
-				new Config2().setVisible(true);
-			}
-		} catch (ArrayIndexOutOfBoundsException e) {
-			new Config2().setVisible(true);
-		}
 	}
 
 	@SuppressWarnings("all")
@@ -946,65 +918,92 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					}
 				} else {
 					if (!jTextField1.getText().trim().isEmpty()) {
-						Metodos.mensaje("actualizar esta parte", 2);
+
 						listaImagenes = Metodos.directorio("imagenes", ".");
 						String parametros = "";
+						StringBuilder bld = new StringBuilder();
+						if (!listaImagenes.isEmpty()) {
 
-						if (listaImagenes.size() > 0) {
 							for (int i = 0; i < listaImagenes.size(); i++) {
-								if (listaImagenes.size() == 1) {
-									parametros += i + ".jpg";
+								if (listaImagenes.size() == 1 || i + 1 == listaImagenes.size()) {
+									bld.append(i + ".jpg");
+
 								} else {
-									if (i + 1 == listaImagenes.size()) {
-										parametros += i + ".jpg";
-									} else {
-										parametros += i + ".jpg,";
-									}
+
+									bld.append(i + ".jpg,");
 								}
-							}
-
-							if (!parametros.isEmpty()) {
-
-								// JSONObject json;
-								try {
-
-									Metodos.eliminarDuplicados(directorioActual + "imagenes", separador);
-									// System.out.println(Metodos
-									// .getSHA256Checksum(directorioActual + "imagenes" + separador + "a.jpg"));
-//									Connection conexion = Metodos.conexionBD();
-//									Statement s = conexion.createStatement();
-//									ResultSet rs;
-//									rs = s.executeQuery("select MAX(image_id)+1 as maximo from " + lecturabd[3]
-//											+ "images order by image_id");
-//									rs.next();
-//							
-//
-//							
-//									json = Metodos.readJsonFromUrl(
-//											"https://apiperiquito.herokuapp.com/recibo-json.php?imagenes="
-//													+ parametros);
-//									JSONArray imagenes = json.getJSONArray("imagenes");
-//									JSONArray imagenes_bd = json.getJSONArray("imagenes_bd");
-
-									// for (int i = 0; i < imagenes_bd.length(); i++) {
-//
-//										s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
-//												+ rs.getString("maximo") + "','" + (jComboBox1.getSelectedIndex() + 1)
-//												+ "',1,'" + jTextField1.getText() + "',DEFAULT,DEFAULT,DEFAULT,"
-//												+ imagenes_bd.get(i).toString() + ")");
-
-									// }
-									// s.close();
-								} catch (Exception e1) {
-									Metodos.mensaje("Error", 1);
-								}
-
 							}
 						}
-					} else {
-						Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
-					}
+						parametros = bld.toString();
 
+						if (!parametros.isEmpty()) {
+
+							JSONObject json;
+							try {
+
+								Metodos.eliminarDuplicados(directorioActual + "imagenes", separador);
+
+								Connection conexion = Metodos.conexionBD();
+								Statement s = conexion.createStatement();
+								ResultSet rs;
+								rs = s.executeQuery("SELECT MAX(image_id)+1 as maximo FROM " + lecturabd[3]
+										+ "images order by image_id");
+								rs.next();
+
+								int maximo = Integer.parseInt(rs.getString("maximo"));
+								int categoria = jComboBox1.getSelectedIndex() + 1;
+
+								rs = s.executeQuery("SELECT cat_parent_id FROM  " + lecturabd[3]
+										+ "categories WHERE cat_id=" + categoria);
+								rs.next();
+
+								String catParent = rs.getString("cat_parent_id");
+
+								json = Metodos.readJsonFromUrl(
+										"https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=" + parametros);
+
+								JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
+
+								listaImagenes = Metodos.directorio(directorioActual + "imagenes", ".");
+
+								for (int i = 0; i < imagenesBD.length(); i++) {
+
+									s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES(" + maximo + ","
+											+ categoria + "," + catParent + ",1,'" + jTextField1.getText().trim()
+											+ "','','','" + Metodos.saberFecha() + "',1,'"
+											+ imagenesBD.get(i).toString() + "',1,0,0,0,DEFAULT,0,'"
+											+ Metodos.getSHA256Checksum(
+													directorioActual + "imagenes" + separador + listaImagenes.get(i))
+											+ "')");
+									maximo++;
+
+									Files.move(
+											FileSystems.getDefault().getPath(
+													directorioActual + "imagenes" + separador + listaImagenes.get(i)),
+											FileSystems.getDefault()
+													.getPath("\\\\" + lecturaurl[0] + separador + lecturaurl[1]
+															+ separador + "data" + separador + "media" + separador
+															+ jComboBox1.getSelectedIndex() + 1 + separador
+															+ imagenesBD.get(i).toString()),
+											StandardCopyOption.REPLACE_EXISTING);
+
+								}
+
+								s.close();
+								rs.close();
+
+							} catch (Exception e1) {
+								Metodos.mensaje("Error", 1);
+							}
+
+						}
+					} else {
+						if (jTextField1.getText().trim().isEmpty()) {
+							Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
+						} else {
+							Metodos.abrirCarpeta(directorioActual + "imagenes");
+						}
+					}
 				}
 
 			}
