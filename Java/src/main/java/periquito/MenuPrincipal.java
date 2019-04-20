@@ -84,7 +84,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem menuItem_12;
 	private JSeparator separator_11;
 	private JMenuItem menuItem_13;
-	private JMenu menu_5;
+	private JMenu mnConfig;
 	private JMenuItem menuItem_14;
 	private JSeparator separator_12;
 	private JMenuItem menuItem_15;
@@ -290,7 +290,8 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		menu = new JMenu("          ");
+		menu = new JMenu("             ");
+		menu.setMnemonic(' ');
 		menu.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png")));
 		menu.setForeground(Color.BLACK);
 		menu.setFont(new Font("Segoe UI", Font.BOLD, 10));
@@ -531,7 +532,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		menuItem_7.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu.add(menuItem_7);
 
-		menu_4 = new JMenu("   ");
+		menu_4 = new JMenu("      ");
 		menu_4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		menu_4.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu_4.setBackground(Color.BLACK);
@@ -636,12 +637,12 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		menuItem_13.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu_4.add(menuItem_13);
 
-		menu_5 = new JMenu("Config");
-		menu_5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
-		menu_5.setForeground(Color.DARK_GRAY);
-		menu_5.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu_5.setBackground(Color.BLACK);
-		menuBar.add(menu_5);
+		mnConfig = new JMenu("Config    ");
+		mnConfig.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
+		mnConfig.setForeground(Color.DARK_GRAY);
+		mnConfig.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mnConfig.setBackground(Color.BLACK);
+		menuBar.add(mnConfig);
 
 		menuItem_14 = new JMenuItem("Local");
 		menuItem_14.addMouseListener(new MouseAdapter() {
@@ -652,10 +653,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 		menuItem_14.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
 		menuItem_14.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu_5.add(menuItem_14);
+		mnConfig.add(menuItem_14);
 
 		separator_12 = new JSeparator();
-		menu_5.add(separator_12);
+		mnConfig.add(separator_12);
 
 		menuItem_15 = new JMenuItem("Remoto");
 		menuItem_15.addMouseListener(new MouseAdapter() {
@@ -666,10 +667,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 		menuItem_15.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/remote.png")));
 		menuItem_15.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu_5.add(menuItem_15);
+		mnConfig.add(menuItem_15);
 
 		separator_13 = new JSeparator();
-		menu_5.add(separator_13);
+		mnConfig.add(separator_13);
 
 		menuItem_16 = new JMenuItem("Conexion BD");
 		menuItem_16.addMouseListener(new MouseAdapter() {
@@ -683,10 +684,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 		menuItem_16.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
 		menuItem_16.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu_5.add(menuItem_16);
+		mnConfig.add(menuItem_16);
 
 		separator_14 = new JSeparator();
-		menu_5.add(separator_14);
+		mnConfig.add(separator_14);
 
 		menuItem_17 = new JMenuItem("Backup DB");
 		menuItem_17.addMouseListener(new MouseAdapter() {
@@ -697,15 +698,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		});
 		menuItem_17.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
 		menuItem_17.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu_5.add(menuItem_17);
+		mnConfig.add(menuItem_17);
 
 		separator_15 = new JSeparator();
-		menu_5.add(separator_15);
+		mnConfig.add(separator_15);
 
 		menu_6 = new JMenu("OS");
 		menu_6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/os.png")));
 		menu_6.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu_5.add(menu_6);
+		mnConfig.add(menu_6);
 
 		label = new JLabel("");
 		label.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/Windows.png")));
