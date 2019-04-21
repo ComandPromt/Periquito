@@ -109,8 +109,17 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 - Hacer clic en la acción que queramos
 
 ![Preview](previews/2.png)
+
+- Frames a GIF
+- GIF a frames
+
 ![Preview](previews/2_1.png)
+
+- Video a Frames
+- Video a Gif
+
 ![Preview](previews/2_2.png)
+
 ----
 
 # 3. Ayuda
