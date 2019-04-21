@@ -133,6 +133,14 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 # 4. Utilidades
 ---
 
+- Copia de seguridad de la base de datos
+
+- Anotaciones de las imágenes
+
+- Recomponer inserts: esta opción sirve para insertar los registros perdidos de las imágenes en la base de datos en caso de pérdida de datos de la tabla de las imágenes y conservemos las imágenes en el servidor
+
+- Recortar imágenes: utilidad para recortar la misma zona en todas las imágenes
+
 ![Preview](previews/4.png)
 
 ## GIF 2 Frames
