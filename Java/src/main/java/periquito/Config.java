@@ -25,10 +25,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import utils.Metodos;
-import utils.interfaz;
+import utils.MyInterface;
 
 @SuppressWarnings("all")
-public class Config extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
+public class Config extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 	private javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JLabel label;
@@ -59,7 +59,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	@SuppressWarnings("all")
-	public void buscarArchivoConf() {
+	public void buscarArchivoConf() throws IOException {
 		File af = new File("Config/Config.txt");
 
 		if (af.exists()) {
@@ -121,14 +121,14 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		}
 	}
 
-	public Config() {
+	public Config() throws IOException {
 		setTitle("Periquito v3 Config ");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}
 
-	public void initComponents() {
+	public void initComponents() throws IOException {
 
 		jTextField1 = new JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);

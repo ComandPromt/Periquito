@@ -1,10 +1,8 @@
 package periquito;
 
-import java.io.IOException;
-
 public class Empezar {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		new MenuPrincipal();
 	}
 }

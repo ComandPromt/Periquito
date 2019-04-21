@@ -1,8 +1,6 @@
 package utils;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,10 +13,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,8 +32,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-import javax.imageio.ImageIO;
-import javax.json.JsonException;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -52,26 +47,8 @@ import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
-	public static void png_a_jpg(String imagen) {
-		BufferedImage bufferedImage;
-		try {
-
-			// read image file
-			bufferedImage = ImageIO.read(new File(imagen));
-
-			// create a blank, RGB, same width and height, and a white background
-			BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(),
-					BufferedImage.TYPE_INT_RGB);
-			newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.WHITE, null);
-
-			// write to jpeg file
-			ImageIO.write(newBufferedImage, "jpg", new File(imagen.substring(0, imagen.length() - 3) + "jpg"));
-
-			Metodos.eliminarFichero(imagen);
-
-		} catch (IOException e) {
-
-		}
+	private Metodos() {
+		super();
 	}
 
 	private static String readAll(Reader rd) throws IOException {
@@ -83,31 +60,33 @@ public abstract class Metodos {
 		return sb.toString();
 	}
 
-	public static JSONObject readJsonFromUrl(String url) throws IOException, JsonException {
+	public static JSONObject readJsonFromUrl(String url) throws IOException {
 		InputStream is = new URL(url).openStream();
-		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-			String jsonText = readAll(rd);
-			JSONObject json = new JSONObject(jsonText);
-			return json;
-		} finally {
-			is.close();
-		}
+
+		BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+		String jsonText = readAll(rd);
+		is.close();
+		return new JSONObject(jsonText);
+
 	}
 
-	public static boolean probarconexion(String web) {
+	public static boolean probarconexion(String web) throws IOException {
 		String dirWeb = web;
 		int puerto = 80;
+		Socket s = new Socket(dirWeb, puerto);
+		boolean resultado = false;
 		try {
-			@SuppressWarnings("resource")
-			Socket s = new Socket(dirWeb, puerto);
+
 			if (s.isConnected()) {
-				return true;
+				resultado = true;
 			} else {
-				return false;
+				resultado = false;
 			}
+			return resultado;
 		} catch (Exception e) {
-			return false;
+			return resultado;
+		} finally {
+			s.close();
 		}
 
 	}
@@ -195,21 +174,22 @@ public abstract class Metodos {
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 			break;
+		default:
+			break;
 		}
 
 		if (!chooser.isMultiSelectionEnabled()) {
 			chooser.setMultiSelectionEnabled(true);
 		}
-		@SuppressWarnings("unused")
-		int returnVal = chooser.showOpenDialog(chooser);
+
 		File[] files = chooser.getSelectedFiles();
 
 		if (files.length == 0) {
 			mensaje(mensaje, 1);
-			return null;
-		} else {
-			return files;
+
 		}
+		return files;
+
 	}
 
 	public static String[] leerFicheroArray(String fichero, int longitud) {
@@ -228,12 +208,13 @@ public abstract class Metodos {
 			}
 			fE.close();
 		} catch (IOException e) {
-
+			Metodos.mensaje("Error al leer el archivo " + fichero, 1);
 		}
 		return salida;
 	}
 
-	public static void exportarBd(int tipo) {
+	@SuppressWarnings("all")
+	public static void exportarBd(int tipo) throws IOException {
 
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
@@ -301,22 +282,21 @@ public abstract class Metodos {
 	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {
 		combobox.setFont(new Font("Tahoma", Font.BOLD, 24));
 		ArrayList<String> categorias = verCategorias();
-		if (categorias != null) {
+		if (!categorias.isEmpty()) {
 			try {
 				for (int x = 0; x < categorias.size(); x++) {
 					combobox.addItem(categorias.get(x));
 				}
 			} catch (Exception e) {
-
+				Metodos.mensaje("Error al cargar las categorías", 1);
 			}
 		}
 	}
 
 	public static ArrayList<String> verCategorias() throws SQLException, IOException {
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
-
+		ArrayList<String> categorias = new ArrayList<>();
 		if (!lectura[3].isEmpty() && conexionBD() != null) {
-			ArrayList<String> categorias = new ArrayList<String>();
 
 			ResultSet rs = null;
 			Connection conexion = conexionBD();
@@ -331,10 +311,8 @@ public abstract class Metodos {
 			s.close();
 			rs.close();
 
-			return categorias;
-		} else {
-			return null;
 		}
+		return categorias;
 	}
 
 	public static void eliminarFichero(String archivo) {
@@ -375,7 +353,7 @@ public abstract class Metodos {
 		return Integer.toString(c.get(Calendar.YEAR)) + "-" + mes + "-" + Integer.toString(c.get(Calendar.DATE));
 	}
 
-	public static void comprobarConexion(String archivo, String ruta) {
+	public static void comprobarConexion(String archivo, String ruta) throws IOException {
 		File af = new File(archivo);
 		if (af.exists()) {
 			File comprobacion = new File(ruta);
@@ -418,39 +396,28 @@ public abstract class Metodos {
 
 	public static boolean comprobarConfiguracion() throws IOException {
 
-		boolean error = false;
+		boolean comprobacion = false;
 
 		if (!Metodos.comprobarConexion()) {
-			error = true;
+			comprobacion = true;
 		}
 
 		if (!Metodos.probarconexion("www.google.com")) {
-			error = true;
+			comprobacion = true;
 			mensaje("No tienes Internet", 1);
 		}
 
-		if (!error) {
+		if (!comprobacion) {
 			try {
-				if (conexionBD() == null) {
-					error = true;
+				if (conexionBD() != null) {
+					comprobacion = true;
 				}
 			} catch (SQLException e) {
-
+				new Bd().setVisible(true);
 			}
 		}
 
-		if (error) {
-			return false;
-		} else {
-			return true;
-		}
-
-	}
-
-	public static void mensaje_error() throws IOException {
-		mensaje("Configuración errónea", 1);
-		new Bd().setVisible(true);
-		new Config2().setVisible(true);
+		return comprobacion;
 
 	}
 
@@ -481,22 +448,24 @@ public abstract class Metodos {
 		return cadena;
 	}
 
-	public static int numeroLineas(String fichero) {
+	public static int numeroLineas(String fichero) throws FileNotFoundException {
 		File input = new File("Config/" + fichero);
 		Scanner iterate;
 		int numLines = 0;
+		iterate = new Scanner(input);
 		try {
-			iterate = new Scanner(input);
+
 			while (iterate.hasNextLine()) {
 				iterate.nextLine();
 				numLines++;
 			}
-		} catch (FileNotFoundException e) {
-			numLines = 0;
+		} finally {
+			iterate.close();
 		}
 		return numLines;
 	}
 
+	@SuppressWarnings("all")
 	public static void guardarConfig(int opcion, String separador) throws IOException {
 
 		String ruta;
@@ -543,6 +512,9 @@ public abstract class Metodos {
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "Hacer_gif" + separador + "Output", "",
 					true);
 			break;
+
+		default:
+			break;
 		}
 
 	}
@@ -554,10 +526,12 @@ public abstract class Metodos {
 				archivo.mkdir();
 			}
 		} else {
-			BufferedWriter bw;
-			bw = new BufferedWriter(new FileWriter(archivo));
-			bw.write(texto);
-			bw.close();
+			BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
+			try {
+				bw.write(texto);
+			} finally {
+				bw.close();
+			}
 		}
 	}
 
@@ -573,15 +547,15 @@ public abstract class Metodos {
 		int ocurrencias = 0;
 
 		String extension;
-		String nombre_archivo;
+		String nombreArchivo;
 		for (final File ficheroEntrada : carpeta.listFiles()) {
-			nombre_archivo = ficheroEntrada.getName();
-			extension = nombre_archivo.substring(nombre_archivo.length() - 3, nombre_archivo.length());
+			nombreArchivo = ficheroEntrada.getName();
+			extension = nombreArchivo.substring(nombreArchivo.length() - 3, nombreArchivo.length());
 
 			if (extension.equals(filtro) || filtro.equals(".")) {
 
 				if (ocurrencias == 0 && filtro.equals("gif")) {
-					File f1 = new File("GifFrames\\" + nombre_archivo);
+					File f1 = new File("GifFrames\\" + nombreArchivo);
 					File f2 = new File("GifFrames\\picture.gif");
 					f1.renameTo(f2);
 				}
@@ -596,7 +570,7 @@ public abstract class Metodos {
 	public static int listarFicherosPorCarpeta(final File carpeta) {
 		int ocurrencias = 0;
 		String extension = "";
-		ArrayList<String> permitidos = new ArrayList<String>();
+		ArrayList<String> permitidos = new ArrayList<>();
 		permitidos.add(".jpg");
 		permitidos.add("jpeg");
 		permitidos.add(".png");
@@ -604,7 +578,7 @@ public abstract class Metodos {
 
 		for (final File ficheroEntrada : carpeta.listFiles()) {
 
-			if (ficheroEntrada.getName().indexOf(".") > 0) {
+			if (ficheroEntrada.getName().indexOf(".") > -1) {
 				extension = ficheroEntrada.getName().substring(ficheroEntrada.getName().length() - 4,
 						ficheroEntrada.getName().length());
 
@@ -616,9 +590,9 @@ public abstract class Metodos {
 		return ocurrencias;
 	}
 
-	public static void abrirCarpeta(String ruta) {
+	public static void abrirCarpeta(String ruta) throws IOException {
 
-		if (ruta != null && ruta != "" && !ruta.isEmpty()) {
+		if (ruta != null && !ruta.equals("") && !ruta.isEmpty()) {
 			try {
 				Runtime.getRuntime().exec("cmd /c start " + ruta);
 			} catch (IOException e) {
@@ -629,8 +603,7 @@ public abstract class Metodos {
 		}
 	}
 
-	public static void notificacion(int salida, String directorio, String tipo, Boolean abrir)
-			throws MalformedURLException {
+	public static void notificacion(int salida, String directorio, String tipo, Boolean abrir) throws IOException {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
 			if (abrir) {
@@ -648,8 +621,14 @@ public abstract class Metodos {
 				crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true);
 
 			} catch (Exception e) {
+				Metodos.mensaje("Error al cerrar el navegador", 1);
 			}
 
+			break;
+		case 2:
+			Metodos.mensaje("Poner el scrip para cerrar chrome en linux", 2);
+			break;
+		default:
 			break;
 		}
 
@@ -676,7 +655,7 @@ public abstract class Metodos {
 
 	public static int salida(String origen, String destino, int opcion, String separador) throws IOException {
 
-		LinkedList<String> imagenes = new LinkedList<String>();
+		LinkedList<String> imagenes;
 
 		if (opcion != 9 || (opcion == 9 && origen.contains("Thumb"))) {
 			imagenes = directorio(origen, ".jpg");
@@ -688,7 +667,7 @@ public abstract class Metodos {
 
 		int mensaje;
 
-		if (imagenes.size() > 0) {
+		if (!imagenes.isEmpty()) {
 
 			if (imagenes.size() == 1) {
 				destino += separador + imagenes.get(0);
@@ -727,7 +706,7 @@ public abstract class Metodos {
 		return complete.digest();
 	}
 
-	public static boolean comprobarArchivo(String archivo, boolean tipo) {
+	public static boolean comprobarArchivo(String archivo, boolean tipo) throws FileNotFoundException {
 		File carpeta = new File(archivo);
 		if (!tipo) {
 			if (!carpeta.exists()) {
@@ -771,6 +750,9 @@ public abstract class Metodos {
 			tipo = JOptionPane.WARNING_MESSAGE;
 			tituloSuperior = "Advertencia";
 			break;
+
+		default:
+			break;
 		}
 
 		JLabel alerta = new JLabel(mensaje);
@@ -781,12 +763,17 @@ public abstract class Metodos {
 	}
 
 	public static String getSHA256Checksum(String filename) throws Exception {
+
 		byte[] b = createChecksum(filename);
 		String result = "";
+		StringBuilder bld = new StringBuilder();
 
 		for (int i = 0; i < b.length; i++) {
-			result += Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1);
+			bld.append(Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1));
 		}
+
+		result = bld.toString();
+
 		return result;
 	}
 
@@ -805,7 +792,7 @@ public abstract class Metodos {
 		directorio.mkdir();
 	}
 
-	public static void eliminarDuplicados(String ruta, String separador) {
+	public static void eliminarDuplicados(String ruta, String separador) throws Exception {
 
 		try {
 			LinkedList<String> imagenes = directorio(ruta, ".");
@@ -816,12 +803,9 @@ public abstract class Metodos {
 
 				for (int i = 0; i < imagenes.size(); i++) {
 
-					try {
-						imagen = getSHA256Checksum(ruta + separador + imagenes.get(i));
-						scanimagenes.add(imagen);
+					imagen = getSHA256Checksum(ruta + separador + imagenes.get(i));
+					scanimagenes.add(imagen);
 
-					} catch (Exception e) {
-					}
 				}
 				Collections.sort(scanimagenes);
 				if (imagenes.size() == scanimagenes.size() && imagenes.size() > 1) {
@@ -849,21 +833,8 @@ public abstract class Metodos {
 
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
-
+			Metodos.mensaje("Error", 1);
 		}
-	}
-
-	public static int searchString(String[] findArray, String stringSearch) {
-		int result = -1;
-		int cant = 0;
-		for (@SuppressWarnings("unused")
-		String stringFounded : findArray) {
-			if (findArray[cant].equals(stringSearch)) {
-				result = cant;
-			}
-			cant++;
-		}
-		return result;
 	}
 
 }

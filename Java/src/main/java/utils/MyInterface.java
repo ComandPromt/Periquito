@@ -2,7 +2,7 @@ package utils;
 
 import java.io.IOException;
 
-public interface interfaz {
+public interface MyInterface {
 
 	void initComponents() throws IOException;
 

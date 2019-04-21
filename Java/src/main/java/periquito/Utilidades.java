@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.TooManyListenersException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -30,11 +31,11 @@ import javax.swing.event.ChangeListener;
 
 import utils.DragAndDrop;
 import utils.Metodos;
-import utils.interfaz;
+import utils.MyInterface;
 
 @SuppressWarnings("serial")
 
-public class Utilidades extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
+public class Utilidades extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 	private JTextArea imagenes = new JTextArea();
 	String comprobacion;
 	transient Statement s;
@@ -47,7 +48,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	private JLabel lblNombreDeImgenes = new JLabel("Nombre");
 	private JTextField nombre;
 
-	public Utilidades() throws IOException {
+	public Utilidades() {
 		try {
 			if (Metodos.comprobarConexion()) {
 
@@ -58,14 +59,14 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 			initComponents();
 
 			this.setVisible(true);
-		} catch (SQLException e3) {
+		} catch (SQLException | IOException e3) {
 			this.dispose();
 		}
 
 	}
 
 	@SuppressWarnings("all")
-	public void initComponents() throws IOException {
+	public void initComponents() {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -135,71 +136,76 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		prefijoTablas.setText(prefijoTablas.getText().trim());
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
-		new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
-			public void filesDropped(java.io.File[] files) {
-				String nombre_input = nombre.getText().trim();
-				String prefijo = prefijoTablas.getText().trim();
-				if (!prefijo.equals("") && !nombre_input.equals("")) {
-					try {
-						String imagen;
-						int fecha = (int) new Date().getTime();
-						if (fecha < 0) {
-							fecha *= -1;
+		try {
+			new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
+				public void filesDropped(java.io.File[] files) {
+					String nombre_input = nombre.getText().trim();
+					String prefijo = prefijoTablas.getText().trim();
+					if (!prefijo.equals("") && !nombre_input.equals("")) {
+						try {
+							String imagen;
+							int fecha = (int) new Date().getTime();
+							if (fecha < 0) {
+								fecha *= -1;
+							}
+
+							String tabla = prefijo + "images";
+							int categoria = comboBox.getSelectedIndex() + 1;
+							int id;
+
+							Connection conexion = Metodos.conexionBD();
+
+							s = conexion.createStatement();
+
+							rs = s.executeQuery("select MAX(image_id)+1 FROM " + tabla);
+							rs.next();
+							id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
+
+							s.close();
+							rs.close();
+
+							String thumb;
+							conexion = Metodos.conexionBD();
+
+							s = conexion.createStatement();
+
+							FileWriter flS = new FileWriter("Config/SQL.sql");
+							BufferedWriter fS = new BufferedWriter(flS);
+
+							String separador = Metodos
+									.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
+
+							for (int i = 0; i < files.length; i++) {
+								imagen = files[i].toString();
+								imagen = imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length());
+
+								thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
+
+								fS.write("INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'"
+										+ nombre_input + "','',''," + fecha + ",DEFAULT,'" + imagen + "','" + thumb
+										+ "', '',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,0);");
+								fS.newLine();
+
+								id++;
+							}
+							fS.close();
+							flS.close();
+							conexion = Metodos.conexionBD();
+
+							s = conexion.createStatement();
+							InputStream archivo = new FileInputStream("SQL.sql");
+							Metodos.executeScript(conexion, archivo);
+							Metodos.eliminarFichero("SQL.sql");
+							Metodos.mensaje("Insert recuperados correctamente!", 2);
+						} catch (Exception e) {
+							Metodos.mensaje("Error al recuperar la BD", 1);
 						}
-
-						String tabla = prefijo + "images";
-						int categoria = comboBox.getSelectedIndex() + 1;
-						int id;
-
-						Connection conexion = Metodos.conexionBD();
-
-						s = conexion.createStatement();
-
-						rs = s.executeQuery("select MAX(image_id)+1 FROM " + tabla);
-						rs.next();
-						id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
-
-						s.close();
-						rs.close();
-
-						String thumb;
-						conexion = Metodos.conexionBD();
-
-						s = conexion.createStatement();
-
-						FileWriter flS = new FileWriter("Config/SQL.sql");
-						BufferedWriter fS = new BufferedWriter(flS);
-
-						String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
-
-						for (int i = 0; i < files.length; i++) {
-							imagen = files[i].toString();
-							imagen = imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length());
-
-							thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
-
-							fS.write("INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'" + nombre_input
-									+ "','',''," + fecha + ",DEFAULT,'" + imagen + "','" + thumb
-									+ "', '',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,0);");
-							fS.newLine();
-
-							id++;
-						}
-						fS.close();
-						flS.close();
-						conexion = Metodos.conexionBD();
-
-						s = conexion.createStatement();
-						InputStream archivo = new FileInputStream("SQL.sql");
-						Metodos.executeScript(conexion, archivo);
-						Metodos.eliminarFichero("SQL.sql");
-						Metodos.mensaje("Insert recuperados correctamente!", 2);
-					} catch (Exception e) {
-						Metodos.mensaje("Error al recuperar la BD", 1);
 					}
 				}
-			}
-		});
+			});
+		} catch (TooManyListenersException e) {
+			Metodos.mensaje("Error al recuperar la BD", 1);
+		}
 
 	}
 

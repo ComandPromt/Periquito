@@ -25,11 +25,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import utils.Metodos;
-import utils.interfaz;
+import utils.MyInterface;
 
 @SuppressWarnings("serial")
 
-public class Agregar extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
+public class Agregar extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 
 	static javax.swing.JTextField usuario;
 	JTextArea nota = new JTextArea("", 0, 50);

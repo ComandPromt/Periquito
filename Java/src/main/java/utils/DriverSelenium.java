@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class DriverSelenium {
 
-	static protected WebDriver driver;
+	static WebDriver driver;
 
 	public WebDriver getDriver() {
 		return DriverSelenium.driver;

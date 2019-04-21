@@ -21,15 +21,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import utils.Metodos;
-import utils.interfaz;
+import utils.MyInterface;
 
 @SuppressWarnings("serial")
 
-public class Backup extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
-	private javax.swing.JLabel jLabel1;
-	static javax.swing.JTextField jTextField1;
+public class Backup extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+	javax.swing.JLabel jLabel1;
+	javax.swing.JTextField jTextField1;
 
-	public void buscarArchivoConf() {
+	@SuppressWarnings("all")
+	public void buscarArchivoConf() throws IOException {
 		File af = new File("Config/Backup.txt");
 
 		if (af.exists()) {
@@ -44,26 +45,25 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 				jTextField1.setText(lectura[0]);
 
 			} catch (ArrayIndexOutOfBoundsException e) {
-
+				Metodos.mensaje("Error al leer el archivo Backup.txt", 1);
 			}
 			guardarDatos(false);
 		}
 	}
 
-	void guardarDatos(Boolean mensaje) {
+	void guardarDatos(Boolean mensaje) throws IOException {
+		FileWriter flS = new FileWriter("Config/Backup.txt");
+		BufferedWriter fS = new BufferedWriter(flS);
+
 		try {
 			String texto = jTextField1.getText().trim();
-			if (texto.isEmpty() || texto == null) {
+			if (texto.isEmpty()) {
 				texto = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop";
 			}
-
-			FileWriter flS = new FileWriter("Config/Backup.txt");
-			BufferedWriter fS = new BufferedWriter(flS);
 
 			fS.write(texto);
 			fS.newLine();
 
-			fS.close();
 			dispose();
 
 			if (mensaje) {
@@ -76,17 +76,20 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
 
+		} finally {
+			fS.close();
+			flS.close();
 		}
 	}
 
-	public Backup() {
+	public Backup() throws IOException {
 		setTitle("Periquito v3 Backup");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}
 
-	public void initComponents() {
+	public void initComponents() throws IOException {
 
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -119,7 +122,7 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 					jTextField1.setText(texto);
 					guardarDatos(false);
 				} catch (Exception e1) {
-
+					Metodos.mensaje("Error al guardar la configuración", 1);
 				}
 			}
 		});
@@ -149,8 +152,10 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {
+		//
 	}
 }

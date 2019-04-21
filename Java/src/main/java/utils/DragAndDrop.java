@@ -3,19 +3,19 @@ package utils;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.io.PrintStream;
+import java.util.TooManyListenersException;
 
 public class DragAndDrop {
 
-	private transient java.awt.dnd.DropTargetListener dropListener;
+	private java.awt.dnd.DropTargetListener dropListener;
 
 	public DragAndDrop(final java.awt.Component c, final javax.swing.border.Border dragBorder, final boolean recursive,
-			final Listener listener) {
+			final Listener listener) throws TooManyListenersException {
 
 		dropListener = new java.awt.dnd.DropTargetListener() {
 			public void dragEnter(java.awt.dnd.DropTargetDragEvent evt) {
 
-				PrintStream out = null;
-				if (isDragOk(out, evt)) {
+				if (isDragOk(evt)) {
 
 					if (c instanceof javax.swing.JComponent) {
 						javax.swing.JComponent jc = (javax.swing.JComponent) c;
@@ -54,20 +54,21 @@ public class DragAndDrop {
 						evt.getDropTargetContext().dropComplete(true);
 
 					}
-				} catch (java.io.IOException io) {
-
-				} catch (java.awt.datatransfer.UnsupportedFlavorException ufe) {
-
+				} catch (Exception io) {
+					Metodos.mensaje("Error", 1);
 				}
 			}
 
 			public void dragExit(DropTargetEvent dte) {
+				//
 			}
 
 			public void dragOver(DropTargetDragEvent dtde) {
+				//
 			}
 
 			public void dropActionChanged(DropTargetDragEvent dtde) {
+				//
 			}
 		};
 
@@ -76,14 +77,12 @@ public class DragAndDrop {
 
 	}
 
-	private void makeDropTarget(final java.io.PrintStream out, final java.awt.Component c, boolean recursive) {
+	private void makeDropTarget(final java.io.PrintStream out, final java.awt.Component c, boolean recursive)
+			throws TooManyListenersException {
 
 		final java.awt.dnd.DropTarget dt = new java.awt.dnd.DropTarget();
-		try {
-			dt.addDropTargetListener(dropListener);
-		} catch (java.util.TooManyListenersException e) {
-			e.printStackTrace();
-		}
+
+		dt.addDropTargetListener(dropListener);
 
 		c.addHierarchyListener(new java.awt.event.HierarchyListener() {
 			public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
@@ -110,7 +109,7 @@ public class DragAndDrop {
 		}
 	}
 
-	private boolean isDragOk(final java.io.PrintStream out, final java.awt.dnd.DropTargetDragEvent evt) {
+	private boolean isDragOk(final java.awt.dnd.DropTargetDragEvent evt) {
 
 		java.awt.datatransfer.DataFlavor[] flavors = null;
 

@@ -21,17 +21,18 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import utils.Metodos;
-import utils.interfaz;
+import utils.MyInterface;
 
 @SuppressWarnings("serial")
 
-public class Config2 extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
-	private javax.swing.JLabel jLabel1;
+public class Config2 extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+	javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
-	private JLabel lblThumbnails;
+	JLabel lblThumbnails;
 
-	public void buscarArchivoConf() {
+	@SuppressWarnings("all")
+	public void buscarArchivoConf() throws IOException {
 		File af = new File("Config/Config2.txt");
 
 		if (af.exists()) {
@@ -58,15 +59,16 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		}
 	}
 
-	public void guardarDatos(Boolean mensaje) {
+	public void guardarDatos(Boolean mensaje) throws IOException {
+		FileWriter flS = new FileWriter("Config/Config2.txt");
+		BufferedWriter fS = new BufferedWriter(flS);
+
 		try {
-			FileWriter flS = new FileWriter("Config/Config2.txt");
-			BufferedWriter fS = new BufferedWriter(flS);
 
 			fS.write(jTextField1.getText().trim());
 			fS.newLine();
 			fS.write(textField.getText().trim());
-			fS.close();
+
 			dispose();
 
 			if (mensaje) {
@@ -77,17 +79,21 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			if (mensaje) {
 				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
+		} finally {
+			fS.close();
+			flS.close();
 		}
 	}
 
-	public Config2() {
+	public Config2() throws IOException {
 		setTitle("Periquito v3 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}
 
-	public void initComponents() {
+	@SuppressWarnings("all")
+	public void initComponents() throws IOException {
 
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -132,7 +138,11 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 							textField.setText(comprobacion2.substring(2, comprobacion2.length()));
 						}
 						dispose();
-						guardarDatos(true);
+						try {
+							guardarDatos(true);
+						} catch (IOException e) {
+							Metodos.mensaje("Error al guargar la configuración", 1);
+						}
 
 					}
 				}

@@ -1,4 +1,4 @@
-package periquito;
+package utils;
 
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -8,26 +8,36 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class ImageResizer {
+public abstract class ImageResizer {
 
-	public static int MAX_WIDTH = 800;
+	static int maxWidth = 800;
 
-	public static int MAX_HEIGHT = 630;
+	private ImageResizer() {
+		super();
+	}
+
+	static int maxHeight = 630;
 
 	public static void copyImage(String filePath, String copyPath) {
-		BufferedImage bimage = loadImage(filePath);
-		if (bimage.getHeight() > bimage.getWidth()) {
-			int heigt = (bimage.getHeight() * MAX_WIDTH) / bimage.getWidth();
-			bimage = resize(bimage, MAX_WIDTH, heigt);
-			int width = (bimage.getWidth() * MAX_HEIGHT) / bimage.getHeight();
-			bimage = resize(bimage, width, MAX_HEIGHT);
-		} else {
-			int width = (bimage.getWidth() * MAX_HEIGHT) / bimage.getHeight();
-			bimage = resize(bimage, width, MAX_HEIGHT);
-			int heigt = (bimage.getHeight() * MAX_WIDTH) / bimage.getWidth();
-			bimage = resize(bimage, MAX_WIDTH, heigt);
+		try {
+
+			BufferedImage bimage = loadImage(filePath);
+
+			if (bimage.getHeight() > bimage.getWidth()) {
+				int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
+				bimage = resize(bimage, maxWidth, heigt);
+				int width = (bimage.getWidth() * maxHeight) / bimage.getHeight();
+				bimage = resize(bimage, width, maxHeight);
+			} else {
+				int width = (bimage.getWidth() * maxHeight) / bimage.getHeight();
+				bimage = resize(bimage, width, maxHeight);
+				int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
+				bimage = resize(bimage, maxWidth, heigt);
+			}
+			saveImage(bimage, copyPath);
+		} catch (Exception e) {
+			Metodos.mensaje("Error al redimensionar la imagen ubicada en " + filePath, 1);
 		}
-		saveImage(bimage, copyPath);
 	}
 
 	public static BufferedImage loadImage(String pathName) {
@@ -35,7 +45,7 @@ public class ImageResizer {
 		try {
 			bimage = ImageIO.read(new File(pathName));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Metodos.mensaje("Error al leer la imagen ubicada en " + pathName, 1);
 		}
 		return bimage;
 	}
@@ -47,7 +57,7 @@ public class ImageResizer {
 			file.getParentFile().mkdirs();
 			ImageIO.write(bufferedImage, format, file);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Metodos.mensaje("Error al guardar la imagen ubicada en " + pathName, 1);
 		}
 	}
 

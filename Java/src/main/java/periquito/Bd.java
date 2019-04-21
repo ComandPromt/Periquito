@@ -23,23 +23,24 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import utils.Metodos;
-import utils.interfaz;
+import utils.MyInterface;
 
 @SuppressWarnings("serial")
 
-public class Bd extends javax.swing.JFrame implements ActionListener, ChangeListener, interfaz {
-	private javax.swing.JLabel jLabel1;
+public class Bd extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+	JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private static JTextField textField;
-	private JLabel lblThumbnails;
-	private JLabel lblBd;
+	JLabel lblThumbnails;
+	JLabel lblBd;
 	private JTextField base;
 	String[] lectura;
-	private JLabel lblPrefijoDeTablas;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	JLabel lblPrefijoDeTablas;
+	private JTextField textField1;
+	private JTextField textField2;
 	private JTextField direccion;
 
+	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException, SQLException {
 		File af = new File("Config/Bd.txt");
 
@@ -60,7 +61,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 				base.setText(lectura[0]);
 				jTextField1.setText(lectura[1]);
 				textField.setText(lectura[2]);
-				textField_1.setText(lectura[3]);
+				textField1.setText(lectura[3]);
 
 			} catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
 //
@@ -69,11 +70,11 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		}
 	}
 
-	public void guardarDatos(Boolean mensaje) throws SQLException {
+	public void guardarDatos(Boolean mensaje) throws IOException, SQLException {
 		dispose();
+		FileWriter flS = new FileWriter("Config/Bd.txt");
+		BufferedWriter fS = new BufferedWriter(flS);
 		try {
-			FileWriter flS = new FileWriter("Config/Bd.txt");
-			BufferedWriter fS = new BufferedWriter(flS);
 
 			fS.write(base.getText().trim());
 			fS.newLine();
@@ -81,13 +82,11 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			fS.newLine();
 			fS.write(textField.getText().trim());
 			fS.newLine();
-			fS.write(textField_1.getText().trim());
+			fS.write(textField1.getText().trim());
 			fS.newLine();
-			fS.write(textField_2.getText().trim());
+			fS.write(textField2.getText().trim());
 			fS.newLine();
 			fS.write(direccion.getText().trim());
-
-			fS.close();
 
 			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);
@@ -96,10 +95,12 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 				Metodos.ponerCategoriasBd(MenuPrincipal.comboBox);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
-			if (mensaje) {
-				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
-			}
+
+			Metodos.mensaje("Error al crear el fichero de configuracion", 1);
+
+		} finally {
+			fS.close();
+			flS.close();
 		}
 	}
 
@@ -110,6 +111,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		this.setVisible(true);
 	}
 
+	@SuppressWarnings("all")
 	public void initComponents() throws IOException {
 
 		jLabel1 = new javax.swing.JLabel();
@@ -133,15 +135,15 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField1.setToolTipText("");
 		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		textField_1 = new JTextField();
-		textField_1.setToolTipText("");
-		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		textField_2 = new JTextField();
-		textField_2.setText("3306");
-		textField_2.setToolTipText("");
-		textField_2.setHorizontalAlignment(SwingConstants.CENTER);
-		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		textField1 = new JTextField();
+		textField1.setToolTipText("");
+		textField1.setHorizontalAlignment(SwingConstants.CENTER);
+		textField1.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		textField2 = new JTextField();
+		textField2.setText("3306");
+		textField2.setToolTipText("");
+		textField2.setHorizontalAlignment(SwingConstants.CENTER);
+		textField2.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		direccion = new JTextField();
 		direccion.setToolTipText("");
 		direccion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -155,7 +157,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/save.png")));
 		btnNewButton.addActionListener(new ActionListener() {
-
+			@SuppressWarnings("all")
 			public void actionPerformed(ActionEvent arg0) {
 				if (jTextField1.getText() != null && jTextField1.getText().length() >= 2 && textField.getText() != null
 						&& textField.getText().length() >= 2) {
@@ -169,7 +171,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 					comprobacion2 = textField.getText().replace(" ", "");
 					comprobacion2 = textField.getText().trim();
 
-					int comprobacion3 = Integer.parseInt(textField_2.getText().trim());
+					int comprobacion3 = Integer.parseInt(textField2.getText().trim());
 
 					if (comprobacion1.length() >= 2 && comprobacion2.length() >= 2 && comprobacion3 > 0) {
 
@@ -183,8 +185,8 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 						try {
 							guardarDatos(true);
-						} catch (SQLException e) {
-//
+						} catch (Exception e) {
+							Metodos.mensaje("Error al guardar la configuración", 1);
 						}
 
 					}
@@ -244,12 +246,12 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 						.addGroup(layout.createSequentialGroup().addComponent(jLabel1).addGap(88)))
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textField2, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 								.addGap(18)
 								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
 						.addComponent(direccion, GroupLayout.PREFERRED_SIZE, 313, GroupLayout.PREFERRED_SIZE)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(textField_1, Alignment.LEADING).addComponent(base, Alignment.LEADING)
+								.addComponent(textField1, Alignment.LEADING).addComponent(base, Alignment.LEADING)
 								.addComponent(jTextField1, Alignment.LEADING).addComponent(textField, Alignment.LEADING,
 										GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)))
 				.addContainerGap(14, Short.MAX_VALUE)));
@@ -262,7 +264,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblPrefijoDeTablas, GroupLayout.PREFERRED_SIZE, 64,
 										GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textField1, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
 						.addGap(38)
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(label, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
@@ -281,7 +283,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 										Short.MAX_VALUE)
 								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 										.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-										.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 35,
+										.addComponent(textField2, GroupLayout.PREFERRED_SIZE, 35,
 												GroupLayout.PREFERRED_SIZE)))
 						.addGap(42)));
 		getContentPane().setLayout(layout);
@@ -299,10 +301,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 	public static JTextField getTextField() {
 		return textField;
-	}
-
-	public void setTextField(JTextField textField) {
-		Bd.textField = textField;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -19,6 +18,11 @@ import periquito.MenuPrincipal;
 public class PhotoFrame extends javax.swing.JFrame {
 
 	static PhotoPanel photoPanel = new PhotoPanel();
+	javax.swing.JMenu jMenu1;
+	javax.swing.JMenuBar jMenuBar1;
+	javax.swing.JMenuItem jMenuItem1;
+	private javax.swing.JPanel jPanel1;
+	javax.swing.JScrollPane jScrollPane1;
 
 	public PhotoFrame() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PhotoFrame.class.getResource("/imagenes/maxresdefault.jpg")));
@@ -29,6 +33,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 		this.jPanel1.add(photoPanel);
 	}
 
+	@SuppressWarnings("all")
 	private void initComponents() {
 
 		jScrollPane1 = new javax.swing.JScrollPane();
@@ -62,7 +67,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
-					jMenuItem1ActionPerformed(evt);
+					jMenuItem1ActionPerformed();
 				} catch (IOException e) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -77,7 +82,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 		pack();
 	}
 
-	private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) throws IOException {// GEN-FIRST:event_jMenuItem1ActionPerformed
+	private void jMenuItem1ActionPerformed() throws IOException {// GEN-FIRST:event_jMenuItem1ActionPerformed
 		JFileChooser fileChooser = new JFileChooser();
 		File miDir = new File(".");
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Imagen", "jpg", "png"));
@@ -88,14 +93,8 @@ public class PhotoFrame extends javax.swing.JFrame {
 		int result = fileChooser.showOpenDialog(null);
 		if (result == JFileChooser.APPROVE_OPTION) {
 			try {
-				String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
 
-				String directorioActual = new File(".").getCanonicalPath() + separador;
-				LinkedList<String> listaImagenes = new LinkedList<>();
-				listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
-
-				photoPanel.setPhoto(ImageIO.read(fileChooser.getSelectedFile()),
-						fileChooser.getSelectedFile().getName());
+				photoPanel.setPhoto(ImageIO.read(fileChooser.getSelectedFile()));
 
 			} catch (IOException ex) {
 				//
@@ -123,11 +122,5 @@ public class PhotoFrame extends javax.swing.JFrame {
 			}
 		});
 	}
-
-	private javax.swing.JMenu jMenu1;
-	private javax.swing.JMenuBar jMenuBar1;
-	private javax.swing.JMenuItem jMenuItem1;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JScrollPane jScrollPane1;
 
 }

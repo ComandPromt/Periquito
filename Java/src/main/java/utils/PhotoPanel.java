@@ -14,7 +14,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,25 +25,18 @@ import javax.swing.JPopupMenu;
 
 import periquito.MenuPrincipal;
 
-/**
- * @see http://www.jc-mouse.net/
- * @author mouse
- */
+@SuppressWarnings("serial")
 public class PhotoPanel extends JPanel implements MouseMotionListener, MouseListener {
 
-	private final String DIR = "C:\\Users\\Yeah\\Documents\\";
-
-	private Image photo;
-	private BufferedImage BufferedImage;
-
-	private String nameFile;
+	transient Image photo;
+	transient BufferedImage bufferedImage;
 
 	private int count = 0;
 
 	private Color color1 = new Color(255, 255, 255);
 	private Color color2 = new Color(0, 0, 0);
 
-	private BufferedImage tmp_Recorte;
+	transient BufferedImage tmpRecorte;
 
 	private float clipX = 0;
 	private float clipY = 0;
@@ -75,8 +67,8 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		menuItem.addActionListener((ActionEvent e) -> {
 			try {
 				saveImage();
-			} catch (IOException e1) {
-				//
+			} catch (Exception e1) {
+				Metodos.mensaje("Error", 1);
 			}
 		});
 		popupMenu.add(menuItem);
@@ -92,7 +84,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 		};
 		timer.schedule(timerColor, 1000, 350);
-	}// PhotoPanel:constructor
+	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
@@ -102,24 +94,22 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 		if (photo != null) {
 			// se crea un lienzo del tamaño de la foto
-			BufferedImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2D = BufferedImage.createGraphics();
+			bufferedImage = new BufferedImage(getWidth(), getHeight(), java.awt.image.BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2D = bufferedImage.createGraphics();
 			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			// se añade la foto grande original
+
 			g2D.drawImage(photo, 0, 0, photo.getWidth(this), photo.getHeight(this), this);
 
-			// pinta rectangulo solido para delimitar la seccion de recorte
 			g2D.setStroke(new BasicStroke(1f));
 			g2D.setColor(color1);
 			drawRect(g2D);
-			// pinta rectangulo segmentando
-			float dash1[] = { 5.0f };
+
+			float[] dash1 = { 5.0f };
 			g2D.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 5.0f, dash1, 0.0f));
 			g2D.setColor(color2);
 			drawRect(g2D);
 
-			// se dibuja todo
-			g2.drawImage(BufferedImage, 0, 0, this);
+			g2.drawImage(bufferedImage, 0, 0, this);
 		}
 	}
 
@@ -131,17 +121,16 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 	}
 
 	private void showPopup(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON3) {// clic derecho
-			if (e.isPopupTrigger()) {
-				popupMenu.show(e.getComponent(), e.getX(), e.getY());
-			}
+		if (e.getButton() == MouseEvent.BUTTON3 && e.isPopupTrigger()) {
+
+			popupMenu.show(e.getComponent(), e.getX(), e.getY());
+
 		}
 	}
 
-	public void setPhoto(Image photo, String nameFile) {
+	public void setPhoto(Image photo) {
 		if (photo != null) {
 			this.photo = photo;
-			this.nameFile = nameFile;
 			this.setSize(new Dimension(photo.getWidth(null), photo.getHeight(null)));
 			this.setPreferredSize(new Dimension(photo.getWidth(null), photo.getHeight(null)));
 			// reinicia valores
@@ -160,7 +149,8 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		}
 	}
 
-	private void saveImage() throws IOException {
+	@SuppressWarnings("all")
+	private void saveImage() throws Exception {
 		String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
 
 		String directorioActual = new File(".").getCanonicalPath() + separador;
@@ -182,9 +172,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			for (int x = 0; x < listaImagenes.size(); x++) {
 				photo = ImageIO
 						.read(new File(directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x)));
-				tmp_Recorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
+				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
-				ImageIO.write(tmp_Recorte, "jpg", new File(directorioActual + "imagenes_para_recortar" + separador
+				ImageIO.write(tmpRecorte, "jpg", new File(directorioActual + "imagenes_para_recortar" + separador
 						+ "recortes" + separador + "Image_" + count + ".jpg"));
 				count++;
 			}
@@ -199,7 +189,6 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		x2 = (int) e.getPoint().getX();
 		y2 = (int) e.getPoint().getY();
 
-		// evita que se salga fuera de los limites del panel
 		if (x2 < 0)
 			x2 = 0;
 		if (y2 < 0)
@@ -218,12 +207,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		repaint();
 	}
 
-	@Override
 	public void mouseMoved(MouseEvent e) {
-
+//
 	}
 
-	@Override
 	public void mouseClicked(MouseEvent e) {
 		showPopup(e);
 	}
@@ -239,13 +226,13 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// dimensiones del recorte
+
 		clipX = x1;
 		clipY = y1;
 		clipWidth = Math.abs(dx1x2);
 		clipHeight = Math.abs(dy1y2);
 
-		if (dx1x2 < 0 & dy1y2 < 0) {
+		if (dx1x2 < 0 && dy1y2 < 0) {
 			clipX = clipX - Math.abs(dx1x2);
 			clipY = clipY - Math.abs(dy1y2);
 		} else if (dy1y2 < 0) {
@@ -256,14 +243,12 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		showPopup(e);
 	}
 
-	@Override
 	public void mouseEntered(MouseEvent e) {
-
+//
 	}
 
-	@Override
 	public void mouseExited(MouseEvent e) {
-
+//
 	}
 
 }
