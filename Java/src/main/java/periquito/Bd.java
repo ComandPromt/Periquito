@@ -87,15 +87,18 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			fS.write(textField2.getText().trim());
 			fS.newLine();
 			fS.write(direccion.getText().trim());
+			fS.close();
+			flS.close();
 
 			if (mensaje) {
-				Metodos.mensaje("Archivo guardado con exito!", 2);
-			}
-			if (Metodos.comprobarConexion()) {
-				Metodos.ponerCategoriasBd(MenuPrincipal.comboBox);
-			}
-		} catch (IOException e) {
 
+				Metodos.mensaje("Archivo guardado con exito!", 2);
+
+				Metodos.ponerCategoriasBd(MenuPrincipal.comboBox);
+
+			}
+
+		} catch (IOException e) {
 			Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 
 		} finally {

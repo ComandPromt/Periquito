@@ -126,26 +126,27 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 				}
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(Backup.class.getResource("/imagenes/save.png")));
+		btnNewButton.setIcon(new ImageIcon(Backup.class.getResource("/imagenes/abrir.png")));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addGap(26)
 						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-						.addGap(31)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(45, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(24)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 64, Short.MAX_VALUE)
-						.addGroup(Alignment.TRAILING,
-								layout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)))
-				.addGap(223)));
+						.addGap(18)
+						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(44, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup().addGap(24)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(223))
+				.addGroup(Alignment.LEADING,
+						layout.createSequentialGroup().addGap(32)
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(20, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(532, 129));
 		setLocationRelativeTo(null);

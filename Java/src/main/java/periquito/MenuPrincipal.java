@@ -51,7 +51,7 @@ import utils.Metodos;
 import utils.MyInterface;
 import utils.PhotoFrame;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 
 public class MenuPrincipal extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 	private JMenuBar menuopciones;
@@ -107,13 +107,19 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JSeparator separator18;
 	private JMenuItem menuItem19;
 	private JTextField textField;
-	@SuppressWarnings("all")
+
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
-	@SuppressWarnings("all")
-	String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
-	@SuppressWarnings("all")
+
 	static String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
-	String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+
+	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+
+	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+
+	public static String[] getLecturabd() {
+		return lecturabd;
+	}
+
 	String separador;
 	@SuppressWarnings("all")
 	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
@@ -126,71 +132,73 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 	transient LinkedList<String> listaImagenes = new LinkedList<>();
 
-	@SuppressWarnings("all")
 	private void hacerGIF() throws IOException {
-		if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
-			Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
-			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
-		} else {
-			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
-				Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
+		try {
+			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
+				Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
 				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 			} else {
-				File af = new File("Config/Config.txt");
+				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
+					Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
+					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
+				} else {
+					File af = new File("Config/Config.txt");
 
-				if (af.exists()) {
-					try {
-						if (!lectura[0].isEmpty() && lectura[0] != null) {
+					if (af.exists()) {
+						try {
+							if (!lectura[0].isEmpty() && lectura[0] != null) {
 
-							WebDriver chrome = new ChromeDriver();
+								WebDriver chrome = new ChromeDriver();
 
-							chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
+								chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
 
-							Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
+								Metodos.cerrarNavegador(Integer.parseInt(lecturaos[0]));
 
-							chrome.close();
+								chrome.close();
 
-							listaImagenes = Metodos
-									.directorio(lectura[0] + separador + "Hacer_gif" + separador + "Output", "gif");
-							LinkedList<String> frames = Metodos
-									.directorio(lectura[0] + separador + "Hacer_gif" + separador + "img", ".");
+								listaImagenes = Metodos
+										.directorio(lectura[0] + separador + "Hacer_gif" + separador + "Output", "gif");
+								LinkedList<String> frames = Metodos
+										.directorio(lectura[0] + separador + "Hacer_gif" + separador + "img", ".");
 
-							for (int x = 0; x < listaImagenes.size(); x++) {
-								Files.move(
-										FileSystems.getDefault()
-												.getPath(lectura[0] + separador + "Hacer_gif" + separador + "Output"
-														+ separador + listaImagenes.get(x)),
-										FileSystems.getDefault().getPath(
-												directorioActual + "imagenes" + separador + listaImagenes.get(x)),
-										StandardCopyOption.REPLACE_EXISTING);
+								for (int x = 0; x < listaImagenes.size(); x++) {
+									Files.move(
+											FileSystems.getDefault()
+													.getPath(lectura[0] + separador + "Hacer_gif" + separador + "Output"
+															+ separador + listaImagenes.get(x)),
+											FileSystems.getDefault().getPath(
+													directorioActual + "imagenes" + separador + listaImagenes.get(x)),
+											StandardCopyOption.REPLACE_EXISTING);
+								}
+
+								for (int x = 0; x < frames.size(); x++) {
+									Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
+											+ separador + frames.get(x));
+								}
+								Metodos.abrirCarpeta("imagenes");
+							} else {
+								new Config().setVisible(true);
 							}
 
-							for (int x = 0; x < frames.size(); x++) {
-								Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
-										+ separador + frames.get(x));
-							}
-							Metodos.abrirCarpeta("imagenes");
-						} else {
+						} catch (ArrayIndexOutOfBoundsException e1) {
+
 							new Config().setVisible(true);
+						} catch (IOException e1) {
+							Metodos.mensaje("Error", 1);
 						}
 
-					} catch (ArrayIndexOutOfBoundsException e1) {
+						catch (Exception e1) {
+							Metodos.mensaje("No tienes el driver de chrome en la carpeta del programa", 1);
+						}
 
-						new Config().setVisible(true);
-					} catch (IOException e1) {
-						Metodos.mensaje("Error", 1);
 					}
-
-					catch (Exception e1) {
-						Metodos.mensaje("No tienes el driver de chrome en la carpeta del programa", 1);
-					}
-
 				}
 			}
+		} catch (Exception e) {
+			new Config().setVisible(true);
 		}
 	}
 
-	@SuppressWarnings("all")
 	private void videoToFrame() throws Exception {
 		File directorio = new File(
 				lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
@@ -244,44 +252,48 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
-	@SuppressWarnings("all")
 	public MenuPrincipal() throws Exception {
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		Metodos.crearFichero("GifFrames", "", true);
-		if (separador == null && lecturaos[0] == null) {
+
+		if (lecturaos[0] == null || lecturaos[0].equals("")) {
 			separador = "\\";
 		} else {
+			if (lecturaos[0].isEmpty()) {
+				lecturaos[0] = "1";
+			}
+
 			separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
 		}
 
 		Metodos.guardarConfig(3, separador);
 
-		if (lectura[0] == null) {
+		if (lectura[0] == null || lectura[0].equals("")) {
 			Metodos.guardarConfig(1, separador);
 		}
 
-		if (lecturaurl[0] == null) {
+		if (lecturaurl[0] == null || lecturaurl[0].equals("")) {
 			Metodos.guardarConfig(2, separador);
 		}
 
-		if (lecturaos[0] == null) {
+		if (lecturaos[0] == null || lecturaos[0].equals("")) {
 			Metodos.guardarConfig(4, separador);
 		}
 
-		if (lecturaos[0] != null) {
+		if (lecturaos[0] == null || lecturaos[0].equals("")) {
+			lecturaos[0] = "1";
 			separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
 		}
 
 		directorioActual = new File(".").getCanonicalPath() + separador;
 
-		if (lecturabd[0] == null) {
+		if (lecturabd[0] == null || lecturabd[0].equals("")) {
 			Metodos.crearFichero("Config/Bd.txt", "", false);
 			new Bd().setVisible(true);
 		}
 
-		if (lecturabackup[0] == null && lecturaos[0] != null) {
-
+		if (lecturabackup[0] == null || lecturabackup[0].equals("")) {
 			if (Integer.parseInt(lecturaos[0]) == 1) {
 				Metodos.crearFichero("Config/Backup.txt", "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop",
 						false);
@@ -376,7 +388,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				try {
 					videoToFrame();
 				} catch (Exception e) {
-					Metodos.mensaje("Error", 1);
+					try {
+						new Config().setVisible(true);
+					} catch (IOException e1) {
+						//
+					}
 				}
 			}
 		});
@@ -396,7 +412,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					try {
 						videoToFrame();
 					} catch (Exception e1) {
-						Metodos.mensaje("Error", 1);
+
 					}
 
 					LinkedList<String> imagenes = new LinkedList<String>();
@@ -460,7 +476,6 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						if (Metodos.comprobarConfiguracion()) {
 							Metodos.exportarBd(1);
 							Metodos.eliminarFichero("backupbd.bat");
-							Metodos.eliminarFichero("reiniciar_explorer.bat");
 						}
 
 					}
@@ -1029,7 +1044,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		label4.setFont(new Font("Tahoma", Font.BOLD, 18));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup().addGap(51).addComponent(label2).addGap(46)
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -1040,13 +1055,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						.addGroup(layout.createSequentialGroup().addGap(40).addComponent(label3,
 								GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)))
 						.addContainerGap(100, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, layout.createSequentialGroup().addContainerGap()
+				.addGroup(layout.createSequentialGroup().addContainerGap()
 						.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE).addGap(18)
 						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(31, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addContainerGap(174, Short.MAX_VALUE)
-						.addComponent(button, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
-						.addGap(113)));
+				.addGroup(Alignment.TRAILING,
+						layout.createSequentialGroup().addContainerGap(174, Short.MAX_VALUE)
+								.addComponent(button, GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)
+								.addGap(113)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -1060,14 +1076,14 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE))
 								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+						.addGap(17)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addGap(9)
+								.addGroup(layout.createSequentialGroup()
 										.addComponent(button, GroupLayout.PREFERRED_SIZE, 71,
 												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE).addComponent(
-												imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(label4)))
+										.addGap(28).addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60,
+												GroupLayout.PREFERRED_SIZE))
+								.addComponent(label4))
 						.addGap(22)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(560, 438));
@@ -1105,6 +1121,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
+	}
+
+	public static void setLecturaurl(String[] lecturaurl) {
+		MenuPrincipal.lecturaurl = lecturaurl;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

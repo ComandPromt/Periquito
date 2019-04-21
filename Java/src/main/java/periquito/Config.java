@@ -1,6 +1,5 @@
 package periquito;
 
-import java.applet.AudioClip;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -18,7 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -33,30 +31,6 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	static javax.swing.JTextField jTextField1;
 	private JLabel label;
 	private JTextField txtHttplocalhost;
-
-	public void mensaje(String mensaje, Boolean error) {
-		JLabel alerta = new JLabel(mensaje);
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-		AudioClip clip;
-		if (error) {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/duck-quack1.wav"));
-		} else {
-			clip = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/gong1.wav"));
-		}
-
-		int option;
-		if (error) {
-			JOptionPane.showMessageDialog(null, alerta, "Error", JOptionPane.ERROR_MESSAGE);
-
-		} else {
-			JOptionPane.showMessageDialog(null, alerta, "Success", JOptionPane.INFORMATION_MESSAGE);
-
-		}
-		option = JOptionPane.CLOSED_OPTION;
-		if (option == -1) {
-			clip.stop();
-		}
-	}
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException {
@@ -105,17 +79,17 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 			fS.newLine();
 			fS.write(servidor);
 			fS.close();
-
+			flS.close();
 			dispose();
-
+			MenuPrincipal.setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
 			if (mensaje) {
-				mensaje("Archivo guardado con exito!", false);
+				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
 
 		} catch (IOException e) {
 
 			if (mensaje) {
-				mensaje("Error al crear el fichero de configuracion", true);
+				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
 
 		}

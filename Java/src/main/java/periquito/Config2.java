@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -124,19 +127,15 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			public void actionPerformed(ActionEvent arg0) {
 				if (jTextField1.getText() != null && jTextField1.getText().length() >= 2 && textField.getText() != null
 						&& textField.getText().length() >= 2) {
-					String comprobacion1 = jTextField1.getText().replace("  ", " ");
-					String comprobacion2 = textField.getText().replace("  ", " ");
-					comprobacion1 = jTextField1.getText().replace(" ", "");
-					comprobacion2 = textField.getText().replace(" ", "");
-					comprobacion1 = jTextField1.getText().trim();
-					comprobacion2 = textField.getText().trim();
+					String comprobacion1 = jTextField1.getText().trim().replaceAll("  ", " ");
+					String comprobacion2 = textField.getText().trim().replaceAll("  ", " ");
+
 					if (comprobacion1.length() >= 2 && comprobacion2.length() >= 2) {
-						if (comprobacion1.substring(0, 2).equals("\\\\")) {
-							jTextField1.setText(comprobacion1.substring(2, comprobacion1.length()));
-						}
-						if (comprobacion2.substring(0, 2).equals("\\\\")) {
-							textField.setText(comprobacion2.substring(2, comprobacion2.length()));
-						}
+
+						jTextField1.setText(comprobacion1);
+
+						textField.setText(comprobacion2);
+						MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));
 						dispose();
 						try {
 							guardarDatos(true);
@@ -153,36 +152,59 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		lblThumbnails.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/folder.png")));
 		lblThumbnails.setFont(new Font("Tahoma", Font.BOLD, 20));
 
+		JButton button = new JButton("");
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				File[] files = Metodos.seleccionar(1, "Elija la carpeta del CMS", "");
+
+				try {
+					String texto = files[0].getCanonicalPath();
+					textField.setText(texto);
+
+				} catch (Exception e1) {
+					Metodos.mensaje("Error al guardar la configuración", 1);
+				}
+			}
+		});
+		button.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/abrir.png")));
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(28)
-						.addGroup(layout
-								.createParallelGroup(
-										Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblThumbnails).addComponent(jLabel1))
-										.addGap(10)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(jTextField1).addComponent(textField,
-														GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE))
-										.addGap(34))
-								.addGroup(layout.createSequentialGroup().addComponent(btnNewButton,
-										GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE).addGap(139)))
-						.addGap(41)));
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(layout.createSequentialGroup().addGap(28)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblThumbnails)
+										.addComponent(jLabel1))
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(layout.createSequentialGroup().addGap(10).addComponent(textField,
+												GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE))
+										.addGroup(layout.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.RELATED).addComponent(jTextField1)))
+								.addPreferredGap(ComponentPlacement.UNRELATED))
+						.addGroup(Alignment.TRAILING,
+								layout.createSequentialGroup()
+										.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(119)))
+						.addGap(18).addComponent(button, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+						.addGap(21)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addGap(24)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jLabel1))
+				.addContainerGap(55, Short.MAX_VALUE)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGap(3)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(35).addComponent(lblThumbnails))
 						.addGroup(layout.createSequentialGroup().addGap(55).addComponent(textField,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(18).addComponent(btnNewButton).addGap(49)));
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(35)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(button, GroupLayout.PREFERRED_SIZE, 64,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblThumbnails))))
+				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnNewButton).addGap(174)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(560, 333));
+		setSize(new Dimension(643, 294));
 		setLocationRelativeTo(null);
 	}
 
