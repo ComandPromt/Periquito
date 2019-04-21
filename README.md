@@ -94,15 +94,7 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 
 ----
 
-## 2.1 Casilla Fix
-
-- Esta opción copia las imágenes al CMS (se aconseja usar esta utilidad en caso de fallo de la aplicación)
-
-![Preview](previews/1.png)
-
-----
-
-## 2.2 Utilidades de conversión (Crear GIF, GIF a frames, Video a GIF, Video a frames)
+## 2.1 Utilidades de conversión (Crear GIF, GIF a frames, Video a GIF, Video a frames)
 
 - Tenemos que pegar el archivo requerido en cada carpeta del programa
 
