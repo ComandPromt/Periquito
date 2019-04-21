@@ -109,7 +109,8 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 - Hacer clic en la acción que queramos
 
 ![Preview](previews/2.png)
-
+![Preview](previews/2_1.png)
+![Preview](previews/2_2.png)
 ----
 
 # 3. Ayuda
