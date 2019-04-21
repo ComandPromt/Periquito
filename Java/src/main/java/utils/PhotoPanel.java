@@ -93,7 +93,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		g2.fill(new Rectangle2D.Double(0, 0, getWidth(), getHeight()));
 
 		if (photo != null) {
-			// se crea un lienzo del tamaño de la foto
+
 			bufferedImage = new BufferedImage(getWidth(), getHeight(), java.awt.image.BufferedImage.TYPE_INT_RGB);
 			Graphics2D g2D = bufferedImage.createGraphics();
 			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

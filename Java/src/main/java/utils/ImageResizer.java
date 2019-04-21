@@ -36,7 +36,7 @@ public abstract class ImageResizer {
 			}
 			saveImage(bimage, copyPath);
 		} catch (Exception e) {
-			Metodos.mensaje("Error al redimensionar la imagen ubicada en " + filePath, 1);
+			//
 		}
 	}
 
@@ -45,7 +45,7 @@ public abstract class ImageResizer {
 		try {
 			bimage = ImageIO.read(new File(pathName));
 		} catch (Exception e) {
-			Metodos.mensaje("Error al leer la imagen ubicada en " + pathName, 1);
+//
 		}
 		return bimage;
 	}

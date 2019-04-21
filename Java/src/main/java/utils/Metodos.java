@@ -119,42 +119,45 @@ public abstract class Metodos {
 		boolean filtro = false;
 		String origen;
 		String destino;
+		if (files.length > 0) {
+			for (int i = 0; i < files.length; i++) {
 
-		for (int i = 0; i < files.length; i++) {
+				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
+						files[i].getCanonicalPath().length());
+				comprobacion = imagen.substring(imagen.length() - 3, imagen.length());
 
-			imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
-					files[i].getCanonicalPath().length());
-			comprobacion = imagen.substring(imagen.length() - 3, imagen.length());
+				if (comprobacion.equals("jpg") || comprobacion.equals("peg") || comprobacion.equals("png")
+						|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
 
-			if (comprobacion.equals("jpg") || comprobacion.equals("peg") || comprobacion.equals("png")
-					|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
+					origen = files[i].getCanonicalPath();
+					destino = new File(".").getCanonicalPath() + separador + "imagenes";
 
-				origen = files[i].getCanonicalPath();
-				destino = new File(".").getCanonicalPath() + separador + "imagenes";
+					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
+						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
+					}
 
-				if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
-					Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
+					else {
+
+						Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
+
+								destino + separador
+										+ origen.substring(origen.lastIndexOf(separador) + 1, origen.length())
+
+						), StandardCopyOption.REPLACE_EXISTING);
+
+					}
+
+				} else {
+					filtro = true;
 				}
-
-				else {
-
-					Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
-
-							destino + separador + origen.substring(origen.lastIndexOf(separador) + 1, origen.length())
-
-					), StandardCopyOption.REPLACE_EXISTING);
-
-					mensaje("Los archivos se han movido correctamente", 2);
-
-				}
-
-			} else {
-				filtro = true;
 			}
+			mensaje("Los archivos se han movido correctamente", 2);
+			if (filtro) {
+				mensaje("Uno o varios archivos no tiene el formato correcto", 1);
+			}
+
 		}
-		if (filtro) {
-			mensaje("Uno o varios archivos no tiene el formato correcto", 1);
-		}
+
 	}
 
 	public static java.io.File[] seleccionar(int tipo, String rotulo, String mensaje) {
@@ -182,6 +185,7 @@ public abstract class Metodos {
 			chooser.setMultiSelectionEnabled(true);
 		}
 
+		chooser.showOpenDialog(chooser);
 		File[] files = chooser.getSelectedFiles();
 
 		if (files.length == 0) {
@@ -189,28 +193,35 @@ public abstract class Metodos {
 
 		}
 		return files;
-
 	}
 
 	public static String[] leerFicheroArray(String fichero, int longitud) {
+
 		String[] salida = new String[longitud];
 		String texto = "";
 		int i = 0;
+
 		try {
+
 			FileReader flE = new FileReader(fichero);
 			BufferedReader fE = new BufferedReader(flE);
+			texto = fE.readLine();
+
 			while (texto != null) {
+
+				salida[i] = texto;
+				i++;
+
 				texto = fE.readLine();
-				if (texto != null) {
-					salida[i] = texto;
-					i++;
-				}
 			}
 			fE.close();
+			flE.close();
 		} catch (IOException e) {
-			Metodos.mensaje("Error al leer el archivo " + fichero, 1);
+//
 		}
+
 		return salida;
+
 	}
 
 	@SuppressWarnings("all")
@@ -242,38 +253,45 @@ public abstract class Metodos {
 
 			crearScript("backupbd.bat", ruta + "mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1]
 					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "\\backupbd.sql", false);
-			crearScript("reiniciar_explorer.bat", "TASKKILL /F /IM explorer.exe\r\n" + "start explorer.exe", true);
+
 			Metodos.mensaje("Backup realizado correctamente", 2);
 
 			abrirCarpeta(backup[0]);
+
 		} catch (Exception e) {
 			Metodos.mensaje("Error", 1);
 		}
 	}
 
 	protected static void crearScript(String archivo, String contenido, boolean opcional) throws IOException {
+
 		String iniciar = "";
+
 		if (opcional) {
 			iniciar = "start";
 		}
+
 		FileWriter flS = new FileWriter(archivo);
 		BufferedWriter fS = new BufferedWriter(flS);
-		fS.write("@echo off");
-		fS.newLine();
-		fS.write(contenido);
-		fS.newLine();
-		fS.write("exit");
-		fS.close();
-
-		Runtime aplicacion = Runtime.getRuntime();
 
 		try {
+
+			fS.write("@echo off");
+			fS.newLine();
+			fS.write(contenido);
+			fS.newLine();
+			fS.write("exit");
+
+			Runtime aplicacion = Runtime.getRuntime();
 			aplicacion.exec("cmd.exe /K " + iniciar + " " + archivo);
 
 		} catch (Exception e) {
 			mensaje("Error al cargar el script", 1);
-		}
+		} finally {
+			fS.close();
+			flS.close();
 
+		}
 		Process p = Runtime.getRuntime().exec("cmd.exe");
 		p.destroy();
 
@@ -295,21 +313,29 @@ public abstract class Metodos {
 
 	public static ArrayList<String> verCategorias() throws SQLException, IOException {
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+
 		ArrayList<String> categorias = new ArrayList<>();
+
 		if (!lectura[3].isEmpty() && conexionBD() != null) {
+			ResultSet rs;
+			Connection conexion;
+			Statement s;
+			try {
+				conexion = conexionBD();
+				s = conexion.createStatement();
 
-			ResultSet rs = null;
-			Connection conexion = conexionBD();
+				rs = s.executeQuery("select cat_name FROM " + lectura[3] + "categories ORDER BY cat_id");
 
-			Statement s = conexion.createStatement();
+				while (rs.next()) {
+					categorias.add(rs.getString("cat_name"));
+				}
+				s.close();
+				rs.close();
+				conexion.close();
+			} catch (Exception e) {
 
-			rs = s.executeQuery("select cat_name FROM " + lectura[3] + "categories ORDER BY cat_id");
-
-			while (rs.next()) {
-				categorias.add(rs.getString("cat_name"));
+				new Bd().setVisible(true);
 			}
-			s.close();
-			rs.close();
 
 		}
 		return categorias;
@@ -324,7 +350,7 @@ public abstract class Metodos {
 	}
 
 	public static boolean comprobarConexionBd() {
-
+		boolean resultado = false;
 		try {
 			Connection conexion = Metodos.conexionBD();
 
@@ -335,13 +361,16 @@ public abstract class Metodos {
 			rs.next();
 
 			if (!rs.getString("Nombre").equals("")) {
-				return true;
-			} else {
-				return false;
+				resultado = true;
 			}
 		} catch (Exception e) {
-			return false;
+			try {
+				new Bd().setVisible(true);
+			} catch (IOException e1) {
+				//
+			}
 		}
+		return resultado;
 	}
 
 	public static String saberFecha() {
@@ -389,6 +418,7 @@ public abstract class Metodos {
 			}
 		} catch (Exception e) {
 			Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 2);
+
 		}
 		return conexion;
 
@@ -439,10 +469,10 @@ public abstract class Metodos {
 	}
 
 	public static String eliminarUltimoElemento(String cadena) {
-		if (cadena.length() > 1) {
-			if (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47) {
-				cadena = cadena.substring(0, cadena.length() - 1);
-			}
+		if (cadena.length() > 1
+				&& (cadena.charAt(cadena.length() - 1) == 92 || cadena.charAt(cadena.length() - 1) == 47)) {
+
+			cadena = cadena.substring(0, cadena.length() - 1);
 
 		}
 		return cadena;
@@ -486,7 +516,7 @@ public abstract class Metodos {
 
 		case 2:
 
-			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1" + "4images_", false);
+			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1\r" + "4images_", false);
 			Config2 guardar2 = new Config2();
 
 			guardar2.guardarDatos(false);
@@ -536,11 +566,13 @@ public abstract class Metodos {
 	}
 
 	public static String saberseparador(int os) {
+		String separador;
 		if (os == 1) {
-			return "\\";
+			separador = "\\";
 		} else {
-			return "/";
+			separador = "/";
 		}
+		return separador;
 	}
 
 	public static int listarFicherosPorCarpeta(final File carpeta, String filtro) {
@@ -578,7 +610,7 @@ public abstract class Metodos {
 
 		for (final File ficheroEntrada : carpeta.listFiles()) {
 
-			if (ficheroEntrada.getName().indexOf(".") > -1) {
+			if (ficheroEntrada.getName().indexOf('.') > -1) {
 				extension = ficheroEntrada.getName().substring(ficheroEntrada.getName().length() - 4,
 						ficheroEntrada.getName().length());
 
@@ -689,20 +721,26 @@ public abstract class Metodos {
 	}
 
 	public static byte[] createChecksum(String filename) throws Exception {
-		InputStream fis = new FileInputStream(filename);
-
-		byte[] buffer = new byte[1024];
+		InputStream fis = null;
 		MessageDigest complete = MessageDigest.getInstance("SHA-256");
-		int numRead;
+		try {
+			fis = new FileInputStream(filename);
+			byte[] buffer = new byte[1024];
 
-		do {
-			numRead = fis.read(buffer);
-			if (numRead > 0) {
-				complete.update(buffer, 0, numRead);
+			int numRead;
+
+			do {
+				numRead = fis.read(buffer);
+				if (numRead > 0) {
+					complete.update(buffer, 0, numRead);
+				}
+			} while (numRead != -1);
+			fis.close();
+		} catch (Exception e) {
+			if (fis != null) {
+				fis.close();
 			}
-		} while (numRead != -1);
-
-		fis.close();
+		}
 		return complete.digest();
 	}
 
@@ -719,7 +757,7 @@ public abstract class Metodos {
 
 			if (config.exists()) {
 
-				if (Metodos.numeroLineas(archivo.substring(archivo.indexOf("/") + 1, archivo.length())) > 0) {
+				if (Metodos.numeroLineas(archivo.substring(archivo.indexOf('/') + 1, archivo.length())) > 0) {
 					return true;
 				} else {
 					return false;
