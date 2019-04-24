@@ -256,7 +256,7 @@ public abstract class Metodos {
 
 			Metodos.mensaje("Backup realizado correctamente", 2);
 
-			abrirCarpeta(backup[0],MenuPrincipal.getLecturaos()[0]);
+			abrirCarpeta(backup[0],MenuPrincipal.getOs());
 
 		} catch (Exception e) {
 			Metodos.mensaje("Error", 1);
@@ -392,7 +392,7 @@ public abstract class Metodos {
 				new Config().setVisible(true);
 			} else {
 				
-				Metodos.abrirCarpeta(ruta,MenuPrincipal.getLecturaos()[0]);
+				Metodos.abrirCarpeta(ruta,MenuPrincipal.getOs());
 			}
 		} else {
 			new Config().setVisible(true);
@@ -650,7 +650,7 @@ public abstract class Metodos {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
 			if (abrir) {
-				abrirCarpeta(directorio,MenuPrincipal.getLecturaos()[0]);
+				abrirCarpeta(directorio,MenuPrincipal.getOs());
 			}
 		}
 	}

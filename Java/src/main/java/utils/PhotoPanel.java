@@ -151,7 +151,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 	@SuppressWarnings("all")
 	private void saveImage() throws Exception {
-		String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
+		String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getOs()));
 
 		String directorioActual = new File(".").getCanonicalPath() + separador;
 		LinkedList<String> listaImagenes = new LinkedList<>();
@@ -180,7 +180,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 
 			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar",MenuPrincipal.getLecturaos()[0]);
+			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar",MenuPrincipal.getOs());
 		}
 	}
 

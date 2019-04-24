@@ -173,7 +173,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							BufferedWriter fS = new BufferedWriter(flS);
 
 							String separador = Metodos
-									.saberseparador(Integer.parseInt(MenuPrincipal.getLecturaos()[0]));
+									.saberseparador(Integer.parseInt(MenuPrincipal.getOs()));
 
 							for (int i = 0; i < files.length; i++) {
 								imagen = files[i].toString();
