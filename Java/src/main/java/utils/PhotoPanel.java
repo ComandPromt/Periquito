@@ -180,7 +180,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 
 			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar");
+			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar",MenuPrincipal.getLecturaos()[0]);
 		}
 	}
 
@@ -194,11 +194,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		if (y2 < 0)
 			y2 = 0;
 
-		// distancia recorrida
 		dx1x2 = x2 - x1;
 		dy1y2 = y2 - y1;
 
-		// evita que se salga fuera de los limites del panel
 		if (x1 + dx1x2 > getWidth())
 			dx1x2 = getWidth() - x1 - 1;
 		if (y1 + dy1y2 > getHeight())

@@ -256,7 +256,7 @@ public abstract class Metodos {
 
 			Metodos.mensaje("Backup realizado correctamente", 2);
 
-			abrirCarpeta(backup[0]);
+			abrirCarpeta(backup[0],MenuPrincipal.getLecturaos()[0]);
 
 		} catch (Exception e) {
 			Metodos.mensaje("Error", 1);
@@ -386,11 +386,13 @@ public abstract class Metodos {
 		File af = new File(archivo);
 		if (af.exists()) {
 			File comprobacion = new File(ruta);
+			System.out.println(archivo+"\n"+ruta);
 			if (!comprobacion.exists()) {
 				Metodos.mensaje("Ruta inválida ", 1);
 				new Config().setVisible(true);
 			} else {
-				Metodos.abrirCarpeta(ruta);
+				
+				Metodos.abrirCarpeta(ruta,MenuPrincipal.getLecturaos()[0]);
 			}
 		} else {
 			new Config().setVisible(true);
@@ -532,6 +534,7 @@ public abstract class Metodos {
 			break;
 
 		case 5:
+
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
 					+ separador + "output", "", true);
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
@@ -622,11 +625,19 @@ public abstract class Metodos {
 		return ocurrencias;
 	}
 
-	public static void abrirCarpeta(String ruta) throws IOException {
+	public static void abrirCarpeta(String ruta,String os) throws IOException {
 
 		if (ruta != null && !ruta.equals("") && !ruta.isEmpty()) {
+			
 			try {
-				Runtime.getRuntime().exec("cmd /c start " + ruta);
+				
+				if(MenuPrincipal.getOs().contentEquals("Linux")) {
+					Runtime.getRuntime().exec("xdg-open " + ruta);
+				}
+				
+				else {
+					Runtime.getRuntime().exec("cmd /c start " + ruta);
+				}
 			} catch (IOException e) {
 				mensaje("Ruta inválida", 1);
 			}
@@ -639,7 +650,7 @@ public abstract class Metodos {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
 			if (abrir) {
-				abrirCarpeta(directorio);
+				abrirCarpeta(directorio,MenuPrincipal.getLecturaos()[0]);
 			}
 		}
 	}
@@ -872,6 +883,15 @@ public abstract class Metodos {
 			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			Metodos.mensaje("Error", 1);
+		}
+	}
+
+	public static String saberSeparador(String os) {
+		if(os.equals("Linux")){
+			return "/";
+		}
+		else {
+			return "\\";
 		}
 	}
 

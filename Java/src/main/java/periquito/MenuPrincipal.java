@@ -106,11 +106,15 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 	private JMenuItem menuItem18;
 	private JSeparator separator18;
 	private JMenuItem menuItem19;
-	private JTextField textField;
+	public static String getOs() {
+		return os;
+	}
 
+	private JTextField textField;
+static String os=System.getProperty("os.name");
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 
-	static String[] lecturaos = Metodos.leerFicheroArray("Config/OS.txt", 1);
+	static String separador = Metodos.saberSeparador(os);
 
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
@@ -120,7 +124,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		return lecturabd;
 	}
 
-	String separador;
+
 	@SuppressWarnings("all")
 	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 	String directorioActual;
@@ -136,11 +140,11 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		try {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
 				Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
-				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
+				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador,lecturaos[0]);
 			} else {
 				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
 					Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
-					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
+					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador,lecturaos[0]);
 				} else {
 					File af = new File("Config/Config.txt");
 
@@ -175,7 +179,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 									Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
 											+ separador + frames.get(x));
 								}
-								Metodos.abrirCarpeta("imagenes");
+								Metodos.abrirCarpeta("imagenes",lecturaos[0]);
 							} else {
 								new Config().setVisible(true);
 							}
@@ -199,6 +203,17 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		}
 	}
 
+	private void video2Frames() {
+		try {
+			Metodos.comprobarConexion("Config/Config.txt",
+					lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
+		} catch (ArrayIndexOutOfBoundsException e1) {
+			Metodos.mensaje("Error en el  archivo Config.txt", 1);
+		} catch (Exception e1) {
+			Metodos.mensaje("Error", 1);
+		}
+	}
+	
 	private void videoToFrame() throws Exception {
 		File directorio = new File(
 				lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
@@ -218,7 +233,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						".") > 0) {
 					Metodos.mensaje("Ya has convertido un video a frames!", 3);
 					Metodos.abrirCarpeta(
-							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output");
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output",lecturaos[0]);
 				}
 
 				else {
@@ -226,7 +241,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 					if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/video"),
 							".") != 1) {
 						Metodos.mensaje("Debes tener un vídeo para poder crear los fotogramas", 3);
-						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video");
+						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video",lecturaos[0]);
 					}
 
 					else {
@@ -240,7 +255,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 						Metodos.eliminarDuplicados(lectura[0] + separador + "FrameExtractor" + separador + "examples"
 								+ separador + "output", separador);
 						Metodos.abrirCarpeta(lectura[0] + separador + "FrameExtractor" + separador + "examples"
-								+ separador + "output");
+								+ separador + "output",lecturaos[0]);
 					}
 
 				}
@@ -257,12 +272,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		Metodos.crearFichero("GifFrames", "", true);
 
-		if (lecturaos[0] == null || lecturaos[0].equals("")) {
-			separador = "\\";
-		} else {
-			if (lecturaos[0].isEmpty()) {
-				lecturaos[0] = "1";
-			}
+
 
 			separador = Metodos.saberseparador(Integer.parseInt(lecturaos[0]));
 		}
@@ -302,7 +312,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 			}
 		}
-		setTitle("Periquito v3 Config Remoto");
+		setTitle("Periquito v3");
 
 		menuopciones = new JMenuBar();
 		setJMenuBar(menuopciones);
@@ -361,7 +371,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 
 							Metodos.mensaje("Copia o mueve un archivo GIF", 3);
 
-							Metodos.abrirCarpeta("GifFrames");
+							Metodos.abrirCarpeta("GifFrames",lecturaos[0]);
 						}
 					}
 				} catch (Exception e1) {
@@ -592,7 +602,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 				directorio.mkdir();
 
 				try {
-					Metodos.abrirCarpeta("imagenes");
+					Metodos.abrirCarpeta("imagenes",lecturaos[0]);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -631,7 +641,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("GifFrames");
+					Metodos.abrirCarpeta("GifFrames",lecturaos[0]);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -648,15 +658,10 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		menuItem11.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					Metodos.comprobarConexion("Config/Config.txt",
-							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
-				} catch (ArrayIndexOutOfBoundsException e1) {
-					Metodos.mensaje("Error en el  archivo Config.txt", 1);
-				} catch (Exception e1) {
-					Metodos.mensaje("Error", 1);
-				}
+				video2Frames();
 			}
+
+
 		});
 		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -669,14 +674,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		menuItem12.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					Metodos.comprobarConexion("Config/Config.txt", lectura[0] + separador + "VID-2-GIF");
-
-				} catch (ArrayIndexOutOfBoundsException e1) {
-					Metodos.mensaje("Error en el  archivo Config.txt", 1);
-				} catch (Exception e1) {
-					Metodos.mensaje("Error", 1);
-				}
+				video2Frames();
 			}
 		});
 		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
@@ -691,7 +689,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("imagenes_para_recortar");
+					Metodos.abrirCarpeta("imagenes_para_recortar",lecturaos[0]);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -701,7 +699,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu4.add(menuItem13);
 
-		mnConfig = new JMenu("Config    ");
+		mnConfig = new JMenu("Config  ");
 		mnConfig.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
 		mnConfig.setForeground(Color.DARK_GRAY);
 		mnConfig.setFont(new Font("Segoe UI", Font.BOLD, 24));
@@ -846,7 +844,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/");
+					Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/",lecturaos[0]);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -1004,7 +1002,7 @@ public class MenuPrincipal extends javax.swing.JFrame implements ActionListener,
 							Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
 						} else {
 							try {
-								Metodos.abrirCarpeta(directorioActual + "imagenes");
+								Metodos.abrirCarpeta(directorioActual + "imagenes",lecturaos[0]);
 							} catch (IOException e1) {
 								Metodos.mensaje("Error", 1);
 							}
