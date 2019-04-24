@@ -44,7 +44,7 @@ sudo nano /etc/apache2/apache2.conf
 
 sudo systemctl restart apache2
 
-sudo apt install mysql-server php mysql
+sudo apt install mysql-server php mysql-client
 
 sudo apt install php libapache2-mod-php php-mcrypt php-mysql php-cli
 
