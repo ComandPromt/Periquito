@@ -22,19 +22,21 @@ public abstract class ImageResizer {
 		try {
 
 			BufferedImage bimage = loadImage(filePath);
-
-			if (bimage.getHeight() > bimage.getWidth()) {
-				int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
-				bimage = resize(bimage, maxWidth, heigt);
-				int width = (bimage.getWidth() * maxHeight) / bimage.getHeight();
-				bimage = resize(bimage, width, maxHeight);
-			} else {
-				int width = (bimage.getWidth() * maxHeight) / bimage.getHeight();
-				bimage = resize(bimage, width, maxHeight);
-				int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
-				bimage = resize(bimage, maxWidth, heigt);
+			if (bimage.getHeight() > 480 && bimage.getWidth() > 640) {
+				if (bimage.getHeight() > bimage.getWidth()) {
+					int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
+					bimage = resize(bimage, maxWidth, heigt);
+					int width = (bimage.getWidth() * maxHeight) / bimage.getHeight();
+					bimage = resize(bimage, width, maxHeight);
+				} else {
+					int width = (bimage.getWidth() * maxHeight) / bimage.getHeight();
+					bimage = resize(bimage, width, maxHeight);
+					int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
+					bimage = resize(bimage, maxWidth, heigt);
+				}
+				saveImage(bimage, copyPath);
 			}
-			saveImage(bimage, copyPath);
+
 		} catch (Exception e) {
 			//
 		}

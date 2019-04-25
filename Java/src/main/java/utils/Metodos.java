@@ -230,71 +230,83 @@ public abstract class Metodos {
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 
-		String ruta = "";
+		if (!MenuPrincipal.getOs().equals("Linux")) {
+			String ruta = "";
+			switch (tipo) {
+			case 1:
+				ruta = "C:\\AppServ\\mysql\\bin\\";
+				break;
 
-		switch (tipo) {
-		case 1:
-			ruta = "C:\\AppServ\\mysql\\bin\\";
-			break;
+			case 2:
+				ruta = "C:\\wamp\\bin\\mysql\\";
+				break;
 
-		case 2:
-			ruta = "C:\\wamp\\bin\\mysql\\";
-			break;
+			case 3:
+				ruta = "C:\\xampp\\mysql\\bin\\";
+				break;
 
-		case 3:
-			ruta = "C:\\xampp\\mysql\\bin\\";
-			break;
+			default:
+				break;
+			}
 
-		default:
-			break;
-		}
+			try {
 
-		try {
+				crearScript("backupbd.bat",
+						"mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1] + " -p" + lectura[2] + " "
+								+ lectura[0] + " > " + backup[0] + MenuPrincipal.getSeparador() + "backupbd.sql",
+						false, MenuPrincipal.getOs());
 
-			crearScript("backupbd.bat", ruta + "mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1]
-					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "\\backupbd.sql", false);
+				Metodos.mensaje("Backup realizado correctamente", 2);
+
+			} catch (Exception e) {
+				Metodos.mensaje("Error", 1);
+			}
+		} else {
+
+			String[] cmdarray = { "/bin/sh", "-c", "mysqldump --no-defaults -h " + lectura[5] + " -u " + lectura[1]
+					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "/backupbd.sql" };
+			Process process = Runtime.getRuntime().exec(cmdarray);
 
 			Metodos.mensaje("Backup realizado correctamente", 2);
-
-			abrirCarpeta(backup[0],MenuPrincipal.getOs());
-
-		} catch (Exception e) {
-			Metodos.mensaje("Error", 1);
+			abrirCarpeta(backup[0], MenuPrincipal.getOs());
 		}
 	}
 
-	protected static void crearScript(String archivo, String contenido, boolean opcional) throws IOException {
+	public static void crearScript(String archivo, String contenido, boolean opcional, String os) throws IOException {
+		Process aplicacion = null;
 
-		String iniciar = "";
-
-		if (opcional) {
-			iniciar = "start";
+		if (os.equals("Linux")) {
+			aplicacion = Runtime.getRuntime().exec("bash " + contenido);
 		}
 
-		FileWriter flS = new FileWriter(archivo);
-		BufferedWriter fS = new BufferedWriter(flS);
+		else {
 
-		try {
+			String iniciar = "";
 
-			fS.write("@echo off");
-			fS.newLine();
-			fS.write(contenido);
-			fS.newLine();
-			fS.write("exit");
+			if (opcional) {
+				iniciar = "start";
+			}
 
-			Runtime aplicacion = Runtime.getRuntime();
-			aplicacion.exec("cmd.exe /K " + iniciar + " " + archivo);
+			FileWriter flS = new FileWriter(archivo);
+			BufferedWriter fS = new BufferedWriter(flS);
 
-		} catch (Exception e) {
-			mensaje("Error al cargar el script", 1);
-		} finally {
-			fS.close();
-			flS.close();
+			try {
 
+				fS.write("@echo off");
+				fS.newLine();
+				fS.write(contenido);
+				fS.newLine();
+				fS.write("exit");
+
+				aplicacion = Runtime.getRuntime().exec("cmd.exe /K " + iniciar + " " + archivo);
+
+			} finally {
+				fS.close();
+				flS.close();
+
+			}
 		}
-		Process p = Runtime.getRuntime().exec("cmd.exe");
-		p.destroy();
-
+		aplicacion.destroy();
 	}
 
 	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {
@@ -386,13 +398,13 @@ public abstract class Metodos {
 		File af = new File(archivo);
 		if (af.exists()) {
 			File comprobacion = new File(ruta);
-			System.out.println(archivo+"\n"+ruta);
+
 			if (!comprobacion.exists()) {
 				Metodos.mensaje("Ruta inválida ", 1);
 				new Config().setVisible(true);
 			} else {
-				
-				Metodos.abrirCarpeta(ruta,MenuPrincipal.getOs());
+
+				Metodos.abrirCarpeta(ruta, MenuPrincipal.getOs());
 			}
 		} else {
 			new Config().setVisible(true);
@@ -625,16 +637,16 @@ public abstract class Metodos {
 		return ocurrencias;
 	}
 
-	public static void abrirCarpeta(String ruta,String os) throws IOException {
+	public static void abrirCarpeta(String ruta, String os) throws IOException {
 
 		if (ruta != null && !ruta.equals("") && !ruta.isEmpty()) {
-			
+
 			try {
-				
-				if(MenuPrincipal.getOs().contentEquals("Linux")) {
+
+				if (MenuPrincipal.getOs().contentEquals("Linux")) {
 					Runtime.getRuntime().exec("xdg-open " + ruta);
 				}
-				
+
 				else {
 					Runtime.getRuntime().exec("cmd /c start " + ruta);
 				}
@@ -650,29 +662,26 @@ public abstract class Metodos {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
 			if (abrir) {
-				abrirCarpeta(directorio,MenuPrincipal.getOs());
+				abrirCarpeta(directorio, MenuPrincipal.getOs());
 			}
 		}
 	}
 
-	public static void cerrarNavegador(int opcion) {
-
-		switch (opcion) {
-
-		case 1:
+	public static void cerrarNavegador(String os) {
+		if (os.equals("Linux")) {
 			try {
-				crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true);
+				crearScript("cerrar.sh", "kilall chrome", true, MenuPrincipal.getOs());
 
 			} catch (Exception e) {
 				Metodos.mensaje("Error al cerrar el navegador", 1);
 			}
+		} else {
+			try {
+				crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true, MenuPrincipal.getOs());
 
-			break;
-		case 2:
-			Metodos.mensaje("Poner el scrip para cerrar chrome en linux", 2);
-			break;
-		default:
-			break;
+			} catch (Exception e) {
+				Metodos.mensaje("Error al cerrar el navegador", 1);
+			}
 		}
 
 	}
@@ -887,10 +896,9 @@ public abstract class Metodos {
 	}
 
 	public static String saberSeparador(String os) {
-		if(os.equals("Linux")){
+		if (os.equals("Linux")) {
 			return "/";
-		}
-		else {
+		} else {
 			return "\\";
 		}
 	}

@@ -151,36 +151,36 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 	@SuppressWarnings("all")
 	private void saveImage() throws Exception {
-		String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getOs()));
 
-		String directorioActual = new File(".").getCanonicalPath() + separador;
+		String directorioActual = new File(".").getCanonicalPath() + MenuPrincipal.getSeparador();
 		LinkedList<String> listaImagenes = new LinkedList<>();
 		listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
 
 		if (!listaImagenes.isEmpty()) {
-			Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", separador);
+			Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", MenuPrincipal.getSeparador());
 
 			count = 1;
 
 			int numeroImagen = Metodos.listarFicherosPorCarpeta(
-					new File(directorioActual + "imagenes_para_recortar" + separador + "recortes"));
+					new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"));
 
 			if (numeroImagen > 0) {
 				count += numeroImagen;
 			}
 
 			for (int x = 0; x < listaImagenes.size(); x++) {
-				photo = ImageIO
-						.read(new File(directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x)));
+				photo = ImageIO.read(new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador()
+						+ listaImagenes.get(x)));
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
-				ImageIO.write(tmpRecorte, "jpg", new File(directorioActual + "imagenes_para_recortar" + separador
-						+ "recortes" + separador + "Image_" + count + ".jpg"));
+				ImageIO.write(tmpRecorte, "jpg",
+						new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"
+								+ MenuPrincipal.getSeparador() + "Image_" + count + ".jpg"));
 				count++;
 			}
 
 			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar",MenuPrincipal.getOs());
+			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar", MenuPrincipal.getOs());
 		}
 	}
 

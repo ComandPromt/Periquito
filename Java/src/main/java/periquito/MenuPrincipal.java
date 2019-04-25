@@ -107,12 +107,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem menuItem18;
 	private JSeparator separator18;
 	private JMenuItem menuItem19;
+
 	public static String getOs() {
 		return os;
 	}
 
 	private JTextField textField;
-static String os=System.getProperty("os.name");
+	static String os = System.getProperty("os.name");
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 
 	static String separador = Metodos.saberSeparador(os);
@@ -121,11 +122,6 @@ static String os=System.getProperty("os.name");
 
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 
-	public static String[] getLecturabd() {
-		return lecturabd;
-	}
-
-
 	@SuppressWarnings("all")
 	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 	String directorioActual;
@@ -133,15 +129,31 @@ static String os=System.getProperty("os.name");
 
 	transient LinkedList<String> listaImagenes = new LinkedList<>();
 
+	public static String[] getLecturabd() {
+		return lecturabd;
+	}
+
+	public static String getSeparador() {
+		return separador;
+	}
+
+	private void cambiarPermisos() {
+		try {
+			Metodos.crearScript("change_permisos.sh", "sudo chmod 777 -R /var/www", true, os);
+		} catch (Exception e1) {
+			Metodos.mensaje("Error", 1);
+		}
+	}
+
 	private void hacerGIF() throws IOException {
 		try {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
 				Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
-				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador,os);
+				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador, os);
 			} else {
 				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
 					Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
-					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador,os);
+					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador, os);
 				} else {
 					File af = new File("Config/Config.txt");
 
@@ -153,7 +165,7 @@ static String os=System.getProperty("os.name");
 
 								chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
 
-								Metodos.cerrarNavegador(Integer.parseInt(os));
+								Metodos.cerrarNavegador(os);
 
 								chrome.close();
 
@@ -176,7 +188,7 @@ static String os=System.getProperty("os.name");
 									Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
 											+ separador + frames.get(x));
 								}
-								Metodos.abrirCarpeta("imagenes",os);
+								Metodos.abrirCarpeta("imagenes", os);
 							} else {
 								new Config().setVisible(true);
 							}
@@ -189,6 +201,7 @@ static String os=System.getProperty("os.name");
 						}
 
 						catch (Exception e1) {
+
 							Metodos.mensaje("No tienes el driver de chrome en la carpeta del programa", 1);
 						}
 
@@ -210,7 +223,7 @@ static String os=System.getProperty("os.name");
 			Metodos.mensaje("Error", 1);
 		}
 	}
-	
+
 	private void videoToFrame() throws Exception {
 		File directorio = new File(
 				lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
@@ -230,7 +243,8 @@ static String os=System.getProperty("os.name");
 						".") > 0) {
 					Metodos.mensaje("Ya has convertido un video a frames!", 3);
 					Metodos.abrirCarpeta(
-							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output",os);
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output",
+							os);
 				}
 
 				else {
@@ -238,7 +252,7 @@ static String os=System.getProperty("os.name");
 					if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/video"),
 							".") != 1) {
 						Metodos.mensaje("Debes tener un vídeo para poder crear los fotogramas", 3);
-						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video",os);
+						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video", os);
 					}
 
 					else {
@@ -246,13 +260,13 @@ static String os=System.getProperty("os.name");
 						WebDriver chrome = new ChromeDriver();
 						chrome.get(lectura[1] + "/FrameExtractor/examples/index.php");
 
-						Metodos.cerrarNavegador(Integer.parseInt(os));
+						Metodos.cerrarNavegador(os);
 						chrome.close();
 
 						Metodos.eliminarDuplicados(lectura[0] + separador + "FrameExtractor" + separador + "examples"
 								+ separador + "output", separador);
 						Metodos.abrirCarpeta(lectura[0] + separador + "FrameExtractor" + separador + "examples"
-								+ separador + "output",os);
+								+ separador + "output", os);
 					}
 
 				}
@@ -300,7 +314,8 @@ static String os=System.getProperty("os.name");
 				Metodos.crearFichero("Config/Backup.txt", "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop",
 						false);
 			} else {
-				Metodos.crearFichero("Config/Backup.txt", "/home/"+System.getProperty("user.name")+"/Escritorio", false);
+				Metodos.crearFichero("Config/Backup.txt", "/home/" + System.getProperty("user.name") + "/Escritorio",
+						false);
 
 			}
 		}
@@ -324,14 +339,27 @@ static String os=System.getProperty("os.name");
 
 		menuItem = new JMenuItem("GIF Animator");
 		menuItem.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
-					hacerGIF();
-				} catch (IOException e1) {
-					Metodos.mensaje("Error", 1);
+
+				int recuento = Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".");
+				if (recuento <= 170) {
+					if (os.equals("Linux")) {
+
+						cambiarPermisos();
+
+					}
+					try {
+						hacerGIF();
+					} catch (IOException e1) {
+						Metodos.mensaje("Error", 1);
+					}
+				} else {
+					Metodos.mensaje("Tienes más de 170 imágenes", 3);
 				}
 			}
+
 		});
 		menuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gifanim.png")));
 		menuItem.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -346,16 +374,18 @@ static String os=System.getProperty("os.name");
 			public void mousePressed(MouseEvent e) {
 				try {
 					if (Metodos.probarconexion("www.google.com")) {
+						LinkedList<String> imagenes = new LinkedList<String>();
+						imagenes = Metodos.directorio("GifFrames", "gif");
 						if (Metodos.listarFicherosPorCarpeta(new File("GifFrames"), "gif") == 1) {
 
 							WebDriver chrome = new ChromeDriver();
 							chrome.get("https://gifframes.herokuapp.com");
 							chrome.findElement(By.id("imagen"))
-									.sendKeys(directorioActual + "GifFrames" + separador + "picture.gif");
+									.sendKeys(directorioActual + "GifFrames" + separador + imagenes.getFirst());
 							chrome.findElement(By.name("enviar")).click();
-							Metodos.cerrarNavegador(Integer.parseInt(os));
+							Metodos.cerrarNavegador(os);
 
-							Metodos.eliminarFichero(directorioActual + "GifFrames" + separador + "picture.gif");
+							Metodos.eliminarFichero(directorioActual + "GifFrames" + separador + imagenes.getFirst());
 
 						}
 
@@ -363,7 +393,7 @@ static String os=System.getProperty("os.name");
 
 							Metodos.mensaje("Copia o mueve un archivo GIF", 3);
 
-							Metodos.abrirCarpeta("GifFrames",os);
+							Metodos.abrirCarpeta("GifFrames", os);
 						}
 					}
 				} catch (Exception e1) {
@@ -387,6 +417,11 @@ static String os=System.getProperty("os.name");
 		menuItem2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				if (os.equals("Linux")) {
+
+					cambiarPermisos();
+
+				}
 				try {
 					videoToFrame();
 				} catch (Exception e) {
@@ -465,19 +500,25 @@ static String os=System.getProperty("os.name");
 					File archivo = new File("Config/Backup.txt");
 
 					if (!archivo.exists()) {
-						if (Integer.parseInt(os) == 1) {
+						if (os.equals("Linux")) {
+							Metodos.crearFichero("Config/Backup.txt",
+									"/home/" + System.getProperty("user.name") + "/Desktop", false);
+
 							Metodos.crearFichero("Config/Backup.txt",
 									"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
 						} else {
-							Metodos.crearFichero("Config/Backup.txt",
-									"/home/" + System.getProperty("user.name") + "/Desktop", false);
 
 						}
 					} else {
 
 						if (Metodos.comprobarConfiguracion()) {
 							Metodos.exportarBd(1);
-							Metodos.eliminarFichero("backupbd.bat");
+
+							if (!os.equals("Linux")) {
+								Metodos.eliminarFichero("backupbd.bat");
+
+							}
+
 						}
 
 					}
@@ -594,7 +635,7 @@ static String os=System.getProperty("os.name");
 				directorio.mkdir();
 
 				try {
-					Metodos.abrirCarpeta("imagenes",os);
+					Metodos.abrirCarpeta("imagenes", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -633,7 +674,7 @@ static String os=System.getProperty("os.name");
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("GifFrames",os);
+					Metodos.abrirCarpeta("GifFrames", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -652,7 +693,6 @@ static String os=System.getProperty("os.name");
 			public void mousePressed(MouseEvent e) {
 				video2Frames();
 			}
-
 
 		});
 		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
@@ -681,7 +721,7 @@ static String os=System.getProperty("os.name");
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("imagenes_para_recortar",os);
+					Metodos.abrirCarpeta("imagenes_para_recortar", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -836,7 +876,7 @@ static String os=System.getProperty("os.name");
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/",os);
+					Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -866,7 +906,7 @@ static String os=System.getProperty("os.name");
 		Metodos.comprobarArchivo("Config", false);
 
 		initComponents();
-		MultiplesFuentesDeEvento tecla=new MultiplesFuentesDeEvento();
+		MultiplesFuentesDeEvento tecla = new MultiplesFuentesDeEvento();
 		this.setVisible(true);
 	}
 
@@ -994,7 +1034,7 @@ static String os=System.getProperty("os.name");
 							Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
 						} else {
 							try {
-								Metodos.abrirCarpeta(directorioActual + "imagenes",os);
+								Metodos.abrirCarpeta(directorioActual + "imagenes", os);
 							} catch (IOException e1) {
 								Metodos.mensaje("Error", 1);
 							}
