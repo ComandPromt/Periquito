@@ -52,18 +52,24 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	void guardarDatos(Boolean mensaje) throws IOException {
+
 		FileWriter flS = new FileWriter("Config/Backup.txt");
 		BufferedWriter fS = new BufferedWriter(flS);
 
 		try {
+
 			String texto = jTextField1.getText().trim();
-			if (texto.isEmpty()) {
+
+			if (texto.isEmpty() && !MenuPrincipal.getOs().equals("Linux")) {
 				texto = "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop";
+			}
+
+			if (texto.isEmpty() && MenuPrincipal.getOs().equals("Linux")) {
+				texto = "/home/" + System.getProperty("user.name");
 			}
 
 			fS.write(texto);
 			fS.newLine();
-
 			dispose();
 
 			if (mensaje) {
@@ -120,7 +126,7 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 				try {
 					String texto = files[0].getCanonicalPath();
 					jTextField1.setText(texto);
-					guardarDatos(false);
+					guardarDatos(true);
 				} catch (Exception e1) {
 					Metodos.mensaje("Error al guardar la configuración", 1);
 				}

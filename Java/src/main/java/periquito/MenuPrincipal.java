@@ -30,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -95,13 +94,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem menuItem16;
 	private JSeparator separator14;
 	private JMenuItem menuItem17;
-	private JSeparator separator15;
-	private JMenu menu6;
-	private JLabel label;
-	private JRadioButton radioButton;
-	private JSeparator separator16;
-	private JLabel label1;
-	private JRadioButton radioButton1;
 	private JMenu menu7;
 	private JSeparator separator17;
 	private JMenuItem menuItem18;
@@ -120,14 +112,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
-	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 
 	@SuppressWarnings("all")
 	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+
 	String directorioActual;
 	static JComboBox<String> comboBox = new JComboBox<>();
 
-	transient LinkedList<String> listaImagenes = new LinkedList<>();
+	LinkedList<String> listaImagenes = new LinkedList<>();
 
 	public static String[] getLecturabd() {
 		return lecturabd;
@@ -278,6 +271,19 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
+	private void mensaje170() {
+		Metodos.mensaje("Tienes más de 170 imágenes", 3);
+		try {
+			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img", os);
+		} catch (IOException e1) {
+			try {
+				new Config().setVisible(true);
+			} catch (IOException e2) {
+				Metodos.mensaje("Error", 1);
+			}
+		}
+	}
+
 	public MenuPrincipal() throws Exception {
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
@@ -356,7 +362,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						Metodos.mensaje("Error", 1);
 					}
 				} else {
-					Metodos.mensaje("Tienes más de 170 imágenes", 3);
+					mensaje170();
 				}
 			}
 
@@ -448,28 +454,34 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					try {
 						videoToFrame();
+
 					} catch (Exception e1) {
 
 					}
 
-					LinkedList<String> imagenes = new LinkedList<String>();
-					imagenes = Metodos.directorio(
-							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output",
-							".");
-					File miDir = new File(".");
-					for (int x = 0; x < imagenes.size(); x++) {
+					if (Metodos.listarFicherosPorCarpeta(new File(
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output"),
+							".") <= 170) {
+						listaImagenes = Metodos.directorio(lectura[0] + separador + "FrameExtractor" + separador
+								+ "examples" + separador + "output", ".");
+						File miDir = new File(".");
+						for (int x = 0; x < listaImagenes.size(); x++) {
 
-						Files.move(
-								FileSystems.getDefault()
-										.getPath(lectura[0] + separador + "FrameExtractor" + separador + "examples"
-												+ separador + "output" + separador + imagenes.get(x)),
-								FileSystems.getDefault().getPath(lectura[0] + separador + "Hacer_gif" + separador
-										+ "img" + separador + imagenes.get(x)),
-								StandardCopyOption.REPLACE_EXISTING);
+							Files.move(
+									FileSystems.getDefault()
+											.getPath(lectura[0] + separador + "FrameExtractor" + separador + "examples"
+													+ separador + "output" + separador + listaImagenes.get(x)),
+									FileSystems.getDefault()
+											.getPath(lectura[0] + separador + "Hacer_gif" + separador + "img"
+													+ separador + listaImagenes.get(x)),
+									StandardCopyOption.REPLACE_EXISTING);
 
+						}
+
+						hacerGIF();
+					} else {
+						mensaje170();
 					}
-
-					hacerGIF();
 
 				} catch (IOException e1) {
 					try {
@@ -512,7 +524,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					} else {
 
 						if (Metodos.comprobarConfiguracion()) {
-							Metodos.exportarBd(1);
+
+							lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
+							Metodos.exportarBd(Integer.parseInt(lecturabd[6]));
 
 							if (!os.equals("Linux")) {
 								Metodos.eliminarFichero("backupbd.bat");
@@ -807,60 +821,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem17.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		mnConfig.add(menuItem17);
 
-		separator15 = new JSeparator();
-		mnConfig.add(separator15);
-
-		menu6 = new JMenu("OS");
-		menu6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/os.png")));
-		menu6.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mnConfig.add(menu6);
-
-		label = new JLabel("");
-		label.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/Windows.png")));
-		label.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		menu6.add(label);
-
-		radioButton = new JRadioButton("WIN");
-		radioButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					Metodos.crearFichero("Config/OS.txt", "1", false);
-					separador = Metodos.saberseparador(Integer.parseInt(os));
-					directorioActual = new File(".").getCanonicalPath() + separador;
-				} catch (IOException e1) {
-					Metodos.mensaje("No se ha podido guardar el archivo OS.txt", 1);
-				}
-			}
-		});
-		radioButton.setHorizontalAlignment(SwingConstants.CENTER);
-		radioButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		menu6.add(radioButton);
-
-		separator16 = new JSeparator();
-		menu6.add(separator16);
-
-		label1 = new JLabel("");
-		label1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/linux.png")));
-		menu6.add(label1);
-
-		radioButton1 = new JRadioButton("Linux");
-		radioButton1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					Metodos.crearFichero("Config/OS.txt", "2", false);
-					separador = Metodos.saberseparador(Integer.parseInt(os));
-					directorioActual = new File(".").getCanonicalPath() + separador;
-				} catch (IOException e1) {
-					Metodos.mensaje("No se ha podido guardar el archivo OS.txt", 1);
-				}
-			}
-		});
-		radioButton1.setHorizontalAlignment(SwingConstants.CENTER);
-		radioButton1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		menu6.add(radioButton1);
-
 		menu7 = new JMenu("Ayuda");
 		menu7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/help.png")));
 		menu7.setForeground(Color.DARK_GRAY);
@@ -876,7 +836,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("https://demos.algorithmia.com/colorize-photos/", os);
+					Metodos.abrirCarpeta("https://colourise.sg", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
