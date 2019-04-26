@@ -47,9 +47,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import utils.DragAndDrop;
 import utils.ImageResizer;
 import utils.Metodos;
-import utils.MultiplesFuentesDeEvento;
 import utils.MyInterface;
 import utils.PhotoFrame;
+import utils.interfaz;
 
 @SuppressWarnings("all")
 
@@ -99,6 +99,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem menuItem18;
 	private JSeparator separator18;
 	private JMenuItem menuItem19;
+	static LinkedList<String> imagenes = new LinkedList<>();
+
+	public static LinkedList<String> getImagenes() {
+		return imagenes;
+	}
 
 	public static String getOs() {
 		return os;
@@ -112,6 +117,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
+	public static String[] getLecturaurl() {
+		return lecturaurl;
+	}
+
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 
 	@SuppressWarnings("all")
@@ -121,6 +130,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	static JComboBox<String> comboBox = new JComboBox<>();
 
 	LinkedList<String> listaImagenes = new LinkedList<>();
+	private JMenuItem mntmNewMenuItem;
 
 	public static String[] getLecturabd() {
 		return lecturabd;
@@ -633,6 +643,52 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem7.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu.add(menuItem7);
 
+		JSeparator separator_1 = new JSeparator();
+		menu.add(separator_1);
+
+		mntmNewMenuItem = new JMenuItem("Buscar imagen");
+		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+
+				try {
+
+					String busqueda = Metodos.mostrarDialogo();
+					busqueda = busqueda.trim();
+
+					if (!busqueda.isEmpty()) {
+
+						Connection conexion = Metodos.conexionBD();
+
+						Statement s = conexion.createStatement();
+						ResultSet rs;
+						rs = s.executeQuery("select image_media_file from " + lecturabd[3]
+								+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+
+						while (rs.next()) {
+
+							imagenes.add(rs.getString("image_media_file"));
+
+						}
+
+						s.close();
+						rs.close();
+
+						new interfaz().setVisible(true);
+
+					} else {
+						Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
+					}
+
+				} catch (Exception e) {
+					//
+				}
+			}
+		});
+		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));
+		mntmNewMenuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/lupa.png")));
+		menu.add(mntmNewMenuItem);
+
 		menu4 = new JMenu("    ");
 		menu4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		menu4.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -866,7 +922,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		Metodos.comprobarArchivo("Config", false);
 
 		initComponents();
-		MultiplesFuentesDeEvento tecla = new MultiplesFuentesDeEvento();
 		this.setVisible(true);
 	}
 

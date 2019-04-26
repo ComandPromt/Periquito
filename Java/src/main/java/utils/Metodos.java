@@ -34,6 +34,7 @@ import java.util.Scanner;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -49,6 +50,15 @@ public abstract class Metodos {
 
 	private Metodos() {
 		super();
+	}
+
+	public static String mostrarDialogo() {
+
+		JFrame frame = new JFrame("Introduce un nombre para buscar");
+
+		String name = JOptionPane.showInputDialog(frame, "Introduce un nombre para buscar");
+
+		return name;
 	}
 
 	private static String readAll(Reader rd) throws IOException {
