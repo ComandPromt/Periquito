@@ -3,7 +3,14 @@ package periquito;
 public class DriverSeleniumChrome extends DriverSelenium {
 
 	public DriverSeleniumChrome() {
-		//System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
-		 System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+
+		if (MenuPrincipal.getOs().equals("Linux")) {
+			System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+		}
+
+		else {
+			System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+		}
+
 	}
 }

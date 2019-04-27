@@ -12,21 +12,24 @@ import javax.swing.ImageIcon;
 
 import periquito.MenuPrincipal;
 
-/**
- * @web http://www.jc-mouse.net/
- * @author Mouse
- */
 public class Galeria {
-	// para almacenar las imagene
-	private ArrayList<ImageIcon> fotos = new ArrayList<ImageIcon>();
+
+	private ArrayList<ImageIcon> fotos = new ArrayList<>();
+	int numeroImagenes;
+
+	public int getNumeroImagenes() {
+		return numeroImagenes;
+	}
 
 	public Galeria() {
 
 		try {
 
 			for (int i = 0; i < MenuPrincipal.getImagenes().size(); i++) {
-				fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://192.168.1.2/"
-						+ MenuPrincipal.getLecturaurl()[1] + "/data/media/3/" + MenuPrincipal.getImagenes().get(i)))));
+				fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + MenuPrincipal.getLecturaurl()[0]
+						+ "/" + MenuPrincipal.getLecturaurl()[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i)
+						+ "/" + MenuPrincipal.getImagenes().get(i)))));
+				numeroImagenes++;
 			}
 
 		} catch (IOException e) {
@@ -37,7 +40,7 @@ public class Galeria {
 
 	/* devuelve una imagen de tamaño 100x100 VISTA PREVIA */
 	public Icon getPreview(int num) {
-		if (num >= 0 & num < fotos.size()) {
+		if (num >= 0 && num < fotos.size()) {
 			Image mini = fotos.get(num).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING);
 			return new ImageIcon(mini);
 		} else {
@@ -50,30 +53,30 @@ public class Galeria {
 	 * redimensiona
 	 */
 	public Icon getFoto(int num, Dimension d) {
-		int original_width = fotos.get(num).getIconWidth();
-		int original_height = fotos.get(num).getIconHeight();
-		int bound_width = d.width;
-		int bound_height = d.height;
-		int new_width = original_width;
-		int new_height = original_height;
+		int originalWidth = fotos.get(num).getIconWidth();
+		int originalHeight = fotos.get(num).getIconHeight();
+		int boundWidth = d.width;
+		int boundHeight = d.height;
+		int newWidth = originalWidth;
+		int newHeight = originalHeight;
 
 		// first check if we need to scale width
-		if (original_width > bound_width) {
+		if (originalWidth > boundWidth) {
 			// scale width to fit
-			new_width = bound_width;
+			newWidth = boundWidth;
 			// scale height to maintain aspect ratio
-			new_height = (new_width * original_height) / original_width;
+			newHeight = (newWidth * originalHeight) / originalWidth;
 		}
 
 		// then check if we need to scale even with the new height
-		if (new_height > bound_height) {
+		if (newHeight > boundHeight) {
 			// scale height to fit instead
-			new_height = bound_height;
+			newHeight = boundHeight;
 			// scale width to maintain aspect ratio
-			new_width = (new_height * original_width) / original_height;
+			newWidth = (newHeight * originalWidth) / originalHeight;
 		}
 
-		Image mini = fotos.get(num).getImage().getScaledInstance(new_width, new_height, Image.SCALE_AREA_AVERAGING);
+		Image mini = fotos.get(num).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_AREA_AVERAGING);
 		return new ImageIcon(mini);
 	}
 

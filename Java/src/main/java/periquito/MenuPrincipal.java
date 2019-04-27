@@ -45,11 +45,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.DragAndDrop;
+import utils.Galeria;
 import utils.ImageResizer;
+import utils.InterfazGaleria;
 import utils.Metodos;
 import utils.MyInterface;
 import utils.PhotoFrame;
-import utils.interfaz;
 
 @SuppressWarnings("all")
 
@@ -99,10 +100,16 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem menuItem18;
 	private JSeparator separator18;
 	private JMenuItem menuItem19;
+	LinkedList<String> listaImagenes = new LinkedList<>();
 	static LinkedList<String> imagenes = new LinkedList<>();
+	static LinkedList<String> categorias = new LinkedList<>();
 
 	public static LinkedList<String> getImagenes() {
 		return imagenes;
+	}
+
+	public static LinkedList<String> getCategorias() {
+		return categorias;
 	}
 
 	public static String getOs() {
@@ -129,7 +136,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	String directorioActual;
 	static JComboBox<String> comboBox = new JComboBox<>();
 
-	LinkedList<String> listaImagenes = new LinkedList<>();
 	private JMenuItem mntmNewMenuItem;
 
 	public static String[] getLecturabd() {
@@ -662,19 +668,26 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						Statement s = conexion.createStatement();
 						ResultSet rs;
-						rs = s.executeQuery("select image_media_file from " + lecturabd[3]
+						rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
 								+ "images WHERE image_name LIKE '%" + busqueda + "%'");
 
 						while (rs.next()) {
 
 							imagenes.add(rs.getString("image_media_file"));
-
+							categorias.add(rs.getString("cat_id"));
 						}
 
 						s.close();
 						rs.close();
 
-						new interfaz().setVisible(true);
+						Galeria Mi_Galeria = new Galeria();
+						if (Mi_Galeria.getNumeroImagenes() == 0) {
+
+							Metodos.mensaje("No hay resultados,intente con otro nombre", 2);
+
+						} else {
+							new InterfazGaleria().setVisible(true);
+						}
 
 					} else {
 						Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);

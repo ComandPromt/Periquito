@@ -19,10 +19,14 @@ public abstract class ImageResizer {
 	static int maxHeight = 630;
 
 	public static void copyImage(String filePath, String copyPath) {
+		BufferedImage bimage = null;
+
 		try {
 
-			BufferedImage bimage = loadImage(filePath);
-			if (bimage.getHeight() > 480 && bimage.getWidth() > 640) {
+			bimage = loadImage(filePath);
+
+			if (bimage != null && bimage.getHeight() > 480 && bimage.getWidth() > 640) {
+
 				if (bimage.getHeight() > bimage.getWidth()) {
 					int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();
 					bimage = resize(bimage, maxWidth, heigt);
