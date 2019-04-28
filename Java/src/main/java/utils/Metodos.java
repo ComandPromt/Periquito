@@ -534,13 +534,16 @@ public abstract class Metodos {
 		case 1:
 			Metodos.crearFichero("Config/Config.txt", ruta + System.getProperty("user.name") + separador + "Downloads",
 					false);
+
 			Config guardar = new Config();
 			guardar.guardarDatos(false);
+
 			break;
 
 		case 2:
 
 			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1\r" + "4images_", false);
+
 			Config2 guardar2 = new Config2();
 
 			guardar2.guardarDatos(false);
@@ -552,10 +555,6 @@ public abstract class Metodos {
 			break;
 
 		case 4:
-			Metodos.crearFichero("Config/OS.txt", "1", false);
-			break;
-
-		case 5:
 
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
 					+ separador + "output", "", true);

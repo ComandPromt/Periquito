@@ -15,25 +15,25 @@ import periquito.MenuPrincipal;
 public class Galeria {
 
 	private ArrayList<ImageIcon> fotos = new ArrayList<>();
-	int numeroImagenes;
-
-	public int getNumeroImagenes() {
-		return numeroImagenes;
-	}
 
 	public Galeria() {
 
 		try {
 
-			for (int i = 0; i < MenuPrincipal.getImagenes().size(); i++) {
-				fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + MenuPrincipal.getLecturaurl()[0]
-						+ "/" + MenuPrincipal.getLecturaurl()[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i)
-						+ "/" + MenuPrincipal.getImagenes().get(i)))));
-				numeroImagenes++;
+			int numeroImagenes = MenuPrincipal.getImagenes().size();
+
+			String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+
+			for (int i = 0; i < numeroImagenes; i++) {
+
+				fotos.add(new javax.swing.ImageIcon(
+						ImageIO.read(new URL("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
+								+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getImagenes().get(i)))));
+
 			}
 
 		} catch (IOException e) {
-			//
+			Metodos.mensaje("No se han podido cargar las imágenes", 1);
 		}
 
 	}
@@ -87,4 +87,5 @@ public class Galeria {
 	public void setFotos(ArrayList<ImageIcon> fotos) {
 		this.fotos = fotos;
 	}
+
 }

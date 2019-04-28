@@ -82,7 +82,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 			fS.close();
 			flS.close();
 			dispose();
-			MenuPrincipal.setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
+
 			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}

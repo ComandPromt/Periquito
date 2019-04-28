@@ -78,7 +78,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	}
 
 	public void guardarDatos(Boolean mensaje) throws IOException, SQLException {
-		dispose();
 		FileWriter flS = new FileWriter("Config/Bd.txt");
 		BufferedWriter fS = new BufferedWriter(flS);
 
@@ -100,8 +99,11 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			fS.close();
 			flS.close();
 
-			if (mensaje) {
+			dispose();
 
+			MenuPrincipal.setLecturabd(Metodos.leerFicheroArray("Config/Bd.txt", 7));
+
+			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);
 
 				Metodos.ponerCategoriasBd(MenuPrincipal.comboBox);

@@ -70,7 +70,10 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 
 			fS.write(texto);
 			fS.newLine();
+
 			dispose();
+
+			MenuPrincipal.setLecturabackup(Metodos.leerFicheroArray("Config/Backup.txt", 1));
 
 			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);

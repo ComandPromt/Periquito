@@ -31,6 +31,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		fotoB.setIcon(miGaleria.getPreview(1));
 		fotoC.setIcon(miGaleria.getPreview(2));
 		fotoD.setIcon(miGaleria.getPreview(3));
+		fotoGrande.setIcon(miGaleria.getFoto(0, fotoGrande.getSize()));
 	}
 
 	private void initComponents() {
@@ -280,6 +281,11 @@ public class InterfazGaleria extends javax.swing.JFrame {
 
 	private void cmdNextActionPerformed(java.awt.event.ActionEvent evt) {
 
+		if (paso == 0 && posicionactual == 0 && size > 1) {
+			posicionactual += 1;
+			verImagen(posicionactual);
+			paso = posicionactual;
+		}
 		if (paso == size || posicionactual == size) {
 			fotoA.setIcon(miGaleria.getPreview(size - 3));
 			fotoB.setIcon(miGaleria.getPreview(size - 2));

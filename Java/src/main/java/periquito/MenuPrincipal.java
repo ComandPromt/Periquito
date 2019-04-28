@@ -130,8 +130,16 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 
+	public static void setLecturabd(String[] lecturabd) {
+		MenuPrincipal.lecturabd = lecturabd;
+	}
+
 	@SuppressWarnings("all")
 	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+
+	public static void setLecturabackup(String[] lecturabackup) {
+		lecturabackup = lecturabackup;
+	}
 
 	String directorioActual;
 	static JComboBox<String> comboBox = new JComboBox<>();
@@ -316,10 +324,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 
 		if (os == null || os.equals("")) {
-			Metodos.guardarConfig(4, separador);
-		}
-
-		if (os == null || os.equals("")) {
 			os = "1";
 			separador = Metodos.saberseparador(Integer.parseInt(os));
 		}
@@ -396,7 +400,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			public void mousePressed(MouseEvent e) {
 				try {
 					if (Metodos.probarconexion("www.google.com")) {
-						LinkedList<String> imagenes = new LinkedList<String>();
+
 						imagenes = Metodos.directorio("GifFrames", "gif");
 						if (Metodos.listarFicherosPorCarpeta(new File("GifFrames"), "gif") == 1) {
 
@@ -661,32 +665,49 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					String busqueda = Metodos.mostrarDialogo();
 					busqueda = busqueda.trim();
-
+					int recuento;
 					if (!busqueda.isEmpty()) {
 
 						Connection conexion = Metodos.conexionBD();
 
 						Statement s = conexion.createStatement();
-						ResultSet rs;
-						rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
+
+						ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
 								+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+						rs.next();
+						recuento = Integer.parseInt(rs.getString("count(image_id)"));
 
-						while (rs.next()) {
+						if (recuento > 0) {
+							if (recuento > 500) {
+								Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+								Metodos.mensaje("Por favor,introduce un nombre con menos registros para mostrarlos", 2);
 
-							imagenes.add(rs.getString("image_media_file"));
-							categorias.add(rs.getString("cat_id"));
+							} else {
+								rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
+										+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+
+								while (rs.next()) {
+									imagenes.add(rs.getString("image_media_file"));
+									categorias.add(rs.getString("cat_id"));
+								}
+
+							}
 						}
 
 						s.close();
 						rs.close();
 
-						Galeria Mi_Galeria = new Galeria();
-						if (Mi_Galeria.getNumeroImagenes() == 0) {
+						if (recuento == 0) {
 
-							Metodos.mensaje("No hay resultados,intente con otro nombre", 2);
+							Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
 
 						} else {
-							new InterfazGaleria().setVisible(true);
+
+							if (recuento < 500) {
+								Galeria Mi_Galeria = new Galeria();
+								new InterfazGaleria().setVisible(true);
+							}
+
 						}
 
 					} else {
@@ -736,7 +757,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
+					lectura = (Metodos.leerFicheroArray("Config/Config.txt", 2));
 					Metodos.comprobarConexion("Config/Config.txt",
 							lectura[0] + separador + "Hacer_gif" + separador + "img");
 				} catch (Exception e1) {
@@ -945,7 +966,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		if (Metodos.comprobarArchivo("Config/Config.txt", true)) {
 
 			try {
-				Metodos.guardarConfig(5, separador);
+				Metodos.guardarConfig(4, separador);
 			} catch (IOException e1) {
 				Metodos.mensaje("Error al guardar la configuración", 1);
 			}
@@ -1175,14 +1196,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	public static String[] getLectura() {
 		return lectura;
-	}
-
-	public static void setLectura(String[] lectura) {
-		MenuPrincipal.lectura = lectura;
-	}
-
-	public static void setLecturaurl(String[] lecturaurl) {
-		MenuPrincipal.lecturaurl = lecturaurl;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
