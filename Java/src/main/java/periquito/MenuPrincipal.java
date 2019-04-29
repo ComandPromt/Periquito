@@ -368,21 +368,29 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				try {
+					int recuento = Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".");
+					if (recuento <= 170) {
+						if (os.equals("Linux")) {
 
-				int recuento = Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".");
-				if (recuento <= 170) {
-					if (os.equals("Linux")) {
+							cambiarPermisos();
 
-						cambiarPermisos();
-
+						}
+						try {
+							hacerGIF();
+						} catch (IOException e1) {
+							Metodos.mensaje("Error", 1);
+						}
+					} else {
+						mensaje170();
 					}
+				} catch (Exception e1) {
 					try {
-						hacerGIF();
-					} catch (IOException e1) {
-						Metodos.mensaje("Error", 1);
+						new Config().setVisible(true);
+					} catch (IOException e2) {
+//
 					}
-				} else {
-					mensaje170();
+
 				}
 			}
 
@@ -503,7 +511,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						mensaje170();
 					}
 
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					try {
 						new Config().setVisible(true);
 					} catch (IOException e2) {
@@ -553,8 +561,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 							}
 
-						}
+						} else {
+							new Bd().setVisible(true);
 
+						}
 					}
 				} catch (IOException e1) {
 				}
@@ -657,63 +667,69 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				if (Metodos.comprobarConexionBd()) {
 
-				try {
+					try {
+						if (Metodos.comprobarConfiguracion()) {
 
-					String busqueda = Metodos.mostrarDialogo();
-					busqueda = busqueda.trim();
-					int recuento;
-					if (!busqueda.isEmpty()) {
+							String busqueda = Metodos.mostrarDialogo();
+							busqueda = busqueda.trim();
+							int recuento;
+							if (!busqueda.isEmpty()) {
 
-						Connection conexion = Metodos.conexionBD();
+								Connection conexion = Metodos.conexionBD();
 
-						Statement s = conexion.createStatement();
+								Statement s = conexion.createStatement();
 
-						ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
-								+ "images WHERE image_name LIKE '%" + busqueda + "%'");
-						rs.next();
-						recuento = Integer.parseInt(rs.getString("count(image_id)"));
-
-						if (recuento > 0) {
-							if (recuento > 500) {
-								Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
-								Metodos.mensaje("Por favor,introduce un nombre con menos registros para mostrarlos", 2);
-
-							} else {
-								rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
+								ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
 										+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+								rs.next();
+								recuento = Integer.parseInt(rs.getString("count(image_id)"));
 
-								while (rs.next()) {
-									imagenes.add(rs.getString("image_media_file"));
-									categorias.add(rs.getString("cat_id"));
+								if (recuento > 0) {
+									if (recuento > 500) {
+										Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+										Metodos.mensaje(
+												"Por favor,introduce un nombre con menos registros para mostrarlos", 2);
+
+									} else {
+										rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
+												+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+
+										while (rs.next()) {
+											imagenes.add(rs.getString("image_media_file"));
+											categorias.add(rs.getString("cat_id"));
+										}
+
+									}
 								}
 
+								s.close();
+								rs.close();
+
+								if (recuento == 0) {
+
+									Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+
+								} else {
+
+									if (recuento < 500) {
+										Galeria Mi_Galeria = new Galeria();
+										new InterfazGaleria().setVisible(true);
+									}
+
+								}
+
+							} else {
+								Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
 							}
-						}
-
-						s.close();
-						rs.close();
-
-						if (recuento == 0) {
-
-							Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
-
-						} else {
-
-							if (recuento < 500) {
-								Galeria Mi_Galeria = new Galeria();
-								new InterfazGaleria().setVisible(true);
-							}
 
 						}
+					} catch (Exception e1) {
 
-					} else {
-						Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
 					}
-
-				} catch (Exception e) {
-					//
 				}
+
 			}
 		});
 		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));

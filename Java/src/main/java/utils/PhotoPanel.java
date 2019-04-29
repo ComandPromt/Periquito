@@ -174,20 +174,36 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				count += numeroImagen;
 			}
 
-			if (!PhotoFrame.rdbtnMultipleCrop.isSelected()) {
+			if (PhotoFrame.rdbtnMultipleCrop.isSelected()) {
 
 				vueltas = listaImagenes.size();
+			} else {
+
+				String imagenSelecionada = PhotoFrame.fileChooser.getSelectedFile().toString();
+
+				imagenSelecionada = imagenSelecionada.substring(
+						imagenSelecionada.lastIndexOf(MenuPrincipal.getSeparador()) + 1, imagenSelecionada.length());
+
+				listaImagenes.set(0, imagenSelecionada);
 			}
 
+			String extension;
 			for (int x = 0; x < vueltas; x++) {
 
+				extension = listaImagenes.get(x).substring(listaImagenes.get(x).length() - 3,
+						listaImagenes.get(x).length());
+
+				if (extension.equals("peg")) {
+					extension = "jpg";
+				}
 				photo = ImageIO.read(new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador()
 						+ listaImagenes.get(x)));
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
-				ImageIO.write(tmpRecorte, "jpg",
+
+				ImageIO.write(tmpRecorte, extension,
 						new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"
-								+ MenuPrincipal.getSeparador() + "Image_" + count + ".jpg"));
+								+ MenuPrincipal.getSeparador() + "Image_" + count + "." + extension));
 				count++;
 			}
 

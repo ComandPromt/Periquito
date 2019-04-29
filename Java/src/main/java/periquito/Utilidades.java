@@ -50,7 +50,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	private JTextField nombre;
 
 	public Utilidades() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/utilities.png")));
 		try {
 			if (Metodos.comprobarConexion(true)) {
 

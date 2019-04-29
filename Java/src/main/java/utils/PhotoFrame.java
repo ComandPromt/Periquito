@@ -31,6 +31,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 	static JRadioButton rdbtnMultipleCrop;
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
+	static JFileChooser fileChooser = new JFileChooser();
 
 	private void rabioBoxPorDefecto() {
 		if (!rdbtnMultipleCrop.isSelected() && !rdbtnSingle.isSelected()) {
@@ -141,7 +142,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 	}
 
 	private void jMenuItem1ActionPerformed() throws IOException {// GEN-FIRST:event_jMenuItem1ActionPerformed
-		JFileChooser fileChooser = new JFileChooser();
+
 		File miDir = new File(".");
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Imagen", "jpg", "png"));
 

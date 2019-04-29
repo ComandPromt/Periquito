@@ -121,7 +121,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	}
 
 	public Bd() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Bd.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Bd.class.getResource("/imagenes/db.png")));
 		setTitle("Periquito v3 Config DB");
 		setType(Type.UTILITY);
 		initComponents();

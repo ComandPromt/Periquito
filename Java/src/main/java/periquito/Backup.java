@@ -93,7 +93,7 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public Backup() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Backup.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Backup.class.getResource("/imagenes/bd.png")));
 		setTitle("Periquito v3 Backup");
 		setType(Type.UTILITY);
 		initComponents();

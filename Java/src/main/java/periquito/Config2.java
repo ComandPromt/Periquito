@@ -91,7 +91,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public Config2() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
 		setTitle("Periquito v3 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();

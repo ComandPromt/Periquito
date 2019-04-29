@@ -98,7 +98,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public Config() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Config.class.getResource("/imagenes/config.png")));
 		setTitle("Periquito v3 Config ");
 		setType(Type.UTILITY);
 		initComponents();

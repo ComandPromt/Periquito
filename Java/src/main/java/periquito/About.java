@@ -17,7 +17,7 @@ import javax.swing.event.ChangeListener;
 public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	public About() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
 		setTitle("Periquito v3 About");
 		setType(Type.UTILITY);
 		initComponents();
@@ -32,12 +32,12 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 		setResizable(false);
 
 		JTextArea txtrAdvertenciaLa = new JTextArea();
-		txtrAdvertenciaLa.setFont(new Font("Arial", Font.BOLD, 18));
+		txtrAdvertenciaLa.setFont(new Font("Dialog", Font.BOLD, 16));
 		txtrAdvertenciaLa.setWrapStyleWord(true);
 		txtrAdvertenciaLa.setEditable(false);
 		txtrAdvertenciaLa.setLineWrap(true);
 		txtrAdvertenciaLa.setText(
-				"---------------------------------------------\r\n                Periquito GUI\r\n---------------------------------------------\r\n\r\n Creado por: ComandPromt\r\n\r\n Email: smr2gocar@gmail.com");
+				"--------------------------------------\r\n            Periquito GUI\r\n--------------------------------------\r\n\r\nCreado por: ComandPromt\n\r\nEmail: smr2gocar@gmail.com");
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(25)
