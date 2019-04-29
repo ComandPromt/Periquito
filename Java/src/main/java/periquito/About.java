@@ -2,6 +2,7 @@ package periquito;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,6 +17,7 @@ import javax.swing.event.ChangeListener;
 public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	public About() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/maxresdefault.jpg")));
 		setTitle("Periquito v3 About");
 		setType(Type.UTILITY);
 		initComponents();

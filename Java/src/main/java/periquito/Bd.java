@@ -2,6 +2,7 @@ package periquito;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -45,7 +46,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	private JLabel lblNewLabel_2;
 	JRadioButton rdbtnXampp = new JRadioButton("XAMPP");
 	JRadioButton rdbtnAppserv = new JRadioButton("APPServ");
-	String servidorWebWindows = "1";
+	String servidorWeb = "1";
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException, SQLException {
@@ -95,7 +96,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			fS.newLine();
 			fS.write(direccion.getText().trim());
 			fS.newLine();
-			fS.write(servidorWebWindows);
+			fS.write(servidorWeb);
 			fS.close();
 			flS.close();
 
@@ -120,10 +121,19 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	}
 
 	public Bd() throws IOException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Bd.class.getResource("/imagenes/maxresdefault.jpg")));
 		setTitle("Periquito v3 Config DB");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
+	}
+
+	private void servidorWebPorDefecto(JRadioButton rdbtnWamp) {
+		if (!rdbtnWamp.isSelected() && !rdbtnXampp.isSelected() && !rdbtnAppserv.isSelected()
+
+		) {
+			rdbtnAppserv.setSelected(true);
+		}
 	}
 
 	@SuppressWarnings("all")
@@ -199,18 +209,30 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		rdbtnWamp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				servidorWebWindows = "2";
+				servidorWeb = "2";
 				rdbtnAppserv.setSelected(false);
 				rdbtnXampp.setSelected(false);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				servidorWebPorDefecto(rdbtnWamp);
+
 			}
 		});
 		rdbtnWamp.setFont(new Font("Dialog", Font.BOLD, 16));
 		rdbtnXampp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				servidorWebWindows = "3";
+				servidorWeb = "3";
 				rdbtnWamp.setSelected(false);
 				rdbtnAppserv.setSelected(false);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				servidorWebPorDefecto(rdbtnWamp);
+
 			}
 		});
 
@@ -220,10 +242,16 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		rdbtnAppserv.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				servidorWebWindows = "1";
+				servidorWeb = "1";
 				rdbtnWamp.setSelected(false);
 				rdbtnXampp.setSelected(false);
 			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				servidorWebPorDefecto(rdbtnWamp);
+			}
+
 		});
 		rdbtnAppserv.setFont(new Font("Dialog", Font.BOLD, 16));
 

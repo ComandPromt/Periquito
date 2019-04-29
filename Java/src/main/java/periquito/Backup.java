@@ -2,6 +2,7 @@ package periquito;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -92,6 +93,7 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 	}
 
 	public Backup() throws IOException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Backup.class.getResource("/imagenes/maxresdefault.jpg")));
 		setTitle("Periquito v3 Backup");
 		setType(Type.UTILITY);
 		initComponents();

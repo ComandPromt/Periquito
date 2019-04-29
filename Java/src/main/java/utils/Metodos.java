@@ -421,14 +421,15 @@ public abstract class Metodos {
 		}
 	}
 
-	public static boolean comprobarConexion() throws IOException {
+	public static boolean comprobarConexion(boolean mensaje) throws IOException {
 
 		boolean conexion = false;
 		try {
 			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 7);
 
-			if (lectura2[5] != null || !lectura2[5].isEmpty()) {
+			if (!lectura2[5].isEmpty()) {
 				try {
+
 					InetAddress ping;
 
 					ping = InetAddress.getByName(lectura2[5]);
@@ -441,9 +442,11 @@ public abstract class Metodos {
 				}
 			}
 		} catch (Exception e) {
-			Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 2);
-
+			if (mensaje) {
+				Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 2);
+			}
 		}
+
 		return conexion;
 
 	}
@@ -452,25 +455,26 @@ public abstract class Metodos {
 
 		boolean comprobacion = false;
 
-		if (!Metodos.comprobarConexion()) {
+		if (Metodos.comprobarConexion(true)) {
 			comprobacion = true;
 		}
 
-		if (!Metodos.probarconexion("www.google.com")) {
-			comprobacion = true;
-			mensaje("No tienes Internet", 1);
-		}
+		else {
 
-		if (!comprobacion) {
-			try {
-				if (conexionBD() != null) {
-					comprobacion = true;
+			if (!Metodos.probarconexion("www.google.com")) {
+				mensaje("No tienes Internet", 1);
+			}
+
+			if (!comprobacion) {
+				try {
+					if (conexionBD() != null) {
+						comprobacion = true;
+					}
+				} catch (SQLException e) {
+					new Bd().setVisible(true);
 				}
-			} catch (SQLException e) {
-				new Bd().setVisible(true);
 			}
 		}
-
 		return comprobacion;
 
 	}
@@ -479,7 +483,7 @@ public abstract class Metodos {
 
 		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 7);
 
-		if (comprobarConexion()) {
+		if (comprobarConexion(false)) {
 
 			return DriverManager.getConnection("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0], lectura2[1],
 					lectura2[2]);

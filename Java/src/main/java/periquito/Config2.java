@@ -2,6 +2,7 @@ package periquito;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -90,6 +91,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 	}
 
 	public Config2() throws IOException {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/maxresdefault.jpg")));
 		setTitle("Periquito v3 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();

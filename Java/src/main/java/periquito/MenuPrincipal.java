@@ -573,12 +573,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				if (!Metodos.comprobarConexionBd()) {
-					try {
-						Metodos.mensaje("Compuebe que exista una tabla llamada notas en la base de datos", 3);
-						new Bd().setVisible(true);
-					} catch (IOException e1) {
 
-					}
+					Metodos.mensaje("Compuebe que exista una tabla llamada notas en la base de datos", 3);
 
 				} else {
 					try {
@@ -604,9 +600,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			public void mousePressed(MouseEvent e) {
 				try {
 					if (Metodos.comprobarConfiguracion()) {
-
 						new Utilidades().setVisible(true);
 
+					} else {
+						new Bd().setVisible(true);
 					}
 				} catch (Exception e1) {
 					//
@@ -1168,7 +1165,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		setSize(new Dimension(560, 438));
 		setLocationRelativeTo(null);
 		try {
-			if (Metodos.comprobarConexion()) {
+			if (Metodos.comprobarConexion(true)) {
 
 				Metodos.ponerCategoriasBd(comboBox);
 			}

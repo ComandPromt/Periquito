@@ -153,10 +153,15 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 	private void saveImage() throws Exception {
 
 		String directorioActual = new File(".").getCanonicalPath() + MenuPrincipal.getSeparador();
+
 		LinkedList<String> listaImagenes = new LinkedList<>();
+
 		listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
 
 		if (!listaImagenes.isEmpty()) {
+
+			int vueltas = 1;
+
 			Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", MenuPrincipal.getSeparador());
 
 			count = 1;
@@ -165,10 +170,17 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 					new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"));
 
 			if (numeroImagen > 0) {
+
 				count += numeroImagen;
 			}
 
-			for (int x = 0; x < listaImagenes.size(); x++) {
+			if (!PhotoFrame.rdbtnMultipleCrop.isSelected()) {
+
+				vueltas = listaImagenes.size();
+			}
+
+			for (int x = 0; x < vueltas; x++) {
+
 				photo = ImageIO.read(new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador()
 						+ listaImagenes.get(x)));
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,

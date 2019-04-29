@@ -3,6 +3,7 @@ package periquito;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -49,8 +50,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	private JTextField nombre;
 
 	public Utilidades() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/maxresdefault.jpg")));
 		try {
-			if (Metodos.comprobarConexion()) {
+			if (Metodos.comprobarConexion(true)) {
 
 				Metodos.ponerCategoriasBd(comboBox);
 			}
@@ -172,8 +174,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							FileWriter flS = new FileWriter("Config/SQL.sql");
 							BufferedWriter fS = new BufferedWriter(flS);
 
-							String separador = Metodos
-									.saberseparador(Integer.parseInt(MenuPrincipal.getOs()));
+							String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getOs()));
 
 							for (int i = 0; i < files.length; i++) {
 								imagen = files[i].toString();
