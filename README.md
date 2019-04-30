@@ -4,7 +4,7 @@
 
 # 1. ¿Qué es Periquito v3.0?
 
-- Este programa principalmente está pensado para subir imágenes masivas a un CMS de gestión de imágenes creando imágenes ( 640 x 480 px ) con su correspondiente miniatura (100 x 125 px )
+- Este programa principalmente está pensado para subir imágenes masivas a un CMS de gestión de imágenes
 
 ---
 
@@ -18,56 +18,48 @@
 ---
 
 ## 1.2 Requisitos
+### Sistemas Operativos soportados
 
-- Ffmpeg (se instala en el servidor,es decir, en el equipo del CMS)
+-Windows Vista o posterior
 
-- Google Chrome
+-Linux
 
-[Chrome](https://www.google.com/intl/es_ALL/chrome/)
+### Dependencias
 
-- Servidor web con base de datos MySQL (WAMP ,LAMP,MAMP o XAMPP)
+- Windows
 
-[Windows](http://prdownloads.sourceforge.net/appserv/appserv-win32-8.6.0.exe?download)
+[Google Chrome](https://www.google.com/intl/es_ALL/chrome/)
 
-### Linux
-~~~bash
-sudo apt update
-sudo apt install apache2
-
-# Abra el archivo de configuración principal con su editor de texto:
-
-sudo nano /etc/apache2/apache2.conf
-
-# Escribimos ServerName dominio_del_servidor_o_IP 
-
-# Guardamos y cerramos el archivo
-
-sudo systemctl restart apache2
-
-sudo apt install mysql-server php mysql-client
-
-sudo apt install php libapache2-mod-php php-mcrypt php-mysql php-cli
-
-sudo systemctl restart apache2
-~~~
-
-- Java
+[Chrome Driver](http://chromedriver.chromium.org/downloads)
 
 [Java](https://www.java.com/es/download/)
 
-- CMS
+[Wamp](http://prdownloads.sourceforge.net/appserv/appserv-win32-8.6.0.exe?download)
 
-[CMS](https://github.com/ComandPromt/4images-UPDATED)
+[FFMPEG](http://ffmpeg.org/download.html)
+
+- Copiar los archivos ffmpeg.exe y ffmpegprobe.exe en C:\Windows\System32 y en C:\Windows\SysWow64 (para equipos de 64 bits)
+
+---
+
+### Linux
+
+[Linux Dependencies](https://github.com/ComandPromt/Periquito/tree/master/Scripts_Linux_Dependencies)
 
 ----
 
 ## 1.3 Instalación del CMS
 
+[CMS](https://github.com/ComandPromt/4images-UPDATED)
+
 - Accede a http://localhost/4images/install.php (cambia "localhost" por la IP o dominio del servidor)
+
+----
 
 ## 1.4 Configuración de las Utilidades
 
-- Descarga las utilidades (carpeta periquito)
+- [Conversores](https://github.com/ComandPromt/Periquito/tree/master/Periquito)
+
 - Descomprime y pega cada utilidad en la carpeta raíz del servidor web
 
 ----
@@ -122,6 +114,8 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 
 ![Preview](previews/3.png)
 
+----
+
 # 4. Utilidades
 ---
 
@@ -134,6 +128,8 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 - Recortar imágenes: utilidad para recortar la misma zona en todas las imágenes
 
 ![Preview](previews/4.png)
+
+----
 
 ## GIF 2 Frames
 
@@ -150,7 +146,6 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 ## Video 2 Frames
 
 [Source](https://github.com/ComandPromt/Video-to-frames-php)
-
 
 ---
 
