@@ -311,7 +311,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	public MenuPrincipal() throws Exception {
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
-		Metodos.crearFichero("GifFrames", "", true);
+		Metodos.crearFichero("Config" + separador + "GifFrames", "", true);
 
 		Metodos.guardarConfig(3, separador);
 
@@ -409,25 +409,27 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				try {
 					if (Metodos.probarconexion("www.google.com")) {
 
-						imagenes = Metodos.directorio("GifFrames", "gif");
-						if (Metodos.listarFicherosPorCarpeta(new File("GifFrames"), "gif") == 1) {
+						imagenes = Metodos.directorio("Config" + separador + "GifFrames", "gif");
+
+						if (Metodos.listarFicherosPorCarpeta(new File("Config" + separador + "GifFrames"),
+								"gif") == 1) {
 
 							WebDriver chrome = new ChromeDriver();
 							chrome.get("https://gifframes.herokuapp.com");
-							chrome.findElement(By.id("imagen"))
-									.sendKeys(directorioActual + "GifFrames" + separador + imagenes.getFirst());
+							chrome.findElement(By.id("imagen")).sendKeys(directorioActual + "Config" + separador
+									+ "GifFrames" + separador + imagenes.getFirst());
 							chrome.findElement(By.name("enviar")).click();
 							Metodos.cerrarNavegador(os);
 
-							Metodos.eliminarFichero(directorioActual + "GifFrames" + separador + imagenes.getFirst());
-
+							Metodos.eliminarFichero(directorioActual + "Config" + separador + "GifFrames" + separador
+									+ imagenes.getFirst());
 						}
 
 						else {
 
 							Metodos.mensaje("Copia o mueve un archivo GIF", 3);
 
-							Metodos.abrirCarpeta("GifFrames", os);
+							Metodos.abrirCarpeta("Config" + separador + "GifFrames", os);
 						}
 					}
 				} catch (Exception e1) {
@@ -438,6 +440,122 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/GIF_Extract.png")));
 		menuItem1.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu1.add(menuItem1);
+
+		separator5 = new JSeparator();
+		menu1.add(separator5);
+
+		menuItem7 = new JMenuItem("Recortar imagenes");
+		menu1.add(menuItem7);
+		menuItem7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+
+					listaImagenes = Metodos
+							.directorio(directorioActual + "Config" + separador + "imagenes_para_recortar", ".");
+				} catch (NumberFormatException e1) {
+//
+				}
+
+				if (!listaImagenes.isEmpty()) {
+
+					try {
+						Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes_para_recortar",
+								separador);
+
+						for (int x = 0; x < listaImagenes.size(); x++) {
+							ImageResizer.copyImage(
+									directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
+											+ listaImagenes.get(x),
+									directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
+											+ listaImagenes.get(x));
+						}
+					} catch (Exception e1) {
+						Metodos.mensaje("Error", 1);
+					}
+
+				}
+				new PhotoFrame().setVisible(true);
+			}
+		});
+		menuItem7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
+		menuItem7.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
+		JSeparator separator_1 = new JSeparator();
+		menu1.add(separator_1);
+
+		mntmNewMenuItem = new JMenuItem("Buscar imagen");
+		menu1.add(mntmNewMenuItem);
+		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if (Metodos.comprobarConexionBd()) {
+
+					try {
+						if (Metodos.comprobarConfiguracion()) {
+
+							String busqueda = Metodos.mostrarDialogo();
+							busqueda = busqueda.trim();
+							int recuento;
+							if (!busqueda.isEmpty()) {
+
+								Connection conexion = Metodos.conexionBD();
+
+								Statement s = conexion.createStatement();
+
+								ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
+										+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+								rs.next();
+								recuento = Integer.parseInt(rs.getString("count(image_id)"));
+
+								if (recuento > 0) {
+									if (recuento > 500) {
+										Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+										Metodos.mensaje(
+												"Por favor,introduce un nombre con menos registros para mostrarlos", 2);
+
+									} else {
+										rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
+												+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+
+										while (rs.next()) {
+											imagenes.add(rs.getString("image_media_file"));
+											categorias.add(rs.getString("cat_id"));
+										}
+
+									}
+								}
+
+								s.close();
+								rs.close();
+
+								if (recuento == 0) {
+
+									Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+
+								} else {
+
+									if (recuento < 500) {
+										Galeria Mi_Galeria = new Galeria();
+										new InterfazGaleria().setVisible(true);
+									}
+
+								}
+
+							} else {
+								Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
+							}
+
+						}
+					} catch (Exception e1) {
+
+					}
+				}
+
+			}
+		});
+		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));
+		mntmNewMenuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/lupa.png")));
 
 		separator1 = new JSeparator();
 		menu.add(separator1);
@@ -575,6 +693,29 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem4.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu3.add(menuItem4);
 
+		separator6 = new JSeparator();
+		menu3.add(separator6);
+
+		menuItem6 = new JMenuItem("Recomponer Inserts");
+		menu3.add(menuItem6);
+		menuItem6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					if (Metodos.comprobarConfiguracion()) {
+						new Utilidades().setVisible(true);
+
+					} else {
+						new Bd().setVisible(true);
+					}
+				} catch (Exception e1) {
+					//
+				}
+			}
+		});
+		menuItem6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
+		menuItem6.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
 		separator4 = new JSeparator();
 		menu.add(separator4);
 
@@ -601,141 +742,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem5.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu.add(menuItem5);
 
-		separator5 = new JSeparator();
-		menu.add(separator5);
-
-		menuItem6 = new JMenuItem("Recomponer Inserts");
-		menuItem6.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					if (Metodos.comprobarConfiguracion()) {
-						new Utilidades().setVisible(true);
-
-					} else {
-						new Bd().setVisible(true);
-					}
-				} catch (Exception e1) {
-					//
-				}
-			}
-		});
-		menuItem6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
-		menuItem6.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		menu.add(menuItem6);
-
-		separator6 = new JSeparator();
-		menu.add(separator6);
-
-		menuItem7 = new JMenuItem("Recortar imagenes");
-		menuItem7.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-
-					listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
-				} catch (NumberFormatException e1) {
-//
-				}
-
-				if (!listaImagenes.isEmpty()) {
-
-					try {
-						Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", separador);
-
-						for (int x = 0; x < listaImagenes.size(); x++) {
-							ImageResizer.copyImage(
-									directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x),
-									directorioActual + "imagenes_para_recortar" + separador + listaImagenes.get(x));
-						}
-					} catch (Exception e1) {
-						Metodos.mensaje("Error", 1);
-					}
-
-				}
-				new PhotoFrame().setVisible(true);
-			}
-		});
-		menuItem7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
-		menuItem7.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		menu.add(menuItem7);
-
-		JSeparator separator_1 = new JSeparator();
-		menu.add(separator_1);
-
-		mntmNewMenuItem = new JMenuItem("Buscar imagen");
-		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				if (Metodos.comprobarConexionBd()) {
-
-					try {
-						if (Metodos.comprobarConfiguracion()) {
-
-							String busqueda = Metodos.mostrarDialogo();
-							busqueda = busqueda.trim();
-							int recuento;
-							if (!busqueda.isEmpty()) {
-
-								Connection conexion = Metodos.conexionBD();
-
-								Statement s = conexion.createStatement();
-
-								ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
-										+ "images WHERE image_name LIKE '%" + busqueda + "%'");
-								rs.next();
-								recuento = Integer.parseInt(rs.getString("count(image_id)"));
-
-								if (recuento > 0) {
-									if (recuento > 500) {
-										Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
-										Metodos.mensaje(
-												"Por favor,introduce un nombre con menos registros para mostrarlos", 2);
-
-									} else {
-										rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
-												+ "images WHERE image_name LIKE '%" + busqueda + "%'");
-
-										while (rs.next()) {
-											imagenes.add(rs.getString("image_media_file"));
-											categorias.add(rs.getString("cat_id"));
-										}
-
-									}
-								}
-
-								s.close();
-								rs.close();
-
-								if (recuento == 0) {
-
-									Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
-
-								} else {
-
-									if (recuento < 500) {
-										Galeria Mi_Galeria = new Galeria();
-										new InterfazGaleria().setVisible(true);
-									}
-
-								}
-
-							} else {
-								Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
-							}
-
-						}
-					} catch (Exception e1) {
-
-					}
-				}
-
-			}
-		});
-		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));
-		mntmNewMenuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/lupa.png")));
-		menu.add(mntmNewMenuItem);
-
 		menu4 = new JMenu("    ");
 		menu4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		menu4.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -752,7 +758,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				directorio.mkdir();
 
 				try {
-					Metodos.abrirCarpeta("imagenes", os);
+					Metodos.abrirCarpeta("Config" + separador + "imagenes", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -791,7 +797,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("GifFrames", os);
+					Metodos.abrirCarpeta("Config" + separador + "GifFrames", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -812,7 +818,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			}
 
 		});
-		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
+		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
 		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu4.add(menuItem11);
 
@@ -826,7 +832,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				video2Frames();
 			}
 		});
-		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
+		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
 		menuItem12.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu4.add(menuItem12);
 
@@ -838,13 +844,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("imagenes_para_recortar", os);
+					Metodos.abrirCarpeta("Config" + separador + "imagenes_para_recortar", os);
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
 			}
 		});
-		menuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
+		menuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
 		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu4.add(menuItem13);
 
@@ -1013,7 +1019,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				} else {
 					if (!textField.getText().trim().isEmpty()) {
 
-						listaImagenes = Metodos.directorio("imagenes", ".");
+						listaImagenes = Metodos.directorio("Config" + separador + "imagenes", ".");
 						String parametros = "";
 						StringBuilder bld = new StringBuilder();
 						if (!listaImagenes.isEmpty()) {
@@ -1035,7 +1041,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							JSONObject json;
 							try {
 
-								Metodos.eliminarDuplicados(directorioActual + "imagenes", separador);
+								Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes",
+										separador);
 
 								Connection conexion = Metodos.conexionBD();
 								Statement s = conexion.createStatement();
@@ -1058,7 +1065,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 								JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
 
-								listaImagenes = Metodos.directorio(directorioActual + "imagenes", ".");
+								listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes",
+										".");
 
 								for (int i = 0; i < imagenesBD.length(); i++) {
 
@@ -1072,8 +1080,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									maximo++;
 
 									Files.move(
-											FileSystems.getDefault().getPath(
-													directorioActual + "imagenes" + separador + listaImagenes.get(i)),
+											FileSystems.getDefault()
+													.getPath(directorioActual + "Config" + separador + "imagenes"
+															+ separador + listaImagenes.get(i)),
 											FileSystems.getDefault()
 													.getPath("\\\\" + lecturaurl[0] + separador + lecturaurl[1]
 															+ separador + "data" + separador + "media" + separador

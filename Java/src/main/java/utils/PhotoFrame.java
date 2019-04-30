@@ -146,8 +146,8 @@ public class PhotoFrame extends javax.swing.JFrame {
 		File miDir = new File(".");
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Imagen", "jpg", "png"));
 
-		fileChooser.setCurrentDirectory(
-				new File(miDir.getCanonicalPath() + MenuPrincipal.getSeparador() + "imagenes_para_recortar"));
+		fileChooser.setCurrentDirectory(new File(miDir.getCanonicalPath() + MenuPrincipal.getSeparador() + "Config"
+				+ MenuPrincipal.getSeparador() + "imagenes_para_recortar"));
 		int result = fileChooser.showOpenDialog(null);
 		if (result == JFileChooser.APPROVE_OPTION) {
 			try {

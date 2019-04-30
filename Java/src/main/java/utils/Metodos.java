@@ -604,21 +604,18 @@ public abstract class Metodos {
 	}
 
 	public static int listarFicherosPorCarpeta(final File carpeta, String filtro) {
+
 		int ocurrencias = 0;
 
 		String extension;
 		String nombreArchivo;
+
 		for (final File ficheroEntrada : carpeta.listFiles()) {
+
 			nombreArchivo = ficheroEntrada.getName();
 			extension = nombreArchivo.substring(nombreArchivo.length() - 3, nombreArchivo.length());
 
 			if (extension.equals(filtro) || filtro.equals(".")) {
-
-				if (ocurrencias == 0 && filtro.equals("gif")) {
-					File f1 = new File("GifFrames\\" + nombreArchivo);
-					File f2 = new File("GifFrames\\picture.gif");
-					f1.renameTo(f2);
-				}
 
 				ocurrencias++;
 			}
@@ -849,17 +846,14 @@ public abstract class Metodos {
 	}
 
 	public static void crearCarpetas() {
-		File directorio = new File("imagenes");
+		File directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes");
 		directorio.mkdir();
-		directorio = new File("imagenes/Thumb");
+		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes/Thumb");
 		directorio.mkdir();
-		directorio = new File("imagenes/gif");
+
+		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
 		directorio.mkdir();
-		directorio = new File("imagenes/gif/Thumb");
-		directorio.mkdir();
-		directorio = new File("imagenes_para_recortar");
-		directorio.mkdir();
-		directorio = new File("imagenes_para_recortar/recortes");
+		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar/recortes");
 		directorio.mkdir();
 	}
 

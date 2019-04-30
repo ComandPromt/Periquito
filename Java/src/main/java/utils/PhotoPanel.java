@@ -156,18 +156,23 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 		LinkedList<String> listaImagenes = new LinkedList<>();
 
-		listaImagenes = Metodos.directorio(directorioActual + "imagenes_para_recortar", ".");
+		listaImagenes = Metodos
+				.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+		listaImagenes.sort(String::compareToIgnoreCase);
 
 		if (!listaImagenes.isEmpty()) {
 
 			int vueltas = 1;
 
-			Metodos.eliminarDuplicados(directorioActual + "imagenes_para_recortar", MenuPrincipal.getSeparador());
+			Metodos.eliminarDuplicados(
+					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar",
+					MenuPrincipal.getSeparador());
 
 			count = 1;
 
-			int numeroImagen = Metodos.listarFicherosPorCarpeta(
-					new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"));
+			int numeroImagen = Metodos
+					.listarFicherosPorCarpeta(new File(directorioActual + "Config" + MenuPrincipal.getSeparador()
+							+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"));
 
 			if (numeroImagen > 0) {
 
@@ -196,19 +201,21 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				if (extension.equals("peg")) {
 					extension = "jpg";
 				}
-				photo = ImageIO.read(new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador()
-						+ listaImagenes.get(x)));
+				photo = ImageIO.read(new File(directorioActual + "Config" + MenuPrincipal.getSeparador()
+						+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + listaImagenes.get(x)));
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
 
 				ImageIO.write(tmpRecorte, extension,
-						new File(directorioActual + "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"
-								+ MenuPrincipal.getSeparador() + "Image_" + count + "." + extension));
+						new File(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
+								+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador() + "Image_"
+								+ count + "." + extension));
 				count++;
 			}
 
 			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta(directorioActual + "imagenes_para_recortar", MenuPrincipal.getOs());
+			Metodos.abrirCarpeta(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar",
+					MenuPrincipal.getOs());
 		}
 	}
 
