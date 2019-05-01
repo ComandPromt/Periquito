@@ -10,13 +10,13 @@ import javax.imageio.ImageIO;
 
 public abstract class ImageResizer {
 
-	static int maxWidth = 800;
+	static int maxWidth = 640;
 
 	private ImageResizer() {
 		super();
 	}
 
-	static int maxHeight = 630;
+	static int maxHeight = 480;
 
 	public static void copyImage(String filePath, String copyPath) {
 		BufferedImage bimage = null;
@@ -25,7 +25,7 @@ public abstract class ImageResizer {
 
 			bimage = loadImage(filePath);
 
-			if (bimage != null && bimage.getHeight() > 480 && bimage.getWidth() > 640) {
+			if (bimage != null && bimage.getHeight() > 480 || bimage.getWidth() > 640) {
 
 				if (bimage.getHeight() > bimage.getWidth()) {
 					int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();

@@ -145,6 +145,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	static JComboBox<String> comboBox = new JComboBox<>();
 
 	private JMenuItem mntmNewMenuItem;
+	private JMenuItem mntmNewMenuItem_1;
+	private JSeparator separator_2;
 
 	public static String[] getLecturabd() {
 		return lecturabd;
@@ -166,11 +168,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		try {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
 				Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
-				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador, os);
+				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 			} else {
 				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
 					Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
-					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador, os);
+					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 				} else {
 					File af = new File("Config/Config.txt");
 
@@ -205,7 +207,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
 											+ separador + frames.get(x));
 								}
-								Metodos.abrirCarpeta("imagenes", os);
+								Metodos.abrirCarpeta("imagenes");
 							} else {
 								new Config().setVisible(true);
 							}
@@ -260,8 +262,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						".") > 0) {
 					Metodos.mensaje("Ya has convertido un video a frames!", 3);
 					Metodos.abrirCarpeta(
-							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output",
-							os);
+							lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "output");
 				}
 
 				else {
@@ -269,7 +270,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/video"),
 							".") != 1) {
 						Metodos.mensaje("Debes tener un vídeo para poder crear los fotogramas", 3);
-						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video", os);
+						Metodos.abrirCarpeta(lectura[0] + "/FrameExtractor/examples/video");
 					}
 
 					else {
@@ -283,7 +284,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						Metodos.eliminarDuplicados(lectura[0] + separador + "FrameExtractor" + separador + "examples"
 								+ separador + "output", separador);
 						Metodos.abrirCarpeta(lectura[0] + separador + "FrameExtractor" + separador + "examples"
-								+ separador + "output", os);
+								+ separador + "output");
 					}
 
 				}
@@ -298,7 +299,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private void mensaje170() {
 		Metodos.mensaje("Tienes más de 170 imágenes", 3);
 		try {
-			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img", os);
+			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img");
 		} catch (IOException e1) {
 			try {
 				new Config().setVisible(true);
@@ -429,11 +430,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 							Metodos.mensaje("Copia o mueve un archivo GIF", 3);
 
-							Metodos.abrirCarpeta("Config" + separador + "GifFrames", os);
+							Metodos.abrirCarpeta("Config" + separador + "GifFrames");
 						}
 					}
 				} catch (Exception e1) {
-					Metodos.mensaje("Comprueba tu conexión", 1);
+					Metodos.mensaje(
+							"Comprueba tu conexión y que tengas el archivo chromedriver.exe en la raíz del programa",
+							1);
 				}
 			}
 		});
@@ -449,17 +452,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem7.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 				try {
 
 					listaImagenes = Metodos
 							.directorio(directorioActual + "Config" + separador + "imagenes_para_recortar", ".");
-				} catch (NumberFormatException e1) {
-//
-				}
 
-				if (!listaImagenes.isEmpty()) {
+					if (!listaImagenes.isEmpty()) {
 
-					try {
 						Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes_para_recortar",
 								separador);
 
@@ -470,12 +470,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
 											+ listaImagenes.get(x));
 						}
-					} catch (Exception e1) {
-						Metodos.mensaje("Error", 1);
-					}
 
+					}
+					new PhotoFrame().setVisible(true);
+
+				} catch (Exception e1) {
+					Metodos.mensaje("Error", 1);
 				}
-				new PhotoFrame().setVisible(true);
+
 			}
 		});
 		menuItem7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
@@ -556,6 +558,19 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));
 		mntmNewMenuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/lupa.png")));
+
+		separator_2 = new JSeparator();
+		menu1.add(separator_2);
+
+		mntmNewMenuItem_1 = new JMenuItem("Descargar imagenes");
+		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// new Descarga().setVisible(true);
+			}
+		});
+		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		menu1.add(mntmNewMenuItem_1);
 
 		separator1 = new JSeparator();
 		menu.add(separator1);
@@ -664,8 +679,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 							Metodos.crearFichero("Config/Backup.txt",
 									"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
-						} else {
-
 						}
 					} else {
 
@@ -758,7 +771,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				directorio.mkdir();
 
 				try {
-					Metodos.abrirCarpeta("Config" + separador + "imagenes", os);
+					Metodos.abrirCarpeta("Config" + separador + "imagenes");
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -797,7 +810,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("Config" + separador + "GifFrames", os);
+					Metodos.abrirCarpeta("Config" + separador + "GifFrames");
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -844,7 +857,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("Config" + separador + "imagenes_para_recortar", os);
+					Metodos.abrirCarpeta("Config" + separador + "imagenes_para_recortar");
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -945,7 +958,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("https://colourise.sg", os);
+					Metodos.abrirCarpeta("https://colourise.sg");
 				} catch (IOException e1) {
 					Metodos.mensaje("Error", 1);
 				}
@@ -1105,7 +1118,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
 						} else {
 							try {
-								Metodos.abrirCarpeta(directorioActual + "imagenes", os);
+								Metodos.abrirCarpeta(directorioActual + "imagenes");
 							} catch (IOException e1) {
 								Metodos.mensaje("Error", 1);
 							}

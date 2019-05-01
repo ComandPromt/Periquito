@@ -28,7 +28,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -134,7 +133,7 @@ public abstract class Metodos {
 
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
 						files[i].getCanonicalPath().length());
-				comprobacion = imagen.substring(imagen.length() - 3, imagen.length());
+				comprobacion = extraerExtension(imagen);
 
 				if (comprobacion.equals("jpg") || comprobacion.equals("peg") || comprobacion.equals("png")
 						|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
@@ -278,7 +277,7 @@ public abstract class Metodos {
 			Process process = Runtime.getRuntime().exec(cmdarray);
 
 			Metodos.mensaje("Backup realizado correctamente", 2);
-			abrirCarpeta(backup[0], MenuPrincipal.getOs());
+			abrirCarpeta(backup[0]);
 		}
 	}
 
@@ -414,7 +413,7 @@ public abstract class Metodos {
 				new Config().setVisible(true);
 			} else {
 
-				Metodos.abrirCarpeta(ruta, MenuPrincipal.getOs());
+				Metodos.abrirCarpeta(ruta);
 			}
 		} else {
 			new Config().setVisible(true);
@@ -428,18 +427,15 @@ public abstract class Metodos {
 			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 7);
 
 			if (!lectura2[5].isEmpty()) {
-				try {
 
-					InetAddress ping;
+				InetAddress ping;
 
-					ping = InetAddress.getByName(lectura2[5]);
+				ping = InetAddress.getByName(lectura2[5]);
 
-					if (!ping.getCanonicalHostName().equals("")) {
-						conexion = true;
-					}
-				} catch (Exception e) {
-					Metodos.mensaje("No tienes conexión con la base de datos", 1);
+				if (!ping.getCanonicalHostName().equals("")) {
+					conexion = true;
 				}
+
 			}
 		} catch (Exception e) {
 			if (mensaje) {
@@ -465,15 +461,14 @@ public abstract class Metodos {
 				mensaje("No tienes Internet", 1);
 			}
 
-			if (!comprobacion) {
-				try {
-					if (conexionBD() != null) {
-						comprobacion = true;
-					}
-				} catch (SQLException e) {
-					new Bd().setVisible(true);
+			try {
+				if (conexionBD() != null) {
+					comprobacion = true;
 				}
+			} catch (SQLException e) {
+				new Bd().setVisible(true);
 			}
+
 		}
 		return comprobacion;
 
@@ -613,7 +608,7 @@ public abstract class Metodos {
 		for (final File ficheroEntrada : carpeta.listFiles()) {
 
 			nombreArchivo = ficheroEntrada.getName();
-			extension = nombreArchivo.substring(nombreArchivo.length() - 3, nombreArchivo.length());
+			extension = extraerExtension(nombreArchivo);
 
 			if (extension.equals(filtro) || filtro.equals(".")) {
 
@@ -622,6 +617,17 @@ public abstract class Metodos {
 
 		}
 		return ocurrencias;
+	}
+
+	public static String extraerExtension(String nombreArchivo) {
+
+		String extension = nombreArchivo.substring(nombreArchivo.length() - 3, nombreArchivo.length());
+
+		if (extension.equals("peg")) {
+			extension = "jpg";
+		}
+
+		return extension;
 	}
 
 	public static int listarFicherosPorCarpeta(final File carpeta) {
@@ -647,7 +653,7 @@ public abstract class Metodos {
 		return ocurrencias;
 	}
 
-	public static void abrirCarpeta(String ruta, String os) throws IOException {
+	public static void abrirCarpeta(String ruta) throws IOException {
 
 		if (ruta != null && !ruta.equals("") && !ruta.isEmpty()) {
 
@@ -672,7 +678,7 @@ public abstract class Metodos {
 		if (salida <= 0) {
 			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
 			if (abrir) {
-				abrirCarpeta(directorio, MenuPrincipal.getOs());
+				abrirCarpeta(directorio);
 			}
 		}
 	}
@@ -861,7 +867,7 @@ public abstract class Metodos {
 
 		try {
 			LinkedList<String> imagenes = directorio(ruta, ".");
-
+			imagenes.sort(String::compareToIgnoreCase);
 			if (!imagenes.isEmpty()) {
 				ArrayList<String> scanimagenes = new ArrayList<>();
 				String imagen;
@@ -872,7 +878,7 @@ public abstract class Metodos {
 					scanimagenes.add(imagen);
 
 				}
-				Collections.sort(scanimagenes);
+
 				if (imagenes.size() == scanimagenes.size() && imagenes.size() > 1) {
 					String shaimagen;
 
@@ -880,9 +886,8 @@ public abstract class Metodos {
 
 						shaimagen = scanimagenes.get(i);
 
-						if (i + 1 != scanimagenes.size() && shaimagen.equals(scanimagenes.get(i + 1))) {
-
-							File fichero = new File(ruta + separador + imagenes.get(i++));
+						if (i + 1 != scanimagenes.size() && shaimagen.equals(scanimagenes.get(++i))) {
+							File fichero = new File(ruta + separador + imagenes.get(i));
 							fichero.delete();
 						}
 

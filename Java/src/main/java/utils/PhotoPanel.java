@@ -158,6 +158,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 		listaImagenes = Metodos
 				.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+
 		listaImagenes.sort(String::compareToIgnoreCase);
 
 		if (!listaImagenes.isEmpty()) {
@@ -167,6 +168,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			Metodos.eliminarDuplicados(
 					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar",
 					MenuPrincipal.getSeparador());
+
+			listaImagenes = Metodos.directorio(
+					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
 
 			count = 1;
 
@@ -201,6 +205,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				if (extension.equals("peg")) {
 					extension = "jpg";
 				}
+
 				photo = ImageIO.read(new File(directorioActual + "Config" + MenuPrincipal.getSeparador()
 						+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + listaImagenes.get(x)));
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
@@ -214,8 +219,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 
 			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar",
-					MenuPrincipal.getOs());
+			Metodos.abrirCarpeta(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
 		}
 	}
 
