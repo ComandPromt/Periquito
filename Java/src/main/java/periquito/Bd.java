@@ -47,6 +47,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	JRadioButton rdbtnXampp = new JRadioButton("XAMPP");
 	JRadioButton rdbtnAppserv = new JRadioButton("APPServ");
 	String servidorWeb = "1";
+	JRadioButton rdbtnWamp = new JRadioButton("WAMP");
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException, SQLException {
@@ -128,7 +129,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		this.setVisible(true);
 	}
 
-	private void servidorWebPorDefecto(JRadioButton rdbtnWamp) {
+	private void servidorWebPorDefecto() {
 		if (!rdbtnWamp.isSelected() && !rdbtnXampp.isSelected() && !rdbtnAppserv.isSelected()
 
 		) {
@@ -205,7 +206,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Tahoma", Font.BOLD, 20));
 
-		JRadioButton rdbtnWamp = new JRadioButton("WAMP");
 		rdbtnWamp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -216,7 +216,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				servidorWebPorDefecto(rdbtnWamp);
+				servidorWebPorDefecto();
 
 			}
 		});
@@ -231,7 +231,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				servidorWebPorDefecto(rdbtnWamp);
+				servidorWebPorDefecto();
 
 			}
 		});
@@ -249,7 +249,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				servidorWebPorDefecto(rdbtnWamp);
+				servidorWebPorDefecto();
 			}
 
 		});

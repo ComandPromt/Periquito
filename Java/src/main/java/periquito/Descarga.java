@@ -5,7 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.GroupLayout;
@@ -14,7 +15,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -32,29 +36,14 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JLabel lblSalto;
+	public static JRadioButton rdbtnComplex = new JRadioButton("Complex");
+	JRadioButton rdbtnNewRadioButton = new JRadioButton("Simple");
+	public static JTextField textField_3 = new JTextField();;
+	private JLabel lblExtensin;
+	static boolean error = false;
 
-	@SuppressWarnings("all")
-	public void buscarArchivoConf() throws IOException {
-		File af = new File("Config/Config2.txt");
-
-		if (af.exists()) {
-			String[] lectura;
-			try {
-				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
-
-				if (lectura[0] == null) {
-					lectura[0] = "";
-				}
-				if (lectura[1] == null) {
-					lectura[1] = "";
-				}
-
-				textField.setText("1");
-			} catch (ArrayIndexOutOfBoundsException e) {
-
-			}
-
-		}
+	public static void setError(boolean error) {
+		Descarga.error = error;
 	}
 
 	public Descarga() throws IOException {
@@ -63,6 +52,12 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
+	}
+
+	private void modoPorDefecto() {
+		if (!rdbtnNewRadioButton.isSelected() && !rdbtnComplex.isSelected()) {
+			rdbtnNewRadioButton.setSelected(true);
+		}
 	}
 
 	@SuppressWarnings("all")
@@ -89,7 +84,6 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		textField.setHorizontalAlignment(SwingConstants.LEFT);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		buscarArchivoConf();
 
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Descarga.class.getResource("/imagenes/start.png")));
@@ -123,8 +117,12 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 						else {
 
 							if (inicio >= 0 && fin >= 0 && salto >= 0) {
+
 								Metodos.descargar(jTextField1.getText().trim(), inicio, fin, salto);
-								Metodos.abrirCarpeta("Downloads");
+
+								if (!error) {
+									Metodos.abrirCarpeta("Downloads");
+								}
 							}
 
 							else {
@@ -133,7 +131,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 						}
 					} catch (NumberFormatException e) {
 						Metodos.mensaje("Por favor, inserta números en los campos inicio,fin y salto", 3);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						//
 					}
 				} else {
@@ -161,50 +159,110 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 
 		lblSalto = new JLabel("Salto");
 		lblSalto.setFont(new Font("Dialog", Font.BOLD, 20));
+		rdbtnComplex.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				rdbtnNewRadioButton.setSelected(false);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				modoPorDefecto();
+			}
+
+		});
+
+		rdbtnComplex.setFont(new Font("Dialog", Font.BOLD, 20));
+		rdbtnNewRadioButton.setSelected(true);
+
+		rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				rdbtnComplex.setSelected(false);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				modoPorDefecto();
+			}
+		});
+		rdbtnNewRadioButton.setFont(new Font("Dialog", Font.BOLD, 20));
+
+		JTextPane txtpnElMtodosimple = new JTextPane();
+		txtpnElMtodosimple.setFont(new Font("Dialog", Font.BOLD, 14));
+		txtpnElMtodosimple.setText(
+				"El método \"Simple\" es cuando damos la URL de la imagen. \n\nEl método complejo se usa para cuando se da una URL\n\nque genera una imagen");
+
+		textField_3.setToolTipText("");
+		textField_3.setHorizontalAlignment(SwingConstants.LEFT);
+		textField_3.setFont(new Font("Dialog", Font.PLAIN, 24));
+
+		lblExtensin = new JLabel("Extensión");
+		lblExtensin.setFont(new Font("Dialog", Font.BOLD, 20));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 338, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(Alignment.LEADING).addComponent(jLabel1)
-										.addGroup(layout.createSequentialGroup().addGap(11)
-												.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-														.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 61,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(lblThumbnails).addComponent(lblSalto,
-																GroupLayout.PREFERRED_SIZE, 61,
-																GroupLayout.PREFERRED_SIZE))))
-										.addGap(83)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(textField_1).addComponent(textField)
-												.addComponent(jTextField1, 338, 338, Short.MAX_VALUE)))))
-						.addGroup(layout.createSequentialGroup().addGap(304).addComponent(btnNewButton,
-								GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)))
+				.addGap(26)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(12).addComponent(txtpnElMtodosimple,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblExtensin, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel1)
+								.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblThumbnails)).addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(textField, Alignment.LEADING)
+										.addGroup(Alignment.LEADING, layout
+												.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(textField_3, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														338, Short.MAX_VALUE)
+												.addComponent(textField_1, Alignment.LEADING, 338, 338, Short.MAX_VALUE)
+												.addComponent(jTextField1, Alignment.LEADING))
+										.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)))
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+								.addGap(80).addComponent(rdbtnNewRadioButton).addGap(28).addComponent(rdbtnComplex)))
 				.addContainerGap(31, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(38)
+				.addGap(18)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblThumbnails))
-				.addGap(45)
+				.addGap(29)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-				.addGap(33)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-				.addGap(428)));
+						.addGroup(layout.createSequentialGroup().addGap(36).addComponent(lblSalto,
+								GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(18)
+								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)))
+				.addGap(21)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblExtensin, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+				.addGap(20)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(rdbtnNewRadioButton).addComponent(rdbtnComplex))
+								.addGap(18))
+						.addGroup(
+								layout.createSequentialGroup()
+										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 51,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(5)))
+				.addGap(18).addComponent(txtpnElMtodosimple, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(423)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(578, 433));
+		setSize(new Dimension(538, 541));
 		setLocationRelativeTo(null);
 	}
 

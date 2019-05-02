@@ -50,6 +50,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import periquito.Bd;
 import periquito.Config;
 import periquito.Config2;
+import periquito.Descarga;
 import periquito.MenuPrincipal;
 
 public abstract class Metodos {
@@ -98,12 +99,46 @@ public abstract class Metodos {
 
 				chrome = new ChromeDriver();
 
-				chrome.get(imagen + x);
+				if (Descarga.rdbtnComplex.isSelected()) {
 
-				if (!chrome.findElements(By.tagName("img")).isEmpty()) {
-					List<WebElement> image = chrome.findElements(By.tagName("img"));
+					chrome.get(imagen + x);
 
-					descargarFoto(image.get(0).getAttribute("src"), x);
+					if (!chrome.findElements(By.tagName("img")).isEmpty()) {
+						List<WebElement> image = chrome.findElements(By.tagName("img"));
+
+						descargarFoto(image.get(0).getAttribute("src"), x);
+					}
+
+				}
+
+				else {
+					try {
+						String extension = Descarga.textField_3.getText().trim();
+						// Url con la foto
+						URL url = new URL(imagen + x + "." + extension);
+
+						// establecemos conexion
+						URLConnection urlCon = url.openConnection();
+
+						// Se obtiene el inputStream de la foto web y se abre el fichero
+						// local.
+						InputStream is = urlCon.getInputStream();
+						FileOutputStream fos = new FileOutputStream("Downloads/Image_" + x + "." + extension);
+
+						// Lectura de la foto de la web y escritura en fichero local
+						byte[] array = new byte[1000]; // buffer temporal de lectura.
+						int leido = is.read(array);
+						while (leido > 0) {
+							fos.write(array, 0, leido);
+							leido = is.read(array);
+						}
+
+						// cierre de conexion y fichero.
+						is.close();
+						fos.close();
+					} catch (Exception e) {
+						Descarga.setError(true);
+					}
 				}
 
 				chrome.close();
