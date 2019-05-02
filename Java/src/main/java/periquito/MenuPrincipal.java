@@ -153,6 +153,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmNewMenuItem_1;
 	private JSeparator separator_2;
+	private JMenu mnNewMenu;
+	private JMenu mnNewMenu_1;
 
 	public static String[] getLecturabd() {
 		return lecturabd;
@@ -779,7 +781,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu4.setBackground(Color.BLACK);
 		menuopciones.add(menu4);
 
+		mnNewMenu = new JMenu("Image  ");
+		mnNewMenu.setFont(new Font("Dialog", Font.BOLD, 20));
+		mnNewMenu.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
+		menu4.add(mnNewMenu);
+
 		menuItem8 = new JMenuItem("Imagenes");
+		mnNewMenu.add(menuItem8);
 		menuItem8.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -797,12 +805,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		menuItem8.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		menuItem8.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menu4.add(menuItem8);
 
-		separator7 = new JSeparator();
-		menu4.add(separator7);
+		separator9 = new JSeparator();
+		mnNewMenu.add(separator9);
 
 		menuItem9 = new JMenuItem("GIF Animator");
+		mnNewMenu.add(menuItem9);
 		menuItem9.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -818,12 +826,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		menuItem9.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gif.png")));
 		menuItem9.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menu4.add(menuItem9);
 
-		separator8 = new JSeparator();
-		menu4.add(separator8);
+		separator7 = new JSeparator();
+		mnNewMenu.add(separator7);
 
 		menuItem10 = new JMenuItem("GIF Extractor");
+		mnNewMenu.add(menuItem10);
 		menuItem10.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -836,41 +844,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		menuItem10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/GIF_Extract.png")));
 		menuItem10.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menu4.add(menuItem10);
-
-		separator9 = new JSeparator();
-		menu4.add(separator9);
-
-		menuItem11 = new JMenuItem("Video 2 Frame");
-		menuItem11.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				video2Frames();
-			}
-
-		});
-		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
-		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menu4.add(menuItem11);
-
-		separator10 = new JSeparator();
-		menu4.add(separator10);
-
-		menuItem12 = new JMenuItem("Video 2 GIF");
-		menuItem12.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				video2Frames();
-			}
-		});
-		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
-		menuItem12.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menu4.add(menuItem12);
 
 		separator11 = new JSeparator();
-		menu4.add(separator11);
+		mnNewMenu.add(separator11);
 
 		menuItem13 = new JMenuItem("Crop images");
+		mnNewMenu.add(menuItem13);
 		menuItem13.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -883,7 +862,40 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		menuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
 		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		menu4.add(menuItem13);
+
+		separator8 = new JSeparator();
+		menu4.add(separator8);
+
+		mnNewMenu_1 = new JMenu("Video");
+		mnNewMenu_1.setFont(new Font("DejaVu Sans", Font.BOLD, 20));
+		mnNewMenu_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_frame.png")));
+		menu4.add(mnNewMenu_1);
+
+		menuItem11 = new JMenuItem("Video 2 Frame");
+		mnNewMenu_1.add(menuItem11);
+		menuItem11.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				video2Frames();
+			}
+
+		});
+		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
+		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+		separator10 = new JSeparator();
+		mnNewMenu_1.add(separator10);
+
+		menuItem12 = new JMenuItem("Video 2 GIF");
+		mnNewMenu_1.add(menuItem12);
+		menuItem12.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				video2Frames();
+			}
+		});
+		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
+		menuItem12.setFont(new Font("Segoe UI", Font.BOLD, 18));
 
 		mnConfig = new JMenu("Config  ");
 		mnConfig.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
