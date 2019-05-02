@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 import periquito.MenuPrincipal;
 
@@ -43,8 +45,13 @@ public class PhotoFrame extends javax.swing.JFrame {
 	private JLabel lblNewLabel_6;
 
 	public static BufferedImage rotacionImagen(BufferedImage origen, double grados) {
-		return origen;
-		//
+		BufferedImage destinationImage;
+        ImageTransform imTransform = new ImageTransform(origen.getHeight(), origen.getWidth());
+        imTransform.rotate(grados);
+        imTransform.findTranslation();
+        AffineTransformOp ato = new AffineTransformOp(imTransform.getTransform(), AffineTransformOp.TYPE_BILINEAR);
+        destinationImage = ato.createCompatibleDestImage(origen, origen.getColorModel());
+        return ato.filter(origen, destinationImage);
 	}
 
 	private static BufferedImage loadJPGImage(String ruta) throws IOException {
@@ -56,7 +63,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 	}
 
 	private static void saveJPGImage(BufferedImage im, int num, String extension) throws IOException {
-		ImageIO.write(im, "jpg", new File("Config/Image_rotate/Image_rotate_" + num + "." + extension));
+		ImageIO.write(im, "JPG", new File("Config/Image_rotate/Image_rotate_" + num + "." + extension));
 	}
 
 	private void rabioBoxPorDefecto() {
@@ -192,13 +199,13 @@ public class PhotoFrame extends javax.swing.JFrame {
 		lblNewLabel_6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				try {
+		        try {
 					if (angulo <= 0 || angulo >= 360) {
 						angulo = 270;
 					} else {
 						angulo -= 90;
 					}
-					System.out.println(angulo);
+
 					img = loadJPGImage(fileChooser.getSelectedFile().toString());
 
 					dst = rotacionImagen(img, angulo);

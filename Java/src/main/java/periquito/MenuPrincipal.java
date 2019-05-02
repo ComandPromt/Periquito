@@ -697,11 +697,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							Metodos.crearFichero("Config/Backup.txt",
 									"/home/" + System.getProperty("user.name") + "/Desktop", false);
 
-							Metodos.crearFichero("Config/Backup.txt",
-									"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
-						}
+							}
 					} else {
-
+						Metodos.crearFichero("Config/Backup.txt",
+								"C:\\Users\\" + System.getProperty("user.name") + "\\Desktop", false);
+				
 						if (Metodos.comprobarConfiguracion()) {
 
 							lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
