@@ -239,7 +239,7 @@ public abstract class Metodos {
 						|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
 
 					origen = files[i].getCanonicalPath();
-					destino = new File(".").getCanonicalPath() + separador + "imagenes";
+					destino = new File(".").getCanonicalPath() + separador + "Config" + separador + "imagenes";
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
