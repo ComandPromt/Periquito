@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,6 +34,36 @@ public class PhotoFrame extends javax.swing.JFrame {
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_1;
 	static JFileChooser fileChooser = new JFileChooser();
+	private JLabel lblNewLabel_2;
+	int angulo = 90;
+	BufferedImage img;
+	BufferedImage dst;
+	private JLabel lblNewLabel_3;
+	private JLabel lblNewLabel_4;
+	private JLabel lblNewLabel_5;
+	private JLabel lblNewLabel_6;
+
+	public static BufferedImage rotacionImagen(BufferedImage origen, double grados) {
+		BufferedImage destinationImage;
+		ImageTransform imTransform = new ImageTransform(origen.getHeight(), origen.getWidth());
+		imTransform.rotate(grados);
+		imTransform.findTranslation();
+		AffineTransformOp ato = new AffineTransformOp(imTransform.getTransform(), AffineTransformOp.TYPE_BILINEAR);
+		destinationImage = ato.createCompatibleDestImage(origen, origen.getColorModel());
+		return ato.filter(origen, destinationImage);
+	}
+
+	private static BufferedImage loadJPGImage(String ruta) throws IOException {
+		BufferedImage imagen = ImageIO.read(new File(ruta));
+
+		BufferedImage source = new BufferedImage(imagen.getWidth(), imagen.getHeight(), BufferedImage.TYPE_INT_RGB);
+		source.getGraphics().drawImage(imagen, 0, 0, null);
+		return source;
+	}
+
+	private static void saveJPGImage(BufferedImage im, int num, String extension) throws IOException {
+		ImageIO.write(im, "jpg", new File("Config/Image_rotate/Image_rotate_" + num + "." + extension));
+	}
 
 	private void rabioBoxPorDefecto() {
 		if (!rdbtnMultipleCrop.isSelected() && !rdbtnSingle.isSelected()) {
@@ -40,7 +72,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 	}
 
 	public PhotoFrame() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(PhotoFrame.class.getResource("/imagenes/maxresdefault.jpg")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PhotoFrame.class.getResource("/imagenes/crop.png")));
 		initComponents();
 		PhotoFrame.this.setTitle("Periquito v3 - Multiple Crop");
 		PhotoFrame.this.setLocationRelativeTo(null);
@@ -137,6 +169,100 @@ public class PhotoFrame extends javax.swing.JFrame {
 		lblNewLabel_1 = new JLabel(" Multiple Crop   ");
 		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 20));
 		jMenuBar1.add(lblNewLabel_1);
+
+		lblNewLabel_2 = new JLabel("    ");
+		lblNewLabel_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				try {
+
+					if (angulo >= 360) {
+						angulo = 90;
+					} else {
+						angulo += 90;
+					}
+
+					img = loadJPGImage(fileChooser.getSelectedFile().toString());
+
+					dst = rotacionImagen(img, angulo);
+					photoPanel.setPhoto(dst);
+
+				} catch (Exception e1) {
+					//
+				}
+			}
+		});
+
+		lblNewLabel_6 = new JLabel("  ");
+		lblNewLabel_6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					if (angulo <= 0 || angulo >= 360) {
+						angulo = 270;
+					} else {
+						angulo -= 90;
+					}
+
+					img = loadJPGImage(fileChooser.getSelectedFile().toString());
+
+					dst = rotacionImagen(img, angulo);
+					photoPanel.setPhoto(dst);
+
+				} catch (Exception e1) {
+					//
+				}
+			}
+		});
+		lblNewLabel_6.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_90.png")));
+		jMenuBar1.add(lblNewLabel_6);
+		lblNewLabel_2.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_180.png")));
+		jMenuBar1.add(lblNewLabel_2);
+
+		lblNewLabel_3 = new JLabel("  ");
+		lblNewLabel_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					int numeroImagenes = Metodos.listarFicherosPorCarpeta(new File("Config/Image_rotate"), ".");
+					saveJPGImage(dst, ++numeroImagenes,
+							Metodos.extraerExtension(fileChooser.getSelectedFile().toString()));
+				} catch (Exception e1) {
+					//
+				}
+			}
+		});
+		lblNewLabel_3.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/save.png")));
+		jMenuBar1.add(lblNewLabel_3);
+
+		lblNewLabel_4 = new JLabel("   ");
+		lblNewLabel_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					Metodos.abrirCarpeta("Config/Image_rotate");
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+
+		lblNewLabel_5 = new JLabel("  ");
+		lblNewLabel_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					Metodos.abrirCarpeta("Config/imagenes_para_recortar");
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+		lblNewLabel_5.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/crop.png")));
+		jMenuBar1.add(lblNewLabel_5);
+		lblNewLabel_4.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/folder.png")));
+		jMenuBar1.add(lblNewLabel_4);
 
 		pack();
 	}

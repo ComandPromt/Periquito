@@ -219,7 +219,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 
 			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
+			Metodos.abrirCarpeta("Config/imagenes_para_recortar/recortes");
 		}
 	}
 

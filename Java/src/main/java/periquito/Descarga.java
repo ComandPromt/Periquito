@@ -47,7 +47,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 	}
 
 	public Descarga() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Descarga.class.getResource("/imagenes/download.png")));
 		setTitle("Periquito v3 Config Remoto");
 		setType(Type.UTILITY);
 		initComponents();
@@ -191,7 +191,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		JTextPane txtpnElMtodosimple = new JTextPane();
 		txtpnElMtodosimple.setFont(new Font("Dialog", Font.BOLD, 14));
 		txtpnElMtodosimple.setText(
-				"El método \"Simple\" es cuando damos la URL de la imagen. \n\nEl método complejo se usa para cuando se da una URL\n\nque genera una imagen");
+				"El método \"Simple\" es cuando damos la URL de la imagen. \n\nEl método complejo se usa para cuando se da una URL\n\nque genera una imagen (elemento img de HTML)");
 
 		textField_3.setToolTipText("");
 		textField_3.setHorizontalAlignment(SwingConstants.LEFT);
@@ -209,13 +209,13 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblExtensin, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabel1)
-								.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblThumbnails)).addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(textField, Alignment.LEADING)
-										.addGroup(Alignment.LEADING, layout
-												.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(lblThumbnails)
+								.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(textField, 338, 338, 338)
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 												.addComponent(textField_3, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
 														338, Short.MAX_VALUE)
 												.addComponent(textField_1, Alignment.LEADING, 338, 338, Short.MAX_VALUE)
@@ -238,11 +238,10 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(36).addComponent(lblSalto,
-								GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addGap(18)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)))
+				.addGap(18)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
 				.addGap(21)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblExtensin, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)

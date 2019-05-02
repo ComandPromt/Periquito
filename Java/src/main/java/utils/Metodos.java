@@ -953,16 +953,15 @@ public abstract class Metodos {
 	}
 
 	public static void crearCarpetas() {
-		File directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes");
+		File directorio = new File("Config/imagenes");
 		directorio.mkdir();
-		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes/Thumb");
+		directorio = new File("Config/imagenes_para_recortar");
 		directorio.mkdir();
-
-		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
+		directorio = new File("Config/imagenes_para_recortar/recortes");
 		directorio.mkdir();
-		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar/recortes");
+		directorio = new File("Config/Downloads");
 		directorio.mkdir();
-		directorio = new File("Downloads");
+		directorio = new File("Config/Image_rotate");
 		directorio.mkdir();
 	}
 
