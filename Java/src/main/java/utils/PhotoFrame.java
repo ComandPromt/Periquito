@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,13 +43,8 @@ public class PhotoFrame extends javax.swing.JFrame {
 	private JLabel lblNewLabel_6;
 
 	public static BufferedImage rotacionImagen(BufferedImage origen, double grados) {
-		BufferedImage destinationImage;
-		ImageTransform imTransform = new ImageTransform(origen.getHeight(), origen.getWidth());
-		imTransform.rotate(grados);
-		imTransform.findTranslation();
-		AffineTransformOp ato = new AffineTransformOp(imTransform.getTransform(), AffineTransformOp.TYPE_BILINEAR);
-		destinationImage = ato.createCompatibleDestImage(origen, origen.getColorModel());
-		return ato.filter(origen, destinationImage);
+		return origen;
+		//
 	}
 
 	private static BufferedImage loadJPGImage(String ruta) throws IOException {
@@ -204,7 +198,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 					} else {
 						angulo -= 90;
 					}
-
+					System.out.println(angulo);
 					img = loadJPGImage(fileChooser.getSelectedFile().toString());
 
 					dst = rotacionImagen(img, angulo);
@@ -241,7 +235,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("Config/Image_rotate");
+					Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Image_rotate");
 				} catch (IOException e1) {
 					//
 				}
@@ -253,7 +247,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("Config/imagenes_para_recortar");
+					Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
 				} catch (IOException e1) {
 					//
 				}
