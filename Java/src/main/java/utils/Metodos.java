@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.io.Reader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -29,6 +31,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.JComboBox;
@@ -39,6 +42,10 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.JSONObject;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 import periquito.Bd;
 import periquito.Config;
@@ -49,6 +56,64 @@ public abstract class Metodos {
 
 	private Metodos() {
 		super();
+	}
+
+	public static void descargarFoto(String enlace, int numero) throws IOException {
+		try {
+			// Url con la foto
+			URL url = new URL(enlace);
+
+			// establecemos conexion
+			URLConnection urlCon = url.openConnection();
+
+			// Se obtiene el inputStream de la foto web y se abre el fichero
+			// local.
+			InputStream is = urlCon.getInputStream();
+			FileOutputStream fos = new FileOutputStream(
+					"Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
+
+			// Lectura de la foto de la web y escritura en fichero local
+			byte[] array = new byte[1000]; // buffer temporal de lectura.
+			int leido = is.read(array);
+			while (leido > 0) {
+				fos.write(array, 0, leido);
+				leido = is.read(array);
+			}
+
+			// cierre de conexion y fichero.
+			is.close();
+			fos.close();
+		} catch (Exception e) {
+			Metodos.abrirCarpeta("Downloads");
+			System.exit(0);
+		}
+	}
+
+	public static void descargar(String imagen, int inicio, int fin, int salto) throws IOException {
+		try {
+
+			WebDriver chrome;
+
+			for (int x = inicio; x <= fin; x++) {
+
+				chrome = new ChromeDriver();
+
+				chrome.get(imagen + x);
+
+				if (!chrome.findElements(By.tagName("img")).isEmpty()) {
+					List<WebElement> image = chrome.findElements(By.tagName("img"));
+
+					descargarFoto(image.get(0).getAttribute("src"), x);
+				}
+
+				chrome.close();
+
+			}
+
+		} catch (Exception e) {
+			Metodos.abrirCarpeta("Downloads");
+			System.exit(0);
+		}
 	}
 
 	public static String mostrarDialogo() {
@@ -438,7 +503,8 @@ public abstract class Metodos {
 
 			}
 		} catch (Exception e) {
-			if (mensaje) {
+
+			if (mensaje && MenuPrincipal.isConexion()) {
 				Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 2);
 			}
 		}
@@ -860,6 +926,8 @@ public abstract class Metodos {
 		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
 		directorio.mkdir();
 		directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar/recortes");
+		directorio.mkdir();
+		directorio = new File("Downloads");
 		directorio.mkdir();
 	}
 

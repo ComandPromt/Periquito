@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -103,6 +104,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	LinkedList<String> listaImagenes = new LinkedList<>();
 	static LinkedList<String> imagenes = new LinkedList<>();
 	static LinkedList<String> categorias = new LinkedList<>();
+	static boolean conexion = true;
+
+	public static boolean isConexion() {
+		return conexion;
+	}
 
 	public static LinkedList<String> getImagenes() {
 		return imagenes;
@@ -331,7 +337,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		directorioActual = new File(".").getCanonicalPath() + separador;
 
-		if (lecturabd[0] == null || lecturabd[0].equals("")) {
+		try {
+			Metodos.probarconexion("www.google.com");
+		} catch (UnknownHostException e) {
+			conexion = false;
+			Metodos.mensaje("No hay conexión a internet", 3);
+		}
+
+		if (conexion && (lecturabd[0] == null || lecturabd[0].equals(""))) {
 			Metodos.crearFichero("Config/Bd.txt", "", false);
 			new Bd().setVisible(true);
 		}
@@ -563,10 +576,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu1.add(separator_2);
 
 		mntmNewMenuItem_1 = new JMenuItem("Descargar imagenes");
+		mntmNewMenuItem_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
 		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// new Descarga().setVisible(true);
+				try {
+					new Descarga().setVisible(true);
+				} catch (IOException e) {
+					//
+				}
 			}
 		});
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -660,7 +678,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator3 = new JSeparator();
 		menu.add(separator3);
 
-		menu3 = new JMenu("Base de datos");
+		menu3 = new JMenu("Base de datos   ");
 		menu3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
 		menu3.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu.add(menu3);
@@ -982,9 +1000,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem19.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		menu7.add(menuItem19);
 
-		if (!Metodos.probarconexion("www.google.com")) {
-			Metodos.mensaje("No hay conexión a internet", 3);
-		}
 		Metodos.comprobarArchivo("Config", false);
 
 		initComponents();
