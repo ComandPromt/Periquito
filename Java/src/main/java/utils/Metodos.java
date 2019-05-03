@@ -71,7 +71,7 @@ public abstract class Metodos {
 			// local.
 			InputStream is = urlCon.getInputStream();
 			FileOutputStream fos = new FileOutputStream(
-					"Config/Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
+					"Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
 
 			// Lectura de la foto de la web y escritura en fichero local
 			byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -85,8 +85,7 @@ public abstract class Metodos {
 			is.close();
 			fos.close();
 		} catch (Exception e) {
-			Metodos.mensaje("Asegúrate de tener el driver de chrome instalado", 3);
-			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
+			Metodos.abrirCarpeta("Downloads");
 			System.exit(0);
 		}
 	}
@@ -124,7 +123,7 @@ public abstract class Metodos {
 						// Se obtiene el inputStream de la foto web y se abre el fichero
 						// local.
 						InputStream is = urlCon.getInputStream();
-						FileOutputStream fos = new FileOutputStream("Config/Downloads/Image_" + x + "." + extension);
+						FileOutputStream fos = new FileOutputStream("Downloads/Image_" + x + "." + extension);
 
 						// Lectura de la foto de la web y escritura en fichero local
 						byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -147,7 +146,7 @@ public abstract class Metodos {
 			}
 
 		} catch (Exception e) {
-			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
+			Metodos.abrirCarpeta("Downloads");
 			System.exit(0);
 		}
 	}
@@ -261,9 +260,11 @@ public abstract class Metodos {
 					filtro = true;
 				}
 			}
-			mensaje("Los archivos se han movido correctamente", 2);
+
 			if (filtro) {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 1);
+			} else {
+				mensaje("Los archivos se han movido correctamente", 2);
 			}
 
 		}
@@ -341,8 +342,11 @@ public abstract class Metodos {
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 
 		if (!MenuPrincipal.getOs().equals("Linux")) {
+
 			String ruta = "";
+
 			switch (tipo) {
+
 			case 1:
 				ruta = "C:\\AppServ\\mysql\\bin\\";
 				break;
@@ -471,21 +475,25 @@ public abstract class Metodos {
 
 	}
 
-	public static boolean comprobarConexionBd() {
+	public static boolean comprobarConexionBd(String sql) {
 		boolean resultado = false;
 		try {
 			Connection conexion = Metodos.conexionBD();
 
 			Statement s = conexion.createStatement();
 
-			ResultSet rs = s.executeQuery("select Nombre from notas order by Nombre");
+			ResultSet rs = s.executeQuery(sql);
 
 			rs.next();
 
 			if (!rs.getString("Nombre").equals("")) {
 				resultado = true;
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
+			Metodos.mensaje("No hay registros en la base de datos", 3);
+		}
+
+		catch (Exception e) {
 			try {
 				new Bd().setVisible(true);
 			} catch (IOException e1) {

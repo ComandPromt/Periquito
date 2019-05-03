@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TooManyListenersException;
 
@@ -50,7 +51,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	private JTextField nombre;
 
 	public Utilidades() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/utilities.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/db.png")));
 		try {
 			if (Metodos.comprobarConexion(true)) {
 
@@ -145,11 +146,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 					String prefijo = prefijoTablas.getText().trim();
 					if (!prefijo.equals("") && !nombre_input.equals("")) {
 						try {
+
 							String imagen;
-							int fecha = (int) new Date().getTime();
-							if (fecha < 0) {
-								fecha *= -1;
-							}
+							Date fecha = new Date();
+							String strDateFormat = "y-dd-MM";
+							SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
 
 							String tabla = prefijo + "images";
 							int categoria = comboBox.getSelectedIndex() + 1;
@@ -161,7 +162,15 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 							rs = s.executeQuery("select MAX(image_id)+1 FROM " + tabla);
 							rs.next();
-							id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
+
+							if (rs.getString("MAX(image_id)+1") == null) {
+								id = 1;
+							}
+
+							else {
+								id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
+
+							}
 
 							s.close();
 							rs.close();
@@ -174,7 +183,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							FileWriter flS = new FileWriter("Config/SQL.sql");
 							BufferedWriter fS = new BufferedWriter(flS);
 
-							String separador = Metodos.saberseparador(Integer.parseInt(MenuPrincipal.getOs()));
+							String separador = MenuPrincipal.getSeparador();
 
 							for (int i = 0; i < files.length; i++) {
 								imagen = files[i].toString();
@@ -182,9 +191,13 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 								thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
 
-								fS.write("INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'"
-										+ nombre_input + "','',''," + fecha + ",DEFAULT,'" + imagen + "','" + thumb
-										+ "', '',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,0);");
+								fS.write(
+
+										"INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'"
+												+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
+												+ "',DEFAULT,'" + imagen
+												+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
+												+ Metodos.getSHA256Checksum(files[i].toString()) + "');");
 								fS.newLine();
 
 								id++;
@@ -194,11 +207,12 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							conexion = Metodos.conexionBD();
 
 							s = conexion.createStatement();
-							InputStream archivo = new FileInputStream("SQL.sql");
+							InputStream archivo = new FileInputStream("Config/SQL.sql");
 							Metodos.executeScript(conexion, archivo);
-							Metodos.eliminarFichero("SQL.sql");
+							Metodos.eliminarFichero("Config/SQL.sql");
 							Metodos.mensaje("Insert recuperados correctamente!", 2);
 						} catch (Exception e) {
+							e.printStackTrace();
 							Metodos.mensaje("Error al recuperar la BD", 1);
 						}
 					}

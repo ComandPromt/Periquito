@@ -296,6 +296,9 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 						try {
 							guardarDatos(true);
+							MenuPrincipal.button.setEnabled(true);
+						} catch (SQLException e) {
+							Metodos.mensaje("Error al conectar a la base de datos", 1);
 						} catch (Exception e) {
 							Metodos.mensaje("Error al guardar la configuración", 1);
 						}
