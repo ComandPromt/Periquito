@@ -54,7 +54,6 @@ import utils.MyInterface;
 import utils.PhotoFrame;
 
 @SuppressWarnings("all")
-
 public class MenuPrincipal extends JFrame implements ActionListener, ChangeListener, MyInterface {
 	private JMenuBar menuopciones;
 	private JMenu menu;
@@ -101,7 +100,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem menuItem18;
 	private JSeparator separator18;
 	private JMenuItem menuItem19;
-	LinkedList<String> listaImagenes = new LinkedList<>();
+	transient LinkedList<String> listaImagenes = new LinkedList<>();
 	static LinkedList<String> imagenes = new LinkedList<>();
 	static LinkedList<String> categorias = new LinkedList<>();
 	static boolean conexion = true;
@@ -116,10 +115,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	String directorioActual;
 	static JComboBox<String> comboBox = new JComboBox<>();
 	private JMenuItem mntmNewMenuItem;
-	private JMenuItem mntmNewMenuItem_1;
-	private JSeparator separator_2;
+	private JMenuItem mntmNewMenuItem1;
+	private JSeparator separator22;
 	private JMenu mnNewMenu;
-	private JMenu mnNewMenu_1;
+	private JMenu mnNewMenu1;
 
 	public static boolean isConexion() {
 		return conexion;
@@ -327,7 +326,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		if (os == null || os.equals("")) {
 			os = "1";
-			separador = Metodos.saberseparador(Integer.parseInt(os));
+			separador = Metodos.saberSeparador(os);
 		}
 
 		directorioActual = new File(".").getCanonicalPath() + separador;
@@ -385,11 +384,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							cambiarPermisos();
 
 						}
-						try {
-							hacerGIF();
-						} catch (IOException e1) {
-							Metodos.mensaje("Error", 1);
-						}
+
+						hacerGIF();
+
 					} else {
 						mensaje170();
 					}
@@ -499,63 +496,73 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM" + lecturabd[3] + "images")) {
-					try {
-						if (Metodos.comprobarConfiguracion()) {
+				try {
+					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM" + lecturabd[3] + "images")) {
+						try {
+							if (Metodos.comprobarConfiguracion()) {
 
-							String busqueda = Metodos.mostrarDialogo();
-							busqueda = busqueda.trim();
-							int recuento;
-							if (!busqueda.isEmpty()) {
+								String busqueda = Metodos.mostrarDialogo();
+								busqueda = busqueda.trim();
+								int recuento;
+								if (!busqueda.isEmpty()) {
 
-								Connection conexion = Metodos.conexionBD();
+									Connection conexion = Metodos.conexionBD();
 
-								Statement s = conexion.createStatement();
+									Statement s = conexion.createStatement();
 
-								ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
-										+ "images WHERE image_name LIKE '%" + busqueda + "%'");
-								rs.next();
-								recuento = Integer.parseInt(rs.getString("count(image_id)"));
+									ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
+											+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+									rs.next();
+									recuento = Integer.parseInt(rs.getString("count(image_id)"));
 
-								if (recuento > 0) {
-									if (recuento > 500) {
-										Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
-										Metodos.mensaje(
-												"Por favor,introduce un nombre con menos registros para mostrarlos", 2);
-									} else {
-										rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
-												+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+									if (recuento > 0) {
+										if (recuento > 500) {
+											Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes",
+													3);
+											Metodos.mensaje(
+													"Por favor,introduce un nombre con menos registros para mostrarlos",
+													2);
+										} else {
+											rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
+													+ "images WHERE image_name LIKE '%" + busqueda + "%'");
 
-										while (rs.next()) {
-											imagenes.add(rs.getString("image_media_file"));
-											categorias.add(rs.getString("cat_id"));
+											while (rs.next()) {
+												imagenes.add(rs.getString("image_media_file"));
+												categorias.add(rs.getString("cat_id"));
+											}
+
 										}
-
 									}
-								}
 
-								s.close();
-								rs.close();
+									s.close();
+									rs.close();
 
-								if (recuento == 0) {
+									if (recuento == 0) {
 
-									Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+										Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+
+									} else {
+
+										if (recuento < 500) {
+											Galeria Mi_Galeria = new Galeria();
+											new InterfazGaleria().setVisible(true);
+										}
+									}
 
 								} else {
-
-									if (recuento < 500) {
-										Galeria Mi_Galeria = new Galeria();
-										new InterfazGaleria().setVisible(true);
-									}
+									Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
 								}
 
-							} else {
-								Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
 							}
+						} catch (Exception e1) {
 
 						}
-					} catch (Exception e1) {
-
+					}
+				} catch (SQLException e) {
+					try {
+						new Bd().setVisible(true);
+					} catch (IOException e1) {
+						//
 					}
 				}
 
@@ -564,12 +571,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));
 		mntmNewMenuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/lupa.png")));
 
-		separator_2 = new JSeparator();
-		menu1.add(separator_2);
+		separator22 = new JSeparator();
+		menu1.add(separator22);
 
-		mntmNewMenuItem_1 = new JMenuItem("Descargar imagenes");
-		mntmNewMenuItem_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
-		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
+		mntmNewMenuItem1 = new JMenuItem("Descargar imagenes");
+		mntmNewMenuItem1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
+		mntmNewMenuItem1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
@@ -579,8 +586,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 			}
 		});
-		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		menu1.add(mntmNewMenuItem_1);
+		mntmNewMenuItem1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		menu1.add(mntmNewMenuItem1);
 
 		separator1 = new JSeparator();
 		menu.add(separator1);
@@ -695,6 +702,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					}
 
 				} catch (IOException e1) {
+					//
 				}
 			}
 		});
@@ -834,13 +842,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator8 = new JSeparator();
 		menu4.add(separator8);
 
-		mnNewMenu_1 = new JMenu("Video");
-		mnNewMenu_1.setFont(new Font("DejaVu Sans", Font.BOLD, 20));
-		mnNewMenu_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_frame.png")));
-		menu4.add(mnNewMenu_1);
+		mnNewMenu1 = new JMenu("Video");
+		mnNewMenu1.setFont(new Font("DejaVu Sans", Font.BOLD, 20));
+		mnNewMenu1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_frame.png")));
+		menu4.add(mnNewMenu1);
 
 		menuItem11 = new JMenuItem("Video 2 Frame");
-		mnNewMenu_1.add(menuItem11);
+		mnNewMenu1.add(menuItem11);
 		menuItem11.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -852,10 +860,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 18));
 
 		separator10 = new JSeparator();
-		mnNewMenu_1.add(separator10);
+		mnNewMenu1.add(separator10);
 
 		menuItem12 = new JMenuItem("Video 2 GIF");
-		mnNewMenu_1.add(menuItem12);
+		mnNewMenu1.add(menuItem12);
 		menuItem12.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {

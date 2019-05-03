@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	public About() {

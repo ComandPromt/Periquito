@@ -81,7 +81,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		cmdPreview.setPreferredSize(new java.awt.Dimension(44, 120));
 		cmdPreview.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				cmdPreviewActionPerformed(evt);
+				cmdPreviewActionPerformed();
 			}
 		});
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -100,7 +100,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		fotoA.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				fotoAMouseClicked(evt);
+				fotoAMouseClicked();
 			}
 		});
 
@@ -124,7 +124,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		fotoB.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				fotoBMouseClicked(evt);
+				fotoBMouseClicked();
 			}
 		});
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -147,7 +147,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		fotoC.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				fotoCMouseClicked(evt);
+				fotoCMouseClicked();
 			}
 		});
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -169,7 +169,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		fotoD.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				fotoDMouseClicked(evt);
+				fotoDMouseClicked();
 			}
 		});
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -187,7 +187,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		cmdNext.addActionListener(new java.awt.event.ActionListener() {
 			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				cmdNextActionPerformed(evt);
+				cmdNextActionPerformed();
 			}
 		});
 		gridBagConstraints = new java.awt.GridBagConstraints();
@@ -205,7 +205,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		pack();
 	}
 
-	private void fotoAMouseClicked(java.awt.event.MouseEvent evt) {
+	private void fotoAMouseClicked() {
 
 		if (posicion == 0 && posicionactual == 0 && paso == 0) {
 
@@ -245,19 +245,19 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		}
 	}
 
-	private void fotoBMouseClicked(java.awt.event.MouseEvent evt) {
+	private void fotoBMouseClicked() {
 		posicionactual += 1;
 		verImagen(posicionactual);
 		paso = posicionactual;
 	}
 
-	private void fotoCMouseClicked(java.awt.event.MouseEvent evt) {
+	private void fotoCMouseClicked() {
 		posicionactual += 2;
 		verImagen(posicionactual);
 		paso = posicionactual;
 	}
 
-	private void fotoDMouseClicked(java.awt.event.MouseEvent evt) {
+	private void fotoDMouseClicked() {
 		posicionactual += 3;
 		verImagen(posicionactual);
 		paso = posicionactual;
@@ -279,7 +279,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		}
 	}
 
-	private void cmdNextActionPerformed(java.awt.event.ActionEvent evt) {
+	private void cmdNextActionPerformed() {
 
 		if (paso == 0 && posicionactual == 0 && size > 1) {
 			posicionactual += 1;
@@ -323,7 +323,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		}
 	}
 
-	private void cmdPreviewActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cmdPreviewActionPerformed
+	private void cmdPreviewActionPerformed() {// GEN-FIRST:event_cmdPreviewActionPerformed
 
 		if (paso == 2) {
 

@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-
 import periquito.MenuPrincipal;
 
 @SuppressWarnings("serial")
@@ -32,26 +31,21 @@ public class PhotoFrame extends javax.swing.JFrame {
 	javax.swing.JScrollPane jScrollPane1;
 	private JRadioButton rdbtnSingle;
 	static JRadioButton rdbtnMultipleCrop;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
+
 	static JFileChooser fileChooser = new JFileChooser();
-	private JLabel lblNewLabel_2;
+
 	int angulo = 90;
-	BufferedImage img;
-	BufferedImage dst;
-	private JLabel lblNewLabel_3;
-	private JLabel lblNewLabel_4;
-	private JLabel lblNewLabel_5;
-	private JLabel lblNewLabel_6;
+	transient BufferedImage img;
+	transient BufferedImage dst;
 
 	public static BufferedImage rotacionImagen(BufferedImage origen, double grados) {
 		BufferedImage destinationImage;
-        ImageTransform imTransform = new ImageTransform(origen.getHeight(), origen.getWidth());
-        imTransform.rotate(grados);
-        imTransform.findTranslation();
-        AffineTransformOp ato = new AffineTransformOp(imTransform.getTransform(), AffineTransformOp.TYPE_BILINEAR);
-        destinationImage = ato.createCompatibleDestImage(origen, origen.getColorModel());
-        return ato.filter(origen, destinationImage);
+		ImageTransform imTransform = new ImageTransform(origen.getHeight(), origen.getWidth());
+		imTransform.rotate(grados);
+		imTransform.findTranslation();
+		AffineTransformOp ato = new AffineTransformOp(imTransform.getTransform(), AffineTransformOp.TYPE_BILINEAR);
+		destinationImage = ato.createCompatibleDestImage(origen, origen.getColorModel());
+		return ato.filter(origen, destinationImage);
 	}
 
 	private static BufferedImage loadJPGImage(String ruta) throws IOException {
@@ -160,19 +154,19 @@ public class PhotoFrame extends javax.swing.JFrame {
 				rabioBoxPorDefecto();
 			}
 		});
-
+		JLabel lblNewLabel;
 		lblNewLabel = new JLabel(" Single Crop   ");
 		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 20));
 		jMenuBar1.add(lblNewLabel);
 		rdbtnMultipleCrop.setSelected(true);
 		jMenuBar1.add(rdbtnMultipleCrop);
-
-		lblNewLabel_1 = new JLabel(" Multiple Crop   ");
-		lblNewLabel_1.setFont(new Font("Dialog", Font.BOLD, 20));
-		jMenuBar1.add(lblNewLabel_1);
-
-		lblNewLabel_2 = new JLabel("    ");
-		lblNewLabel_2.addMouseListener(new MouseAdapter() {
+		JLabel lblNewLabel1;
+		lblNewLabel1 = new JLabel(" Multiple Crop   ");
+		lblNewLabel1.setFont(new Font("Dialog", Font.BOLD, 20));
+		jMenuBar1.add(lblNewLabel1);
+		JLabel lblNewLabel2;
+		lblNewLabel2 = new JLabel("    ");
+		lblNewLabel2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
@@ -195,11 +189,12 @@ public class PhotoFrame extends javax.swing.JFrame {
 			}
 		});
 
-		lblNewLabel_6 = new JLabel("  ");
-		lblNewLabel_6.addMouseListener(new MouseAdapter() {
+		JLabel lblNewLabel6;
+		lblNewLabel6 = new JLabel("  ");
+		lblNewLabel6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-		        try {
+				try {
 					if (angulo <= 0 || angulo >= 360) {
 						angulo = 270;
 					} else {
@@ -216,13 +211,13 @@ public class PhotoFrame extends javax.swing.JFrame {
 				}
 			}
 		});
-		lblNewLabel_6.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_90.png")));
-		jMenuBar1.add(lblNewLabel_6);
-		lblNewLabel_2.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_180.png")));
-		jMenuBar1.add(lblNewLabel_2);
-
-		lblNewLabel_3 = new JLabel("  ");
-		lblNewLabel_3.addMouseListener(new MouseAdapter() {
+		lblNewLabel6.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_90.png")));
+		jMenuBar1.add(lblNewLabel6);
+		lblNewLabel2.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_180.png")));
+		jMenuBar1.add(lblNewLabel2);
+		JLabel lblNewLabel3;
+		lblNewLabel3 = new JLabel("  ");
+		lblNewLabel3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
@@ -234,11 +229,11 @@ public class PhotoFrame extends javax.swing.JFrame {
 				}
 			}
 		});
-		lblNewLabel_3.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/save.png")));
-		jMenuBar1.add(lblNewLabel_3);
-
-		lblNewLabel_4 = new JLabel("   ");
-		lblNewLabel_4.addMouseListener(new MouseAdapter() {
+		lblNewLabel3.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/save.png")));
+		jMenuBar1.add(lblNewLabel3);
+		JLabel lblNewLabel4;
+		lblNewLabel4 = new JLabel("   ");
+		lblNewLabel4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
@@ -249,8 +244,9 @@ public class PhotoFrame extends javax.swing.JFrame {
 			}
 		});
 
-		lblNewLabel_5 = new JLabel("  ");
-		lblNewLabel_5.addMouseListener(new MouseAdapter() {
+		JLabel lblNewLabel5;
+		lblNewLabel5 = new JLabel("  ");
+		lblNewLabel5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
@@ -260,10 +256,10 @@ public class PhotoFrame extends javax.swing.JFrame {
 				}
 			}
 		});
-		lblNewLabel_5.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/crop.png")));
-		jMenuBar1.add(lblNewLabel_5);
-		lblNewLabel_4.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/folder.png")));
-		jMenuBar1.add(lblNewLabel_4);
+		lblNewLabel5.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/crop.png")));
+		jMenuBar1.add(lblNewLabel5);
+		lblNewLabel4.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/folder.png")));
+		jMenuBar1.add(lblNewLabel4);
 
 		pack();
 	}

@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -60,6 +61,8 @@ public abstract class Metodos {
 	}
 
 	public static void descargarFoto(String enlace, int numero) throws IOException {
+		FileOutputStream fos = null;
+		InputStream is = null;
 		try {
 			// Url con la foto
 			URL url = new URL(enlace);
@@ -69,9 +72,8 @@ public abstract class Metodos {
 
 			// Se obtiene el inputStream de la foto web y se abre el fichero
 			// local.
-			InputStream is = urlCon.getInputStream();
-			FileOutputStream fos = new FileOutputStream(
-					"Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
+			is = urlCon.getInputStream();
+			fos = new FileOutputStream("Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
 
 			// Lectura de la foto de la web y escritura en fichero local
 			byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -87,6 +89,14 @@ public abstract class Metodos {
 		} catch (Exception e) {
 			Metodos.abrirCarpeta("Downloads");
 			System.exit(0);
+		} finally {
+			if (is != null) {
+				is.close();
+			}
+			if (fos != null) {
+				fos.close();
+			}
+
 		}
 	}
 
@@ -95,12 +105,10 @@ public abstract class Metodos {
 
 			WebDriver chrome;
 
-			for (int x = inicio; x <= fin; x++) {
+			for (int x = inicio; x <= fin; x += salto) {
 
-				chrome = new ChromeDriver();
-
-				if (Descarga.rdbtnComplex.isSelected()) {
-
+				if (Descarga.getRdbtnComplex().isSelected()) {
+					chrome = new ChromeDriver();
 					chrome.get(imagen + x);
 
 					if (!chrome.findElements(By.tagName("img")).isEmpty()) {
@@ -109,11 +117,12 @@ public abstract class Metodos {
 						descargarFoto(image.get(0).getAttribute("src"), x);
 					}
 
+					chrome.close();
 				}
 
 				else {
 					try {
-						String extension = Descarga.textField_3.getText().trim();
+						String extension = Descarga.textField3.getText().trim();
 						// Url con la foto
 						URL url = new URL(imagen + x + "." + extension);
 
@@ -123,7 +132,7 @@ public abstract class Metodos {
 						// Se obtiene el inputStream de la foto web y se abre el fichero
 						// local.
 						InputStream is = urlCon.getInputStream();
-						FileOutputStream fos = new FileOutputStream("Downloads/Image_" + x + "." + extension);
+						FileOutputStream fos = new FileOutputStream("Config/Downloads/Image_" + x + "." + extension);
 
 						// Lectura de la foto de la web y escritura en fichero local
 						byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -141,12 +150,10 @@ public abstract class Metodos {
 					}
 				}
 
-				chrome.close();
-
 			}
-
+			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
 		} catch (Exception e) {
-			Metodos.abrirCarpeta("Downloads");
+			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
 			System.exit(0);
 		}
 	}
@@ -311,11 +318,12 @@ public abstract class Metodos {
 		String[] salida = new String[longitud];
 		String texto = "";
 		int i = 0;
-
+		FileReader flE = null;
+		BufferedReader fE = null;
 		try {
 
-			FileReader flE = new FileReader(fichero);
-			BufferedReader fE = new BufferedReader(flE);
+			flE = new FileReader(fichero);
+			fE = new BufferedReader(flE);
 			texto = fE.readLine();
 
 			while (texto != null) {
@@ -329,8 +337,25 @@ public abstract class Metodos {
 			flE.close();
 		} catch (IOException e) {
 //
-		}
+		} finally {
+			if (fE != null) {
+				try {
+					fE.close();
+				} catch (IOException e) {
+					//
+				}
+			}
 
+			if (flE != null) {
+				try {
+					flE.close();
+				} catch (IOException e) {
+					// }
+
+				}
+
+			}
+		}
 		return salida;
 
 	}
@@ -459,7 +484,6 @@ public abstract class Metodos {
 				rs.close();
 				conexion.close();
 			} catch (Exception e) {
-
 				new Bd().setVisible(true);
 			}
 
@@ -475,20 +499,25 @@ public abstract class Metodos {
 
 	}
 
-	public static boolean comprobarConexionBd(String sql) {
+	public static boolean comprobarConexionBd(String sql) throws SQLException {
 		boolean resultado = false;
+		Connection conexion = null;
+		Statement s = null;
+		ResultSet rs = null;
 		try {
-			Connection conexion = Metodos.conexionBD();
+			conexion = Metodos.conexionBD();
 
-			Statement s = conexion.createStatement();
+			s = conexion.createStatement();
 
-			ResultSet rs = s.executeQuery(sql);
+			rs = s.executeQuery(sql);
 
 			rs.next();
 
 			if (!rs.getString("Nombre").equals("")) {
 				resultado = true;
 			}
+			s.close();
+			rs.close();
 		} catch (SQLException e) {
 			Metodos.mensaje("No hay registros en la base de datos", 3);
 		}
@@ -499,6 +528,14 @@ public abstract class Metodos {
 			} catch (IOException e1) {
 				//
 			}
+		} finally {
+			if (s != null) {
+				s.close();
+			}
+			if (rs != null) {
+				rs.close();
+			}
+
 		}
 		return resultado;
 	}
@@ -698,16 +735,6 @@ public abstract class Metodos {
 		}
 	}
 
-	public static String saberseparador(int os) {
-		String separador;
-		if (os == 1) {
-			separador = "\\";
-		} else {
-			separador = "/";
-		}
-		return separador;
-	}
-
 	public static int listarFicherosPorCarpeta(final File carpeta, String filtro) {
 
 		int ocurrencias = 0;
@@ -866,7 +893,7 @@ public abstract class Metodos {
 		return mensaje;
 	}
 
-	public static byte[] createChecksum(String filename) throws Exception {
+	public static byte[] createChecksum(String filename) throws NoSuchAlgorithmException, IOException {
 		InputStream fis = null;
 		MessageDigest complete = MessageDigest.getInstance("SHA-256");
 		try {
@@ -882,7 +909,7 @@ public abstract class Metodos {
 				}
 			} while (numRead != -1);
 			fis.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			if (fis != null) {
 				fis.close();
 			}
@@ -892,11 +919,12 @@ public abstract class Metodos {
 
 	public static boolean comprobarArchivo(String archivo, boolean tipo) throws FileNotFoundException {
 		File carpeta = new File(archivo);
+		boolean retorno;
 		if (!tipo) {
 			if (!carpeta.exists()) {
 				carpeta.mkdir();
 			}
-			return false;
+			retorno = false;
 		} else {
 
 			File config = new File(archivo);
@@ -904,14 +932,15 @@ public abstract class Metodos {
 			if (config.exists()) {
 
 				if (Metodos.numeroLineas(archivo.substring(archivo.indexOf('/') + 1, archivo.length())) > 0) {
-					return true;
+					retorno = true;
 				} else {
-					return false;
+					retorno = false;
 				}
 			} else {
-				return false;
+				retorno = false;
 			}
 		}
+		return retorno;
 	}
 
 	public static void mensaje(String mensaje, int titulo) {

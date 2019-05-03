@@ -25,7 +25,7 @@ public abstract class ImageResizer {
 
 			bimage = loadImage(filePath);
 
-			if (bimage != null && bimage.getHeight() > 480 || bimage.getWidth() > 640) {
+			if (bimage != null && (bimage.getHeight() > 480 || bimage.getWidth() > 640)) {
 
 				if (bimage.getHeight() > bimage.getWidth()) {
 					int heigt = (bimage.getHeight() * maxWidth) / bimage.getWidth();

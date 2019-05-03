@@ -29,7 +29,7 @@ import javax.swing.event.ChangeListener;
 import utils.Metodos;
 import utils.MyInterface;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 
 public class Bd extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 	JLabel jLabel1;
@@ -43,7 +43,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	private JTextField textField1;
 	private JTextField textField2;
 	private JTextField direccion;
-	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel2;
 	JRadioButton rdbtnXampp = new JRadioButton("XAMPP");
 	JRadioButton rdbtnAppserv = new JRadioButton("APPServ");
 	String servidorWeb = "1";
@@ -261,8 +261,8 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/wamp.png")));
 
-		lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/xampp.png")));
+		lblNewLabel2 = new JLabel("");
+		lblNewLabel2.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/xampp.png")));
 
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/save.png")));
@@ -320,7 +320,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 										.addPreferredGap(ComponentPlacement.RELATED).addComponent(rdbtnAppserv)
 										.addGap(30).addComponent(lblNewLabel_1)
 										.addPreferredGap(ComponentPlacement.RELATED).addComponent(rdbtnWamp).addGap(18)
-										.addComponent(lblNewLabel_2).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(lblNewLabel2).addPreferredGap(ComponentPlacement.RELATED)
 										.addComponent(rdbtnXampp).addGap(30).addComponent(btnNewButton))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
@@ -372,7 +372,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
 										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-												.addComponent(btnNewButton).addComponent(lblNewLabel_2)))
+												.addComponent(btnNewButton).addComponent(lblNewLabel2)))
 								.addGroup(layout.createSequentialGroup().addGap(18)
 										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 												.addComponent(lblNewLabel).addComponent(lblNewLabel_1)))

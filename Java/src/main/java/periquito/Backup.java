@@ -24,7 +24,7 @@ import javax.swing.event.ChangeListener;
 import utils.Metodos;
 import utils.MyInterface;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("all")
 
 public class Backup extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 	javax.swing.JLabel jLabel1;

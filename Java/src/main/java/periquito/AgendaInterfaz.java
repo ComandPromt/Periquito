@@ -18,48 +18,42 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import utils.Metodos;
 
 @SuppressWarnings("all")
-public class AgendaInterfaz extends javax.swing.JFrame {
-	static javax.swing.JButton agregar;
-	private javax.swing.JButton buscar;
-	private javax.swing.JButton contactos;
-	private javax.swing.JButton editar;
-	private javax.swing.JButton editarContacto;
-	private javax.swing.JButton eliminarContacto;
-	private javax.swing.JButton btnNewButton;
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel3;
-	private javax.swing.JLabel jLabel5;
-	private javax.swing.JLabel jLabel6;
-	private static javax.swing.JList<String> jList1;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JPanel jPanel3;
-	private javax.swing.JPanel jPanel4;
-	private javax.swing.JPanel jPanel5;
-	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JPanel panelCasa;
-	private javax.swing.JPanel panelCelular;
-	private javax.swing.JPanel panelNombre;
-	private JScrollPane scrollPane;
+public class AgendaInterfaz extends JFrame {
+	static JButton agregar;
+	private JButton buscar;
+	private JButton contactos;
+	private JButton editar;
+
+	private JButton eliminarContacto;
+
+	private static JList<String> jList1;
+
 	private JTextArea nota;
 	private JTextPane nombre;
 	private JTextPane tipo;
-	static DefaultListModel<String> modelo = new DefaultListModel<String>();
+	static DefaultListModel<String> modelo = new DefaultListModel<>();
 
 	String iduser;
-	ResultSet rs;
-	Statement s;
+	transient ResultSet rs;
+	transient Statement s;
 	String cnombre;
 	String ctipo;
 	String cnota;
@@ -96,53 +90,62 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 	}
 
 	private void initComponents() throws SQLException, IOException {
-		jPanel4 = new javax.swing.JPanel();
-		jPanel5 = new javax.swing.JPanel();
-		jLabel1 = new javax.swing.JLabel();
-		jPanel1 = new javax.swing.JPanel();
-		contactos = new javax.swing.JButton();
+		JLabel jLabel1;
+		JPanel jPanel1;
+		JPanel jPanel3;
+		JPanel jPanel4;
+		JPanel jPanel5;
+		jList1 = new JList<>();
+		agregar = new JButton();
+		jPanel4 = new JPanel();
+		jPanel5 = new JPanel();
+		jLabel1 = new JLabel();
+		jPanel1 = new JPanel();
+		contactos = new JButton();
 		contactos.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		editar = new javax.swing.JButton();
+		editar = new JButton();
 		editar.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		buscar = new javax.swing.JButton();
+		buscar = new JButton();
 		buscar.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		jPanel3 = new javax.swing.JPanel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		jList1 = new javax.swing.JList<>();
+		jPanel3 = new JPanel();
+		JScrollPane jScrollPane1;
+		JPanel panelCasa;
+		JPanel panelCelular;
+		JPanel panelNombre;
+		JScrollPane scrollPane;
+		jScrollPane1 = new JScrollPane();
 		jList1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		jList1.setFixedCellHeight(40);
 
 		jPanel5.setBackground(new java.awt.Color(88, 205, 170));
 
-		jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+		jLabel1.setHorizontalAlignment(SwingConstants.LEFT);
 		jLabel1.setText("Nombre");
 
-		javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+		GroupLayout jPanel5Layout = new GroupLayout(jPanel5);
 		jPanel5.setLayout(jPanel5Layout);
-		jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						jPanel5Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(jLabel1,
-								javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)));
-		jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE));
+		jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(
+				GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 481, GroupLayout.PREFERRED_SIZE)));
+		jPanel5Layout.setVerticalGroup(jPanel5Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE));
 
-		javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+		GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
 		jPanel4.setLayout(jPanel4Layout);
-		jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-						jPanel4Layout.createSequentialGroup().addContainerGap().addComponent(jPanel5,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-								Short.MAX_VALUE)));
-		jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(jPanel4Layout.createSequentialGroup()
-						.addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(0, 0, Short.MAX_VALUE)));
+		jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addGroup(GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup().addContainerGap()
+						.addComponent(jPanel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		jPanel4Layout
+				.setVerticalGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+						.addGroup(jPanel4Layout
+								.createSequentialGroup().addComponent(jPanel5, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(0, 0, Short.MAX_VALUE)));
 		setTitle("Periquito v3 Agenda");
 		setBackground(new java.awt.Color(123, 123, 123));
 
 		jPanel1.setBackground(new Color(240, 240, 240));
-		agregar = new javax.swing.JButton();
+
 		agregar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		agregar.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/insert.png")));
@@ -157,7 +160,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 				new Agregar().setVisible(true);
 			}
 		});
-		editarContacto = new javax.swing.JButton();
+
+		JButton editarContacto = new JButton();
 
 		editarContacto.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/edit_1.png")));
 		editarContacto.setBorderPainted(false);
@@ -221,8 +225,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 				}
 			}
 		});
-
-		btnNewButton = new JButton();
+		JButton btnNewButton = new JButton();
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -280,7 +283,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		btnNewButton.setFocusPainted(false);
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.setBorderPainted(false);
-		eliminarContacto = new javax.swing.JButton();
+		eliminarContacto = new JButton();
 
 		eliminarContacto.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/delete.png")));
 		eliminarContacto.setBorderPainted(false);
@@ -291,7 +294,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		eliminarContacto.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				try {
-					eliminarContactoMouseClicked(evt);
+					eliminarContactoMouseClicked();
 				} catch (IOException e) {
 					Metodos.mensaje("No se ha podido eliminar la nota", 1);
 				}
@@ -300,7 +303,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 		JSeparator separator = new JSeparator();
 
-		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+		GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
 		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(Alignment.LEADING).addGroup(jPanel1Layout
 				.createSequentialGroup().addContainerGap()
 				.addComponent(agregar, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
@@ -327,7 +330,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 				.addComponent(separator, GroupLayout.PREFERRED_SIZE, 9, GroupLayout.PREFERRED_SIZE)));
 		jPanel1.setLayout(jPanel1Layout);
 
-		jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		jScrollPane1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPane1.setDoubleBuffered(true);
 
 		jList1.setBackground(new java.awt.Color(254, 254, 254));
@@ -338,8 +341,11 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 
 		});
 		jScrollPane1.setViewportView(jList1);
-		panelNombre = new javax.swing.JPanel();
-		jLabel3 = new javax.swing.JLabel();
+		panelNombre = new JPanel();
+		JLabel jLabel3;
+		JLabel jLabel5;
+		JLabel jLabel6;
+		jLabel3 = new JLabel();
 
 		panelNombre.setBackground(new Color(214, 217, 223));
 
@@ -350,7 +356,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		nombre.setEditable(false);
 		nombre.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
-		javax.swing.GroupLayout panelNombreLayout = new javax.swing.GroupLayout(panelNombre);
+		GroupLayout panelNombreLayout = new GroupLayout(panelNombre);
 		panelNombreLayout.setHorizontalGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(panelNombreLayout.createSequentialGroup().addContainerGap().addComponent(jLabel3).addGap(18)
 						.addComponent(nombre, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
@@ -364,8 +370,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 										GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)))
 						.addContainerGap()));
 		panelNombre.setLayout(panelNombreLayout);
-		panelCasa = new javax.swing.JPanel();
-		jLabel5 = new javax.swing.JLabel();
+		panelCasa = new JPanel();
+		jLabel5 = new JLabel();
 
 		panelCasa.setBackground(new Color(214, 217, 223));
 
@@ -376,7 +382,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		tipo.setEditable(false);
 		tipo.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
-		javax.swing.GroupLayout panelCasaLayout = new javax.swing.GroupLayout(panelCasa);
+		GroupLayout panelCasaLayout = new GroupLayout(panelCasa);
 		panelCasaLayout.setHorizontalGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(panelCasaLayout.createSequentialGroup().addContainerGap().addComponent(jLabel5).addGap(18)
 						.addComponent(tipo, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
@@ -389,8 +395,8 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 										GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
 						.addContainerGap(22, Short.MAX_VALUE)));
 		panelCasa.setLayout(panelCasaLayout);
-		panelCelular = new javax.swing.JPanel();
-		jLabel6 = new javax.swing.JLabel();
+		panelCelular = new JPanel();
+		jLabel6 = new JLabel();
 		jLabel6.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/nota.png")));
 
 		panelCelular.setBackground(new Color(214, 217, 223));
@@ -398,7 +404,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		scrollPane = new JScrollPane((Component) null);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		javax.swing.GroupLayout panelCelularLayout = new javax.swing.GroupLayout(panelCelular);
+		GroupLayout panelCelularLayout = new GroupLayout(panelCelular);
 		panelCelularLayout.setHorizontalGroup(panelCelularLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(panelCelularLayout.createSequentialGroup().addContainerGap().addComponent(jLabel6).addGap(18)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE).addContainerGap()));
@@ -418,7 +424,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		nota.setLineWrap(true);
 		panelCelular.setLayout(panelCelularLayout);
 
-		javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+		GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
 		jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING).addGroup(jPanel3Layout
 				.createSequentialGroup().addGap(18)
 				.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
@@ -442,7 +448,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 				.addGap(31)));
 		jPanel3.setLayout(jPanel3Layout);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(jPanel1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -461,7 +467,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 			try {
 				verNotas();
 			} catch (Exception e) {
-
+//
 			}
 		}
 
@@ -485,7 +491,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		s.close();
 	}
 
-	private void eliminarContactoMouseClicked(java.awt.event.MouseEvent evt) throws IOException {
+	private void eliminarContactoMouseClicked() throws IOException {
 
 		if (!controlarSeleccion()) {
 			JLabel mensaje = new JLabel("Seguro que quieres borrar a " + jList1.getSelectedValue().toString() + "?");
@@ -503,6 +509,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 					verNotas();
 					s.close();
 				} catch (SQLException e) {
+					//
 				}
 
 			}
@@ -520,12 +527,12 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		}
 	}
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 
 		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+					UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
 			}
@@ -538,7 +545,7 @@ public class AgendaInterfaz extends javax.swing.JFrame {
 		} catch (IllegalAccessException ex) {
 			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+		} catch (UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		}
