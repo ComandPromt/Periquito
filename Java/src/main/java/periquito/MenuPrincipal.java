@@ -732,16 +732,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				if (!Metodos.comprobarConexionBd("select Nombre from notas order by Nombre")) {
-					Metodos.mensaje("Compuebe que exista una tabla llamada notas en la base de datos", 3);
-				} else {
-					try {
-						if (Metodos.comprobarConfiguracion()) {
-							new AgendaInterfaz().setVisible(true);
-						}
-					} catch (IOException | SQLException e1) {
+				try {
+					if (Metodos.comprobarConfiguracion()) {
+						new AgendaInterfaz().setVisible(true);
 					}
+				} catch (Exception e1) {
 				}
+
 			}
 		});
 		menuItem5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));

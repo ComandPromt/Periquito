@@ -36,7 +36,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 	private JTextField tipo;
 
 	public Agregar() {
-		setTitle("Periquito v3 Agregar Usuario");
+		setTitle("Periquito v3 Agregar Nota");
 		setType(Type.UTILITY);
 		initComponents();
 	}
@@ -48,7 +48,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 		usuario.setToolTipText("");
 		javax.swing.JLabel jLabel1;
 		jLabel1 = new javax.swing.JLabel();
-		jLabel1.setText("Usuario");
+		jLabel1.setText("Nombre");
 		jLabel1.setIcon(new ImageIcon(Agregar.class.getResource("/imagenes/user.png")));
 		jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -112,7 +112,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 
 		JLabel lblDescripcion = new JLabel();
 		lblDescripcion.setIcon(new ImageIcon(Agregar.class.getResource("/imagenes/nota.png")));
-		lblDescripcion.setText("Nota");
+		lblDescripcion.setText("Obs");
 		lblDescripcion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDescripcion.setFont(new Font("Tahoma", Font.BOLD, 20));
 
