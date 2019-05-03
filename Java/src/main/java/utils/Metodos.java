@@ -71,7 +71,7 @@ public abstract class Metodos {
 			// local.
 			InputStream is = urlCon.getInputStream();
 			FileOutputStream fos = new FileOutputStream(
-					"Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
+					"Config/Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
 
 			// Lectura de la foto de la web y escritura en fichero local
 			byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -85,7 +85,8 @@ public abstract class Metodos {
 			is.close();
 			fos.close();
 		} catch (Exception e) {
-			Metodos.abrirCarpeta("Downloads");
+			Metodos.mensaje("Asegúrate de tener el driver de chrome instalado", 3);
+			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
 			System.exit(0);
 		}
 	}
@@ -123,7 +124,7 @@ public abstract class Metodos {
 						// Se obtiene el inputStream de la foto web y se abre el fichero
 						// local.
 						InputStream is = urlCon.getInputStream();
-						FileOutputStream fos = new FileOutputStream("Downloads/Image_" + x + "." + extension);
+						FileOutputStream fos = new FileOutputStream("Config/Downloads/Image_" + x + "." + extension);
 
 						// Lectura de la foto de la web y escritura en fichero local
 						byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -146,7 +147,7 @@ public abstract class Metodos {
 			}
 
 		} catch (Exception e) {
-			Metodos.abrirCarpeta("Downloads");
+			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
 			System.exit(0);
 		}
 	}

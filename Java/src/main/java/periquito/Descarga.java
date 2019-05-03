@@ -121,7 +121,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 								Metodos.descargar(jTextField1.getText().trim(), inicio, fin, salto);
 
 								if (!error) {
-									Metodos.abrirCarpeta("Downloads");
+									Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
 								}
 							}
 
