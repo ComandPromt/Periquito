@@ -46,7 +46,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.DragAndDrop;
-import utils.Galeria;
 import utils.ImageResizer;
 import utils.InterfazGaleria;
 import utils.Metodos;
@@ -497,7 +496,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM" + lecturabd[3] + "images")) {
+
+					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM " + lecturabd[3] + "images",
+							"COUNT(image_id)")) {
+
 						try {
 							if (Metodos.comprobarConfiguracion()) {
 
@@ -544,7 +546,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									} else {
 
 										if (recuento < 500) {
-											Galeria Mi_Galeria = new Galeria();
+											InterfazGaleria Mi_Galeria = new InterfazGaleria();
 											new InterfazGaleria().setVisible(true);
 										}
 									}

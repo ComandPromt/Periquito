@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import periquito.Config2;
 import periquito.MenuPrincipal;
 
 public class Galeria {
@@ -29,11 +30,15 @@ public class Galeria {
 				fotos.add(new javax.swing.ImageIcon(
 						ImageIO.read(new URL("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
 								+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getImagenes().get(i)))));
-
 			}
 
 		} catch (IOException e) {
 			Metodos.mensaje("No se han podido cargar las imágenes", 1);
+			try {
+				new Config2().setVisible(true);
+			} catch (IOException e1) {
+				//
+			}
 		}
 
 	}

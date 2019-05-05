@@ -396,7 +396,7 @@ public abstract class Metodos {
 						false, MenuPrincipal.getOs());
 
 				Metodos.mensaje("Backup realizado correctamente", 2);
-
+				abrirCarpeta(backup[0]);
 			} catch (Exception e) {
 				Metodos.mensaje("Error", 1);
 			}
@@ -499,7 +499,7 @@ public abstract class Metodos {
 
 	}
 
-	public static boolean comprobarConexionBd(String sql) throws SQLException {
+	public static boolean comprobarConexionBd(String sql, String fila) throws SQLException {
 		boolean resultado = false;
 		Connection conexion = null;
 		Statement s = null;
@@ -513,7 +513,7 @@ public abstract class Metodos {
 
 			rs.next();
 
-			if (!rs.getString("Nombre").equals("")) {
+			if (!rs.getString(fila).equals("")) {
 				resultado = true;
 			}
 			s.close();
