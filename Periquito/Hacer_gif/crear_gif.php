@@ -136,7 +136,7 @@ if ($comprobacion[0] != 'error') {
     $ancho = array();
     $alto = array();
 
-    if (check_images_ext("img", "jpg") != null && check_images_ext("img", "jpg") != "" || check_images_ext("img", "png") != null && check_images_ext("img", "png") != "") {
+    if ($imagenes != null && $imagenes != "" || check_images_ext("img", "png") != null && check_images_ext("img", "png") != "") {
 
         for ($x = 0; $x < count($imagenes); $x++) {
 
