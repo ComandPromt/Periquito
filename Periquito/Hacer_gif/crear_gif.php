@@ -3,9 +3,7 @@
 date_default_timezone_set('Europe/Madrid');
 
 function comprobar_formatos($path){
-
     $formatos = array(".jpg", "jpeg", ".png");
-
     $dir = opendir($path);
     $files = array();
     while ($current = readdir($dir)) {
@@ -21,19 +19,15 @@ function comprobar_formatos($path){
             }
         }
     }
-    sort($files);
+	sort($files);
     return $files;
 }
 
 function redimensionarJPG($max_ancho, $max_alto, $ruta){
-
     $imagenes = check_images_ext($ruta, "jpg");
-
     $calidad = 100;
     for ($x = 0; $x < count($imagenes); $x++) {
-
         $salida = $ruta . "/" . $imagenes[$x];
-
         if (substr($imagenes[$x], -4, 1) == ".") {
             $img_original = imagecreatefromjpeg("./" . $ruta . "/" . $imagenes[$x]);
             list($ancho, $alto) = getimagesize("./" . $ruta . "/" . $imagenes[$x]);
@@ -62,7 +56,7 @@ function check_images_ext($path, $extension){
             }
         }
     }
-    sort($files);
+	sort($files);
     return $files;
 }
 
@@ -80,7 +74,7 @@ function showFiles($path){
             }
         }
     }
-    sort($files);
+	sort($files);
     return $files;
 }
 
@@ -92,12 +86,11 @@ function check_images($path){
             if (is_dir($path . $current)) {
                 showFiles($path . $current . '/');
             } else {
-
                 $files[] = $current;
             }
         }
     }
-    sort($files); 
+	sort($files);
     return $files;
 }
 
@@ -111,7 +104,6 @@ function jpeg_jpg(array $imagenes, $ruta){
 
 function png_a_jpg($ruta){
     $imagenes = check_images_ext($ruta, "png");
-
     for ($x = 0; $x < count($imagenes); $x++) {
         $jpg = $ruta . "/" . substr($imagenes[$x], 0, -3) . "jpg";
         $image = imagecreatefrompng($ruta . "/" . $imagenes[$x]);
@@ -120,70 +112,64 @@ function png_a_jpg($ruta){
     }
 }
 
-
 $borrar = showFiles("img/");
 $num_imagenes=count($borrar);
 
 if($num_imagenes<=170){
-$comprobacion = comprobar_formatos("img");
-
-if ($comprobacion[0] != 'error') {
-	$imagenes = check_images("img");
-    jpeg_jpg($imagenes, "img");
-    png_a_jpg("img");
-
-    $imagenes = check_images_ext("img", "jpg");
-    $ancho = array();
-    $alto = array();
-
-    if ($imagenes != null && $imagenes != "" || check_images_ext("img", "png") != null && check_images_ext("img", "png") != "") {
-
-        for ($x = 0; $x < count($imagenes); $x++) {
-
-            $imagen = getimagesize("img/" . $imagenes[$x]);
-            $ancho[] = $imagen[0];
-            $alto[] = $imagen[1];
-        }
-
-        $anchofinal = min($ancho);
-        $altofinal = min($alto);
-
-        if ($anchofinal > 640) {
-            $anchofinal = 640;
-        }
-        if ($altofinal > 480) {
-            $altofinal = 480;
-        }
-
-        redimensionarJPG($anchofinal, $altofinal, "img");
-
-        if (count($imagenes) > 1) {
-
-            require "src/GifCreator/AnimGif.php";
-
-            $anim = new GifCreator\AnimGif();
-            if (count($imagenes) <= 10) {
-                $rapidez = 20;
-            } else {
-                $rapidez = 5;
-            }
-            $archivo = date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s");
-            $anim->create("img/", array($rapidez))
-                ->save('Output/' . $archivo . '.gif');
-
-        }
-    } else {
-        print '<h1 name="salida">Folder empty</h1>';
-
-    }
-}
-
+	
+	$comprobacion = comprobar_formatos("img");
+	
+	if ($comprobacion[0] != 'error') {
+		$imagenes = check_images("img");
+		jpeg_jpg($imagenes, "img");
+		png_a_jpg("img");
+		$imagenes = check_images_ext("img", "jpg");
+		$ancho = array();
+		$alto = array();
+		
+		if ($imagenes != null && $imagenes != "" || check_images_ext("img", "png") != null && check_images_ext("img", "png") != "") {
+		
+			for ($x = 0; $x < count($imagenes); $x++) {
+				$imagen = getimagesize("img/" . $imagenes[$x]);
+				$ancho[] = $imagen[0];
+				$alto[] = $imagen[1];
+			}
+			
+			$anchofinal = min($ancho);
+			$altofinal = min($alto);
+			
+			if ($anchofinal > 640) {
+				$anchofinal = 640;
+			}
+			
+			if ($altofinal > 480) {
+				$altofinal = 480;
+			}
+			
+			redimensionarJPG($anchofinal, $altofinal, "img");
+			
+			if (count($imagenes) > 1) {
+				require "src/GifCreator/AnimGif.php";
+				$anim = new GifCreator\AnimGif();
+				if (count($imagenes) <= 10) {
+					$rapidez = 20;
+				} else {
+					$rapidez = 5;
+				}
+				$archivo = date("Y") . "_" . date("d") . "_" . date("m") . "_" . date("H") . "-" . date("i") . "-" . date("s");
+				$anim->create("img/", array($rapidez))
+					->save('Output/' . $archivo . '.gif');
+			}
+		}
+		else {
+			print '<h1 name="salida">Folder empty</h1>';
+		}
+	}
 }
 
 $borrar = showFiles("img/");
 
 if ($num_imagenes > 0) {
-
     for ($x = 0; $x < count($borrar); $x++) {
         unlink("img/" . $borrar[$x]);
     }

@@ -420,24 +420,24 @@
 		if(!file_exists('img')){
 			mkdir('img', 0777, true);
 		}
-
+		
 		if (!file_exists("Output")) {
 			mkdir("Output", 0777, true);
 		}
-
+		
 		if(isset($_FILES['upload']['name'])){
-		for($i=0; $i<count($_FILES['upload']['name']); $i++) {
-		
-			$fichTemporal = $_FILES['upload']['tmp_name'][$i];
-		
-			if ($fichTemporal != ""){
-				$destino = "./img/" . $_FILES['upload']['name'][$i];
-				move_uploaded_file($fichTemporal, $destino);
-				chmod($destino,0777);
-				print '<script>window.location="crear_gif.php";</script>';
-			}   
+			for($i=0; $i<count($_FILES['upload']['name']); $i++) {
+			
+				$fichTemporal = $_FILES['upload']['tmp_name'][$i];
+			
+				if ($fichTemporal != ""){
+					$destino = "./img/" . $_FILES['upload']['name'][$i];
+					move_uploaded_file($fichTemporal, $destino);
+					chmod($destino,0777);
+					print '<script>window.location="crear_gif.php";</script>';
+				}   
+			}
 		}
-	}
 		
 		?>
 		
