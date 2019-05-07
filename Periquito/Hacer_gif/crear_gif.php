@@ -21,6 +21,7 @@ function comprobar_formatos($path){
             }
         }
     }
+    sort($files);
     return $files;
 }
 
@@ -61,6 +62,7 @@ function check_images_ext($path, $extension){
             }
         }
     }
+    sort($files);
     return $files;
 }
 
@@ -78,6 +80,7 @@ function showFiles($path){
             }
         }
     }
+    sort($files);
     return $files;
 }
 
@@ -94,6 +97,7 @@ function check_images($path){
             }
         }
     }
+    sort($files); 
     return $files;
 }
 
@@ -186,4 +190,5 @@ if ($num_imagenes > 0) {
 }
 
 header('Location:index.php');
+
 ?>
