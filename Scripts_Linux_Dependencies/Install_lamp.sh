@@ -6,6 +6,6 @@ sudo apt install apache2
 
 sudo apt install mysql-server php mysql-client
 
-sudo apt install php libapache2-mod-php php-mcrypt php-mysql php-cli
+sudo apt install php libapache2-mod-php php-mysql php-cli
 
 exit 0
