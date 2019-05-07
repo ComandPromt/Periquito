@@ -75,6 +75,8 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 
 			dispose();
 
+			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));
+
 			if (mensaje) {
 
 				Metodos.mensaje("Archivo guardado con exito!", 2);

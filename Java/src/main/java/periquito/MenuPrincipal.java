@@ -46,6 +46,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.DragAndDrop;
+import utils.Galeria;
 import utils.ImageResizer;
 import utils.InterfazGaleria;
 import utils.Metodos;
@@ -106,6 +107,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JTextField textField;
 	static String os = System.getProperty("os.name");
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
+
 	static String separador = Metodos.saberSeparador(os);
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
@@ -118,6 +120,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JSeparator separator22;
 	private JMenu mnNewMenu;
 	private JMenu mnNewMenu1;
+
+	public static void setLectura(String[] lectura) {
+		MenuPrincipal.lectura = lectura;
+	}
+
+	public static void setLecturaurl(String[] lecturaurl) {
+		MenuPrincipal.lecturaurl = lecturaurl;
+	}
 
 	public static boolean isConexion() {
 		return conexion;
@@ -197,8 +207,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											FileSystems.getDefault()
 													.getPath(lectura[0] + separador + "Hacer_gif" + separador + "Output"
 															+ separador + listaImagenes.get(x)),
-											FileSystems.getDefault().getPath(
-													directorioActual + "imagenes" + separador + listaImagenes.get(x)),
+											FileSystems.getDefault()
+													.getPath(directorioActual + "Config" + separador + "imagenes"
+															+ separador + listaImagenes.get(x)),
 											StandardCopyOption.REPLACE_EXISTING);
 								}
 
@@ -206,7 +217,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
 											+ separador + frames.get(x));
 								}
-								Metodos.abrirCarpeta("imagenes");
+								Metodos.abrirCarpeta("Config" + separador + "imagenes");
 							} else {
 								new Config().setVisible(true);
 							}
@@ -496,10 +507,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-
-					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM " + lecturabd[3] + "images",
-							"COUNT(image_id)")) {
-
+					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM" + lecturabd[3] + "images")) {
 						try {
 							if (Metodos.comprobarConfiguracion()) {
 
@@ -546,7 +554,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									} else {
 
 										if (recuento < 500) {
-											InterfazGaleria Mi_Galeria = new InterfazGaleria();
+											Galeria Mi_Galeria = new Galeria();
 											new InterfazGaleria().setVisible(true);
 										}
 									}
