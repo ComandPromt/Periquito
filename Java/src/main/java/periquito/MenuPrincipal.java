@@ -507,7 +507,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM" + lecturabd[3] + "images")) {
+					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM" + lecturabd[3] + "images",
+							"COUNT(image_id)")) {
 						try {
 							if (Metodos.comprobarConfiguracion()) {
 
