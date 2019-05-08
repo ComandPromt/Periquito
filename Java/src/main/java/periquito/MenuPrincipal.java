@@ -1090,6 +1090,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 								for (int i = 0; i < imagenesBD.length(); i++) {
 
+									File f1 = new File(directorioActual + "Config" + separador + "imagenes",
+											separador + listaImagenes.get(i));
+
+									File f2 = new File(directorioActual + "Config" + separador + "imagenes",
+											separador + imagenesBD.get(i).toString());
+
+									f1.renameTo(f2);
+
 									s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES(" + maximo + ","
 											+ categoria + ",1,'" + textField.getText().trim() + "','','','"
 											+ Metodos.saberFecha() + "',1,'" + imagenesBD.get(i).toString()
@@ -1115,7 +1123,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								rs.close();
 								s.close();
 
-							} catch (Exception e1) {
+							} catch (SQLException e1) {
+								Metodos.mensaje(
+										"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
+										1);
+							}
+
+							catch (Exception e1) {
 								Metodos.mensaje("Error", 1);
 							}
 

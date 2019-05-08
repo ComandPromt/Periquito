@@ -109,7 +109,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 
 		jLabel1 = new javax.swing.JLabel();
 		jLabel1.setText("Servidor");
-		jLabel1.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/folder.png")));
+		jLabel1.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/remote.png")));
 		jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
