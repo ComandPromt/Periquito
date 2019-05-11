@@ -94,7 +94,7 @@ class AnimGif{
 		}
 		$i = 0;
 
-		if (in_array("img//Image_", $frames)) {
+		if (substr($frames[2],0,11)=="img//Image_") {
 			
 			$y=1;
 
