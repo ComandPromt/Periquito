@@ -12,7 +12,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
@@ -58,6 +62,64 @@ public abstract class Metodos {
 
 	private Metodos() {
 		super();
+	}
+
+	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int cat_id) {
+
+		try {
+
+			String url = "http://localhost/Server/index.php?username=" + username + "&pass=" + pass + "&cat_id="
+					+ cat_id + "&nombre_imagen=" + imageNameOnServer;
+
+			String charset = "UTF-8";
+
+			String limite = Long.toHexString(System.currentTimeMillis());
+
+			String CRLF = "\r\n";
+
+			URLConnection connection = new URL(url).openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + limite);
+			OutputStream output = connection.getOutputStream();
+			PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
+
+			writer.append("--" + limite).append(CRLF);
+			writer.append("Content-Disposition: form-data; name=\"imgname\"").append(CRLF);
+			writer.append("Content-Type: text/plain; charset=" + charset).append(CRLF);
+			writer.append(CRLF).append(imageNameOnServer).append(CRLF).flush();
+
+			writer.append("--" + limite).append(CRLF);
+			writer.append("Content-Disposition: form-data; name=\"archivo\"; filename=\"" + binaryFile.getName() + "\"")
+					.append(CRLF);
+			writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(binaryFile.getName())).append(CRLF);
+			writer.append("Content-Transfer-Encoding: binary").append(CRLF);
+			writer.append(CRLF).flush();
+			Files.copy(binaryFile.toPath(), output);
+			output.flush();
+			writer.append(CRLF).flush();
+
+			writer.append("--" + limite + "--").append(CRLF).flush();
+
+			int responseCode = ((HttpURLConnection) connection).getResponseCode();
+			System.out.println(responseCode); // Si es correcto debe ser el 200
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			// Mostramos la respuesta del servidor por consola
+			System.out.println(response);
+			// cerramos la conexiÃ³n
+			in.close();
+			if (responseCode == 200) {
+				MenuPrincipal.setImagenesSubidas(MenuPrincipal.getImagenesSubidas() + 1);
+			}
+
+		} catch (Exception ex) {
+			//
+		}
 	}
 
 	public static void descargarFoto(String enlace, int numero) throws IOException {
@@ -818,25 +880,6 @@ public abstract class Metodos {
 				abrirCarpeta(directorio);
 			}
 		}
-	}
-
-	public static void cerrarNavegador(String os) {
-		if (os.equals("Linux")) {
-			try {
-				crearScript("cerrar.sh", "kilall chrome", true, MenuPrincipal.getOs());
-
-			} catch (Exception e) {
-				Metodos.mensaje("Error al cerrar el navegador", 1);
-			}
-		} else {
-			try {
-				crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true, MenuPrincipal.getOs());
-
-			} catch (Exception e) {
-				Metodos.mensaje("Error al cerrar el navegador", 1);
-			}
-		}
-
 	}
 
 	public static LinkedList<String> directorio(String ruta, String extension) {
