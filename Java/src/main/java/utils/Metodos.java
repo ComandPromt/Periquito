@@ -68,8 +68,9 @@ public abstract class Metodos {
 
 		try {
 
-			String url = "http://localhost/Server/index.php?username=" + username + "&pass=" + pass + "&cat_id="
-					+ cat_id + "&nombre_imagen=" + imageNameOnServer;
+			String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[0]
+					+ "/utility/index.php?username=" + username + "&pass=" + pass + "&cat_id=" + cat_id
+					+ "&nombre_imagen=" + imageNameOnServer;
 
 			String charset = "UTF-8";
 
@@ -101,18 +102,19 @@ public abstract class Metodos {
 			writer.append("--" + limite + "--").append(CRLF).flush();
 
 			int responseCode = ((HttpURLConnection) connection).getResponseCode();
-			System.out.println(responseCode); // Si es correcto debe ser el 200
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
 
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			// Mostramos la respuesta del servidor por consola
-			System.out.println(response);
-			// cerramos la conexiÃ³n
-			in.close();
+			/*
+			 * BufferedReader in = new BufferedReader(new
+			 * InputStreamReader(connection.getInputStream())); String inputLine;
+			 * StringBuffer response = new StringBuffer();
+			 * 
+			 * while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
+			 * 
+			 * System.out.println(response);
+			 * 
+			 * in.close();
+			 */
+
 			if (responseCode == 200) {
 				MenuPrincipal.setImagenesSubidas(MenuPrincipal.getImagenesSubidas() + 1);
 			}

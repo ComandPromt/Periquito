@@ -45,6 +45,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import utils.ComprobarSha;
 import utils.DragAndDrop;
 import utils.Galeria;
 import utils.ImageResizer;
@@ -107,7 +108,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JTextField textField;
 	static String os = System.getProperty("os.name");
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
-	private static String[] user;
+	private static String[] user = Metodos.leerFicheroArray("Config/User.txt", 2);
 	static int imagenesSubidas = 0;
 
 	public static void setImagenesSubidas(int imagenesSubidas) {
@@ -139,6 +140,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenu mnNewMenu;
 	private JMenu mnNewMenu1;
 	private JMenuItem mntmNewMenuItem_1;
+	private JMenuItem mntmNewMenuItem_2;
 
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
@@ -761,6 +763,20 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
 		menuItem6.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
+		mntmNewMenuItem_2 = new JMenuItem("Comprobador SHA");
+		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				new ComprobarSha().setVisible(true);
+			}
+		});
+
+		JSeparator separator_3 = new JSeparator();
+		menu3.add(separator_3);
+		mntmNewMenuItem_2.setFont(new Font("Dialog", Font.BOLD, 20));
+		mntmNewMenuItem_2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
+		menu3.add(mntmNewMenuItem_2);
+
 		separator4 = new JSeparator();
 		menu.add(separator4);
 
@@ -1084,17 +1100,28 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						listaImagenes = Metodos.directorio("Config" + separador + "imagenes", ".");
 
-						if (listaImagenes.isEmpty()) {
-							try {
-								Metodos.abrirCarpeta("Config" + separador + "imagenes");
-							} catch (IOException e1) {
-								//
+						if (listaImagenes.isEmpty() || user.length != 2) {
+
+							if (user.length != 2) {
+								try {
+									new User().setVisible(true);
+								} catch (IOException e1) {
+									//
+								}
 							}
+
+							if (listaImagenes.isEmpty()) {
+								try {
+									Metodos.abrirCarpeta("Config" + separador + "imagenes");
+								} catch (IOException e1) {
+									//
+								}
+							}
+
 						} else {
 							String parametros = "";
 							String extension = "";
 							StringBuilder bld = new StringBuilder();
-							user = Metodos.leerFicheroArray("Config/User.txt", 2);
 
 							if (user[0] != null && user[1] != null && !user[0].isEmpty() && !user[1].isEmpty()) {
 
@@ -1182,8 +1209,24 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 										rs.close();
 										s.close();
-										Metodos.mensaje("Se han subido " + imagenesSubidas + " archivo/s al CMS", 2);
+
+										if (imagenesSubidas > 0) {
+											Metodos.mensaje("Se han subido " + imagenesSubidas + " archivo/s al CMS",
+													2);
+										} else {
+											Metodos.mensaje("No se subido ningún archivo al CMS", 2);
+										}
+
 										imagenesSubidas = 0;
+
+										listaImagenes = Metodos
+												.directorio(directorioActual + "Config" + separador + "imagenes", ".");
+
+										for (int i = 0; i < listaImagenes.size(); i++) {
+											Metodos.eliminarFichero(directorioActual + "Config" + separador + "imagenes"
+													+ separador + listaImagenes.get(i));
+										}
+
 									} catch (SQLException e1) {
 										Metodos.mensaje(
 												"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
@@ -1201,13 +1244,29 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							}
 						}
 					} else {
-						if (textField.getText().trim().isEmpty()) {
-							Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
-						} else {
+						try {
+							if (user[0] == null && user[1] == null || (user[0].isEmpty() || user[1].isEmpty())) {
+
+								Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
+								new User().setVisible(true);
+
+							} else {
+								if (textField.getText().trim().isEmpty()) {
+									Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
+								} else {
+									try {
+										Metodos.abrirCarpeta(directorioActual + "Config" + separador + "imagenes");
+									} catch (IOException e1) {
+										Metodos.mensaje("Error", 1);
+									}
+								}
+							}
+						} catch (Exception e1) {
+							Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
 							try {
-								Metodos.abrirCarpeta(directorioActual + "Config" + separador + "imagenes");
-							} catch (IOException e1) {
-								Metodos.mensaje("Error", 1);
+								new User().setVisible(true);
+							} catch (IOException e2) {
+								//
 							}
 						}
 					}

@@ -40,14 +40,11 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 		if (af.exists()) {
 			String[] lectura;
 			try {
+
 				lectura = Metodos.leerFicheroArray("Config/User.txt", 2);
 
-				if (lectura[0] == null) {
-					lectura[0] = "1";
-				}
-
-				if (lectura[1] == null) {
-					lectura[1] = "http://localhost/Periquito";
+				if (lectura[0] == null || lectura[0].isEmpty()) {
+					lectura[0] = "admin";
 				}
 
 				jTextField1.setText(lectura[0]);
@@ -91,7 +88,7 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 	}
 
 	public User() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config.class.getResource("/imagenes/config.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(User.class.getResource("/imagenes/user.png")));
 		setTitle("Periquito v3 User");
 		setType(Type.UTILITY);
 		initComponents();
@@ -146,32 +143,34 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addContainerGap()
 				.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(jLabel1)
-						.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+						.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
 				.addGap(26)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup().addComponent(txtHttplocalhost, 236, 236, 236)
 								.addGap(18).addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 46,
 										GroupLayout.PREFERRED_SIZE))
 						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(45, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(24)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addContainerGap(37, Short.MAX_VALUE)));
+		layout.setVerticalGroup(
+				layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(24)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(18)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
 										.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 47,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtHttplocalhost, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(32, Short.MAX_VALUE)));
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(txtHttplocalhost, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblContrasea, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)))
+								.addContainerGap(34, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(532, 231));
+		setSize(new Dimension(519, 218));
 		setLocationRelativeTo(null);
 	}
 
