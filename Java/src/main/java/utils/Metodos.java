@@ -68,10 +68,10 @@ public abstract class Metodos {
 
 		try {
 
-			String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[0]
+			String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
 					+ "/utility/index.php?username=" + username + "&pass=" + pass + "&cat_id=" + cat_id
 					+ "&nombre_imagen=" + imageNameOnServer;
-
+			System.out.println(url);
 			String charset = "UTF-8";
 
 			String limite = Long.toHexString(System.currentTimeMillis());
@@ -103,17 +103,17 @@ public abstract class Metodos {
 
 			int responseCode = ((HttpURLConnection) connection).getResponseCode();
 
-			/*
-			 * BufferedReader in = new BufferedReader(new
-			 * InputStreamReader(connection.getInputStream())); String inputLine;
-			 * StringBuffer response = new StringBuffer();
-			 * 
-			 * while ((inputLine = in.readLine()) != null) { response.append(inputLine); }
-			 * 
-			 * System.out.println(response);
-			 * 
-			 * in.close();
-			 */
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+
+			System.out.println(response);
+
+			in.close();
 
 			if (responseCode == 200) {
 				MenuPrincipal.setImagenesSubidas(MenuPrincipal.getImagenesSubidas() + 1);

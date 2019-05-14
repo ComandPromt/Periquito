@@ -1193,9 +1193,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES(" + maximo
 													+ "," + categoria + ",1,'" + textField.getText().trim()
 													+ "','','','" + Metodos.saberFecha() + "',1,'"
-													+ listaImagenes.get(i).toString() + "',1,0,0,0,DEFAULT,0,'"
+													+ imagenesBD.get(i).toString() + "',1,0,0,0,DEFAULT,0,'"
 													+ Metodos.getSHA256Checksum(directorioActual + "Config" + separador
-															+ "imagenes" + separador + listaImagenes.get(i).toString())
+															+ "imagenes" + separador + imagenesBD.get(i).toString())
 													+ "')");
 
 											maximo++;
@@ -1222,11 +1222,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										listaImagenes = Metodos
 												.directorio(directorioActual + "Config" + separador + "imagenes", ".");
 
-										for (int i = 0; i < listaImagenes.size(); i++) {
-											Metodos.eliminarFichero(directorioActual + "Config" + separador + "imagenes"
-													+ separador + listaImagenes.get(i));
-										}
-
+										/*
+										 * for (int i = 0; i < listaImagenes.size(); i++) {
+										 * Metodos.eliminarFichero(directorioActual + "Config" + separador + "imagenes"
+										 * + separador + listaImagenes.get(i)); }
+										 */
 									} catch (SQLException e1) {
 										Metodos.mensaje(
 												"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
@@ -1240,6 +1240,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											//
 										}
 									}
+								}
+							} else {
+								try {
+									new User().setVisible(true);
+								} catch (IOException e1) {
+									//
 								}
 							}
 						}
