@@ -1,5 +1,6 @@
 package utils;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -67,6 +68,8 @@ public class PhotoFrame extends javax.swing.JFrame {
 	}
 
 	public PhotoFrame() {
+		photoPanel.setBackground(Color.WHITE);
+		photoPanel.setForeground(Color.WHITE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PhotoFrame.class.getResource("/imagenes/crop.png")));
 		initComponents();
 		PhotoFrame.this.setTitle("Periquito v3 - Multiple Crop");

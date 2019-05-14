@@ -14,8 +14,11 @@ import java.util.TooManyListenersException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -54,17 +57,25 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
 		imagenes.setEditable(false);
 		imagenes.setBackground(Color.WHITE);
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ComprobarSha.class.getResource("/imagenes/import.png")));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addGap(33)
-						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 545, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addGap(150)
-						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-						.addGap(113)));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(Alignment.LEADING,
+				layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
+						.addPreferredGap(ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE)
+						.addGap(21)));
+		layout.setVerticalGroup(
+				layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addContainerGap()
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel))
+								.addContainerGap(28, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(613, 265));
+		setSize(new Dimension(491, 119));
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
@@ -120,5 +131,4 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
-
 }

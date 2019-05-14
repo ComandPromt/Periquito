@@ -552,6 +552,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											Metodos.mensaje(
 													"Por favor,introduce un nombre con menos registros para mostrarlos",
 													2);
+
+											Metodos.abrirCarpeta(
+													Metodos.obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0],
+															MenuPrincipal.getLecturaurl()[1]) + "/search.php");
+
 										} else {
 											rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
 													+ "images WHERE image_name LIKE '%" + busqueda + "%'");
@@ -574,8 +579,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									} else {
 
 										if (recuento < 500) {
-											Galeria Mi_Galeria = new Galeria();
-											new InterfazGaleria().setVisible(true);
+											try {
+												Galeria Mi_Galeria = new Galeria();
+												new InterfazGaleria().setVisible(true);
+											} catch (Exception e) {
+												Metodos.mensaje("No se han podido cargar las imágenes", 1);
+												try {
+													new Config2().setVisible(true);
+												} catch (IOException e1) {
+													//
+												}
+											}
+
 										}
 									}
 
@@ -597,6 +612,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 
 			}
+
 		});
 		mntmNewMenuItem.setFont(new Font("Dialog", Font.BOLD, 20));
 		mntmNewMenuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/lupa.png")));
@@ -1222,11 +1238,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										listaImagenes = Metodos
 												.directorio(directorioActual + "Config" + separador + "imagenes", ".");
 
-										/*
-										 * for (int i = 0; i < listaImagenes.size(); i++) {
-										 * Metodos.eliminarFichero(directorioActual + "Config" + separador + "imagenes"
-										 * + separador + listaImagenes.get(i)); }
-										 */
+										for (int i = 0; i < listaImagenes.size(); i++) {
+											Metodos.eliminarFichero(directorioActual + "Config" + separador + "imagenes"
+													+ separador + listaImagenes.get(i));
+										}
+
 									} catch (SQLException e1) {
 										Metodos.mensaje(
 												"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",

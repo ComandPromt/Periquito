@@ -3,6 +3,7 @@ package utils;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -10,7 +11,6 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import periquito.Config2;
 import periquito.MenuPrincipal;
 
 public class Galeria {
@@ -25,20 +25,24 @@ public class Galeria {
 
 			String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
-			for (int i = 0; i < numeroImagenes; i++) {
+			InetAddress ping;
 
-				fotos.add(new javax.swing.ImageIcon(
-						ImageIO.read(new URL("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
-								+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getImagenes().get(i)))));
+			ping = InetAddress.getByName(lecturaurl[0]);
+
+			if (ping.getCanonicalHostName().equals("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
+					+ MenuPrincipal.getCategorias().get(0) + "/" + MenuPrincipal.getImagenes().get(0))) {
+
+				for (int i = 0; i < numeroImagenes; i++) {
+
+					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + lecturaurl[0] + "/"
+							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
+							+ MenuPrincipal.getImagenes().get(i)))));
+				}
+
 			}
 
 		} catch (IOException e) {
-			Metodos.mensaje("No se han podido cargar las imágenes", 1);
-			try {
-				new Config2().setVisible(true);
-			} catch (IOException e1) {
-				//
-			}
+			//
 		}
 
 	}

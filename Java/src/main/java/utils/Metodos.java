@@ -60,8 +60,14 @@ import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
-	private Metodos() {
-		super();
+	public static String obtenerEnlaceCms(String servidor, String carpeta) {
+
+		String separador = "";
+
+		if (!carpeta.equals("")) {
+			separador = "/";
+		}
+		return "http://" + servidor + separador + carpeta;
 	}
 
 	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int cat_id) {
