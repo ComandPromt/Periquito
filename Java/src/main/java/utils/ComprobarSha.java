@@ -6,10 +6,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
+import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 import java.util.TooManyListenersException;
 
 import javax.swing.GroupLayout;
@@ -22,8 +22,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import periquito.MenuPrincipal;
-
 @SuppressWarnings("serial")
 
 public class ComprobarSha extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
@@ -33,12 +31,21 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	boolean filtro = false;
 	transient ResultSet rs;
 	String[] categorias;
+	static LinkedList<String> lectura = new LinkedList<>();
 
-	public ComprobarSha() {
+	public static LinkedList<String> getLectura() {
+		return lectura;
+	}
+
+	public void setLectura(LinkedList<String> lectura) {
+		ComprobarSha.lectura = lectura;
+	}
+
+	public ComprobarSha() throws IOException {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ComprobarSha.class.getResource("/imagenes/db.png")));
 
-		setTitle("Periquito v3 Recomponer Imágenes");
+		setTitle("Periquito v3 Comprobador SHA");
 		setType(Type.UTILITY);
 		initComponents();
 
@@ -47,7 +54,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	}
 
 	@SuppressWarnings("all")
-	public void initComponents() {
+	public void initComponents() throws IOException {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -81,45 +88,35 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
 		try {
 			new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
+
 				public void filesDropped(java.io.File[] files) {
-					System.out.println(files + "\n");
-					// String nombre_input = nombre.getText().trim();
-					// String prefijo = prefijoTablas.getText().trim();
 
-					if (true) {
+					try {
 
-						try {
-							System.out.println("select image_media_file,cat_id" + " FROM "
-									+ MenuPrincipal.getLecturabd()[3] + "images" + " WHERE sha256='"
-									+ Metodos.getSHA256Checksum(files[0].toString()) + "'");
-							String thumb;
-							Connection conexion = Metodos.conexionBD();
-
-							s = conexion.createStatement();
-							rs = s.executeQuery("select image_media_file,cat_id" + " FROM "
-									+ MenuPrincipal.getLecturabd()[3] + "images" + " WHERE sha256='"
-									+ Metodos.getSHA256Checksum(files[0].toString()) + "'");
-							rs.next();
-
-							if (rs.getString("image_media_file") == null) {
-								System.out.println(rs.getString("image_media_file"));
-							}
-
-							s.close();
-							rs.close();
-
-						} catch (SQLException e) {
-							Metodos.mensaje("La tabla está vacía", 2);
-
-						} catch (Exception e) {
-							//
+						for (int x = 0; x < files.length; x++) {
+							System.out.println(files[x].getCanonicalPath());
+							lectura.add(files[x].getCanonicalPath());
 						}
-
+						System.out.println("cantidad de imagenes " + files.length);
+						if (lectura.size() > 0) {
+							dispose();
+							try {
+								new ImagenesSha().setVisible(true);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
 				}
+
 			});
-		} catch (TooManyListenersException e) {
-			//
+
+		} catch (TooManyListenersException e1) {
+			e1.printStackTrace();
+			// Metodos.mensaje("Error", 1);
 		}
 
 	}

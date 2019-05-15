@@ -49,6 +49,7 @@ import utils.ComprobarSha;
 import utils.DragAndDrop;
 import utils.Galeria;
 import utils.ImageResizer;
+import utils.ImagenesSha;
 import utils.InterfazGaleria;
 import utils.Metodos;
 import utils.MyInterface;
@@ -567,40 +568,39 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											}
 
 										}
-									}
 
-									s.close();
-									rs.close();
+										s.close();
+										rs.close();
 
-									if (recuento == 0) {
+										if (recuento == 0) {
 
-										Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+											Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+
+										} else {
+
+											if (recuento < 500) {
+												try {
+													Galeria Mi_Galeria = new Galeria();
+													new InterfazGaleria().setVisible(true);
+												} catch (Exception e) {
+													Metodos.mensaje("No se han podido cargar las imágenes", 1);
+													try {
+														new Config2().setVisible(true);
+													} catch (IOException e1) {
+														//
+													}
+												}
+
+											}
+										}
 
 									} else {
-
-										if (recuento < 500) {
-											try {
-												Galeria Mi_Galeria = new Galeria();
-												new InterfazGaleria().setVisible(true);
-											} catch (Exception e) {
-												Metodos.mensaje("No se han podido cargar las imágenes", 1);
-												try {
-													new Config2().setVisible(true);
-												} catch (IOException e1) {
-													//
-												}
-											}
-
-										}
+										Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
 									}
 
-								} else {
-									Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
 								}
-
 							}
 						} catch (Exception e1) {
-
 						}
 					}
 				} catch (SQLException e) {
@@ -626,7 +626,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					new Descarga().setVisible(true);
+					new ImagenesSha().setVisible(true);
 				} catch (IOException e) {
 					//
 				}
@@ -783,7 +783,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				new ComprobarSha().setVisible(true);
+				try {
+					new ComprobarSha().setVisible(true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
