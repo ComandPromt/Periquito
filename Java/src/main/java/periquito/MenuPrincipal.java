@@ -49,7 +49,6 @@ import utils.ComprobarSha;
 import utils.DragAndDrop;
 import utils.Galeria;
 import utils.ImageResizer;
-import utils.ImagenesSha;
 import utils.InterfazGaleria;
 import utils.Metodos;
 import utils.MyInterface;
@@ -626,7 +625,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
-					new ImagenesSha().setVisible(true);
+					new Descarga().setVisible(true);
 				} catch (IOException e) {
 					//
 				}

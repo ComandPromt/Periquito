@@ -22,6 +22,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import periquito.MenuPrincipal;
+
 @SuppressWarnings("serial")
 
 public class ComprobarSha extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
@@ -32,6 +34,15 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	transient ResultSet rs;
 	String[] categorias;
 	static LinkedList<String> lectura = new LinkedList<>();
+	static LinkedList<String> shaimages = new LinkedList<>();
+
+	public static LinkedList<String> getShaimages() {
+		return shaimages;
+	}
+
+	public static void setShaimages(LinkedList<String> shaimages) {
+		ComprobarSha.shaimages = shaimages;
+	}
 
 	public static LinkedList<String> getLectura() {
 		return lectura;
@@ -42,6 +53,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	}
 
 	public ComprobarSha() throws IOException {
+		setAlwaysOnTop(true);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ComprobarSha.class.getResource("/imagenes/db.png")));
 
@@ -92,31 +104,32 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				public void filesDropped(java.io.File[] files) {
 
 					try {
-
+						lectura.clear();
 						for (int x = 0; x < files.length; x++) {
-							System.out.println(files[x].getCanonicalPath());
-							lectura.add(files[x].getCanonicalPath());
+							lectura.add(files[x].getCanonicalPath().substring(
+									files[x].getCanonicalPath().lastIndexOf(MenuPrincipal.getSeparador()) + 1,
+									files[x].getCanonicalPath().length()));
+							shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
 						}
-						System.out.println("cantidad de imagenes " + files.length);
+
 						if (lectura.size() > 0) {
 							dispose();
+							System.out.println("entro");
 							try {
-								new ImagenesSha().setVisible(true);
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
+								new ImagenesSha();
+							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						//
 					}
 				}
 
 			});
 
 		} catch (TooManyListenersException e1) {
-			e1.printStackTrace();
-			// Metodos.mensaje("Error", 1);
+			Metodos.mensaje("Error", 1);
 		}
 
 	}

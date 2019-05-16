@@ -1,28 +1,30 @@
 package utils;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import periquito.Config2;
+import periquito.MenuPrincipal;
 
 @SuppressWarnings("all")
 
-public class ImagenesSha extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
-	private JTable table;
+public class ImagenesSha extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException {
@@ -51,61 +53,57 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	}
 
 	public ImagenesSha() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
-		setTitle("Periquito v3 Config Remoto");
-		setType(Type.UTILITY);
-		initComponents();
-		this.setVisible(true);
-	}
-
-	@SuppressWarnings("all")
-	public void initComponents() throws IOException {
-
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-		setResizable(false);
-		buscarArchivoConf();
-
-		String titulos[] = { "Codigo", "Nombre", "Edad", "Profesión", "Telefono" };
-
-		DefaultTableModel myTable = new DefaultTableModel();
-
-		table = new JTable(myTable);
-
-		table.setEnabled(false);
-
-		myTable.addColumn("");
-
-		myTable.addColumn("");
-
-		for (int x = 0; x < ComprobarSha.getLectura().size();) {
-			myTable.addRow(new Object[] { ComprobarSha.getLectura().get(x), ComprobarSha.getLectura().get(x++) });
-
-		}
-
-		JLabel lblNewLabel = new JLabel("Imagen");
-
-		JLabel lblNewLabel_1 = new JLabel("¿Está en la BD?");
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(table, GroupLayout.PREFERRED_SIZE, 344, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel)
-								.addPreferredGap(ComponentPlacement.RELATED, 152, Short.MAX_VALUE)
-								.addComponent(lblNewLabel_1).addGap(91)))));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel)
-								.addComponent(lblNewLabel_1))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(table, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE).addContainerGap()));
-		getContentPane().setLayout(layout);
+		setAlwaysOnTop(true);
+		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 14));
 		setSize(new Dimension(368, 294));
 		setLocationRelativeTo(null);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
+		setTitle("Periquito v3 SHA Images Checker");
+		setType(Type.UTILITY);
+		DefaultTableModel myTable = new DefaultTableModel();
 
+		JTable table = new JTable(myTable);
+		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		table.setPreferredScrollableViewportSize(new Dimension(400, 300));
+		table.setFillsViewportHeight(true);
+
+		myTable.addColumn("Imagen");
+
+		myTable.addColumn("¿Está en la BD?");
+
+		Connection conexion;
+
+		try {
+			conexion = Metodos.conexionBD();
+			Statement s = conexion.createStatement();
+
+			String resultadosha;
+
+			for (int x = 0; x < ComprobarSha.getLectura().size(); x++) {
+
+				ResultSet rs = s.executeQuery("select COUNT(image_id) from " + MenuPrincipal.getLecturabd()[3]
+						+ "images WHERE sha256='" + ComprobarSha.getShaimages().get(x) + "'");
+				rs.next();
+				int recuento = Integer.parseInt(rs.getString("count(image_id)"));
+
+				if (recuento > 0) {
+					resultadosha = "SI";
+				} else {
+					resultadosha = "NO";
+				}
+				myTable.addRow(new Object[] { ComprobarSha.getLectura().get(x), resultadosha });
+
+			}
+		} catch (SQLException e) {
+			//
+		}
+
+		JScrollPane js = new JScrollPane(table);
+		js.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		js.setVisible(true);
+		getContentPane().add(js);
+
+		this.setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
