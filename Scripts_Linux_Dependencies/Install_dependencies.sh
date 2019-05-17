@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install default-jre
+sudo apt install openjdk-8-jre
 
 sudo apt install ffmpeg
 
