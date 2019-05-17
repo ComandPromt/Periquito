@@ -43,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.ComprobarSha;
@@ -785,8 +786,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				try {
 					new ComprobarSha().setVisible(true);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//
 				}
 			}
 		});
@@ -1200,6 +1200,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										listaImagenes = Metodos
 												.directorio(directorioActual + "Config" + separador + "imagenes", ".");
 
+										String imagen = "";
+
 										for (int i = 0; i < listaImagenes.size(); i++) {
 
 											File f1 = new File(directorioActual + "Config" + separador + "imagenes",
@@ -1208,22 +1210,47 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											File f2 = new File(directorioActual + "Config" + separador + "imagenes",
 													separador + imagenesBD.get(i).toString());
 
+											imagen = directorioActual + "Config" + separador + "imagenes" + separador
+													+ imagenesBD.get(i).toString();
+
 											f1.renameTo(f2);
 
 											s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES(" + maximo
 													+ "," + categoria + ",1,'" + textField.getText().trim()
 													+ "','','','" + Metodos.saberFecha() + "',1,'"
 													+ imagenesBD.get(i).toString() + "',1,0,0,0,DEFAULT,0,'"
-													+ Metodos.getSHA256Checksum(directorioActual + "Config" + separador
-															+ "imagenes" + separador + imagenesBD.get(i).toString())
-													+ "')");
+													+ Metodos.getSHA256Checksum(imagen) + "')");
 
 											maximo++;
 
-											Metodos.postFile(
-													new File(directorioActual + "Config" + separador + "imagenes"
-															+ separador + imagenesBD.get(i).toString()),
-													imagenesBD.get(i).toString(), user[0], user[1], categoria);
+											if (!Metodos.extraerExtension(imagen).equals("gif")) {
+												Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
+														user[0], user[1], categoria);
+
+											} else {
+												String carpeta = "";
+
+												if (!lecturaurl[1].isEmpty()) {
+													carpeta = "/" + lecturaurl[1];
+												}
+
+												WebDriver chrome = new ChromeDriver();
+
+												chrome.get("http://" + lecturaurl[0] + carpeta
+														+ "/upload_images/index.php");
+
+												WebElement insertar = chrome.findElement(By.id("usuario"));
+
+												insertar.sendKeys(user[0]);
+
+												insertar = chrome.findElement(By.id("pass"));
+												insertar.sendKeys(user[1]);
+												chrome.findElement(By.id("enviar")).click();
+												chrome.findElement(By.id("file")).sendKeys(imagen);
+
+												chrome.close();
+												imagenesSubidas++;
+											}
 
 										}
 
@@ -1233,19 +1260,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										if (imagenesSubidas > 0) {
 											Metodos.mensaje("Se han subido " + imagenesSubidas + " archivo/s al CMS",
 													2);
+											listaImagenes = Metodos.directorio(
+													directorioActual + "Config" + separador + "imagenes", ".");
+
+											for (int i = 0; i < listaImagenes.size(); i++) {
+												Metodos.eliminarFichero(directorioActual + "Config" + separador
+														+ "imagenes" + separador + listaImagenes.get(i));
+											}
 										} else {
-											Metodos.mensaje("No se subido ningún archivo al CMS", 2);
+											Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 										}
 
 										imagenesSubidas = 0;
-
-										listaImagenes = Metodos
-												.directorio(directorioActual + "Config" + separador + "imagenes", ".");
-
-										for (int i = 0; i < listaImagenes.size(); i++) {
-											Metodos.eliminarFichero(directorioActual + "Config" + separador + "imagenes"
-													+ separador + listaImagenes.get(i));
-										}
 
 									} catch (SQLException e1) {
 										Metodos.mensaje(
@@ -1254,11 +1280,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									}
 
 									catch (Exception e1) {
-										try {
-											new User().setVisible(true);
-										} catch (IOException e2) {
-											//
-										}
+										//
 									}
 								}
 							} else {

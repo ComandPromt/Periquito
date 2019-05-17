@@ -55,7 +55,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	public ImagenesSha() throws IOException {
 		setAlwaysOnTop(true);
 		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 14));
-		setSize(new Dimension(368, 294));
+		setSize(new Dimension(496, 294));
 		setLocationRelativeTo(null);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
 		setTitle("Periquito v3 SHA Images Checker");

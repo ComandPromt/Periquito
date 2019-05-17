@@ -77,7 +77,7 @@ public abstract class Metodos {
 			String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
 					+ "/utility/index.php?username=" + username + "&pass=" + pass + "&cat_id=" + cat_id
 					+ "&nombre_imagen=" + imageNameOnServer;
-			System.out.println(url);
+
 			String charset = "UTF-8";
 
 			String limite = Long.toHexString(System.currentTimeMillis());
@@ -117,12 +117,17 @@ public abstract class Metodos {
 				response.append(inputLine);
 			}
 
-			System.out.println(response);
-
 			in.close();
 
-			if (responseCode == 200) {
+			switch (responseCode) {
+
+			case 200:
 				MenuPrincipal.setImagenesSubidas(MenuPrincipal.getImagenesSubidas() + 1);
+				break;
+
+			default:
+				Metodos.mensaje("Error", 1);
+				break;
 			}
 
 		} catch (Exception ex) {
