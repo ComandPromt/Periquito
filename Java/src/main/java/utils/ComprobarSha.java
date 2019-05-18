@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -52,8 +55,30 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		ComprobarSha.lectura = lectura;
 	}
 
+	private void comprobarSha(java.io.File[] files) {
+		try {
+			lectura.clear();
+			for (int x = 0; x < files.length; x++) {
+				lectura.add(files[x].getCanonicalPath().substring(
+						files[x].getCanonicalPath().lastIndexOf(MenuPrincipal.getSeparador()) + 1,
+						files[x].getCanonicalPath().length()));
+				shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
+			}
+
+			if (lectura.size() > 0) {
+				dispose();
+				try {
+					new ImagenesSha();
+				} catch (Exception e) {
+					//
+				}
+			}
+		} catch (Exception e) {
+			//
+		}
+	}
+
 	public ComprobarSha() throws IOException {
-		setAlwaysOnTop(true);
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ComprobarSha.class.getResource("/imagenes/db.png")));
 
@@ -78,6 +103,16 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		imagenes.setBackground(Color.WHITE);
 
 		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				File[] files = Metodos.seleccionar(2, "Imagen & Video",
+						"Elije un archivo de imagen o video para mover");
+				if (files != null) {
+					comprobarSha(files);
+				}
+			}
+		});
 		lblNewLabel.setIcon(new ImageIcon(ComprobarSha.class.getResource("/imagenes/import.png")));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -101,26 +136,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 				public void filesDropped(java.io.File[] files) {
 
-					try {
-						lectura.clear();
-						for (int x = 0; x < files.length; x++) {
-							lectura.add(files[x].getCanonicalPath().substring(
-									files[x].getCanonicalPath().lastIndexOf(MenuPrincipal.getSeparador()) + 1,
-									files[x].getCanonicalPath().length()));
-							shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
-						}
-
-						if (lectura.size() > 0) {
-							dispose();
-							try {
-								new ImagenesSha();
-							} catch (Exception e) {
-								//
-							}
-						}
-					} catch (Exception e) {
-						//
-					}
+					comprobarSha(files);
 				}
 
 			});

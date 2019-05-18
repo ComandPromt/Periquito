@@ -98,9 +98,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JSeparator separator14;
 	private JMenuItem menuItem17;
 	private JMenu menu7;
-	private JSeparator separator17;
 	private JMenuItem menuItem18;
-	private JSeparator separator18;
 	private JMenuItem menuItem19;
 	transient LinkedList<String> listaImagenes = new LinkedList<>();
 	static LinkedList<String> imagenes = new LinkedList<>();
@@ -142,6 +140,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenu mnNewMenu1;
 	private JMenuItem mntmNewMenuItem_1;
 	private JMenuItem mntmNewMenuItem_2;
+	private JMenuItem mntmNewMenuItem_3;
 
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
@@ -1039,8 +1038,28 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu7.setBackground(Color.BLACK);
 		menuopciones.add(menu7);
 
-		separator17 = new JSeparator();
-		menu7.add(separator17);
+		menuItem19 = new JMenuItem("Sobre");
+		menuItem19.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new About().setVisible(true);
+			}
+		});
+
+		mntmNewMenuItem_3 = new JMenuItem("DB Fix");
+		mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					new DBFix().setVisible(true);
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mntmNewMenuItem_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
+		menu7.add(mntmNewMenuItem_3);
 
 		menuItem18 = new JMenuItem("IMG 2 Color");
 		menuItem18.addMouseListener(new MouseAdapter() {
@@ -1053,20 +1072,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 			}
 		});
+
+		JSeparator separator_4 = new JSeparator();
+		menu7.add(separator_4);
 		menuItem18.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/30-07-2018 1-07-31.png")));
 		menuItem18.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		menu7.add(menuItem18);
 
-		separator18 = new JSeparator();
-		menu7.add(separator18);
-
-		menuItem19 = new JMenuItem("Sobre");
-		menuItem19.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				new About().setVisible(true);
-			}
-		});
+		JSeparator separator_5 = new JSeparator();
+		menu7.add(separator_5);
 		menuItem19.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/about.png")));
 		menuItem19.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		menu7.add(menuItem19);
@@ -1300,7 +1314,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 							} else {
 								if (textField.getText().trim().isEmpty()) {
-									Metodos.mensaje("Introduce un nombre común para las imágenes", 3);
+									Metodos.mensaje("Por favor, rellene el nombre", 3);
 								} else {
 									try {
 										Metodos.abrirCarpeta(directorioActual + "Config" + separador + "imagenes");

@@ -131,10 +131,10 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 							String imagen;
 							Date fecha = new Date();
-							String strDateFormat = "y-dd-MM";
+							String strDateFormat = "y-MM-dd";
 							SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
 
-							String tabla = MenuPrincipal.getLecturabd()[1] + "images";
+							String tabla = MenuPrincipal.getLecturabd()[3] + "images";
 							int categoria = comboBox.getSelectedIndex() + 1;
 							int id;
 
@@ -157,7 +157,6 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							s.close();
 							rs.close();
 
-							String thumb;
 							conexion = Metodos.conexionBD();
 
 							s = conexion.createStatement();
@@ -171,11 +170,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 								imagen = files[i].toString();
 								imagen = imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length());
 
-								thumb = imagen.substring(0, imagen.length() - 4) + "_Thumb.jpg";
-
 								fS.write(
 
-										"INSERT INTO " + tabla + " VALUES(" + id + "," + categoria + ",1,'"
+										"INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
 												+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
 												+ "',DEFAULT,'" + imagen
 												+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
@@ -194,9 +191,10 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							Metodos.eliminarFichero("Config/SQL.sql");
 							Metodos.mensaje("Insert recuperados correctamente!", 2);
 						} catch (Exception e) {
-							e.printStackTrace();
 							Metodos.mensaje("Error al recuperar la BD", 1);
 						}
+					} else {
+						Metodos.mensaje("Por favor, rellene el nombre", 3);
 					}
 				}
 			});

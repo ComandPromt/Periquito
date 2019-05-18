@@ -141,7 +141,7 @@ public class AgendaInterfaz extends JFrame {
 								.createSequentialGroup().addComponent(jPanel5, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(0, 0, Short.MAX_VALUE)));
-		setTitle("Periquito v3 Agenda");
+		setTitle("Periquito v3 Notas");
 		setBackground(new java.awt.Color(123, 123, 123));
 
 		jPanel1.setBackground(new Color(240, 240, 240));

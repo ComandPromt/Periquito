@@ -148,7 +148,8 @@ public abstract class Metodos {
 			// Se obtiene el inputStream de la foto web y se abre el fichero
 			// local.
 			is = urlCon.getInputStream();
-			fos = new FileOutputStream("Downloads/Image" + numero + "." + Metodos.extraerExtension(enlace));
+			fos = new FileOutputStream("Downloads" + MenuPrincipal.getSeparador() + "Image" + numero + "."
+					+ Metodos.extraerExtension(enlace));
 
 			// Lectura de la foto de la web y escritura en fichero local
 			byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -162,8 +163,8 @@ public abstract class Metodos {
 			is.close();
 			fos.close();
 		} catch (Exception e) {
-			Metodos.abrirCarpeta("Downloads");
-			System.exit(0);
+			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
+
 		} finally {
 			if (is != null) {
 				is.close();
@@ -187,6 +188,7 @@ public abstract class Metodos {
 					chrome.get(imagen + x);
 
 					if (!chrome.findElements(By.tagName("img")).isEmpty()) {
+
 						List<WebElement> image = chrome.findElements(By.tagName("img"));
 
 						descargarFoto(image.get(0).getAttribute("src"), x);
@@ -207,7 +209,9 @@ public abstract class Metodos {
 						// Se obtiene el inputStream de la foto web y se abre el fichero
 						// local.
 						InputStream is = urlCon.getInputStream();
-						FileOutputStream fos = new FileOutputStream("Config/Downloads/Image_" + x + "." + extension);
+
+						FileOutputStream fos = new FileOutputStream("Config" + MenuPrincipal.getSeparador()
+								+ "Downloads" + MenuPrincipal.getSeparador() + "Image_" + x + "." + extension);
 
 						// Lectura de la foto de la web y escritura en fichero local
 						byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -221,6 +225,7 @@ public abstract class Metodos {
 						is.close();
 						fos.close();
 					} catch (Exception e) {
+
 						Descarga.setError(true);
 					}
 				}
