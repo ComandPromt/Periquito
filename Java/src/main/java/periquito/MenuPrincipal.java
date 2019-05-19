@@ -803,9 +803,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+			
 				try {
 					if (Metodos.comprobarConfiguracion()) {
 						new AgendaInterfaz().setVisible(true);
+					}
+					else {
+						new Bd().setVisible(true);
 					}
 				} catch (Exception e1) {
 				}
@@ -1229,10 +1233,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 											f1.renameTo(f2);
 
-											s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES(" + maximo
-													+ "," + categoria + ",1,'" + textField.getText().trim()
-													+ "','','','" + Metodos.saberFecha() + "',1,'"
-													+ imagenesBD.get(i).toString() + "',1,0,0,0,DEFAULT,0,'"
+											s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo
+													+ "','" + categoria + "','1','" + textField.getText().trim()
+													+ "','','','" + Metodos.saberFecha() + "','1','"
+													+ imagenesBD.get(i).toString() + "','1','0','0','0',DEFAULT,'0','"
 													+ Metodos.getSHA256Checksum(imagen) + "')");
 
 											maximo++;

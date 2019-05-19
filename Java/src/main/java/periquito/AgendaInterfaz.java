@@ -240,7 +240,7 @@ public class AgendaInterfaz extends JFrame {
 						try {
 							String usuario = nombre.getText();
 							s.executeUpdate("UPDATE notas SET nombre='" + nombre.getText() + "',tipo='" + tipo.getText()
-									+ "',descripcion='" + nota.getText() + "' WHERE id=" + iduser);
+									+ "',descripcion='" + nota.getText() + "' WHERE id='" + iduser+"'");
 
 							rs.close();
 							s.close();

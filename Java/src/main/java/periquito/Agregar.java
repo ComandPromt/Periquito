@@ -94,8 +94,13 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 
 						}
 
-					} catch (SQLException | IOException e) {
+					} catch (Exception e) {
 						dispose();
+						try {
+							new Bd().setVisible(true);
+						} catch (IOException e1) {
+							// 
+						}
 					}
 				} else {
 					Metodos.mensaje("Rellene todos los campos", 3);

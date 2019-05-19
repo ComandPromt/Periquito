@@ -49,7 +49,7 @@ public class DBFix extends javax.swing.JFrame implements ActionListener, ChangeL
 								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(134, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(336, 387));
+		setSize(new Dimension(336, 404));
 		setLocationRelativeTo(null);
 	}
 
