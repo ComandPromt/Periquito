@@ -267,7 +267,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 		pack();
 	}
 
-	private void jMenuItem1ActionPerformed() throws IOException {// GEN-FIRST:event_jMenuItem1ActionPerformed
+	private void jMenuItem1ActionPerformed() throws IOException {
 
 		File miDir = new File(".");
 		fileChooser.setFileFilter(new FileNameExtensionFilter("Archivo de Imagen", "jpg", "png"));

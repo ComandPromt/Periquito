@@ -119,6 +119,30 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 
 							if (inicio >= 0 && fin >= 0 && salto >= 0) {
 
+								String unidadtiempo = "segundos";
+
+								int tiempoEstimado = fin - inicio;
+
+								if (fin - inicio == 0) {
+									tiempoEstimado = 5;
+								}
+
+								else {
+									tiempoEstimado = ((fin - inicio) + 1) * 5;
+								}
+
+								if (tiempoEstimado == 60) {
+									tiempoEstimado = 1;
+									unidadtiempo = "minuto";
+								} else {
+									tiempoEstimado /= 60;
+									unidadtiempo = "minutos";
+								}
+
+								Metodos.mensaje(
+										"El tiempo estimado de descarga es de: " + tiempoEstimado + " " + unidadtiempo,
+										2);
+
 								Metodos.descargar(jTextField1.getText().trim(), inicio, fin, salto);
 
 								if (!error) {

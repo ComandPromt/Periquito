@@ -126,7 +126,7 @@ public abstract class Metodos {
 				break;
 
 			default:
-				Metodos.mensaje("Error", 1);
+
 				break;
 			}
 
@@ -148,8 +148,8 @@ public abstract class Metodos {
 			// Se obtiene el inputStream de la foto web y se abre el fichero
 			// local.
 			is = urlCon.getInputStream();
-			fos = new FileOutputStream("Downloads" + MenuPrincipal.getSeparador() + "Image" + numero + "."
-					+ Metodos.extraerExtension(enlace));
+			fos = new FileOutputStream("Config" + MenuPrincipal.getSeparador() + "Downloads"
+					+ MenuPrincipal.getSeparador() + "Image_" + numero + "." + Metodos.extraerExtension(enlace));
 
 			// Lectura de la foto de la web y escritura en fichero local
 			byte[] array = new byte[1000]; // buffer temporal de lectura.
@@ -184,7 +184,9 @@ public abstract class Metodos {
 			for (int x = inicio; x <= fin; x += salto) {
 
 				if (Descarga.getRdbtnComplex().isSelected()) {
+
 					chrome = new ChromeDriver();
+
 					chrome.get(imagen + x);
 
 					if (!chrome.findElements(By.tagName("img")).isEmpty()) {

@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Timer;
@@ -67,8 +68,14 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		menuItem.addActionListener((ActionEvent e) -> {
 			try {
 				saveImage();
+			} catch (RasterFormatException e1) {
+				Metodos.mensaje("La zona seleccionada es más grande que una o más imágenes", 1);
+				Metodos.mensaje("Se han recortado las fotos anteriores a la foto que se muestra", 3);
 			} catch (Exception e1) {
-				Metodos.mensaje("Error", 1);
+				File directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
+						+ MenuPrincipal.getSeparador() + "recortes");
+				directorio.mkdir();
+				Metodos.mensaje("Error,inténtelo de nuevo", 1);
 			}
 		});
 		popupMenu.add(menuItem);

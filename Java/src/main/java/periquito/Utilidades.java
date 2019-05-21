@@ -166,7 +166,8 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 							String separador = MenuPrincipal.getSeparador();
 
-							for (int i = 0; i < files.length; i++) {
+							int i;
+							for (i = 0; i < files.length; i++) {
 								imagen = files[i].toString();
 								imagen = imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length());
 
@@ -189,7 +190,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							InputStream archivo = new FileInputStream("Config/SQL.sql");
 							Metodos.executeScript(conexion, archivo);
 							Metodos.eliminarFichero("Config/SQL.sql");
-							Metodos.mensaje("Insert recuperados correctamente!", 2);
+							if (i == 1) {
+								Metodos.mensaje("Se ha recuperado 1 registro", 2);
+							} else {
+								Metodos.mensaje("Se han recuperado " + i + " registros", 2);
+							}
 						} catch (Exception e) {
 							Metodos.mensaje("Error al recuperar la BD", 1);
 						}

@@ -481,7 +481,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator5 = new JSeparator();
 		menu1.add(separator5);
 
-		menuItem7 = new JMenuItem("Recortar imagenes");
+		menuItem7 = new JMenuItem("Recortar imágenes");
 		menu1.add(menuItem7);
 		menuItem7.addMouseListener(new MouseAdapter() {
 			@Override
@@ -619,7 +619,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator22 = new JSeparator();
 		menu1.add(separator22);
 
-		mntmNewMenuItem1 = new JMenuItem("Descargar imagenes");
+		mntmNewMenuItem1 = new JMenuItem("Descargar imágenes");
 		mntmNewMenuItem1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
 		mntmNewMenuItem1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -803,12 +803,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-			
+
 				try {
 					if (Metodos.comprobarConfiguracion()) {
 						new AgendaInterfaz().setVisible(true);
-					}
-					else {
+					} else {
 						new Bd().setVisible(true);
 					}
 				} catch (Exception e1) {
@@ -1254,8 +1253,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												WebDriver chrome = new ChromeDriver();
 
-												chrome.get("http://" + lecturaurl[0] + carpeta
-														+ "/upload_images/index.php");
+												chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
+
+												// tengo que iniciar sesion y entrar a subir archivos
 
 												WebElement insertar = chrome.findElement(By.id("usuario"));
 
