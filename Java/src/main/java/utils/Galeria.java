@@ -27,10 +27,10 @@ public class Galeria {
 
 			InetAddress ping;
 
-			ping = InetAddress.getByName(lecturaurl[0]);
+			ping = InetAddress.getByName(new URL("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
+					+ MenuPrincipal.getCategorias().get(0) + "/" + MenuPrincipal.getImagenes().get(0)).getHost());
 
-			if (ping.getCanonicalHostName().equals("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
-					+ MenuPrincipal.getCategorias().get(0) + "/" + MenuPrincipal.getImagenes().get(0))) {
+			if (!ping.getCanonicalHostName().equals("")) {
 
 				for (int i = 0; i < numeroImagenes; i++) {
 

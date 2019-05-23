@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -42,8 +44,8 @@ import javax.swing.event.ChangeListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.ComprobarSha;
@@ -55,7 +57,6 @@ import utils.Metodos;
 import utils.MyInterface;
 import utils.PhotoFrame;
 
-@SuppressWarnings("all")
 public class MenuPrincipal extends JFrame implements ActionListener, ChangeListener, MyInterface {
 	private JMenuBar menuopciones;
 	private JMenu menu;
@@ -562,6 +563,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 													+ "images WHERE image_name LIKE '%" + busqueda + "%'");
 
 											while (rs.next()) {
+
 												imagenes.add(rs.getString("image_media_file"));
 												categorias.add(rs.getString("cat_id"));
 											}
@@ -579,15 +581,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 											if (recuento < 500) {
 												try {
-													Galeria Mi_Galeria = new Galeria();
+
+													new Galeria();
 													new InterfazGaleria().setVisible(true);
 												} catch (Exception e) {
+
 													Metodos.mensaje("No se han podido cargar las imágenes", 1);
-													try {
-														new Config2().setVisible(true);
-													} catch (IOException e1) {
-														//
-													}
+
+													new Config2().setVisible(true);
+
 												}
 
 											}
@@ -1159,7 +1161,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							String parametros = "";
 							String extension = "";
 							StringBuilder bld = new StringBuilder();
-
+							InetAddress ping;
 							if (user[0] != null && user[1] != null && !user[0].isEmpty() && !user[1].isEmpty()) {
 
 								for (int i = 0; i < listaImagenes.size(); i++) {
@@ -1219,72 +1221,117 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 										String imagen = "";
 
+										ping = InetAddress
+												.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
+														+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
+
+										conexion = Metodos.conexionBD();
+
+										int comprobarSha = 0;
+
 										for (int i = 0; i < listaImagenes.size(); i++) {
 
-											File f1 = new File(directorioActual + "Config" + separador + "imagenes",
-													separador + listaImagenes.get(i));
+											rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images"
+													+ " WHERE sha256='" + Metodos.getSHA256Checksum(imagen) + "'");
 
-											File f2 = new File(directorioActual + "Config" + separador + "imagenes",
-													separador + imagenesBD.get(i).toString());
+											rs.next();
 
-											imagen = directorioActual + "Config" + separador + "imagenes" + separador
-													+ imagenesBD.get(i).toString();
+											comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
 
-											f1.renameTo(f2);
+											if (comprobarSha == 0) {
 
-											s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo
-													+ "','" + categoria + "','1','" + textField.getText().trim()
-													+ "','','','" + Metodos.saberFecha() + "','1','"
-													+ imagenesBD.get(i).toString() + "','1','0','0','0',DEFAULT,'0','"
-													+ Metodos.getSHA256Checksum(imagen) + "')");
+												imagen = directorioActual + "Config" + separador + "imagenes"
+														+ separador + imagenesBD.get(i).toString();
 
-											maximo++;
+												if (!Metodos.extraerExtension(imagen).equals("gif")
+														&& !Metodos.extraerExtension(imagenesBD.get(i).toString())
+																.equals("ini")
+														&& !ping.getCanonicalHostName().equals("")) {
 
-											if (!Metodos.extraerExtension(imagen).equals("gif")) {
-												Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
-														user[0], user[1], categoria);
+													File f1 = new File(
+															directorioActual + "Config" + separador + "imagenes",
+															separador + listaImagenes.get(i));
 
-											} else {
-												String carpeta = "";
+													File f2 = new File(
+															directorioActual + "Config" + separador + "imagenes",
+															separador + imagenesBD.get(i).toString());
+													f1.renameTo(f2);
+													s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
+															+ maximo + "','" + categoria + "','1','"
+															+ textField.getText().trim() + "','','','"
+															+ Metodos.saberFecha() + "','1','"
+															+ imagenesBD.get(i).toString()
+															+ "','1','0','0','0',DEFAULT,'0','"
+															+ Metodos.getSHA256Checksum(imagen) + "')");
 
-												if (!lecturaurl[1].isEmpty()) {
-													carpeta = "/" + lecturaurl[1];
+													maximo++;
+													Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
+															user[0], user[1], categoria);
+
+												} else {
+
+													listaImagenes = Metodos.directorio(
+															directorioActual + "Config" + separador + "imagenes", ".");
+
+													if (!Metodos.extraerExtension(imagen).equals("ini")) {
+
+														imagen = directorioActual + "Config" + separador + "imagenes"
+																+ separador + listaImagenes.get(i).toString();
+														String carpeta = "";
+
+														if (!lecturaurl[1].isEmpty()) {
+															carpeta = "/" + lecturaurl[1];
+														}
+
+														WebDriver chrome = new ChromeDriver();
+
+														String user_id = "";
+														chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
+
+														rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
+																+ "users" + " WHERE user_name='" + user[0] + "'");
+														rs.next();
+														user_id = rs.getString("user_id");
+														chrome.manage()
+																.addCookie(new Cookie("4images_userid", user_id));
+
+														s = conexion.createStatement();
+
+														rs = s.executeQuery("SELECT user_password FROM " + lecturabd[3]
+																+ "users WHERE user_id='" + user_id + "'");
+														rs.next();
+
+														chrome.manage().addCookie(
+																new Cookie("pass", rs.getString("user_password")));
+
+														chrome.get("http://" + lecturaurl[0] + carpeta
+																+ "/upload_images/input.php?cat_id=1&nombre=java");
+
+														chrome.findElement(By.id("file")).sendKeys(imagen);
+
+														chrome.close();
+
+													}
+
 												}
-
-												WebDriver chrome = new ChromeDriver();
-
-												chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
-
-												// tengo que iniciar sesion y entrar a subir archivos
-
-												WebElement insertar = chrome.findElement(By.id("usuario"));
-
-												insertar.sendKeys(user[0]);
-
-												insertar = chrome.findElement(By.id("pass"));
-												insertar.sendKeys(user[1]);
-												chrome.findElement(By.id("enviar")).click();
-												chrome.findElement(By.id("file")).sendKeys(imagen);
-
-												chrome.close();
-												imagenesSubidas++;
 											}
-
 										}
 
 										rs.close();
 										s.close();
-
+										conexion.close();
 										if (imagenesSubidas > 0) {
-											Metodos.mensaje("Se han subido " + imagenesSubidas + " archivo/s al CMS",
-													2);
+
 											listaImagenes = Metodos.directorio(
 													directorioActual + "Config" + separador + "imagenes", ".");
 
-											for (int i = 0; i < listaImagenes.size(); i++) {
-												Metodos.eliminarFichero(directorioActual + "Config" + separador
-														+ "imagenes" + separador + listaImagenes.get(i));
+											if (comprobarSha > 0) {
+												for (int i = 0; i < listaImagenes.size(); i++) {
+													Metodos.eliminarFichero(directorioActual + "Config" + separador
+															+ "imagenes" + separador + listaImagenes.get(i));
+												}
 											}
+
 										} else {
 											Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 										}

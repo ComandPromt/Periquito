@@ -70,12 +70,12 @@ public abstract class Metodos {
 		return "http://" + servidor + separador + carpeta;
 	}
 
-	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int cat_id) {
+	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int catId) {
 
 		try {
 
 			String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
-					+ "/utility/index.php?username=" + username + "&pass=" + pass + "&cat_id=" + cat_id
+					+ "/utility/index.php?username=" + username + "&pass=" + pass + "&cat_id=" + catId
 					+ "&nombre_imagen=" + imageNameOnServer;
 
 			String charset = "UTF-8";
@@ -119,15 +119,10 @@ public abstract class Metodos {
 
 			in.close();
 
-			switch (responseCode) {
+			if (responseCode == 200) {
 
-			case 200:
 				MenuPrincipal.setImagenesSubidas(MenuPrincipal.getImagenesSubidas() + 1);
-				break;
 
-			default:
-
-				break;
 			}
 
 		} catch (Exception ex) {
@@ -432,8 +427,7 @@ public abstract class Metodos {
 				try {
 					flE.close();
 				} catch (IOException e) {
-					// }
-
+					//
 				}
 
 			}
