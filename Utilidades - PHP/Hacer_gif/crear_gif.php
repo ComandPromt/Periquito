@@ -77,7 +77,7 @@ function check_images($path){
 
 function jpeg_jpg(array $imagenes, $ruta){
     for ($x = 0; $x < count($imagenes); $x++) {
-        if (substr($current, -4) == "jpeg") {
+        if (substr($imagenes[$x], -4) == "jpeg") {
             rename($ruta . "/" . $imagenes, $ruta . "/" . substr($imagenes, 0, -4) . ".jpg");
         }
     }
