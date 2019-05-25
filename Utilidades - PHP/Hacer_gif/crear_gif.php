@@ -23,25 +23,6 @@ function comprobar_formatos($path){
     return $files;
 }
 
-function redimensionarJPG($max_ancho, $max_alto, $ruta){
-    $imagenes = check_images_ext($ruta, "jpg");
-    $calidad = 100;
-    for ($x = 0; $x < count($imagenes); $x++) {
-        $salida = $ruta . "/" . $imagenes[$x];
-        if (substr($imagenes[$x], -4, 1) == ".") {
-            $img_original = imagecreatefromjpeg("./" . $ruta . "/" . $imagenes[$x]);
-            list($ancho, $alto) = getimagesize("./" . $ruta . "/" . $imagenes[$x]);
-            //Se calcula ancho y alto de la imagen final
-            $x_ratio = $max_ancho / $ancho;
-            $y_ratio = $max_alto / $alto;
-            $tmp = imagecreatetruecolor($max_ancho, $max_alto);
-            imagecopyresampled($tmp, $img_original, 0, 0, 0, 0, $max_ancho, $max_alto, $ancho, $alto);
-            imagedestroy($img_original);
-            imagejpeg($tmp, $salida, $calidad);
-        }
-    }
-}
-
 function check_images_ext($path, $extension){
     $dir = opendir($path);
     $files = array();
@@ -120,6 +101,7 @@ if($num_imagenes<=170){
 	$comprobacion = comprobar_formatos("img");
 	
 	if ($comprobacion[0] != 'error') {
+
 		$imagenes = check_images("img");
 		jpeg_jpg($imagenes, "img");
 		png_a_jpg("img");
@@ -134,20 +116,7 @@ if($num_imagenes<=170){
 				$ancho[] = $imagen[0];
 				$alto[] = $imagen[1];
 			}
-			
-			$anchofinal = min($ancho);
-			$altofinal = min($alto);
-			
-			if ($anchofinal > 640) {
-				$anchofinal = 640;
-			}
-			
-			if ($altofinal > 480) {
-				$altofinal = 480;
-			}
-			
-			redimensionarJPG($anchofinal, $altofinal, "img");
-			
+		
 			if (count($imagenes) > 1) {
 				require "src/GifCreator/AnimGif.php";
 				$anim = new GifCreator\AnimGif();
@@ -160,7 +129,8 @@ if($num_imagenes<=170){
 				$anim->create("img/", array($rapidez))
 					->save('Output/' . $archivo . '.gif');
 			}
-		}
+        }
+        
 		else {
 			print '<h1 name="salida">Folder empty</h1>';
 		}

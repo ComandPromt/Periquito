@@ -558,7 +558,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 											Metodos.abrirCarpeta(
 													Metodos.obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0],
-															MenuPrincipal.getLecturaurl()[1]) + "/search.php");
+															MenuPrincipal.getLecturaurl()[1]) + "/search.php?filtro="+busqueda);
 
 										} else {
 											rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
