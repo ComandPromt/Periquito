@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TooManyListenersException;
 
@@ -57,6 +58,7 @@ import utils.Metodos;
 import utils.MyInterface;
 import utils.PhotoFrame;
 
+@SuppressWarnings("serial")
 public class MenuPrincipal extends JFrame implements ActionListener, ChangeListener, MyInterface {
 	private JMenuBar menuopciones;
 	private JMenu menu;
@@ -731,26 +733,43 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
+				ArrayList<String> categorias;
 				try {
+					categorias = Metodos.comprobarConexionBD();
+					if (categorias !=null && categorias.size()>0 ) {
+						try {
 
-					if (Metodos.comprobarConfiguracion()) {
+							if (Metodos.comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
 
-						lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
-						Metodos.exportarBd(Integer.parseInt(lecturabd[6]));
+								lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
+								Metodos.exportarBd(Integer.parseInt(lecturabd[6]));
 
-						if (!os.equals("Linux")) {
-							Metodos.eliminarFichero("backupbd.bat");
+								if (!os.equals("Linux")) {
+									Metodos.eliminarFichero("backupbd.bat");
 
+								}
+
+							} else {
+								new Bd().setVisible(true);
+
+							}
+
+						} catch (IOException e1) {
+							//
 						}
-
-					} else {
-						new Bd().setVisible(true);
-
 					}
-
-				} catch (IOException e1) {
-					//
+				} catch (IOException e2) {
+					 try {
+						new Bd().setVisible(true);
+					} catch (IOException e1) {
+						// 
+					}
 				}
+				
+				
+				
+				
 			}
 		});
 		menuItem4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
@@ -784,11 +803,33 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				
+				ArrayList<String> categorias;
+				
 				try {
-					new ComprobarSha().setVisible(true);
-				} catch (IOException e) {
-					//
+					
+					categorias = Metodos.comprobarConexionBD();
+					
+					if (categorias !=null && categorias.size()>0 ) {
+						
+						try {
+							new ComprobarSha().setVisible(true);
+						} catch (IOException e) {
+							//
+						}
+					}
+				} catch (IOException e2) {
+					 try {
+						new Bd().setVisible(true);
+					} catch (IOException e1) {
+						// 
+					}
 				}
+				
+				
+				
+				/////////////////
+				
 			}
 		});
 

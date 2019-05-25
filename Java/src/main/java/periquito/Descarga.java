@@ -35,8 +35,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 	JLabel lblThumbnails;
 	private JTextField textField1;
 	private JTextField textField2;
-
-	private static JRadioButton rdbtnComplex = new JRadioButton("Complex");
+	public static JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Complex");
 	JRadioButton rdbtnNewRadioButton = new JRadioButton("Simple");
 	public static final JTextField textField3 = new JTextField();
 
@@ -56,7 +55,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 	}
 
 	private void modoPorDefecto() {
-		if (!rdbtnNewRadioButton.isSelected() && !getRdbtnComplex().isSelected()) {
+		if (!rdbtnNewRadioButton.isSelected() && !rdbtnNewRadioButton_1.isSelected()) {
 			rdbtnNewRadioButton.setSelected(true);
 		}
 	}
@@ -184,7 +183,9 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		JLabel lblSalto;
 		lblSalto = new JLabel("Salto");
 		lblSalto.setFont(new Font("Dialog", Font.BOLD, 20));
-		getRdbtnComplex().addMouseListener(new MouseAdapter() {
+		rdbtnNewRadioButton_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		
+		rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				rdbtnNewRadioButton.setSelected(false);
@@ -197,13 +198,13 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 
 		});
 
-		getRdbtnComplex().setFont(new Font("Dialog", Font.BOLD, 20));
+	
 		rdbtnNewRadioButton.setSelected(true);
 
 		rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				getRdbtnComplex().setSelected(false);
+				rdbtnNewRadioButton_1.setSelected(false);
 			}
 
 			@Override
@@ -224,68 +225,77 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		JLabel lblExtension;
 		lblExtension = new JLabel("Extensión");
 		lblExtension.setFont(new Font("Dialog", Font.BOLD, 20));
+		
+		
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(26)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(12).addComponent(txtpnElMtodosimple,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGap(26)
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addGap(12)
+							.addComponent(txtpnElMtodosimple, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup()
+							.addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblExtension, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 								.addComponent(jLabel1)
 								.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblThumbnails)
 								.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addComponent(textField, 338, 338, 338)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(textField3, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
-														338, Short.MAX_VALUE)
-												.addComponent(textField1, Alignment.LEADING, 338, 338, Short.MAX_VALUE)
-												.addComponent(jTextField1, Alignment.LEADING))
-										.addComponent(textField2, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(textField, 338, 338, Short.MAX_VALUE)
+								.addComponent(textField3, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+								.addComponent(textField1, 338, 338, Short.MAX_VALUE)
+								.addComponent(jTextField1)
+								.addComponent(textField2)))
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-								.addGap(80).addComponent(rdbtnNewRadioButton).addGap(28)
-								.addComponent(getRdbtnComplex())))
-				.addContainerGap(31, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
+							.addGap(80)
+							.addComponent(rdbtnNewRadioButton)
+							.addGap(27)
+							.addComponent(rdbtnNewRadioButton_1)))
+					.addContainerGap(20, Short.MAX_VALUE))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(jLabel1)
+						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblThumbnails))
-				.addGap(29)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+					.addGap(29)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField1, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+					.addGap(18)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(textField2, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-				.addGap(21)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+					.addGap(21)
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblExtension, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textField3, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-				.addGap(20)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+					.addGap(20)
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(rdbtnNewRadioButton).addComponent(getRdbtnComplex()))
-								.addGap(18))
-						.addGroup(
-								layout.createSequentialGroup()
-										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 51,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(5)))
-				.addGap(18).addComponent(txtpnElMtodosimple, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-						GroupLayout.PREFERRED_SIZE)
-				.addGap(423)));
+							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(rdbtnNewRadioButton)
+								.addComponent(rdbtnNewRadioButton_1))
+							.addGap(18))
+						.addGroup(layout.createSequentialGroup()
+							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+							.addGap(5)))
+					.addGap(18)
+					.addComponent(txtpnElMtodosimple, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addGap(423))
+		);
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(538, 541));
 		setLocationRelativeTo(null);
@@ -297,13 +307,5 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 
 	public void stateChanged(ChangeEvent e) {
 		//
-	}
-
-	public static JRadioButton getRdbtnComplex() {
-		return rdbtnComplex;
-	}
-
-	public static void setRdbtnComplex(JRadioButton rdbtnComplex) {
-		Descarga.rdbtnComplex = rdbtnComplex;
 	}
 }

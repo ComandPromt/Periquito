@@ -204,6 +204,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 
 			String extension;
+
+			String numero = "" + count;
+
 			for (int x = 0; x < vueltas; x++) {
 
 				extension = listaImagenes.get(x).substring(listaImagenes.get(x).length() - 3,
@@ -218,10 +221,14 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
 
+				if (count < 100) {
+					numero = "0" + count;
+				}
+
 				ImageIO.write(tmpRecorte, extension,
 						new File(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
 								+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador() + "Image_"
-								+ count + "." + extension));
+								+ numero + "." + extension));
 				count++;
 			}
 			PhotoFrame.photoPanel.photo = null;

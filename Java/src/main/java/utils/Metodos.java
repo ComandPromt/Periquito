@@ -178,7 +178,7 @@ public abstract class Metodos {
 
 			for (int x = inicio; x <= fin; x += salto) {
 
-				if (Descarga.getRdbtnComplex().isSelected()) {
+				if (Descarga.rdbtnNewRadioButton_1.isSelected()) {
 
 					chrome = new ChromeDriver();
 
@@ -671,10 +671,13 @@ public abstract class Metodos {
 	}
 
 	public static boolean comprobarConfiguracion() throws IOException {
-
+		
 		boolean comprobacion = false;
+		
+		ArrayList<String> categorias = comprobarConexionBD();
+		
+		if (Metodos.comprobarConexion(true) && categorias.size()>0) {
 
-		if (Metodos.comprobarConexion(true)) {
 			comprobacion = true;
 		}
 
@@ -695,6 +698,16 @@ public abstract class Metodos {
 		}
 		return comprobacion;
 
+	}
+
+	public static ArrayList<String> comprobarConexionBD() throws IOException {
+		ArrayList<String> categorias = null;
+		try {
+			categorias = verCategorias();
+		} catch (SQLException e1) {
+			new Bd().setVisible(true);
+		}
+		return categorias;
 	}
 
 	public static Connection conexionBD() throws SQLException, IOException {
