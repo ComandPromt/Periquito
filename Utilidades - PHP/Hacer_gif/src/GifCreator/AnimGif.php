@@ -94,19 +94,6 @@ class AnimGif{
 		}
 		$i = 0;
 
-		if (substr($frames[2],0,11)=="img/Image_") {
-			
-			$y=1;
-
-			for($x=2;$y<=count($frames)-2;$x++){
-				$frames[$x]='img/Image_'.$y.'.jpg';
-				$y++;
-			}
-	
-			$frames[$x]='img/Image_'.$y.'.jpg';
-			$frames[++$x]='img/Image_'.++$y.'.jpg';
-		}
-	
 		foreach ($frames as $frame) {
 			if (is_resource($frame)) { // in-memory image resource (hopefully)
 				$resourceImg = $frame;
