@@ -133,7 +133,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 	static JButton button = new JButton("");
-	String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+	static String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 	String directorioActual;
 	static JComboBox<String> comboBox = new JComboBox<>();
 	private JMenuItem mntmNewMenuItem;
@@ -178,7 +178,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	public static void setLecturabackup(String[] lecturabackup) {
-		lecturabackup = lecturabackup;
+		MenuPrincipal.lecturabackup = lecturabackup;
 	}
 
 	public static String[] getLecturabd() {
@@ -556,9 +556,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 													"Por favor,introduce un nombre con menos registros para mostrarlos",
 													2);
 
-											Metodos.abrirCarpeta(
-													Metodos.obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0],
-															MenuPrincipal.getLecturaurl()[1]) + "/search.php?filtro="+busqueda);
+											Metodos.abrirCarpeta(Metodos.obtenerEnlaceCms(
+													MenuPrincipal.getLecturaurl()[0], MenuPrincipal.getLecturaurl()[1])
+													+ "/search.php?filtro=" + busqueda);
 
 										} else {
 											rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
@@ -689,7 +689,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							".") <= 170) {
 						listaImagenes = Metodos.directorio(lectura[0] + separador + "FrameExtractor" + separador
 								+ "examples" + separador + "output", ".");
-						File miDir = new File(".");
 
 						for (int x = 0; x < listaImagenes.size(); x++) {
 
@@ -733,11 +732,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 				ArrayList<String> categorias;
 				try {
 					categorias = Metodos.comprobarConexionBD();
-					if (categorias !=null && categorias.size()>0 ) {
+					if (categorias != null && categorias.size() > 0) {
 						try {
 
 							if (Metodos.comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
@@ -760,16 +759,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						}
 					}
 				} catch (IOException e2) {
-					 try {
+					try {
 						new Bd().setVisible(true);
 					} catch (IOException e1) {
-						// 
+						//
 					}
 				}
-				
-				
-				
-				
+
 			}
 		});
 		menuItem4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
@@ -803,15 +799,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				
+
 				ArrayList<String> categorias;
-				
+
 				try {
-					
+
 					categorias = Metodos.comprobarConexionBD();
-					
-					if (categorias !=null && categorias.size()>0 ) {
-						
+
+					if (categorias != null && categorias.size() > 0) {
+
 						try {
 							new ComprobarSha().setVisible(true);
 						} catch (IOException e) {
@@ -819,17 +815,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						}
 					}
 				} catch (IOException e2) {
-					 try {
+					try {
 						new Bd().setVisible(true);
 					} catch (IOException e1) {
-						// 
+						//
 					}
 				}
-				
-				
-				
+
 				/////////////////
-				
+
 			}
 		});
 
@@ -1268,6 +1262,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 										conexion = Metodos.conexionBD();
 
+										s = conexion.createStatement();
+
 										int comprobarSha = 0;
 
 										for (int i = 0; i < listaImagenes.size(); i++) {
@@ -1326,20 +1322,17 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 														WebDriver chrome = new ChromeDriver();
 
-														String user_id = "";
+														String userId = "";
 														chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
 
-														rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
+														rs = s.executeQuery("SELECT userId FROM " + lecturabd[3]
 																+ "users" + " WHERE user_name='" + user[0] + "'");
 														rs.next();
-														user_id = rs.getString("user_id");
-														chrome.manage()
-																.addCookie(new Cookie("4images_userid", user_id));
-
-														s = conexion.createStatement();
+														userId = rs.getString("userId");
+														chrome.manage().addCookie(new Cookie("4images_userid", userId));
 
 														rs = s.executeQuery("SELECT user_password FROM " + lecturabd[3]
-																+ "users WHERE user_id='" + user_id + "'");
+																+ "users WHERE userId='" + userId + "'");
 														rs.next();
 
 														chrome.manage().addCookie(
