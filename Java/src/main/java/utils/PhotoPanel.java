@@ -15,15 +15,21 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+import periquito.Config;
 import periquito.MenuPrincipal;
 
 @SuppressWarnings("serial")
@@ -205,7 +211,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 			String extension;
 
-			String numero = "" + count;
+			String numero = "";
+
+			int y = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
+					+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes", ".").size() + 1;
 
 			for (int x = 0; x < vueltas; x++) {
 
@@ -221,20 +230,92 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
 						(int) clipHeight);
 
-				if (count < 100) {
-					numero = "0" + count;
+				if (y < 10) {
+					numero = "000" + y;
 				}
+
+				else {
+
+					if (y >= 10 && y < 100) {
+						numero = "00" + y;
+					} else {
+						if (y >= 100 && y < 1000) {
+							numero = "0" + y;
+						} else {
+							numero = "" + y;
+						}
+					}
+				}
+
+				y++;
 
 				ImageIO.write(tmpRecorte, extension,
 						new File(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
 								+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador() + "Image_"
 								+ numero + "." + extension));
-				count++;
 			}
+
 			PhotoFrame.photoPanel.photo = null;
-			Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
-			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
-					+ MenuPrincipal.getSeparador() + "recortes");
+
+			int n = 2;
+
+			if (--y <= 170) {
+
+				n = JOptionPane.showConfirmDialog(null, "¿Quieres crear un gif con las imágenes recortadas?",
+						"Crear GIF", JOptionPane.YES_NO_OPTION);
+
+				if (n == 0) {
+
+					listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
+							+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes", ".");
+
+					for (int x = 0; x < listaImagenes.size(); x++) {
+						Files.move(
+								FileSystems.getDefault()
+										.getPath(directorioActual + "Config" + MenuPrincipal.getSeparador()
+												+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes"
+												+ MenuPrincipal.getSeparador() + listaImagenes.get(x)),
+								FileSystems.getDefault()
+										.getPath(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
+												+ "Hacer_gif" + MenuPrincipal.getSeparador() + "img"
+												+ MenuPrincipal.getSeparador() + listaImagenes.get(x)),
+								StandardCopyOption.REPLACE_EXISTING);
+					}
+
+					try {
+						int recuento = Metodos.listarFicherosPorCarpeta(
+								new File(MenuPrincipal.getLectura()[0] + "/Hacer_gif/img"), ".");
+						if (recuento <= 170) {
+							if (MenuPrincipal.getOs().equals("Linux")) {
+
+								MenuPrincipal.cambiarPermisos();
+
+							}
+
+							MenuPrincipal.hacerGIF();
+
+						} else {
+							MenuPrincipal.mensaje170();
+						}
+					} catch (Exception e1) {
+						try {
+							new Config().setVisible(true);
+						} catch (IOException e2) {
+							//
+						}
+
+					}
+
+				}
+
+			}
+
+			if (n > 0) {
+				Metodos.mensaje("Las imágenes han sido recortadas correctamente", 2);
+				Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
+						+ MenuPrincipal.getSeparador() + "recortes");
+			}
+
 		}
 	}
 

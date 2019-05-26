@@ -103,7 +103,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenu menu7;
 	private JMenuItem menuItem18;
 	private JMenuItem menuItem19;
-	transient LinkedList<String> listaImagenes = new LinkedList<>();
+	transient static LinkedList<String> listaImagenes = new LinkedList<>();
 	static LinkedList<String> imagenes = new LinkedList<>();
 	static LinkedList<String> categorias = new LinkedList<>();
 	static boolean conexion = true;
@@ -134,7 +134,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 	static JButton button = new JButton("");
 	static String[] lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
-	String directorioActual;
+	static String directorioActual;
 	static JComboBox<String> comboBox = new JComboBox<>();
 	private JMenuItem mntmNewMenuItem;
 	private JMenuItem mntmNewMenuItem1;
@@ -189,7 +189,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		return separador;
 	}
 
-	private void cambiarPermisos() {
+	public static void cambiarPermisos() {
 		try {
 			Metodos.crearScript("change_permisos.sh", "sudo chmod 777 -R /var/www", true, os);
 		} catch (Exception e1) {
@@ -197,13 +197,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
-	private void hacerGIF() throws IOException {
+	public static void hacerGIF() throws IOException {
 		try {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
 				Metodos.mensaje("Tienes que tener al menos 2 imágenes para crear un GIF", 3);
 				Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 			} else {
-				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 163) {
+				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") > 170) {
 					Metodos.mensaje("Has superado el límite de imágenes para crear un GIF", 3);
 					Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img" + separador);
 				} else {
@@ -327,7 +327,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
-	private void mensaje170() {
+	public static void mensaje170() {
 		Metodos.mensaje("Tienes más de 170 imágenes", 3);
 		try {
 			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img");
@@ -529,14 +529,17 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				try {
+
 					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM " + lecturabd[3] + "images",
 							"COUNT(image_id)")) {
 						try {
+
 							if (Metodos.comprobarConfiguracion()) {
 
 								String busqueda = Metodos.mostrarDialogo();
 								busqueda = busqueda.trim();
 								int recuento;
+
 								if (!busqueda.isEmpty()) {
 
 									Connection conexion = Metodos.conexionBD();
@@ -545,11 +548,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 									ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
 											+ "images WHERE image_name LIKE '%" + busqueda + "%'");
+
 									rs.next();
+
 									recuento = Integer.parseInt(rs.getString("count(image_id)"));
 
 									if (recuento > 0) {
+
 										if (recuento > 500) {
+
 											Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes",
 													3);
 											Metodos.mensaje(
@@ -561,6 +568,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 													+ "/search.php?filtro=" + busqueda);
 
 										} else {
+
 											rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
 													+ "images WHERE image_name LIKE '%" + busqueda + "%'");
 
@@ -582,6 +590,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										} else {
 
 											if (recuento < 500) {
+
 												try {
 
 													new Galeria();
