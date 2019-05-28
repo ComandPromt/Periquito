@@ -1276,7 +1276,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										int comprobarSha = 0;
 
 										for (int i = 0; i < listaImagenes.size(); i++) {
-
+											imagen = directorioActual + "Config" + separador + "imagenes"
+													+ separador + listaImagenes.get(i).toString();
+											
 											rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images"
 													+ " WHERE sha256='" + Metodos.getSHA256Checksum(imagen) + "'");
 
@@ -1286,8 +1288,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 											if (comprobarSha == 0) {
 
-												imagen = directorioActual + "Config" + separador + "imagenes"
-														+ separador + imagenesBD.get(i).toString();
+												
 
 												if (!Metodos.extraerExtension(imagen).equals("gif")
 														&& !Metodos.extraerExtension(imagenesBD.get(i).toString())
@@ -1302,6 +1303,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 															directorioActual + "Config" + separador + "imagenes",
 															separador + imagenesBD.get(i).toString());
 													f1.renameTo(f2);
+													
+													imagen = directorioActual + "Config" + separador + "imagenes"
+															+ separador + imagenesBD.get(i).toString();
+													
+													
 													s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
 															+ maximo + "','" + categoria + "','1','"
 															+ textField.getText().trim() + "','','','"
@@ -1313,7 +1319,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 													maximo++;
 													Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
 															user[0], user[1], categoria);
-
+													imagenesSubidas++;
+													
 												} else {
 
 													listaImagenes = Metodos.directorio(
@@ -1332,56 +1339,64 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 														WebDriver chrome = new ChromeDriver();
 
 														String userId = "";
+														
 														chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
 
-														rs = s.executeQuery("SELECT userId FROM " + lecturabd[3]
+														rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
 																+ "users" + " WHERE user_name='" + user[0] + "'");
 														rs.next();
-														userId = rs.getString("userId");
+														userId = rs.getString("user_id");
+										
 														chrome.manage().addCookie(new Cookie("4images_userid", userId));
 
 														rs = s.executeQuery("SELECT user_password FROM " + lecturabd[3]
-																+ "users WHERE userId='" + userId + "'");
+																+ "users WHERE user_id='" + userId + "'");
+														
 														rs.next();
 
 														chrome.manage().addCookie(
 																new Cookie("pass", rs.getString("user_password")));
 
 														chrome.get("http://" + lecturaurl[0] + carpeta
-																+ "/upload_images/input.php?cat_id=1&nombre=java");
+																+ "/upload_images/input.php?cat_id="+(comboBox.getSelectedIndex()+1)+"&nombre="+textField.getText().trim());
 
 														chrome.findElement(By.id("file")).sendKeys(imagen);
 
 														chrome.close();
-
+														
+														imagenesSubidas++;
 													}
 
 												}
 											}
 										}
-
+										
 										rs.close();
 										s.close();
 										conexion.close();
+										
 										if (imagenesSubidas > 0) {
-
+					
 											listaImagenes = Metodos.directorio(
 													directorioActual + "Config" + separador + "imagenes", ".");
-
-											if (comprobarSha > 0) {
+				
+											
 												for (int i = 0; i < listaImagenes.size(); i++) {
 													Metodos.eliminarFichero(directorioActual + "Config" + separador
 															+ "imagenes" + separador + listaImagenes.get(i));
 												}
-											}
-
+											
+											Metodos.mensaje("Se ha/n subido "+imagenesSubidas+" imagen/s al CMS", 2);
+										
 										} else {
+	
 											Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 										}
 
 										imagenesSubidas = 0;
 
 									} catch (SQLException e1) {
+										e1.printStackTrace();
 										Metodos.mensaje(
 												"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
 												1);
