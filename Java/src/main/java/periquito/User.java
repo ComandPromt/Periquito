@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -101,7 +102,7 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField1.setToolTipText("");
 
-		txtHttplocalhost = new JTextField();
+		txtHttplocalhost = new JPasswordField();
 		txtHttplocalhost.setToolTipText("");
 		txtHttplocalhost.setHorizontalAlignment(SwingConstants.CENTER);
 		txtHttplocalhost.setFont(new Font("Tahoma", Font.PLAIN, 20));
