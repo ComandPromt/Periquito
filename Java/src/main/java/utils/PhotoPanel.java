@@ -38,7 +38,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 	transient Image photo;
 	transient BufferedImage bufferedImage;
 
-	private int count = 0;
+	int count = 0;
 
 	private Color color1 = new Color(255, 255, 255);
 	private Color color2 = new Color(0, 0, 0);

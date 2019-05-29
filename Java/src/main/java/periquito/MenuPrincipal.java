@@ -1287,8 +1287,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
 
 											if (comprobarSha == 0) {
-
-												
+								
 
 												if (!Metodos.extraerExtension(imagen).equals("gif")
 														&& !Metodos.extraerExtension(imagenesBD.get(i).toString())
@@ -1386,7 +1385,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 															+ "imagenes" + separador + listaImagenes.get(i));
 												}
 											
-											Metodos.mensaje("Se ha/n subido "+imagenesSubidas+" imagen/s al CMS", 2);
+											Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 										
 										} else {
 	
