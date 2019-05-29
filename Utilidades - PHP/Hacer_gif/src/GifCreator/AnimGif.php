@@ -94,6 +94,8 @@ class AnimGif{
 		}
 		$i = 0;
 
+
+	
 		foreach ($frames as $frame) {
 			if (is_resource($frame)) { // in-memory image resource (hopefully)
 				$resourceImg = $frame;
