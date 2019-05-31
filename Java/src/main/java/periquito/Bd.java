@@ -43,11 +43,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	private JTextField textField1;
 	private JTextField textField2;
 	private JTextField direccion;
-	private JLabel lblNewLabel2;
-	JRadioButton rdbtnXampp = new JRadioButton("XAMPP");
-	JRadioButton rdbtnAppserv = new JRadioButton("APPServ");
 	String servidorWeb = "1";
-	JRadioButton rdbtnWamp = new JRadioButton("WAMP");
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException, SQLException {
@@ -132,14 +128,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		this.setVisible(true);
 	}
 
-	private void servidorWebPorDefecto() {
-		if (!rdbtnWamp.isSelected() && !rdbtnXampp.isSelected() && !rdbtnAppserv.isSelected()
-
-		) {
-			rdbtnAppserv.setSelected(true);
-		}
-	}
-
 	@SuppressWarnings("all")
 	public void initComponents() throws IOException {
 
@@ -209,64 +197,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setFont(new Font("Tahoma", Font.BOLD, 20));
 
-		rdbtnWamp.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				servidorWeb = "2";
-				rdbtnAppserv.setSelected(false);
-				rdbtnXampp.setSelected(false);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				servidorWebPorDefecto();
-
-			}
-		});
-		rdbtnWamp.setFont(new Font("Dialog", Font.BOLD, 16));
-		rdbtnXampp.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				servidorWeb = "3";
-				rdbtnWamp.setSelected(false);
-				rdbtnAppserv.setSelected(false);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				servidorWebPorDefecto();
-
-			}
-		});
-
-		rdbtnXampp.setFont(new Font("Dialog", Font.BOLD, 16));
-		rdbtnAppserv.setSelected(true);
-
-		rdbtnAppserv.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				servidorWeb = "1";
-				rdbtnWamp.setSelected(false);
-				rdbtnXampp.setSelected(false);
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				servidorWebPorDefecto();
-			}
-
-		});
-		rdbtnAppserv.setFont(new Font("Dialog", Font.BOLD, 16));
-
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/appserv.png")));
-
-		JLabel lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/wamp.png")));
-
-		lblNewLabel2 = new JLabel("");
-		lblNewLabel2.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/xampp.png")));
-
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/save.png")));
 		btnNewButton.addMouseListener(new MouseAdapter() {
@@ -314,75 +244,67 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(rdbtnAppserv)
-										.addGap(30).addComponent(lblNewLabel_1)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(rdbtnWamp).addGap(18)
-										.addComponent(lblNewLabel2).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(rdbtnXampp).addGap(30).addComponent(btnNewButton))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
-										.addGap(3).addComponent(textField2, GroupLayout.PREFERRED_SIZE, 245,
-												GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup()
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+							.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+									.addComponent(btnNewButton)
+									.addGroup(layout.createSequentialGroup()
+										.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+										.addGap(3)
+										.addComponent(textField2, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE))
+									.addGroup(layout.createSequentialGroup()
 										.addGroup(layout.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblThumbnails, GroupLayout.DEFAULT_SIZE, 363,
-														Short.MAX_VALUE)
-												.addComponent(lblBd).addComponent(jLabel1))
+											.addComponent(lblThumbnails, GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+											.addComponent(lblBd)
+											.addComponent(jLabel1))
 										.addPreferredGap(ComponentPlacement.RELATED)
 										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(base, 226, 226, Short.MAX_VALUE)
-												.addComponent(textField1, 226, 226, Short.MAX_VALUE)
-												.addComponent(direccion, GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-												.addComponent(jTextField1).addComponent(textField, Alignment.TRAILING,
-														GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE))))
+											.addComponent(base, 226, 226, Short.MAX_VALUE)
+											.addComponent(textField1, 226, 226, Short.MAX_VALUE)
+											.addComponent(direccion, GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+											.addComponent(jTextField1)
+											.addComponent(textField, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE))))
 								.addGap(242))
-						.addComponent(label)).addComponent(lblPrefijoDeTablas))
-				.addGap(0)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(14)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(direccion, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblBd, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-						.addGap(36)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPrefijoDeTablas, GroupLayout.PREFERRED_SIZE, 64,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(36)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(base, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblThumbnails)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-								.addComponent(textField2, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-												.addComponent(btnNewButton).addComponent(lblNewLabel2)))
-								.addGroup(layout.createSequentialGroup().addGap(18)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-												.addComponent(lblNewLabel).addComponent(lblNewLabel_1)))
-								.addGroup(layout.createSequentialGroup().addGap(28).addComponent(rdbtnXampp))
-								.addGroup(layout.createSequentialGroup().addGap(28).addComponent(rdbtnWamp))
-								.addGroup(layout.createSequentialGroup().addGap(29).addComponent(rdbtnAppserv)))
-						.addGap(27)));
+							.addComponent(label))
+						.addComponent(lblPrefijoDeTablas))
+					.addGap(0))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+					.addGap(14)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(direccion, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblBd, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+					.addGap(36)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPrefijoDeTablas, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(36)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+						.addComponent(base, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblThumbnails)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPuerto, GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+						.addComponent(textField2, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnNewButton)
+					.addGap(27))
+		);
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(651, 647));
 		setLocationRelativeTo(null);

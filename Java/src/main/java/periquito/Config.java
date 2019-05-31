@@ -118,7 +118,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		txtHttplocalhost.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		jLabel1 = new javax.swing.JLabel();
-		jLabel1.setText("Web");
+		jLabel1.setText("Utils");
 		jLabel1.setIcon(new ImageIcon(Backup.class.getResource("/imagenes/folder.png")));
 		jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 

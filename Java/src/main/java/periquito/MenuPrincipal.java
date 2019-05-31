@@ -144,6 +144,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem_1;
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
+	private JMenuItem mntmDownloads;
 
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
@@ -755,7 +756,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 								if (!os.equals("Linux")) {
 									Metodos.eliminarFichero("backupbd.bat");
-
 								}
 
 							} else {
@@ -951,6 +951,24 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		menuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
 		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		
+		mntmDownloads = new JMenuItem("Descargas");
+		mntmDownloads.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
+		mntmDownloads.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				try {
+					Metodos.abrirCarpeta("Config" + separador + "Downloads");
+				} catch (IOException e1) {
+					Metodos.mensaje("Error", 1);
+				}
+			}
+		});
+		
+		JSeparator separator_6 = new JSeparator();
+		mnNewMenu.add(separator_6);
+		mntmDownloads.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		mnNewMenu.add(mntmDownloads);
 
 		separator8 = new JSeparator();
 		menu4.add(separator8);

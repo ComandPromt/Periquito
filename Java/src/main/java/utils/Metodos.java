@@ -436,43 +436,19 @@ public abstract class Metodos {
 
 	}
 
-	@SuppressWarnings("all")
 	public static void exportarBd(int tipo) throws IOException {
 
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
-
+	
 		if (!MenuPrincipal.getOs().equals("Linux")) {
-
-			String ruta = "";
-
-			switch (tipo) {
-
-			case 1:
-				ruta = "C:\\AppServ\\mysql\\bin\\";
-				break;
-
-			case 2:
-				ruta = "C:\\wamp\\bin\\mysql\\";
-				break;
-
-			case 3:
-				ruta = "C:\\xampp\\mysql\\bin\\";
-				break;
-
-			default:
-				break;
-			}
 
 			try {
 
-				crearScript("backupbd.bat",
-						"mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1] + " -p" + lectura[2] + " "
-								+ lectura[0] + " > " + backup[0] + MenuPrincipal.getSeparador() + "backupbd.sql",
-						false, MenuPrincipal.getOs());
+				Runtime.getRuntime().exec("cmd.exe /K mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1] + " -p" + lectura[2] + " "
+						+ lectura[0] + " > " + backup[0] + MenuPrincipal.getSeparador() + "backupbd.sql");
+				
 
-				Metodos.mensaje("Backup realizado correctamente", 2);
-				abrirCarpeta(backup[0]);
 			} catch (Exception e) {
 				Metodos.mensaje("Error", 1);
 			}
@@ -480,11 +456,12 @@ public abstract class Metodos {
 
 			String[] cmdarray = { "/bin/sh", "-c", "mysqldump --no-defaults -h " + lectura[5] + " -u " + lectura[1]
 					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "/backupbd.sql" };
-			Process process = Runtime.getRuntime().exec(cmdarray);
+			Runtime.getRuntime().exec(cmdarray);
 
-			Metodos.mensaje("Backup realizado correctamente", 2);
-			abrirCarpeta(backup[0]);
 		}
+		
+		Metodos.mensaje("Backup realizado correctamente", 2);
+		abrirCarpeta(backup[0]);
 	}
 
 	public static void crearScript(String archivo, String contenido, boolean opcional, String os) throws IOException {
