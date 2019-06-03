@@ -1204,10 +1204,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						ping = InetAddress
 								.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
 										+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
-						
-						File archivo = new File("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
-								+ MenuPrincipal.getLecturaurl()[1]+"/index.php");
-	
+				
+
 						if(!ping.getHostName().equals("")) {
 							if (!textField.getText().trim().isEmpty()) {
 
