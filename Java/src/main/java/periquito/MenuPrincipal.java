@@ -1197,270 +1197,291 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						Metodos.mensaje("Error", 1);
 					}
 				} else {
-					if (!textField.getText().trim().isEmpty()) {
+					InetAddress ping;
+					
+					try {
+						
+						ping = InetAddress
+								.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
+										+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
+						
+						File archivo = new File("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
+								+ MenuPrincipal.getLecturaurl()[1]+"/index.php");
+	
+						if(!ping.getHostName().equals("")) {
+							if (!textField.getText().trim().isEmpty()) {
 
-						listaImagenes = Metodos.directorio("Config" + separador + "imagenes", ".");
+								listaImagenes = Metodos.directorio("Config" + separador + "imagenes", ".");
 
-						if (listaImagenes.isEmpty() || user.length != 2) {
+								if (listaImagenes.isEmpty() || user.length != 2) {
 
-							if (user.length != 2) {
-								try {
-									new User().setVisible(true);
-								} catch (IOException e1) {
-									//
-								}
-							}
-
-							if (listaImagenes.isEmpty()) {
-								try {
-									Metodos.abrirCarpeta("Config" + separador + "imagenes");
-								} catch (IOException e1) {
-									//
-								}
-							}
-
-						} else {
-							String parametros = "";
-							String extension = "";
-							StringBuilder bld = new StringBuilder();
-							InetAddress ping;
-							if (user[0] != null && user[1] != null && !user[0].isEmpty() && !user[1].isEmpty()) {
-
-								for (int i = 0; i < listaImagenes.size(); i++) {
-
-									extension = listaImagenes.get(i).substring(listaImagenes.get(i).length() - 3,
-											listaImagenes.get(i).length());
-
-									if (extension.equals("peg")) {
-										extension = "jpg";
-									}
-
-									if (listaImagenes.size() == 1 || i + 1 == listaImagenes.size()) {
-										bld.append(i + "." + extension);
-
-									} else {
-
-										bld.append(i + "." + extension + ",");
-									}
-
-								}
-
-								parametros = bld.toString();
-
-								if (!parametros.isEmpty()) {
-
-									JSONObject json;
-
-									try {
-
-										int maximo = 1;
-
-										Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes",
-												separador);
-
-										Connection conexion = Metodos.conexionBD();
-										Statement s = conexion.createStatement();
-										ResultSet rs;
-
-										rs = s.executeQuery("SELECT MAX(image_id)+1 as maximo FROM " + lecturabd[3]
-												+ "images order by image_id");
-										rs.next();
-
-										if (rs.getString("maximo") != null) {
-											maximo = Integer.parseInt(rs.getString("maximo"));
+									if (user.length != 2) {
+										try {
+											new User().setVisible(true);
+										} catch (IOException e1) {
+											//
 										}
+									}
 
-										int categoria = comboBox.getSelectedIndex() + 1;
+									if (listaImagenes.isEmpty()) {
+										try {
+											Metodos.abrirCarpeta("Config" + separador + "imagenes");
+										} catch (IOException e1) {
+											//
+										}
+									}
 
-										json = Metodos.readJsonFromUrl(
-												"https://apiperiquito.herokuapp.com/recibo-json.php?imagenes="
-														+ parametros);
-
-										JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
-
-										listaImagenes = Metodos
-												.directorio(directorioActual + "Config" + separador + "imagenes", ".");
-
-										String imagen = "";
-
-										ping = InetAddress
-												.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
-														+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
-
-										conexion = Metodos.conexionBD();
-
-										s = conexion.createStatement();
-
-										int comprobarSha = 0;
+								} else {
+									String parametros = "";
+									String extension = "";
+									StringBuilder bld = new StringBuilder();
+									
+									if (user[0] != null && user[1] != null && !user[0].isEmpty() && !user[1].isEmpty()) {
 
 										for (int i = 0; i < listaImagenes.size(); i++) {
-											imagen = directorioActual + "Config" + separador + "imagenes"
-													+ separador + listaImagenes.get(i).toString();
-											
-											rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images"
-													+ " WHERE sha256='" + Metodos.getSHA256Checksum(imagen) + "'");
 
-											rs.next();
+											extension = listaImagenes.get(i).substring(listaImagenes.get(i).length() - 3,
+													listaImagenes.get(i).length());
 
-											comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
+											if (extension.equals("peg")) {
+												extension = "jpg";
+											}
 
-											if (comprobarSha == 0) {
-								
+											if (listaImagenes.size() == 1 || i + 1 == listaImagenes.size()) {
+												bld.append(i + "." + extension);
 
-												if (!Metodos.extraerExtension(imagen).equals("gif")
-														&& !Metodos.extraerExtension(imagenesBD.get(i).toString())
-																.equals("ini")
-														&& !ping.getCanonicalHostName().equals("")) {
+											} else {
 
-													File f1 = new File(
-															directorioActual + "Config" + separador + "imagenes",
-															separador + listaImagenes.get(i));
+												bld.append(i + "." + extension + ",");
+											}
 
-													File f2 = new File(
-															directorioActual + "Config" + separador + "imagenes",
-															separador + imagenesBD.get(i).toString());
-													f1.renameTo(f2);
-													
+										}
+
+										parametros = bld.toString();
+
+										if (!parametros.isEmpty()) {
+
+											JSONObject json;
+
+											try {
+
+												int maximo = 1;
+
+												Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes",
+														separador);
+
+												Connection conexion = Metodos.conexionBD();
+												Statement s = conexion.createStatement();
+												ResultSet rs;
+
+												rs = s.executeQuery("SELECT MAX(image_id)+1 as maximo FROM " + lecturabd[3]
+														+ "images order by image_id");
+												rs.next();
+
+												if (rs.getString("maximo") != null) {
+													maximo = Integer.parseInt(rs.getString("maximo"));
+												}
+
+												int categoria = comboBox.getSelectedIndex() + 1;
+
+												json = Metodos.readJsonFromUrl(
+														"https://apiperiquito.herokuapp.com/recibo-json.php?imagenes="
+																+ parametros);
+
+												JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
+
+												listaImagenes = Metodos
+														.directorio(directorioActual + "Config" + separador + "imagenes", ".");
+
+												String imagen = "";
+
+												ping = InetAddress
+														.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
+																+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
+
+												conexion = Metodos.conexionBD();
+
+												s = conexion.createStatement();
+
+												int comprobarSha = 0;
+
+												for (int i = 0; i < listaImagenes.size(); i++) {
 													imagen = directorioActual + "Config" + separador + "imagenes"
-															+ separador + imagenesBD.get(i).toString();
+															+ separador + listaImagenes.get(i).toString();
 													
-													
-													s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
-															+ maximo + "','" + categoria + "','1','"
-															+ textField.getText().trim() + "','','','"
-															+ Metodos.saberFecha() + "','1','"
-															+ imagenesBD.get(i).toString()
-															+ "','1','0','0','0',DEFAULT,'0','"
-															+ Metodos.getSHA256Checksum(imagen) + "')");
+													rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images"
+															+ " WHERE sha256='" + Metodos.getSHA256Checksum(imagen) + "'");
 
-													maximo++;
-													Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
-															user[0], user[1], categoria);
-													imagenesSubidas++;
-													
-												} else {
+													rs.next();
 
+													comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
+
+													if (comprobarSha == 0) {
+										
+														if (!Metodos.extraerExtension(imagen).equals("gif")
+																&& !Metodos.extraerExtension(imagenesBD.get(i).toString())
+																		.equals("ini")
+																&& !ping.getCanonicalHostName().equals("")) {
+
+															File f1 = new File(
+																	directorioActual + "Config" + separador + "imagenes",
+																	separador + listaImagenes.get(i));
+
+															File f2 = new File(
+																	directorioActual + "Config" + separador + "imagenes",
+																	separador + imagenesBD.get(i).toString());
+															f1.renameTo(f2);
+															
+															imagen = directorioActual + "Config" + separador + "imagenes"
+																	+ separador + imagenesBD.get(i).toString();
+															
+															
+															s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
+																	+ maximo + "','" + categoria + "','1','"
+																	+ textField.getText().trim() + "','','','"
+																	+ Metodos.saberFecha() + "','1','"
+																	+ imagenesBD.get(i).toString()
+																	+ "','1','0','0','0',DEFAULT,'0','"
+																	+ Metodos.getSHA256Checksum(imagen) + "')");
+
+															maximo++;
+															Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
+																	user[0], user[1], categoria);
+															imagenesSubidas++;
+															
+														} else {
+
+															listaImagenes = Metodos.directorio(
+																	directorioActual + "Config" + separador + "imagenes", ".");
+
+															if (!Metodos.extraerExtension(imagen).equals("ini")) {
+
+																imagen = directorioActual + "Config" + separador + "imagenes"
+																		+ separador + listaImagenes.get(i).toString();
+																String carpeta = "";
+
+																if (!lecturaurl[1].isEmpty()) {
+																	carpeta = "/" + lecturaurl[1];
+																}
+
+																WebDriver chrome = new ChromeDriver();
+
+																String userId = "";
+																
+																chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
+
+																rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
+																		+ "users" + " WHERE user_name='" + user[0] + "'");
+																rs.next();
+																userId = rs.getString("user_id");
+												
+																chrome.manage().addCookie(new Cookie("4images_userid", userId));
+
+																rs = s.executeQuery("SELECT user_password FROM " + lecturabd[3]
+																		+ "users WHERE user_id='" + userId + "'");
+																
+																rs.next();
+
+																chrome.manage().addCookie(
+																		new Cookie("pass", rs.getString("user_password")));
+
+																chrome.get("http://" + lecturaurl[0] + carpeta
+																		+ "/upload_images/input.php?cat_id="+(comboBox.getSelectedIndex()+1)+"&nombre="+textField.getText().trim());
+
+																chrome.findElement(By.id("file")).sendKeys(imagen);
+
+																chrome.close();
+																
+																imagenesSubidas++;
+															}
+
+														}
+													}
+												}
+												
+												rs.close();
+												s.close();
+												conexion.close();
+												
+												if (imagenesSubidas > 0) {
+							
 													listaImagenes = Metodos.directorio(
 															directorioActual + "Config" + separador + "imagenes", ".");
-
-													if (!Metodos.extraerExtension(imagen).equals("ini")) {
-
-														imagen = directorioActual + "Config" + separador + "imagenes"
-																+ separador + listaImagenes.get(i).toString();
-														String carpeta = "";
-
-														if (!lecturaurl[1].isEmpty()) {
-															carpeta = "/" + lecturaurl[1];
+						
+													
+														for (int i = 0; i < listaImagenes.size(); i++) {
+															Metodos.eliminarFichero(directorioActual + "Config" + separador
+																	+ "imagenes" + separador + listaImagenes.get(i));
 														}
-
-														WebDriver chrome = new ChromeDriver();
-
-														String userId = "";
-														
-														chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
-
-														rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
-																+ "users" + " WHERE user_name='" + user[0] + "'");
-														rs.next();
-														userId = rs.getString("user_id");
-										
-														chrome.manage().addCookie(new Cookie("4images_userid", userId));
-
-														rs = s.executeQuery("SELECT user_password FROM " + lecturabd[3]
-																+ "users WHERE user_id='" + userId + "'");
-														
-														rs.next();
-
-														chrome.manage().addCookie(
-																new Cookie("pass", rs.getString("user_password")));
-
-														chrome.get("http://" + lecturaurl[0] + carpeta
-																+ "/upload_images/input.php?cat_id="+(comboBox.getSelectedIndex()+1)+"&nombre="+textField.getText().trim());
-
-														chrome.findElement(By.id("file")).sendKeys(imagen);
-
-														chrome.close();
-														
-														imagenesSubidas++;
-													}
-
+													
+													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
+												
+												} else {
+			
+													Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 												}
+
+												imagenesSubidas = 0;
+
+											} catch (SQLException e1) {
+												Metodos.mensaje(
+														"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
+														1);
+											}
+
+											catch (Exception e1) {
+												//
 											}
 										}
-										
-										rs.close();
-										s.close();
-										conexion.close();
-										
-										if (imagenesSubidas > 0) {
-					
-											listaImagenes = Metodos.directorio(
-													directorioActual + "Config" + separador + "imagenes", ".");
-				
-											
-												for (int i = 0; i < listaImagenes.size(); i++) {
-													Metodos.eliminarFichero(directorioActual + "Config" + separador
-															+ "imagenes" + separador + listaImagenes.get(i));
-												}
-											
-											Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
-										
-										} else {
-	
-											Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
+									} else {
+										try {
+											new User().setVisible(true);
+										} catch (IOException e1) {
+											//
 										}
-
-										imagenesSubidas = 0;
-
-									} catch (SQLException e1) {
-										e1.printStackTrace();
-										Metodos.mensaje(
-												"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
-												1);
 									}
+								}
+							} else {
+								try {
+									if (user[0] == null && user[1] == null || (user[0].isEmpty() || user[1].isEmpty())) {
 
-									catch (Exception e1) {
+										Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
+										new User().setVisible(true);
+
+									} else {
+										if (textField.getText().trim().isEmpty()) {
+											Metodos.mensaje("Por favor, rellene el nombre", 3);
+										} else {
+											try {
+												Metodos.abrirCarpeta(directorioActual + "Config" + separador + "imagenes");
+											} catch (IOException e1) {
+												Metodos.mensaje("Error", 1);
+											}
+										}
+									}
+								} catch (Exception e1) {
+									Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
+									try {
+										new User().setVisible(true);
+									} catch (IOException e2) {
 										//
 									}
 								}
-							} else {
-								try {
-									new User().setVisible(true);
-								} catch (IOException e1) {
-									//
-								}
 							}
 						}
-					} else {
-						try {
-							if (user[0] == null && user[1] == null || (user[0].isEmpty() || user[1].isEmpty())) {
-
-								Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
-								new User().setVisible(true);
-
-							} else {
-								if (textField.getText().trim().isEmpty()) {
-									Metodos.mensaje("Por favor, rellene el nombre", 3);
-								} else {
-									try {
-										Metodos.abrirCarpeta(directorioActual + "Config" + separador + "imagenes");
-									} catch (IOException e1) {
-										Metodos.mensaje("Error", 1);
-									}
-								}
-							}
-						} catch (Exception e1) {
-							Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
-							try {
-								new User().setVisible(true);
-							} catch (IOException e2) {
-								//
-							}
+						else {
+							Metodos.mensaje("Por favor, revisa la configuración", 3);
+							new Config2().setVisible(true);
 						}
+					} catch (Exception e3) {
+						// 
 					}
+					
+
 				}
 			}
 		});
+		
 		button.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/start.png")));
 		button.setFont(new Font("Tahoma", Font.PLAIN, 6));
 
