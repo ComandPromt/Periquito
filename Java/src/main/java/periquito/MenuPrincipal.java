@@ -458,8 +458,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									+ "GifFrames" + separador + imagenes.getFirst());
 							chrome.findElement(By.name("enviar")).click();
 
-							chrome.close();
-
 							Metodos.eliminarFichero(directorioActual + "Config" + separador + "GifFrames" + separador
 									+ imagenes.getFirst());
 						}
