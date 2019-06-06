@@ -1301,7 +1301,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												int comprobarSha = 0;
 
+												int idCategoria=comboBox.getSelectedIndex()+1;
+												
+												boolean gif=false;
+												
 												for (int i = 0; i < listaImagenes.size(); i++) {
+													
 													imagen = directorioActual + "Config" + separador + "imagenes"
 															+ separador + listaImagenes.get(i).toString();
 													
@@ -1382,11 +1387,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 																		new Cookie("pass", rs.getString("user_password")));
 
 																chrome.get("http://" + lecturaurl[0] + carpeta
-																		+ "/upload_images/input.php?cat_id="+(comboBox.getSelectedIndex()+1)+"&nombre="+textField.getText().trim());
+																		+ "/upload_images/input.php?cat_id="+idCategoria+"&nombre="+textField.getText().trim());
 
 																chrome.findElement(By.id("file")).sendKeys(imagen);
 
-																chrome.close();
+																//chrome.close();
+																
+																gif=true;
 																
 																imagenesSubidas++;
 															}
