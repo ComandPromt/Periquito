@@ -1303,8 +1303,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												int idCategoria=comboBox.getSelectedIndex()+1;
 												
-												boolean gif=false;
-												
+										
 												for (int i = 0; i < listaImagenes.size(); i++) {
 													
 													imagen = directorioActual + "Config" + separador + "imagenes"
@@ -1390,11 +1389,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 																		+ "/upload_images/input.php?cat_id="+idCategoria+"&nombre="+textField.getText().trim());
 
 																chrome.findElement(By.id("file")).sendKeys(imagen);
-
-																//chrome.close();
-																
-																gif=true;
-																
+									
 																imagenesSubidas++;
 															}
 
