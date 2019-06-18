@@ -81,7 +81,12 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				File directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
 						+ MenuPrincipal.getSeparador() + "recortes");
 				directorio.mkdir();
-				Metodos.mensaje("Error,inténtelo de nuevo", 1);
+				try {
+					new Config().setVisible(true);
+				} catch (IOException e2) {
+					// 
+				}
+				
 			}
 		});
 		popupMenu.add(menuItem);

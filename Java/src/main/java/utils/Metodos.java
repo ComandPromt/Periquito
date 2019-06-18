@@ -16,8 +16,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
@@ -70,6 +70,25 @@ public abstract class Metodos {
 		return "http://" + servidor + separador + carpeta;
 	}
 
+	public static void cerrarNavegador() {
+
+			try {
+				
+				if (!MenuPrincipal.getOs().equals("Linux")) {
+					crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true, MenuPrincipal.getOs());
+
+				}
+				
+				else {
+					crearScript("cerrar.sh", "kilall chrome", true, MenuPrincipal.getOs());
+				}
+				
+			} catch (Exception e) {
+				Metodos.mensaje("Error al cerrar el navegador", 1);
+			}
+			
+	}
+	
 	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int catId) {
 
 		try {
@@ -107,8 +126,6 @@ public abstract class Metodos {
 
 			writer.append("--" + limite + "--").append(CRLF).flush();
 
-			int responseCode = ((HttpURLConnection) connection).getResponseCode();
-
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String inputLine;
 			StringBuffer response = new StringBuffer();
@@ -119,56 +136,52 @@ public abstract class Metodos {
 
 			in.close();
 
-			if (responseCode == 200) {
-
-				MenuPrincipal.setImagenesSubidas(MenuPrincipal.getImagenesSubidas() + 1);
-
-			}
-
 		} catch (Exception ex) {
 			//
 		}
 	}
 
-	public static void descargarFoto(String enlace, int numero) throws IOException {
-		FileOutputStream fos = null;
-		InputStream is = null;
+	public static void descargarFoto(String enlace) throws IOException {
+		
+		String folder = "Config" + MenuPrincipal.getSeparador() + "Downloads"+ MenuPrincipal.getSeparador();
+		
 		try {
-			// Url con la foto
-			URL url = new URL(enlace);
-
-			// establecemos conexion
-			URLConnection urlCon = url.openConnection();
-
-			// Se obtiene el inputStream de la foto web y se abre el fichero
-			// local.
-			is = urlCon.getInputStream();
-			fos = new FileOutputStream("Config" + MenuPrincipal.getSeparador() + "Downloads"
-					+ MenuPrincipal.getSeparador() + "Image_" + numero + "." + Metodos.extraerExtension(enlace));
-
-			// Lectura de la foto de la web y escritura en fichero local
-			byte[] array = new byte[1000]; // buffer temporal de lectura.
-			int leido = is.read(array);
-			while (leido > 0) {
-				fos.write(array, 0, leido);
-				leido = is.read(array);
+	
+			
+			File dir = new File(folder);
+		
+			if (!dir.exists()) {
+			  dir.mkdir();
 			}
 
-			// cierre de conexion y fichero.
-			is.close();
-			fos.close();
-		} catch (Exception e) {
-			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
-
-		} finally {
-			if (is != null) {
-				is.close();
+			File file = new File(folder +
+					"Image_"+(listarFicherosPorCarpeta(new File("Config" + MenuPrincipal.getSeparador() + "Downloads"),".")+1)
+					+"."+extraerExtension(enlace));
+		
+			URLConnection conn = new URL(enlace).openConnection();
+			
+			conn.connect();
+			
+			InputStream in = conn.getInputStream();
+			OutputStream out = new FileOutputStream(file);
+			int b = 0;
+			while (b != -1) {
+			  b = in.read();
+			  if (b != -1)
+			    out.write(b);
 			}
-			if (fos != null) {
-				fos.close();
-			}
-
+			out.close();
+			in.close();
 		}
+		
+		catch (MalformedURLException e) {
+			  mensaje("la URL: " + enlace + " no es valida!",1);
+		}
+		
+		catch (Exception e) {
+			Metodos.abrirCarpeta(folder);
+
+		} 
 	}
 
 	public static void descargar(String imagen, int inicio, int fin, int salto) throws IOException {
@@ -188,10 +201,11 @@ public abstract class Metodos {
 
 						List<WebElement> image = chrome.findElements(By.tagName("img"));
 
-						descargarFoto(image.get(0).getAttribute("src"), x);
+						descargarFoto(image.get(0).getAttribute("src"));
 					}
 
 					chrome.close();
+					Metodos.cerrarNavegador();
 				}
 
 				else {
@@ -318,7 +332,6 @@ public abstract class Metodos {
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
 						files[i].getCanonicalPath().length());
 				comprobacion = extraerExtension(imagen);
-
 				if (comprobacion.equals("jpg") || comprobacion.equals("peg") || comprobacion.equals("png")
 						|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
 
@@ -469,6 +482,7 @@ public abstract class Metodos {
 
 		if (os.equals("Linux")) {
 			aplicacion = Runtime.getRuntime().exec("bash " + contenido);
+			aplicacion.destroy();
 		}
 
 		else {
@@ -483,14 +497,18 @@ public abstract class Metodos {
 			BufferedWriter fS = new BufferedWriter(flS);
 
 			try {
-
+				Runtime aplicacion2 = Runtime.getRuntime(); 
 				fS.write("@echo off");
 				fS.newLine();
 				fS.write(contenido);
 				fS.newLine();
 				fS.write("exit");
+				aplicacion2 = Runtime.getRuntime();
+				 try{aplicacion2.exec("cmd.exe /K "+iniciar+" "+System.getProperty("user.dir")+"\\"+archivo); }
+			        catch(Exception e){
+			        	e.printStackTrace();
+			        	}
 
-				aplicacion = Runtime.getRuntime().exec("cmd.exe /K " + iniciar + " " + archivo);
 
 			} finally {
 				fS.close();
@@ -498,7 +516,7 @@ public abstract class Metodos {
 
 			}
 		}
-		aplicacion.destroy();
+		
 	}
 
 	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {

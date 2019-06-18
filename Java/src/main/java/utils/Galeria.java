@@ -16,6 +16,11 @@ import periquito.MenuPrincipal;
 public class Galeria {
 
 	private ArrayList<ImageIcon> fotos = new ArrayList<>();
+	public static ArrayList<String> urlFotos = new ArrayList<>();
+	
+	public static ArrayList<String> getUrlFotos() {
+		return urlFotos;
+	}
 
 	public Galeria() {
 
@@ -33,7 +38,9 @@ public class Galeria {
 			if (!ping.getCanonicalHostName().equals("")) {
 
 				for (int i = 0; i < numeroImagenes; i++) {
-
+					urlFotos.add("http://" + lecturaurl[0] + "/"
+							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
+							+ MenuPrincipal.getImagenes().get(i));
 					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + lecturaurl[0] + "/"
 							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
 							+ MenuPrincipal.getImagenes().get(i)))));
@@ -66,25 +73,13 @@ public class Galeria {
 		int originalHeight = fotos.get(num).getIconHeight();
 		int boundWidth = d.width;
 		int boundHeight = d.height;
-		int newWidth = originalWidth;
-		int newHeight = originalHeight;
+		
+		int maxWidth = 600;
+		int maxHeight = 440;
 
-		// first check if we need to scale width
-		if (originalWidth > boundWidth) {
-			// scale width to fit
-			newWidth = boundWidth;
-			// scale height to maintain aspect ratio
-			newHeight = (newWidth * originalHeight) / originalWidth;
-		}
-
-		// then check if we need to scale even with the new height
-		if (newHeight > boundHeight) {
-			// scale height to fit instead
-			newHeight = boundHeight;
-			// scale width to maintain aspect ratio
-			newWidth = (newHeight * originalWidth) / originalHeight;
-		}
-
+		int newWidth=545;
+		int newHeight=453;
+		
 		Image mini = fotos.get(num).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_AREA_AVERAGING);
 		return new ImageIcon(mini);
 	}

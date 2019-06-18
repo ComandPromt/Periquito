@@ -1,6 +1,20 @@
 package utils;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+
+import javax.swing.ImageIcon;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+
+import periquito.MenuPrincipal;
+import java.awt.GridBagConstraints;
 
 @SuppressWarnings("serial")
 public class InterfazGaleria extends javax.swing.JFrame {
@@ -10,14 +24,18 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	int posicion;
 	int posicionactual;
 	int paso;
-
+	int descargar;
+	int web;
+	boolean atras=false;
 	private javax.swing.JLabel fotoA;
 	private javax.swing.JLabel fotoB;
 	private javax.swing.JLabel fotoC;
 	private javax.swing.JLabel fotoD;
 	private javax.swing.JLabel fotoGrande;
+	private GridBagConstraints gridBagConstraints_1;
 
 	public InterfazGaleria() {
+		
 		setResizable(false);
 		initComponents();
 		this.setTitle("Periquito v3 Image Gallery");
@@ -32,6 +50,93 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		fotoC.setIcon(miGaleria.getPreview(2));
 		fotoD.setIcon(miGaleria.getPreview(3));
 		fotoGrande.setIcon(miGaleria.getFoto(0, fotoGrande.getSize()));
+
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu mnNewMenu = new JMenu("Descargar");
+		mnNewMenu.setBackground(new Color(240,240,240));
+		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/download.png")));
+		menuBar.add(mnNewMenu);
+
+		JMenuItem mntmNewMenuItem = new JMenuItem("Descargar");
+		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					
+					descargar=paso;
+					
+					if(descargar>0 ) {
+						--descargar;
+					}
+					
+					if(atras) {
+						++descargar;
+					}
+
+					Metodos.descargarFoto(Galeria.getUrlFotos().get(descargar));
+					
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/download.png")));
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		JSeparator separator_1 = new JSeparator();
+		mnNewMenu.add(separator_1);
+
+		JSeparator separator = new JSeparator();
+		mnNewMenu.add(separator);
+
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Descargar");
+		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() +
+								"Downloads");
+				} catch (IOException e1) {
+					// 
+				}
+			}
+		});
+		mntmNewMenuItem_1.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/folder.png")));
+		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu.add(mntmNewMenuItem_1);
+
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Web");
+		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				try {
+					
+					web=paso;
+			
+					if(web>0 ) {
+						--web;
+					}
+					
+					if(atras) {
+						++web;
+					}
+					
+					Metodos.abrirCarpeta(Galeria.getUrlFotos().get(web));
+					
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+		mntmNewMenuItem_2.setBackground( new Color(240,240,240));
+		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_2.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/remote.png")));
+		menuBar.add(mntmNewMenuItem_2);
 	}
 
 	private void initComponents() {
@@ -58,7 +163,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		javax.swing.JButton cmdNext = new javax.swing.JButton();
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new java.awt.GridBagLayout());
-		jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+		jPanel1.setBackground(new java.awt.Color(240, 240, 240));
 		jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 		jPanel1.setPreferredSize(new java.awt.Dimension(600, 500));
 		jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -69,13 +174,14 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		gridBagConstraints.gridy = 0;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
 		jPanel1.add(fotoGrande, gridBagConstraints);
-		gridBagConstraints = new java.awt.GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-		gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 10);
-		getContentPane().add(jPanel1, gridBagConstraints);
-		jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+		gridBagConstraints_1 = new java.awt.GridBagConstraints();
+		gridBagConstraints_1.gridheight = 2;
+		gridBagConstraints_1.gridx = 0;
+		gridBagConstraints_1.gridy = 0;
+		gridBagConstraints_1.anchor = java.awt.GridBagConstraints.NORTHWEST;
+		gridBagConstraints_1.insets = new java.awt.Insets(10, 10, 5, 10);
+		getContentPane().add(jPanel1, gridBagConstraints_1);
+		jPanel3.setBorder(null);
 		jPanel3.setLayout(new java.awt.GridBagLayout());
 		cmdPreview.setText("<");
 		cmdPreview.setPreferredSize(new java.awt.Dimension(44, 120));
@@ -198,7 +304,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		jPanel3.add(cmdNext, gridBagConstraints);
 		gridBagConstraints = new java.awt.GridBagConstraints();
 		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridy = 1;
+		gridBagConstraints.gridy = 2;
 		gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
 		getContentPane().add(jPanel3, gridBagConstraints);
 
@@ -280,9 +386,9 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	}
 
 	private void cmdNextActionPerformed() {
-
+		atras=false;
 		if (paso == 0 && posicionactual == 0 && size > 1) {
-			posicionactual += 1;
+			++posicionactual;
 			verImagen(posicionactual);
 			paso = posicionactual;
 		}
@@ -295,6 +401,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		} else {
 			if (paso < 0) {
 				paso = 0;
+			
 			}
 			if (posicionactual == 0) {
 				if (paso == 0) {
@@ -311,6 +418,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 					fotoC.setIcon(miGaleria.getPreview(posicionactual + 2));
 					fotoD.setIcon(miGaleria.getPreview(posicionactual + 3));
 					paso++;
+					
 				}
 			} else {
 				fotoA.setIcon(miGaleria.getPreview(paso));
@@ -319,12 +427,24 @@ public class InterfazGaleria extends javax.swing.JFrame {
 				fotoD.setIcon(miGaleria.getPreview(paso + 3));
 				fotoGrande.setIcon(miGaleria.getFoto(paso, fotoGrande.getSize()));
 				++paso;
+				
 			}
 		}
+		
+		/*
+		fotoA.setIcon(miGaleria.getPreview(paso));
+		fotoGrande.setIcon(miGaleria.getFoto(paso, fotoGrande.getSize()));
+		fotoB.setIcon(miGaleria.getPreview(paso + 1));
+		fotoC.setIcon(miGaleria.getPreview(paso + 2));
+		fotoD.setIcon(miGaleria.getPreview(paso + 3));
+*/
+
+	
+		
 	}
 
 	private void cmdPreviewActionPerformed() {// GEN-FIRST:event_cmdPreviewActionPerformed
-
+		atras=true;
 		if (paso == 2) {
 
 			if (posicionactual <= 0) {

@@ -28,16 +28,20 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException {
+		
 		File af = new File("Config/Config2.txt");
 
 		if (af.exists()) {
+			
 			String[] lectura;
+			
 			try {
 				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "";
 				}
+				
 				if (lectura[1] == null) {
 					lectura[1] = "";
 				}
@@ -74,16 +78,29 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 		Connection conexion;
 
 		try {
+			
 			conexion = Metodos.conexionBD();
 			Statement s = conexion.createStatement();
 
 			String resultadosha;
 
+			String sentenciaFinal;
+			
 			for (int x = 0; x < ComprobarSha.getLectura().size(); x++) {
 
+				if(ComprobarSha.getComboBox().getSelectedIndex()==0 ) {
+					sentenciaFinal="WHERE sha256='" + ComprobarSha.getShaimages().get(x) + "'";
+					
+				}
+				else {
+					sentenciaFinal="WHERE image_media_file='" + ComprobarSha.getLectura().get(x) + "'";
+						
+				}
+				
 				ResultSet rs = s.executeQuery("select COUNT(image_id) from " + MenuPrincipal.getLecturabd()[3]
-						+ "images WHERE sha256='" + ComprobarSha.getShaimages().get(x) + "'");
+						+ "images "+sentenciaFinal);
 				rs.next();
+				
 				int recuento = Integer.parseInt(rs.getString("count(image_id)"));
 
 				if (recuento > 0) {
@@ -91,9 +108,11 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				} else {
 					resultadosha = "NO";
 				}
+				
 				myTable.addRow(new Object[] { ComprobarSha.getLectura().get(x), resultadosha });
 
 			}
+			
 		} catch (SQLException e) {
 			//
 		}

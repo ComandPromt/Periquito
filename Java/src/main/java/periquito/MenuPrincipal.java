@@ -111,15 +111,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	static String os = System.getProperty("os.name");
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 	private static String[] user = Metodos.leerFicheroArray("Config/User.txt", 2);
-	static int imagenesSubidas = 0;
-
-	public static void setImagenesSubidas(int imagenesSubidas) {
-		MenuPrincipal.imagenesSubidas = imagenesSubidas;
-	}
-
-	public static int getImagenesSubidas() {
-		return imagenesSubidas;
-	}
 
 	public static String[] getUser() {
 		return user;
@@ -219,7 +210,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
 
 								chrome.close();
-
+								Metodos.cerrarNavegador();
 								listaImagenes = Metodos
 										.directorio(lectura[0] + separador + "Hacer_gif" + separador + "Output", "gif");
 								LinkedList<String> frames = Metodos
@@ -312,7 +303,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						chrome.get(lectura[1] + "/FrameExtractor/examples/index.php");
 
 						chrome.close();
-
+						Metodos.cerrarNavegador();
 						Metodos.eliminarDuplicados(lectura[0] + separador + "FrameExtractor" + separador + "examples"
 								+ separador + "output", separador);
 						Metodos.abrirCarpeta(lectura[0] + separador + "FrameExtractor" + separador + "examples"
@@ -1151,7 +1142,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu7.add(menuItem19);
 
 		Metodos.comprobarArchivo("Config", false);
-
 		initComponents();
 		this.setVisible(true);
 	}
@@ -1187,6 +1177,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
+				Metodos.cerrarNavegador();
+				
 				if (comboBox.getSelectedIndex() == -1) {
 					try {
 						Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
@@ -1347,7 +1340,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 															maximo++;
 															Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
 																	user[0], user[1], categoria);
-															imagenesSubidas++;
+														
 															
 														} else {
 
@@ -1389,8 +1382,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 																		+ "/upload_images/input.php?cat_id="+idCategoria+"&nombre="+textField.getText().trim());
 
 																chrome.findElement(By.id("file")).sendKeys(imagen);
-									
-																imagenesSubidas++;
+																
 															}
 
 														}
@@ -1401,8 +1393,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 												s.close();
 												conexion.close();
 												
-												if (imagenesSubidas > 0) {
-							
+												if (listaImagenes.size() > 0) {
+													
 													listaImagenes = Metodos.directorio(
 															directorioActual + "Config" + separador + "imagenes", ".");
 						
@@ -1411,7 +1403,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 															Metodos.eliminarFichero(directorioActual + "Config" + separador
 																	+ "imagenes" + separador + listaImagenes.get(i));
 														}
-													
+														
+														
 													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 												
 												} else {
@@ -1419,7 +1412,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 													Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 												}
 
-												imagenesSubidas = 0;
+										
 
 											} catch (SQLException e1) {
 												Metodos.mensaje(
