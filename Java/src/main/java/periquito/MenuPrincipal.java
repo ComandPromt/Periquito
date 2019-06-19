@@ -136,7 +136,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmDownloads;
-
+	boolean gif=false;
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
 	}
@@ -189,6 +189,16 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
+	private void eliminararchivos() {
+		listaImagenes = Metodos.directorio(
+				directorioActual + "Config" + separador + "imagenes", ".");
+
+			for (int i = 0; i < listaImagenes.size(); i++) {
+				Metodos.eliminarFichero(directorioActual + "Config" + separador
+						+ "imagenes" + separador + listaImagenes.get(i));
+			}
+	}
+	
 	public static void hacerGIF() throws IOException {
 		try {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
@@ -244,8 +254,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						}
 
 						catch (Exception e1) {
-
-							Metodos.mensaje("No tienes el driver de chrome en la carpeta del programa", 1);
+							hacerGIF();
 						}
 
 					}
@@ -1180,6 +1189,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				
 				Metodos.cerrarNavegador();
 				
+				if(gif) {
+					eliminararchivos();
+				}
+				
+				
 				if (comboBox.getSelectedIndex() == -1) {
 					try {
 						Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
@@ -1384,7 +1398,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 																chrome.findElement(By.id("file")).sendKeys(imagen);
 																
 															}
-
+															gif=true;
 														}
 													}
 												}
@@ -1395,15 +1409,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 												
 												if (listaImagenes.size() > 0) {
 													
-													listaImagenes = Metodos.directorio(
-															directorioActual + "Config" + separador + "imagenes", ".");
-						
-													
-														for (int i = 0; i < listaImagenes.size(); i++) {
-															Metodos.eliminarFichero(directorioActual + "Config" + separador
-																	+ "imagenes" + separador + listaImagenes.get(i));
-														}
-														
+													eliminararchivos();
 														
 													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 												
@@ -1411,8 +1417,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			
 													Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 												}
-
-										
 
 											} catch (SQLException e1) {
 												Metodos.mensaje(
@@ -1424,7 +1428,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 												//
 											}
 										}
-									} else {
+									} 
+									
+									else {
 										try {
 											new User().setVisible(true);
 										} catch (IOException e1) {
@@ -1471,6 +1477,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				}
 			}
+
+	
 		});
 		
 		button.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/start.png")));
