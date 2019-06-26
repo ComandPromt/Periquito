@@ -54,7 +54,6 @@ public class Galeria {
 
 	}
 
-	/* devuelve una imagen de tamaño 100x100 VISTA PREVIA */
 	public Icon getPreview(int num) {
 		if (num >= 0 && num < fotos.size()) {
 			Image mini = fotos.get(num).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING);
@@ -64,19 +63,11 @@ public class Galeria {
 		}
 	}
 
-	/*
-	 * devuelve la foto original, pero si el tamaño es mayor al contenedor, lo
-	 * redimensiona
-	 */
 	public Icon getFoto(int num, Dimension d) {
-		int originalWidth = fotos.get(num).getIconWidth();
-		int originalHeight = fotos.get(num).getIconHeight();
-		int boundWidth = d.width;
-		int boundHeight = d.height;
-		
-		int maxWidth = 600;
-		int maxHeight = 440;
-
+				
+		//int originalWidth = fotos.get(num).getIconWidth();
+		//int originalHeight = fotos.get(num).getIconHeight();
+	
 		int newWidth=545;
 		int newHeight=453;
 		

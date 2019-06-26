@@ -189,9 +189,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
-	private void eliminararchivos() {
+	private void eliminararchivos(String extension) {
 		listaImagenes = Metodos.directorio(
-				directorioActual + "Config" + separador + "imagenes", ".");
+				directorioActual + "Config" + separador + "imagenes", extension);
 
 			for (int i = 0; i < listaImagenes.size(); i++) {
 				Metodos.eliminarFichero(directorioActual + "Config" + separador
@@ -1190,10 +1190,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				Metodos.cerrarNavegador();
 				
 				if(gif) {
-					eliminararchivos();
+					eliminararchivos("gif");
+					System.exit(0);
 				}
-				
-				
+								
 				if (comboBox.getSelectedIndex() == -1) {
 					try {
 						Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
@@ -1202,6 +1202,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						Metodos.mensaje("Error", 1);
 					}
 				} else {
+					
 					InetAddress ping;
 					
 					try {
@@ -1210,7 +1211,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
 										+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
 				
-
 						if(!ping.getHostName().equals("")) {
 							if (!textField.getText().trim().isEmpty()) {
 
@@ -1235,6 +1235,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									}
 
 								} else {
+									
 									String parametros = "";
 									String extension = "";
 									StringBuilder bld = new StringBuilder();
@@ -1330,19 +1331,17 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 																		.equals("ini")
 																&& !ping.getCanonicalHostName().equals("")) {
 
-															File f1 = new File(
-																	directorioActual + "Config" + separador + "imagenes",
-																	separador + listaImagenes.get(i));
+															File f1 = new File(imagen);
 
 															File f2 = new File(
 																	directorioActual + "Config" + separador + "imagenes",
 																	separador + imagenesBD.get(i).toString());
+															
 															f1.renameTo(f2);
 															
 															imagen = directorioActual + "Config" + separador + "imagenes"
 																	+ separador + imagenesBD.get(i).toString();
-															
-															
+																														
 															s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
 																	+ maximo + "','" + categoria + "','1','"
 																	+ textField.getText().trim() + "','','','"
@@ -1351,11 +1350,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 																	+ "','1','0','0','0',DEFAULT,'0','"
 																	+ Metodos.getSHA256Checksum(imagen) + "')");
 
-															maximo++;
-															Metodos.postFile(new File(imagen), imagenesBD.get(i).toString(),
+															Metodos.postFile(f2, imagenesBD.get(i).toString(),
 																	user[0], user[1], categoria);
 														
-															
+															maximo++;
 														} else {
 
 															listaImagenes = Metodos.directorio(
@@ -1409,7 +1407,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 												
 												if (listaImagenes.size() > 0) {
 													
-													eliminararchivos();
+													eliminararchivos(".");
 														
 													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 												
@@ -1473,11 +1471,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					} catch (Exception e3) {
 						// 
 					}
-					
 
 				}
 			}
-
 	
 		});
 		
