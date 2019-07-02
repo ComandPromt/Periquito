@@ -84,9 +84,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				try {
 					new Config().setVisible(true);
 				} catch (IOException e2) {
-					// 
+					//
 				}
-				
+
 			}
 		});
 		popupMenu.add(menuItem);

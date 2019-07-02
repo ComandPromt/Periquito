@@ -99,7 +99,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 						try {
 							new Bd().setVisible(true);
 						} catch (IOException e1) {
-							// 
+							//
 						}
 					}
 				} else {

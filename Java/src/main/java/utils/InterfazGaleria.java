@@ -2,6 +2,7 @@ package utils;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -14,7 +15,6 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import periquito.MenuPrincipal;
-import java.awt.GridBagConstraints;
 
 @SuppressWarnings("serial")
 public class InterfazGaleria extends javax.swing.JFrame {
@@ -26,7 +26,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	int paso;
 	int descargar;
 	int web;
-	boolean atras=false;
+	boolean atras = false;
 	private javax.swing.JLabel fotoA;
 	private javax.swing.JLabel fotoB;
 	private javax.swing.JLabel fotoC;
@@ -35,7 +35,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	private GridBagConstraints gridBagConstraints_1;
 
 	public InterfazGaleria() {
-		
+
 		setResizable(false);
 		initComponents();
 		this.setTitle("Periquito v3 Image Gallery");
@@ -55,7 +55,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		setJMenuBar(menuBar);
 
 		JMenu mnNewMenu = new JMenu("Descargar");
-		mnNewMenu.setBackground(new Color(240,240,240));
+		mnNewMenu.setBackground(new Color(240, 240, 240));
 		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/download.png")));
 		menuBar.add(mnNewMenu);
@@ -65,19 +65,19 @@ public class InterfazGaleria extends javax.swing.JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					
-					descargar=paso;
-					
-					if(descargar>0 ) {
+
+					descargar = paso;
+
+					if (descargar > 0) {
 						--descargar;
 					}
-					
-					if(atras) {
+
+					if (atras) {
 						++descargar;
 					}
 
 					Metodos.descargarFoto(Galeria.getUrlFotos().get(descargar));
-					
+
 				} catch (IOException e1) {
 					//
 				}
@@ -86,7 +86,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/download.png")));
 		mnNewMenu.add(mntmNewMenuItem);
-		
+
 		JSeparator separator_1 = new JSeparator();
 		mnNewMenu.add(separator_1);
 
@@ -98,10 +98,9 @@ public class InterfazGaleria extends javax.swing.JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				try {
-					Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() +
-								"Downloads");
+					Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
 				} catch (IOException e1) {
-					// 
+					//
 				}
 			}
 		});
@@ -113,27 +112,27 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 				try {
-					
-					web=paso;
-			
-					if(web>0 ) {
+
+					web = paso;
+
+					if (web > 0) {
 						--web;
 					}
-					
-					if(atras) {
+
+					if (atras) {
 						++web;
 					}
-					
+
 					Metodos.abrirCarpeta(Galeria.getUrlFotos().get(web));
-					
+
 				} catch (IOException e1) {
 					//
 				}
 			}
 		});
-		mntmNewMenuItem_2.setBackground( new Color(240,240,240));
+		mntmNewMenuItem_2.setBackground(new Color(240, 240, 240));
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem_2.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/remote.png")));
 		menuBar.add(mntmNewMenuItem_2);
@@ -386,7 +385,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	}
 
 	private void cmdNextActionPerformed() {
-		atras=false;
+		atras = false;
 		if (paso == 0 && posicionactual == 0 && size > 1) {
 			++posicionactual;
 			verImagen(posicionactual);
@@ -401,7 +400,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		} else {
 			if (paso < 0) {
 				paso = 0;
-			
+
 			}
 			if (posicionactual == 0) {
 				if (paso == 0) {
@@ -418,7 +417,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 					fotoC.setIcon(miGaleria.getPreview(posicionactual + 2));
 					fotoD.setIcon(miGaleria.getPreview(posicionactual + 3));
 					paso++;
-					
+
 				}
 			} else {
 				fotoA.setIcon(miGaleria.getPreview(paso));
@@ -427,24 +426,22 @@ public class InterfazGaleria extends javax.swing.JFrame {
 				fotoD.setIcon(miGaleria.getPreview(paso + 3));
 				fotoGrande.setIcon(miGaleria.getFoto(paso, fotoGrande.getSize()));
 				++paso;
-				
+
 			}
 		}
-		
-		/*
-		fotoA.setIcon(miGaleria.getPreview(paso));
-		fotoGrande.setIcon(miGaleria.getFoto(paso, fotoGrande.getSize()));
-		fotoB.setIcon(miGaleria.getPreview(paso + 1));
-		fotoC.setIcon(miGaleria.getPreview(paso + 2));
-		fotoD.setIcon(miGaleria.getPreview(paso + 3));
-*/
 
-	
-		
+		/*
+		 * fotoA.setIcon(miGaleria.getPreview(paso));
+		 * fotoGrande.setIcon(miGaleria.getFoto(paso, fotoGrande.getSize()));
+		 * fotoB.setIcon(miGaleria.getPreview(paso + 1));
+		 * fotoC.setIcon(miGaleria.getPreview(paso + 2));
+		 * fotoD.setIcon(miGaleria.getPreview(paso + 3));
+		 */
+
 	}
 
 	private void cmdPreviewActionPerformed() {// GEN-FIRST:event_cmdPreviewActionPerformed
-		atras=true;
+		atras = true;
 		if (paso == 2) {
 
 			if (posicionactual <= 0) {

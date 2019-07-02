@@ -136,7 +136,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem_2;
 	private JMenuItem mntmNewMenuItem_3;
 	private JMenuItem mntmDownloads;
-	boolean gif=false;
+	boolean gif = false;
+
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
 	}
@@ -181,6 +182,25 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		return separador;
 	}
 
+	public static int saberMaximo() throws SQLException, IOException {
+
+		int maximo = 0;
+
+		Connection conexion = Metodos.conexionBD();
+		Statement s = conexion.createStatement();
+		ResultSet rs;
+
+		rs = s.executeQuery("SELECT MAX(image_id)+1 as maximo FROM " + lecturabd[3] + "images order by image_id");
+
+		rs.next();
+
+		if (rs.getString("maximo") != null) {
+			maximo = Integer.parseInt(rs.getString("maximo"));
+		}
+
+		return maximo;
+	}
+
 	public static void cambiarPermisos() {
 		try {
 			Metodos.crearScript("change_permisos.sh", "sudo chmod 777 -R /var/www", true, os);
@@ -190,15 +210,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	private void eliminararchivos(String extension) {
-		listaImagenes = Metodos.directorio(
-				directorioActual + "Config" + separador + "imagenes", extension);
+		listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes", extension);
 
-			for (int i = 0; i < listaImagenes.size(); i++) {
-				Metodos.eliminarFichero(directorioActual + "Config" + separador
-						+ "imagenes" + separador + listaImagenes.get(i));
-			}
+		for (int i = 0; i < listaImagenes.size(); i++) {
+			Metodos.eliminarFichero(
+					directorioActual + "Config" + separador + "imagenes" + separador + listaImagenes.get(i));
+		}
 	}
-	
+
 	public static void hacerGIF() throws IOException {
 		try {
 			if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".") <= 1) {
@@ -949,7 +968,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		menuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
 		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		
+
 		mntmDownloads = new JMenuItem("Descargas");
 		mntmDownloads.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
 		mntmDownloads.addMouseListener(new MouseAdapter() {
@@ -962,7 +981,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 			}
 		});
-		
+
 		JSeparator separator_6 = new JSeparator();
 		mnNewMenu.add(separator_6);
 		mntmDownloads.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -1186,14 +1205,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 				Metodos.cerrarNavegador();
-				
-				if(gif) {
+
+				if (gif) {
 					eliminararchivos("gif");
 					System.exit(0);
 				}
-								
+
 				if (comboBox.getSelectedIndex() == -1) {
 					try {
 						Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
@@ -1202,16 +1221,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						Metodos.mensaje("Error", 1);
 					}
 				} else {
-					
+
 					InetAddress ping;
-					
+
 					try {
-						
-						ping = InetAddress
-								.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
-										+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
-				
-						if(!ping.getHostName().equals("")) {
+
+						ping = InetAddress.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
+								+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
+
+						if (!ping.getHostName().equals("")) {
 							if (!textField.getText().trim().isEmpty()) {
 
 								listaImagenes = Metodos.directorio("Config" + separador + "imagenes", ".");
@@ -1235,17 +1253,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									}
 
 								} else {
-									
+
 									String parametros = "";
 									String extension = "";
 									StringBuilder bld = new StringBuilder();
-									
-									if (user[0] != null && user[1] != null && !user[0].isEmpty() && !user[1].isEmpty()) {
+
+									if (user[0] != null && user[1] != null && !user[0].isEmpty()
+											&& !user[1].isEmpty()) {
 
 										for (int i = 0; i < listaImagenes.size(); i++) {
 
-											extension = listaImagenes.get(i).substring(listaImagenes.get(i).length() - 3,
-													listaImagenes.get(i).length());
+											extension = listaImagenes.get(i).substring(
+													listaImagenes.get(i).length() - 3, listaImagenes.get(i).length());
 
 											if (extension.equals("peg")) {
 												extension = "jpg";
@@ -1269,22 +1288,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 											try {
 
-												int maximo = 1;
-
-												Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes",
+												Metodos.eliminarDuplicados(
+														directorioActual + "Config" + separador + "imagenes",
 														separador);
-
-												Connection conexion = Metodos.conexionBD();
-												Statement s = conexion.createStatement();
-												ResultSet rs;
-
-												rs = s.executeQuery("SELECT MAX(image_id)+1 as maximo FROM " + lecturabd[3]
-														+ "images order by image_id");
-												rs.next();
-
-												if (rs.getString("maximo") != null) {
-													maximo = Integer.parseInt(rs.getString("maximo"));
-												}
 
 												int categoria = comboBox.getSelectedIndex() + 1;
 
@@ -1294,129 +1300,105 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
 
-												listaImagenes = Metodos
-														.directorio(directorioActual + "Config" + separador + "imagenes", ".");
+												listaImagenes = Metodos.directorio(
+														directorioActual + "Config" + separador + "imagenes", ".");
 
 												String imagen = "";
 
 												ping = InetAddress
-														.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
-																+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
+														.getByName(new URL("http://" + MenuPrincipal.getLecturaurl()[0]
+																+ "/" + MenuPrincipal.getLecturaurl()[1] + "/index.php")
+																		.getHost());
+
+												Connection conexion = Metodos.conexionBD();
 
 												conexion = Metodos.conexionBD();
 
+												ResultSet rs = null;
+
+												Statement s;
+
 												s = conexion.createStatement();
 
-												int comprobarSha = 0;
+												int idCategoria = comboBox.getSelectedIndex() + 1;
 
-												int idCategoria=comboBox.getSelectedIndex()+1;
-												
-										
-												for (int i = 0; i < listaImagenes.size(); i++) {
-													
-													imagen = directorioActual + "Config" + separador + "imagenes"
-															+ separador + listaImagenes.get(i).toString();
-													
-													rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images"
-															+ " WHERE sha256='" + Metodos.getSHA256Checksum(imagen) + "'");
+												boolean notificarSubidas = false;
 
-													rs.next();
+												if (subirArchivos(s, categoria, imagenesBD, "png") > 0
+														|| subirArchivos(s, categoria, imagenesBD, "jpg") > 0
+														|| subirArchivos(s, categoria, imagenesBD, "jpeg") > 0) {
 
-													comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
-
-													if (comprobarSha == 0) {
-										
-														if (!Metodos.extraerExtension(imagen).equals("gif")
-																&& !Metodos.extraerExtension(imagenesBD.get(i).toString())
-																		.equals("ini")
-																&& !ping.getCanonicalHostName().equals("")) {
-
-															File f1 = new File(imagen);
-
-															File f2 = new File(
-																	directorioActual + "Config" + separador + "imagenes",
-																	separador + imagenesBD.get(i).toString());
-															
-															f1.renameTo(f2);
-															
-															imagen = directorioActual + "Config" + separador + "imagenes"
-																	+ separador + imagenesBD.get(i).toString();
-																														
-															s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('"
-																	+ maximo + "','" + categoria + "','1','"
-																	+ textField.getText().trim() + "','','','"
-																	+ Metodos.saberFecha() + "','1','"
-																	+ imagenesBD.get(i).toString()
-																	+ "','1','0','0','0',DEFAULT,'0','"
-																	+ Metodos.getSHA256Checksum(imagen) + "')");
-
-															Metodos.postFile(f2, imagenesBD.get(i).toString(),
-																	user[0], user[1], categoria);
-														
-															maximo++;
-														} else {
-
-															listaImagenes = Metodos.directorio(
-																	directorioActual + "Config" + separador + "imagenes", ".");
-
-															if (!Metodos.extraerExtension(imagen).equals("ini")) {
-
-																imagen = directorioActual + "Config" + separador + "imagenes"
-																		+ separador + listaImagenes.get(i).toString();
-																String carpeta = "";
-
-																if (!lecturaurl[1].isEmpty()) {
-																	carpeta = "/" + lecturaurl[1];
-																}
-
-																WebDriver chrome = new ChromeDriver();
-
-																String userId = "";
-																
-																chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
-
-																rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
-																		+ "users" + " WHERE user_name='" + user[0] + "'");
-																rs.next();
-																userId = rs.getString("user_id");
-												
-																chrome.manage().addCookie(new Cookie("4images_userid", userId));
-
-																rs = s.executeQuery("SELECT user_password FROM " + lecturabd[3]
-																		+ "users WHERE user_id='" + userId + "'");
-																
-																rs.next();
-
-																chrome.manage().addCookie(
-																		new Cookie("pass", rs.getString("user_password")));
-
-																chrome.get("http://" + lecturaurl[0] + carpeta
-																		+ "/upload_images/input.php?cat_id="+idCategoria+"&nombre="+textField.getText().trim());
-
-																chrome.findElement(By.id("file")).sendKeys(imagen);
-																
-															}
-															gif=true;
-														}
-													}
+													notificarSubidas = true;
 												}
-												
+
+												listaImagenes = Metodos.directorio(
+														directorioActual + "Config" + separador + "imagenes", "gif");
+
+												if (listaImagenes.size() > 0) {
+
+													for (int i = 0; i < listaImagenes.size(); i++) {
+
+														imagen = directorioActual + "Config" + separador + "imagenes"
+																+ separador + listaImagenes.get(i).toString();
+
+														if (!Metodos.extraerExtension(imagen).equals("ini")) {
+
+															String carpeta = "";
+
+															if (!lecturaurl[1].isEmpty()) {
+																carpeta = "/" + lecturaurl[1];
+															}
+
+															WebDriver chrome = new ChromeDriver();
+
+															String userId = "";
+
+															chrome.get(
+																	"http://" + lecturaurl[0] + carpeta + "/index.php");
+
+															rs = s.executeQuery("SELECT user_id FROM " + lecturabd[3]
+																	+ "users" + " WHERE user_name='" + user[0] + "'");
+															rs.next();
+															userId = rs.getString("user_id");
+
+															chrome.manage()
+																	.addCookie(new Cookie("4images_userid", userId));
+
+															rs = s.executeQuery(
+																	"SELECT user_password FROM " + lecturabd[3]
+																			+ "users WHERE user_id='" + userId + "'");
+
+															rs.next();
+
+															chrome.manage().addCookie(
+																	new Cookie("pass", rs.getString("user_password")));
+
+															chrome.get("http://" + lecturaurl[0] + carpeta
+																	+ "/upload_images/input.php?cat_id=" + idCategoria
+																	+ "&nombre=" + textField.getText().trim());
+
+															chrome.findElement(By.id("file")).sendKeys(imagen);
+
+														}
+
+														gif = true;
+
+													}
+
+												}
+
 												rs.close();
 												s.close();
 												conexion.close();
-												
-												if (listaImagenes.size() > 0) {
-													
-													eliminararchivos(".");
-														
+
+												eliminararchivos(".");
+
+												if (notificarSubidas || gif) {
 													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
-												
-												} else {
-			
-													Metodos.mensaje("No se ha subido ningún archivo al CMS", 2);
 												}
 
 											} catch (SQLException e1) {
+
 												Metodos.mensaje(
 														"La tabla de imágenes no tiene la estructura para ejecutar correctamente esta acción",
 														1);
@@ -1426,8 +1408,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 												//
 											}
 										}
-									} 
-									
+									}
+
 									else {
 										try {
 											new User().setVisible(true);
@@ -1438,7 +1420,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								}
 							} else {
 								try {
-									if (user[0] == null && user[1] == null || (user[0].isEmpty() || user[1].isEmpty())) {
+									if (user[0] == null && user[1] == null
+											|| (user[0].isEmpty() || user[1].isEmpty())) {
 
 										Metodos.mensaje("Por favor, introduce tu usuario y contraseña del CMS", 2);
 										new User().setVisible(true);
@@ -1448,7 +1431,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 											Metodos.mensaje("Por favor, rellene el nombre", 3);
 										} else {
 											try {
-												Metodos.abrirCarpeta(directorioActual + "Config" + separador + "imagenes");
+												Metodos.abrirCarpeta(
+														directorioActual + "Config" + separador + "imagenes");
 											} catch (IOException e1) {
 												Metodos.mensaje("Error", 1);
 											}
@@ -1463,20 +1447,108 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									}
 								}
 							}
-						}
-						else {
+						} else {
 							Metodos.mensaje("Por favor, revisa la configuración", 3);
 							new Config2().setVisible(true);
 						}
 					} catch (Exception e3) {
-						// 
+						//
 					}
 
 				}
 			}
-	
+
+			private int subirArchivos(Statement s, int categoria, JSONArray imagenesBD, String extension)
+					throws SQLException, Exception {
+
+				int maximo = saberMaximo();
+
+				int retorno = 0;
+
+				listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes", extension);
+
+				if (listaImagenes.size() > 0) {
+					retorno = subirImagenes(maximo, s, categoria, imagenesBD);
+				}
+
+				return retorno;
+			}
+
+			private int subirImagenes(int maximo, Statement s, int categoria, JSONArray imagenesBD)
+					throws SQLException, IOException {
+
+				int image_id = 0;
+
+				try {
+
+					String imagen;
+
+					Connection conexion = Metodos.conexionBD();
+					ResultSet rs;
+
+					int comprobarSha = 0;
+
+					for (int i = 0; i < listaImagenes.size(); i++) {
+
+						imagen = directorioActual + "Config" + separador + "imagenes" + separador
+								+ listaImagenes.get(i).toString();
+
+						rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images" + " WHERE sha256='"
+								+ Metodos.getSHA256Checksum(imagen) + "'");
+
+						rs.next();
+
+						comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
+
+						if (comprobarSha == 0) {
+
+							image_id = maximo;
+
+							File f1 = new File(imagen);
+
+							File f2 = new File(directorioActual + "Config" + separador + "imagenes",
+									separador + imagenesBD.get(i).toString());
+
+							f1.renameTo(f2);
+
+							imagen = directorioActual + "Config" + separador + "imagenes" + separador
+									+ imagenesBD.get(i).toString();
+
+							s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','"
+									+ categoria + "','1','" + textField.getText().trim() + "','','','"
+									+ Metodos.saberFecha() + "','1','" + imagenesBD.get(i).toString()
+									+ "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen) + "')");
+
+							Metodos.postFile(f2, imagenesBD.get(i).toString(), user[0], user[1], categoria);
+
+							maximo++;
+
+						}
+
+					}
+
+					conexion.close();
+
+				}
+
+				catch (Exception e) {
+
+					Connection conexion = Metodos.conexionBD();
+
+					s.executeQuery("DELETE FROM " + lecturabd[3] + "images" + " WHERE image_id='" + image_id + "'");
+
+					conexion.close();
+
+					maximo = 0;
+
+					return maximo;
+				}
+
+				return maximo;
+			}
+
 		});
-		
+
 		button.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/start.png")));
 		button.setFont(new Font("Tahoma", Font.PLAIN, 6));
 

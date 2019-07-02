@@ -15,9 +15,11 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.TooManyListenersException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -26,8 +28,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import periquito.MenuPrincipal;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
 
@@ -41,7 +41,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	static LinkedList<String> lectura = new LinkedList<>();
 	static LinkedList<String> shaimages = new LinkedList<>();
 	static JComboBox<?> comboBox;
-	
+
 	public static LinkedList<String> getShaimages() {
 		return shaimages;
 	}
@@ -59,39 +59,38 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	}
 
 	private void comprobarSha(java.io.File[] files) {
-		
+
 		try {
-			
+
 			lectura.clear();
 			String nombreArchivo;
-			
+
 			for (int x = 0; x < files.length; x++) {
-				
-				nombreArchivo=files[x].getCanonicalPath().substring(
+
+				nombreArchivo = files[x].getCanonicalPath().substring(
 						files[x].getCanonicalPath().lastIndexOf(MenuPrincipal.getSeparador()) + 1,
 						files[x].getCanonicalPath().length());
-				
+
 				lectura.add(nombreArchivo);
-				
-				if(comboBox.getSelectedIndex()==0) {
+
+				if (comboBox.getSelectedIndex() == 0) {
 					shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
-				}
-				else {
+				} else {
 					shaimages.add(files[x].getCanonicalPath());
 				}
-				
+
 			}
 
 			if (lectura.size() > 0) {
-				
+
 				dispose();
-				
+
 				try {
 					new ImagenesSha();
 				} catch (Exception e) {
 					//
 				}
-				
+
 			}
 		} catch (Exception e) {
 			//
@@ -111,7 +110,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	}
 
 	@SuppressWarnings("all")
-	
+
 	public void initComponents() throws IOException {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -134,46 +133,41 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				}
 			}
 		});
-		
+
 		lblNewLabel.setIcon(new ImageIcon(ComprobarSha.class.getResource("/imagenes/import.png")));
-		
+
 		comboBox = new JComboBox();
 		comboBox.setFont(new Font("Tahoma", Font.BOLD, 22));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"SHA", "Nombre"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "SHA", "Nombre" }));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		
-		layout.setHorizontalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addGap(21)
-					.addComponent(lblNewLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 377, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(24, Short.MAX_VALUE))
-		);
-		
-		layout.setVerticalGroup(
-			layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(layout.createSequentialGroup()
-							.addGap(23)
-							.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(19, Short.MAX_VALUE))
-		);
-		
+
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 377, GroupLayout.PREFERRED_SIZE).addGap(18)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(24, Short.MAX_VALUE)));
+
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addContainerGap()
+				.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(layout.createSequentialGroup().addGap(23)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 41,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 40,
+												GroupLayout.PREFERRED_SIZE))))
+				.addContainerGap(19, Short.MAX_VALUE)));
+
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(641, 123));
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
-		
+
 		try {
 			new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
 
@@ -187,7 +181,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		} catch (TooManyListenersException e1) {
 			Metodos.mensaje("Error", 1);
 		}
-		
+
 	}
 
 	public static JComboBox<?> getComboBox() {

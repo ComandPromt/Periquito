@@ -72,23 +72,23 @@ public abstract class Metodos {
 
 	public static void cerrarNavegador() {
 
-			try {
-				
-				if (!MenuPrincipal.getOs().equals("Linux")) {
-					crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true, MenuPrincipal.getOs());
+		try {
 
-				}
-				
-				else {
-					crearScript("cerrar.sh", "kilall chrome", true, MenuPrincipal.getOs());
-				}
-				
-			} catch (Exception e) {
-				Metodos.mensaje("Error al cerrar el navegador", 1);
+			if (!MenuPrincipal.getOs().equals("Linux")) {
+				crearScript("cerrar.bat", "taskkill /F /IM chromedriver.exe /T", true, MenuPrincipal.getOs());
+
 			}
-			
+
+			else {
+				crearScript("cerrar.sh", "kilall chrome", true, MenuPrincipal.getOs());
+			}
+
+		} catch (Exception e) {
+			Metodos.mensaje("Error al cerrar el navegador", 1);
+		}
+
 	}
-	
+
 	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int catId) {
 
 		try {
@@ -142,46 +142,46 @@ public abstract class Metodos {
 	}
 
 	public static void descargarFoto(String enlace) throws IOException {
-		
-		String folder = "Config" + MenuPrincipal.getSeparador() + "Downloads"+ MenuPrincipal.getSeparador();
-		
+
+		String folder = "Config" + MenuPrincipal.getSeparador() + "Downloads" + MenuPrincipal.getSeparador();
+
 		try {
-	
-			
+
 			File dir = new File(folder);
-		
+
 			if (!dir.exists()) {
-			  dir.mkdir();
+				dir.mkdir();
 			}
 
-			File file = new File(folder +
-					"Image_"+(listarFicherosPorCarpeta(new File("Config" + MenuPrincipal.getSeparador() + "Downloads"),".")+1)
-					+"."+extraerExtension(enlace));
-		
+			File file = new File(folder + "Image_"
+					+ (listarFicherosPorCarpeta(new File("Config" + MenuPrincipal.getSeparador() + "Downloads"), ".")
+							+ 1)
+					+ "." + extraerExtension(enlace));
+
 			URLConnection conn = new URL(enlace).openConnection();
-			
+
 			conn.connect();
-			
+
 			InputStream in = conn.getInputStream();
 			OutputStream out = new FileOutputStream(file);
 			int b = 0;
 			while (b != -1) {
-			  b = in.read();
-			  if (b != -1)
-			    out.write(b);
+				b = in.read();
+				if (b != -1)
+					out.write(b);
 			}
 			out.close();
 			in.close();
 		}
-		
+
 		catch (MalformedURLException e) {
-			  mensaje("la URL: " + enlace + " no es valida!",1);
+			mensaje("la URL: " + enlace + " no es valida!", 1);
 		}
-		
+
 		catch (Exception e) {
 			Metodos.abrirCarpeta(folder);
 
-		} 
+		}
 	}
 
 	public static void descargar(String imagen, int inicio, int fin, int salto) throws IOException {
@@ -453,14 +453,15 @@ public abstract class Metodos {
 
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
-	
+
 		if (!MenuPrincipal.getOs().equals("Linux")) {
 
 			try {
 
-				Runtime.getRuntime().exec("cmd.exe /K mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1] + " -p" + lectura[2] + " "
-						+ lectura[0] + " > " + backup[0] + MenuPrincipal.getSeparador() + "backupbd.sql");
-				
+				Runtime.getRuntime()
+						.exec("cmd.exe /K mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1] + " -p"
+								+ lectura[2] + " " + lectura[0] + " > " + backup[0] + MenuPrincipal.getSeparador()
+								+ "backupbd.sql");
 
 			} catch (Exception e) {
 				Metodos.mensaje("Error", 1);
@@ -472,7 +473,7 @@ public abstract class Metodos {
 			Runtime.getRuntime().exec(cmdarray);
 
 		}
-		
+
 		Metodos.mensaje("Backup realizado correctamente", 2);
 		abrirCarpeta(backup[0]);
 	}
@@ -497,18 +498,18 @@ public abstract class Metodos {
 			BufferedWriter fS = new BufferedWriter(flS);
 
 			try {
-				Runtime aplicacion2 = Runtime.getRuntime(); 
+				Runtime aplicacion2 = Runtime.getRuntime();
 				fS.write("@echo off");
 				fS.newLine();
 				fS.write(contenido);
 				fS.newLine();
 				fS.write("exit");
 				aplicacion2 = Runtime.getRuntime();
-				 try{aplicacion2.exec("cmd.exe /K "+iniciar+" "+System.getProperty("user.dir")+"\\"+archivo); }
-			        catch(Exception e){
-			        	e.printStackTrace();
-			        	}
-
+				try {
+					aplicacion2.exec("cmd.exe /K " + iniciar + " " + System.getProperty("user.dir") + "\\" + archivo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 			} finally {
 				fS.close();
@@ -516,7 +517,7 @@ public abstract class Metodos {
 
 			}
 		}
-		
+
 	}
 
 	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {
@@ -666,12 +667,12 @@ public abstract class Metodos {
 	}
 
 	public static boolean comprobarConfiguracion() throws IOException {
-		
+
 		boolean comprobacion = false;
-		
+
 		ArrayList<String> categorias = comprobarConexionBD();
-		
-		if (Metodos.comprobarConexion(true) && categorias.size()>0) {
+
+		if (Metodos.comprobarConexion(true) && categorias.size() > 0) {
 
 			comprobacion = true;
 		}

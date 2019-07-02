@@ -17,7 +17,7 @@ public class Galeria {
 
 	private ArrayList<ImageIcon> fotos = new ArrayList<>();
 	public static ArrayList<String> urlFotos = new ArrayList<>();
-	
+
 	public static ArrayList<String> getUrlFotos() {
 		return urlFotos;
 	}
@@ -38,9 +38,8 @@ public class Galeria {
 			if (!ping.getCanonicalHostName().equals("")) {
 
 				for (int i = 0; i < numeroImagenes; i++) {
-					urlFotos.add("http://" + lecturaurl[0] + "/"
-							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
-							+ MenuPrincipal.getImagenes().get(i));
+					urlFotos.add("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
+							+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getImagenes().get(i));
 					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + lecturaurl[0] + "/"
 							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
 							+ MenuPrincipal.getImagenes().get(i)))));
@@ -64,13 +63,13 @@ public class Galeria {
 	}
 
 	public Icon getFoto(int num, Dimension d) {
-				
-		//int originalWidth = fotos.get(num).getIconWidth();
-		//int originalHeight = fotos.get(num).getIconHeight();
-	
-		int newWidth=545;
-		int newHeight=453;
-		
+
+		// int originalWidth = fotos.get(num).getIconWidth();
+		// int originalHeight = fotos.get(num).getIconHeight();
+
+		int newWidth = 545;
+		int newHeight = 453;
+
 		Image mini = fotos.get(num).getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_AREA_AVERAGING);
 		return new ImageIcon(mini);
 	}

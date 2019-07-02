@@ -161,6 +161,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+
 				File[] files = Metodos.seleccionar(1, "Elija la carpeta del CMS", "");
 
 				try {
