@@ -508,7 +508,7 @@ public abstract class Metodos {
 				try {
 					aplicacion2.exec("cmd.exe /K " + iniciar + " " + System.getProperty("user.dir") + "\\" + archivo);
 				} catch (Exception e) {
-					e.printStackTrace();
+
 				}
 
 			} finally {

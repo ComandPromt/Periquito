@@ -1205,7 +1205,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-
+				boolean notificarSubidas = false;
 				Metodos.cerrarNavegador();
 
 				if (gif) {
@@ -1322,13 +1322,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												int idCategoria = comboBox.getSelectedIndex() + 1;
 
-												boolean notificarSubidas = false;
-
 												if (subirArchivos(s, categoria, imagenesBD, "png") > 0
 														|| subirArchivos(s, categoria, imagenesBD, "jpg") > 0
 														|| subirArchivos(s, categoria, imagenesBD, "jpeg") > 0) {
 
 													notificarSubidas = true;
+
 												}
 
 												listaImagenes = Metodos.directorio(
@@ -1387,13 +1386,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												}
 
-												rs.close();
+												if (rs != null) {
+													rs.close();
+
+												}
+
 												s.close();
 												conexion.close();
 
 												eliminararchivos(".");
 
-												if (notificarSubidas || gif) {
+												if (notificarSubidas) {
+
 													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 												}
 
