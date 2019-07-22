@@ -3,11 +3,13 @@ package utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -35,6 +37,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	private GridBagConstraints gridBagConstraints_1;
 
 	public InterfazGaleria() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(InterfazGaleria.class.getResource("/imagenes/lupa.png")));
 
 		setResizable(false);
 		initComponents();
@@ -160,7 +163,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		jPanel6 = new javax.swing.JPanel();
 		fotoD = new javax.swing.JLabel();
 		javax.swing.JButton cmdNext = new javax.swing.JButton();
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new java.awt.GridBagLayout());
 		jPanel1.setBackground(new java.awt.Color(240, 240, 240));
 		jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));

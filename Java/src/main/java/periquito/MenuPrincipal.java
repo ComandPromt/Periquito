@@ -51,9 +51,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.ComprobarSha;
 import utils.DragAndDrop;
-import utils.Galeria;
 import utils.ImageResizer;
-import utils.InterfazGaleria;
 import utils.Metodos;
 import utils.MyInterface;
 import utils.PhotoFrame;
@@ -546,99 +544,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+
 				try {
-
-					if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM " + lecturabd[3] + "images",
-							"COUNT(image_id)")) {
-						try {
-
-							if (Metodos.comprobarConfiguracion()) {
-
-								String busqueda = Metodos.mostrarDialogo();
-								busqueda = busqueda.trim();
-								int recuento;
-
-								if (!busqueda.isEmpty()) {
-
-									Connection conexion = Metodos.conexionBD();
-
-									Statement s = conexion.createStatement();
-
-									ResultSet rs = s.executeQuery("select count(image_id) from " + lecturabd[3]
-											+ "images WHERE image_name LIKE '%" + busqueda + "%'");
-
-									rs.next();
-
-									recuento = Integer.parseInt(rs.getString("count(image_id)"));
-
-									if (recuento > 0) {
-
-										if (recuento > 500) {
-
-											Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes",
-													3);
-											Metodos.mensaje(
-													"Por favor,introduce un nombre con menos registros para mostrarlos",
-													2);
-
-											Metodos.abrirCarpeta(Metodos.obtenerEnlaceCms(
-													MenuPrincipal.getLecturaurl()[0], MenuPrincipal.getLecturaurl()[1])
-													+ "/search.php?filtro=" + busqueda);
-
-										} else {
-
-											rs = s.executeQuery("select image_media_file,cat_id from " + lecturabd[3]
-													+ "images WHERE image_name LIKE '%" + busqueda + "%'");
-
-											while (rs.next()) {
-
-												imagenes.add(rs.getString("image_media_file"));
-												categorias.add(rs.getString("cat_id"));
-											}
-
-										}
-
-										s.close();
-										rs.close();
-
-										if (recuento == 0) {
-
-											Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
-
-										} else {
-
-											if (recuento < 500) {
-
-												try {
-
-													new Galeria();
-													new InterfazGaleria().setVisible(true);
-												} catch (Exception e) {
-
-													Metodos.mensaje("No se han podido cargar las imágenes", 1);
-
-													new Config2().setVisible(true);
-
-												}
-
-											}
-										}
-
-									} else {
-										Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
-									}
-
-								}
-							}
-						} catch (Exception e1) {
-						}
-					}
-				} catch (SQLException e) {
+					new Busqueda().setVisible(true);
+				} catch (IOException e) {
 					try {
+						Metodos.mensaje("Comprueba la configuración", 3);
 						new Bd().setVisible(true);
+						new Config2().setVisible(true);
 					} catch (IOException e1) {
 						//
 					}
+
 				}
 
 			}
@@ -1203,10 +1120,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		label3.setHorizontalAlignment(SwingConstants.CENTER);
 
 		button.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mousePressed(MouseEvent e) {
-				boolean notificarSubidas = false;
+
 				Metodos.cerrarNavegador();
+
+				Metodos.conversion("jpeg", "jpg");
+
+				Metodos.conversion("JPEG", "jpg");
 
 				if (gif) {
 					eliminararchivos("gif");
@@ -1214,12 +1136,16 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 
 				if (comboBox.getSelectedIndex() == -1) {
+
 					try {
 						Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
 						new Bd().setVisible(true);
-					} catch (IOException e1) {
+					}
+
+					catch (IOException e1) {
 						Metodos.mensaje("Error", 1);
 					}
+
 				} else {
 
 					InetAddress ping;
@@ -1230,6 +1156,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								+ MenuPrincipal.getLecturaurl()[1] + "/index.php").getHost());
 
 						if (!ping.getHostName().equals("")) {
+
 							if (!textField.getText().trim().isEmpty()) {
 
 								listaImagenes = Metodos.directorio("Config" + separador + "imagenes", ".");
@@ -1245,6 +1172,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									}
 
 									if (listaImagenes.isEmpty()) {
+
 										try {
 											Metodos.abrirCarpeta("Config" + separador + "imagenes");
 										} catch (IOException e1) {
@@ -1322,13 +1250,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 												int idCategoria = comboBox.getSelectedIndex() + 1;
 
-												if (subirArchivos(s, categoria, imagenesBD, "png") > 0
-														|| subirArchivos(s, categoria, imagenesBD, "jpg") > 0
-														|| subirArchivos(s, categoria, imagenesBD, "jpeg") > 0) {
+												subirArchivos(s, categoria, imagenesBD, "png");
 
-													notificarSubidas = true;
+												subirArchivos(s, categoria, imagenesBD, "jpg");
 
-												}
+												subirArchivos(s, categoria, imagenesBD, "jpeg");
 
 												listaImagenes = Metodos.directorio(
 														directorioActual + "Config" + separador + "imagenes", "gif");
@@ -1394,12 +1320,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 												s.close();
 												conexion.close();
 
-												eliminararchivos(".");
+												Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 
-												if (notificarSubidas) {
+												eliminararchivos("png");
 
-													Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
-												}
+												eliminararchivos("jpg");
+
+												eliminararchivos("gif");
 
 											} catch (SQLException e1) {
 
@@ -1472,13 +1399,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes", extension);
 
 				if (listaImagenes.size() > 0) {
-					retorno = subirImagenes(maximo, s, categoria, imagenesBD);
+
+					retorno = subirImagenes(maximo, s, categoria, imagenesBD, extension);
 				}
 
 				return retorno;
 			}
 
-			private int subirImagenes(int maximo, Statement s, int categoria, JSONArray imagenesBD)
+			private int subirImagenes(int maximo, Statement s, int categoria, JSONArray imagenesBD, String extension)
 					throws SQLException, IOException {
 
 				int image_id = 0;
@@ -1491,6 +1419,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					ResultSet rs;
 
 					int comprobarSha = 0;
+
+					String imagenbd = "";
 
 					for (int i = 0; i < listaImagenes.size(); i++) {
 
@@ -1508,22 +1438,24 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 							image_id = maximo;
 
+							imagenbd = imagenesBD.get(i).toString().substring(0,
+									imagenesBD.get(i).toString().length() - 3) + extension;
+
 							File f1 = new File(imagen);
 
 							File f2 = new File(directorioActual + "Config" + separador + "imagenes",
-									separador + imagenesBD.get(i).toString());
+									separador + imagenbd);
 
 							f1.renameTo(f2);
 
-							imagen = directorioActual + "Config" + separador + "imagenes" + separador
-									+ imagenesBD.get(i).toString();
+							imagen = directorioActual + "Config" + separador + "imagenes" + separador + imagenbd;
 
 							s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','"
 									+ categoria + "','1','" + textField.getText().trim() + "','','','"
-									+ Metodos.saberFecha() + "','1','" + imagenesBD.get(i).toString()
-									+ "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen) + "')");
+									+ Metodos.saberFecha() + "','1','" + imagenbd + "','1','0','0','0',DEFAULT,'0','"
+									+ Metodos.getSHA256Checksum(imagen) + "')");
 
-							Metodos.postFile(f2, imagenesBD.get(i).toString(), user[0], user[1], categoria);
+							Metodos.postFile(f2, imagenbd, user[0], user[1], categoria);
 
 							maximo++;
 
@@ -1557,7 +1489,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		button.setFont(new Font("Tahoma", Font.PLAIN, 6));
 
 		JTextArea imagenes = new JTextArea();
-		imagenes.setText("         Arrastra los archivos aqui");
+		imagenes.setText(" Arrastra los archivos aqui");
 		imagenes.setForeground(Color.DARK_GRAY);
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
 		imagenes.setEditable(false);
@@ -1584,43 +1516,52 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		label4.setFont(new Font("Tahoma", Font.BOLD, 18));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(
-				layout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(51).addComponent(label2).addGap(46)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(comboBox, 0, 293, Short.MAX_VALUE)
-												.addComponent(textField, GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE)
-												.addComponent(button, 0, 0, Short.MAX_VALUE)))
-								.addGroup(layout.createSequentialGroup().addGap(40).addComponent(label3,
-										GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)))
-								.addContainerGap(104, Short.MAX_VALUE))
-						.addGroup(layout.createSequentialGroup().addContainerGap()
-								.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(33, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(layout.createSequentialGroup().addComponent(label2).addGap(46))
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(label3, GroupLayout.PREFERRED_SIZE, 89,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(32)))
+								.addGap(18)).addGroup(
+										layout.createSequentialGroup().addGap(21).addComponent(label4,
+												GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(
+								ComponentPlacement.RELATED)
+						.addGroup(
+								layout.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(textField)
+										.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+										.addGroup(Alignment.TRAILING,
+												layout.createSequentialGroup().addComponent(button,
+														GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
+														.addGap(54)))
+						.addGap(80)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(29).addComponent(textField,
-										GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
 								.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(label2,
-										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.RELATED)
+										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup().addGap(27).addComponent(textField,
+										GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(21).addComponent(comboBox,
+								.addGroup(layout.createSequentialGroup().addGap(18).addComponent(label3,
+										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup().addGap(28).addComponent(comboBox,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-						.addGap(23).addComponent(button, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-						.addGap(22)
+										GroupLayout.PREFERRED_SIZE)))
+						.addGap(1).addComponent(button, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+						.addGap(14)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 								.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 								.addComponent(label4))
-						.addGap(22)));
+						.addGap(45)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(560, 438));
+		setSize(new Dimension(560, 443));
 		setLocationRelativeTo(null);
 
 		try {

@@ -41,7 +41,6 @@ import java.util.Scanner;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -249,15 +248,6 @@ public abstract class Metodos {
 		}
 	}
 
-	public static String mostrarDialogo() {
-
-		JFrame frame = new JFrame("Introduce un nombre para buscar");
-
-		String name = JOptionPane.showInputDialog(frame, "Introduce un nombre para buscar");
-
-		return name;
-	}
-
 	private static String readAll(Reader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		int cp;
@@ -397,7 +387,7 @@ public abstract class Metodos {
 		File[] files = chooser.getSelectedFiles();
 
 		if (files.length == 0) {
-			mensaje(mensaje, 1);
+			mensaje(mensaje, 3);
 
 		}
 		return files;
@@ -907,18 +897,27 @@ public abstract class Metodos {
 
 	public static LinkedList<String> directorio(String ruta, String extension) {
 
+		int size = extension.length();
+
 		LinkedList<String> lista = new LinkedList<>();
+
 		String directorio = ruta;
+
 		File f = new File(directorio);
 
 		if (f.exists()) {
 
 			File[] ficheros = f.listFiles();
+
 			for (int x = 0; x < ficheros.length; x++) {
+
 				String fichero = ficheros[x].getName();
-				if (fichero.indexOf(extension) != -1) {
+
+				if (extension.equals(".")
+						|| (fichero.substring(fichero.length() - size, fichero.length()).equals(extension))) {
 					lista.add(fichero);
 				}
+
 			}
 		}
 		return lista;
@@ -1119,6 +1118,24 @@ public abstract class Metodos {
 		} else {
 			return "\\";
 		}
+	}
+
+	public static void conversion(String extension, String salida) {
+
+		LinkedList<String> listaImagenes = Metodos.directorio("Config" + MenuPrincipal.getSeparador() + "imagenes",
+				extension);
+
+		for (int i = 0; i < listaImagenes.size(); i++) {
+
+			File f1 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
+					+ listaImagenes.get(i));
+
+			File f2 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
+					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - extension.length()) + salida);
+
+			f1.renameTo(f2);
+		}
+
 	}
 
 }

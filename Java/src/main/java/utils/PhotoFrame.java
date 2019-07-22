@@ -214,12 +214,14 @@ public class PhotoFrame extends javax.swing.JFrame {
 				}
 			}
 		});
+
 		lblNewLabel6.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_90.png")));
 		jMenuBar1.add(lblNewLabel6);
 		lblNewLabel2.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/rotate_180.png")));
 		jMenuBar1.add(lblNewLabel2);
 		JLabel lblNewLabel3;
 		lblNewLabel3 = new JLabel("  ");
+
 		lblNewLabel3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -264,7 +266,6 @@ public class PhotoFrame extends javax.swing.JFrame {
 		lblNewLabel4.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/folder.png")));
 		jMenuBar1.add(lblNewLabel4);
 
-		pack();
 	}
 
 	private void jMenuItem1ActionPerformed() throws IOException {
