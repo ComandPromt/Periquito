@@ -517,6 +517,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								separador);
 
 						for (int x = 0; x < listaImagenes.size(); x++) {
+
 							ImageResizer.copyImage(
 									directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
 											+ listaImagenes.get(x),

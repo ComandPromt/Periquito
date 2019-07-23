@@ -78,6 +78,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				Metodos.mensaje("La zona seleccionada es más grande que una o más imágenes", 1);
 				Metodos.mensaje("Se han recortado las fotos anteriores a la foto que se muestra", 3);
 			} catch (Exception e1) {
+				e1.printStackTrace();
 				File directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
 						+ MenuPrincipal.getSeparador() + "recortes");
 				directorio.mkdir();
@@ -189,6 +190,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 			listaImagenes = Metodos.directorio(
 					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+
+			if (listaImagenes.get(0).equals("recortes")) {
+				listaImagenes.remove(0);
+			}
 
 			count = 1;
 
@@ -322,6 +327,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			}
 
 		}
+
 	}
 
 	@Override
