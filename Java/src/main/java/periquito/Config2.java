@@ -124,14 +124,19 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		textField.setHorizontalAlignment(SwingConstants.LEFT);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
+
 		buscarArchivoConf();
 
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/save.png")));
+
 		btnNewButton.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent arg0) {
+
 				if (jTextField1.getText() != null && jTextField1.getText().length() >= 2 && textField.getText() != null
 						&& textField.getText().length() >= 2) {
+
 					String comprobacion1 = jTextField1.getText().trim().replaceAll("  ", " ");
 					String comprobacion2 = textField.getText().trim().replaceAll("  ", " ");
 
@@ -142,8 +147,10 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 						textField.setText(comprobacion2);
 
 						dispose();
+
 						try {
 							guardarDatos(true);
+
 						} catch (IOException e) {
 							Metodos.mensaje("Error al guargar la configuración", 1);
 						}
@@ -158,6 +165,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		lblThumbnails.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		JButton button = new JButton("");
+
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -173,6 +181,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 				}
 			}
 		});
+
 		button.setIcon(new ImageIcon(Config2.class.getResource("/imagenes/abrir.png")));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

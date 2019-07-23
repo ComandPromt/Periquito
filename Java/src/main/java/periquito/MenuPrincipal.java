@@ -526,6 +526,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						}
 
 					}
+
 					new PhotoFrame().setVisible(true);
 
 				} catch (Exception e1) {
