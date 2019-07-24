@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -35,18 +36,17 @@ import utils.MyInterface;
 public class Busqueda extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 	javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
+	private JTextField textField;
 
 	public Busqueda() throws IOException {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/imagenes/lupa.png")));
 		setTitle("Periquito v3 Busqueda ");
-		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}
 
 	@SuppressWarnings("all")
 	public void initComponents() throws IOException {
-
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField1.setToolTipText("");
@@ -69,7 +69,9 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 
 				rdbtnNewRadioButton.setSelected(false);
 
-				jTextField1.setText("");
+				textField.setVisible(false);
+
+				textField.setText("");
 
 			}
 
@@ -87,8 +89,8 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 			public void mousePressed(MouseEvent e) {
 
 				rdbtnNewRadioButton_1.setSelected(false);
-
-				jTextField1.setText("SELECT count(image_id) FROM " + MenuPrincipal.getLecturabd()[3] + "images WHERE ");
+				textField.setVisible(true);
+				textField.setText("SELECT count(image_id) FROM " + MenuPrincipal.getLecturabd()[3] + "images WHERE ");
 
 			}
 
@@ -145,6 +147,7 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 									}
 
 									else {
+
 										sql = "select count(image_id) from " + MenuPrincipal.getLecturabd()[3]
 												+ "images WHERE " + busqueda;
 
@@ -185,6 +188,9 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 
 												rs = s.executeQuery(sql2);
 
+												MenuPrincipal.getImagenes().clear();
+												MenuPrincipal.getCategorias().clear();
+
 												while (rs.next()) {
 
 													MenuPrincipal.getImagenes().add(rs.getString("image_media_file"));
@@ -220,13 +226,14 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 											}
 
 										} else {
-											Metodos.mensaje("Por favor, introduce un nombre para buscar", 3);
+											Metodos.mensaje("La búsqueda no tiene resultados", 3);
 										}
 
 									}
 
 								}
 							} catch (Exception e1) {
+								Metodos.mensaje("Revise la búsqueda", 3);
 							}
 						}
 					} catch (SQLException e1) {
@@ -242,35 +249,42 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 			}
 		});
 
+		textField = new JTextField();
+		textField.setEditable(false);
+
+		textField.setFont(new Font("Tahoma", Font.BOLD, 16));
+		textField.setColumns(10);
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(146).addComponent(btnNewButton))
-						.addGroup(layout.createSequentialGroup().addGap(19).addGroup(layout
-								.createParallelGroup(Alignment.LEADING)
-								.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 349, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel1).addGap(34)
-										.addComponent(rdbtnNewRadioButton_1).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(lblNombre)))))
-						.addContainerGap(28, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addContainerGap(48, Short.MAX_VALUE)
-								.addComponent(rdbtnNewRadioButton_1).addGap(38))
-						.addGroup(
-								layout.createSequentialGroup().addGap(43).addComponent(rdbtnNewRadioButton).addGap(43))
-						.addGroup(layout.createSequentialGroup().addGap(25)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblNombre, GroupLayout.PREFERRED_SIZE, 64,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(jLabel1))
-								.addGap(18)))
-						.addGap(10).addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+				.addGroup(layout.createSequentialGroup().addContainerGap(152, Short.MAX_VALUE)
+						.addComponent(btnNewButton).addGap(147))
+				.addGroup(layout.createSequentialGroup().addGap(19).addGroup(layout
+						.createParallelGroup(Alignment.TRAILING, false).addComponent(textField, Alignment.LEADING)
+						.addGroup(Alignment.LEADING,
+								layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(rdbtnNewRadioButton).addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(jLabel1).addGap(34).addComponent(rdbtnNewRadioButton_1)
+										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblNombre))
+						.addComponent(jTextField1, Alignment.LEADING)).addContainerGap(40, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup().addContainerGap(12, Short.MAX_VALUE)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton).addGap(41))
+								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton_1).addGap(39))
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblNombre, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(jLabel1))
+										.addGap(21)))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE).addGap(18)
+						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(27).addComponent(btnNewButton).addGap(41)));
+						.addGap(18).addComponent(btnNewButton).addGap(28)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(402, 315));
+		setSize(new Dimension(402, 336));
 		setLocationRelativeTo(null);
 	}
 

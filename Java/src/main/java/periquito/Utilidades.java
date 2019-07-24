@@ -21,6 +21,7 @@ import java.util.TooManyListenersException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -78,8 +79,10 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
 		imagenes.setEditable(false);
 		imagenes.setBackground(Color.WHITE);
-		JLabel lblCategoraAInsertar = new JLabel("Categoría a insertar");
+		JLabel lblCategoraAInsertar = new JLabel("");
+		lblCategoraAInsertar.setIcon(new ImageIcon(Utilidades.class.getResource("/imagenes/tag.png")));
 		lblCategoraAInsertar.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblNombreDeImgenes.setIcon(new ImageIcon(Utilidades.class.getResource("/imagenes/name.png")));
 
 		lblNombreDeImgenes.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNombreDeImgenes.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -88,36 +91,28 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		nombre.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		nombre.setColumns(10);
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addGap(15)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(13)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(imagenes, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 545,
-												GroupLayout.PREFERRED_SIZE)
-										.addGroup(layout.createSequentialGroup().addComponent(lblCategoraAInsertar)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-														.addComponent(nombre)
-														.addComponent(comboBox, 0, 293, Short.MAX_VALUE)))))
-						.addComponent(lblNombreDeImgenes, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblNombreDeImgenes, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createSequentialGroup().addGap(29).addComponent(lblCategoraAInsertar,
+								GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(nombre).addComponent(imagenes))
+						.addContainerGap(40, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGap(23)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNombreDeImgenes, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNombreDeImgenes)
 						.addComponent(nombre, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(
-						layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblCategoraAInsertar, GroupLayout.PREFERRED_SIZE, 25,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-				.addContainerGap(24, Short.MAX_VALUE)));
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(lblCategoraAInsertar))
+						.addGroup(layout.createSequentialGroup().addGap(33).addComponent(comboBox,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+				.addGap(18).addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+				.addGap(66)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(598, 221));
+		setSize(new Dimension(578, 289));
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");

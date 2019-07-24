@@ -40,15 +40,15 @@ public class About extends javax.swing.JFrame implements ActionListener, ChangeL
 				"-----------------------------------------------\r\n            Periquito GUI\r\n-----------------------------------------------\r\n\r\n Creado por: ComandPromt\n\r\n Email: smr2gocar@gmail.com\r\n\r\n Ramón Jesús Gómez Carmona");
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
+				.addGroup(layout.createSequentialGroup().addGap(21)
 						.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 252, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(58, Short.MAX_VALUE)));
+						.addContainerGap(23, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
+				.addGroup(layout.createSequentialGroup().addGap(27)
 						.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(318, Short.MAX_VALUE)));
+						.addContainerGap(31, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(276, 268));
+		setSize(new Dimension(309, 305));
 		setLocationRelativeTo(null);
 	}
 

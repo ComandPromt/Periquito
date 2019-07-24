@@ -913,13 +913,14 @@ public abstract class Metodos {
 
 				String fichero = ficheros[x].getName();
 
-				if (extension.equals(".")
+				if (extension.equals(".") && !fichero.equals("recortes")
 						|| (fichero.substring(fichero.length() - size, fichero.length()).equals(extension))) {
 					lista.add(fichero);
 				}
 
 			}
 		}
+
 		return lista;
 	}
 

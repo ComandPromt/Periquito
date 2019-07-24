@@ -78,11 +78,12 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 				Metodos.mensaje("La zona seleccionada es más grande que una o más imágenes", 1);
 				Metodos.mensaje("Se han recortado las fotos anteriores a la foto que se muestra", 3);
 			} catch (Exception e1) {
-				e1.printStackTrace();
+
 				File directorio = new File("Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
 						+ MenuPrincipal.getSeparador() + "recortes");
 				directorio.mkdir();
 				try {
+					e1.printStackTrace();
 					new Config().setVisible(true);
 				} catch (IOException e2) {
 					//
@@ -191,10 +192,6 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			listaImagenes = Metodos.directorio(
 					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
 
-			if (listaImagenes.get(0).equals("recortes")) {
-				listaImagenes.remove(0);
-			}
-
 			count = 1;
 
 			int numeroImagen = Metodos
@@ -209,7 +206,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			if (PhotoFrame.rdbtnMultipleCrop.isSelected()) {
 
 				vueltas = listaImagenes.size();
-			} else {
+			}
+
+			else {
 
 				String imagenSelecionada = PhotoFrame.fileChooser.getSelectedFile().toString();
 
@@ -268,7 +267,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			PhotoFrame.photoPanel.photo = null;
 
 			int n = 2;
-
+			System.out.println(y);
 			if (--y <= 170) {
 
 				n = JOptionPane.showConfirmDialog(null, "¿Quieres crear un gif con las imágenes recortadas?",
@@ -293,6 +292,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 					}
 
 					try {
+
 						int recuento = Metodos.listarFicherosPorCarpeta(
 								new File(MenuPrincipal.getLectura()[0] + "/Hacer_gif/img"), ".");
 						if (recuento <= 170) {
@@ -308,7 +308,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 							MenuPrincipal.mensaje170();
 						}
 					} catch (Exception e1) {
+
 						try {
+							e1.printStackTrace();
 							new Config().setVisible(true);
 						} catch (IOException e2) {
 							//

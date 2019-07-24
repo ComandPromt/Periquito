@@ -40,16 +40,16 @@ public class DBFix extends javax.swing.JFrame implements ActionListener, ChangeL
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
+				.addGroup(layout.createSequentialGroup().addGap(23)
 						.addComponent(txtpnBindaddress, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(15, Short.MAX_VALUE)));
+						.addContainerGap(29, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout
-						.createSequentialGroup().addContainerGap().addComponent(txtpnBindaddress,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(134, Short.MAX_VALUE)));
+						.createSequentialGroup().addGap(27).addComponent(txtpnBindaddress, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(30, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(336, 404));
+		setSize(new Dimension(366, 422));
 		setLocationRelativeTo(null);
 	}
 

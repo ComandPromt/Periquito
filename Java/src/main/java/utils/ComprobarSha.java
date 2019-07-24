@@ -73,11 +73,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 				lectura.add(nombreArchivo);
 
-				if (comboBox.getSelectedIndex() == 0) {
-					shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
-				} else {
-					shaimages.add(files[x].getCanonicalPath());
-				}
+				shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
 
 			}
 
@@ -102,7 +98,6 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ComprobarSha.class.getResource("/imagenes/db.png")));
 
 		setTitle("Periquito v3 Comprobador SHA");
-		setType(Type.UTILITY);
 		initComponents();
 
 		this.setVisible(true);
@@ -140,27 +135,25 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		comboBox.setFont(new Font("Tahoma", Font.BOLD, 22));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] { "SHA", "Nombre" }));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 377, GroupLayout.PREFERRED_SIZE).addGap(18)
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(24, Short.MAX_VALUE)));
-
+						.addContainerGap(25, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addContainerGap()
 				.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
 						.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(layout.createSequentialGroup().addGap(23)
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addGroup(layout.createSequentialGroup().addGap(22)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 										.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 41,
 												GroupLayout.PREFERRED_SIZE)
 										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 40,
 												GroupLayout.PREFERRED_SIZE))))
-				.addContainerGap(19, Short.MAX_VALUE)));
+				.addContainerGap(16, Short.MAX_VALUE)));
 
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(641, 123));

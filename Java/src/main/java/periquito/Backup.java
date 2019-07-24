@@ -141,25 +141,24 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jLabel1).addGap(26)
+				.addGroup(layout.createSequentialGroup().addGap(18).addComponent(jLabel1).addGap(18)
 						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
 						.addGap(18)
 						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(44, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addGap(24)
+						.addContainerGap(21, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+						.addContainerGap()
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
 								.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(223))
-				.addGroup(Alignment.LEADING,
-						layout.createSequentialGroup().addGap(32)
-								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(20, Short.MAX_VALUE)));
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)))
+						.addGroup(layout.createSequentialGroup().addGap(19).addComponent(btnNewButton,
+								GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
+				.addContainerGap()));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(532, 129));
+		setSize(new Dimension(519, 130));
 		setLocationRelativeTo(null);
 	}
 

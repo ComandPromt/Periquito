@@ -218,7 +218,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 												GroupLayout.PREFERRED_SIZE))))
 				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnNewButton).addGap(174)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(643, 294));
+		setSize(new Dimension(643, 303));
 		setLocationRelativeTo(null);
 	}
 

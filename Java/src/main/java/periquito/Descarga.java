@@ -49,7 +49,6 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 20));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Descarga.class.getResource("/imagenes/download.png")));
 		setTitle("Periquito v3 Config Remoto");
-		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}
