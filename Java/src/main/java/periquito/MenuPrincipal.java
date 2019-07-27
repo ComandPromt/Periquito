@@ -1132,6 +1132,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				Metodos.conversion("JPEG", "jpg");
 
+				Metodos.conversion("JPG", "jpg");
+
 				if (gif) {
 					eliminararchivos("gif");
 					System.exit(0);

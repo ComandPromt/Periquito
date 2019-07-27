@@ -146,7 +146,7 @@ if($num_imagenes<=170){
 				$altofinal = 480;
 			}
 			
-			redimensionarJPG($anchofinal, $altofinal, "img");
+			//redimensionarJPG($anchofinal, $altofinal, "img");
 			
 			if (count($imagenes) > 1) {
 				require "src/GifCreator/AnimGif.php";

@@ -322,8 +322,9 @@ public abstract class Metodos {
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
 						files[i].getCanonicalPath().length());
 				comprobacion = extraerExtension(imagen);
-				if (comprobacion.equals("jpg") || comprobacion.equals("peg") || comprobacion.equals("png")
-						|| comprobacion.equals("gif") || comprobacion.equals("avi") || comprobacion.equals("mp4")) {
+				if (comprobacion.equals("jpg") || comprobacion.equals("JPG") || comprobacion.equals("peg")
+						|| comprobacion.equals("png") || comprobacion.equals("gif") || comprobacion.equals("avi")
+						|| comprobacion.equals("mp4")) {
 
 					origen = files[i].getCanonicalPath();
 					destino = new File(".").getCanonicalPath() + separador + "Config" + separador + "imagenes";
