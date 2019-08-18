@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -35,6 +36,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -376,6 +378,14 @@ public abstract class Metodos {
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 			break;
+
+		case 3:
+			filter = new FileNameExtensionFilter(rotulo, "txt");
+			chooser.setFileFilter(filter);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+			break;
+
 		default:
 			break;
 		}
@@ -391,7 +401,130 @@ public abstract class Metodos {
 			mensaje(mensaje, 3);
 
 		}
+
 		return files;
+	}
+
+	public static void ejecutar(LinkedList<String> contenido, String tipo, String descripcion, int paso, int size)
+			throws SQLException, IOException {
+
+		try {
+
+			Connection conexion = Metodos.conexionBD();
+
+			Statement s = conexion.createStatement();
+
+			int recorrido = paso;
+
+			for (paso = recorrido; paso <= size; paso++) {
+
+				if (!contenido.get(paso).isEmpty()) {
+
+					s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + contenido.get(paso) + "','"
+							+ tipo + "','" + descripcion + "')");
+				}
+
+				s.close();
+			}
+
+			conexion.close();
+
+		} catch (Exception e) {
+
+			int y = ++paso;
+
+			if (y <= size) {
+				ejecutar(contenido, tipo, descripcion, y, size);
+			}
+		}
+	}
+
+	public static void muestraContenido(String archivo, String tipo, String descripcion)
+			throws FileNotFoundException, IOException {
+
+		File file = null;
+
+		FileReader fr = null;
+
+		BufferedReader br = null;
+
+		try {
+
+			file = new File(archivo);
+
+			fr = new FileReader(archivo);
+
+			br = new BufferedReader(fr);
+
+			String linea;
+
+			LinkedList<String> contenido = new LinkedList<>();
+
+			while ((linea = br.readLine()) != null) {
+				contenido.add(linea);
+			}
+
+			// Creamos un objeto HashSet
+			HashSet hs = new HashSet();
+
+			// Lo cargamos con los valores del array, esto hace quite los repetidos
+			hs.addAll(contenido);
+
+			// Limpiamos el array
+			contenido.clear();
+
+			// Agregamos los valores sin repetir
+			contenido.addAll(hs);
+
+			Connection conexion = Metodos.conexionBD();
+			Statement s = conexion.createStatement();
+
+			int size = contenido.size();
+
+			int i = 0;
+
+			try {
+				for (i = 0; i < size; i++) {
+					if (!contenido.get(i).isEmpty()) {
+						s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + contenido.get(i)
+								+ "','" + tipo + "','" + descripcion + "')");
+					}
+
+				}
+			}
+
+			catch (Exception e) {
+				conexion.close();
+				int y = ++i;
+				ejecutar(contenido, tipo, descripcion, y, size);
+			}
+
+			s.close();
+			conexion.close();
+		}
+
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (null != fr) {
+
+					fr.close();
+
+				}
+
+			} catch (Exception e2) {
+
+				e2.printStackTrace();
+
+			}
+
+		}
+
 	}
 
 	public static String[] leerFicheroArray(String fichero, int longitud) {
@@ -401,6 +534,7 @@ public abstract class Metodos {
 		int i = 0;
 		FileReader flE = null;
 		BufferedReader fE = null;
+
 		try {
 
 			flE = new FileReader(fichero);
@@ -414,11 +548,14 @@ public abstract class Metodos {
 
 				texto = fE.readLine();
 			}
+
 			fE.close();
 			flE.close();
+
 		} catch (IOException e) {
 //
 		} finally {
+
 			if (fE != null) {
 				try {
 					fE.close();
@@ -428,6 +565,7 @@ public abstract class Metodos {
 			}
 
 			if (flE != null) {
+
 				try {
 					flE.close();
 				} catch (IOException e) {
@@ -436,6 +574,7 @@ public abstract class Metodos {
 
 			}
 		}
+
 		return salida;
 
 	}
@@ -703,8 +842,9 @@ public abstract class Metodos {
 
 		if (comprobarConexion(false)) {
 
-			return DriverManager.getConnection("jdbc:mysql://" + lectura2[5] + "/" + lectura2[0], lectura2[1],
-					lectura2[2]);
+			return DriverManager.getConnection(
+					"jdbc:mysql://" + lectura2[5] + "/" + lectura2[0] + "?useUnicode=true&amp;characterEncoding=utf8",
+					lectura2[1], lectura2[2]);
 
 		}
 
@@ -1055,6 +1195,28 @@ public abstract class Metodos {
 		result = bld.toString();
 
 		return result;
+	}
+
+	public static boolean pingURL(String url) {
+
+		int timeout = 20000;
+
+		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
+
+		try {
+
+			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+			connection.setConnectTimeout(timeout);
+			connection.setReadTimeout(timeout);
+			connection.setRequestMethod("HEAD");
+
+			int responseCode = connection.getResponseCode();
+
+			return (200 <= responseCode && responseCode <= 399);
+
+		} catch (IOException exception) {
+			return false;
+		}
 	}
 
 	public static void crearCarpetas() {

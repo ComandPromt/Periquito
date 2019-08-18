@@ -65,47 +65,52 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 			public void actionPerformed(ActionEvent arg0) {
 
 				String usuariobd = usuario.getText().trim();
-				usuariobd = usuariobd.substring(0, 1).toUpperCase() + usuariobd.substring(1);
-				String tipobd = tipo.getText().trim();
-				String notabd = nota.getText().trim();
 
-				if (!usuariobd.equals("") && !tipobd.equals("") && !notabd.equals("")) {
+				if (!usuariobd.isEmpty()) {
 
-					try {
+					usuariobd = usuariobd.substring(0, 1).toUpperCase() + usuariobd.substring(1);
+					String tipobd = tipo.getText().trim();
+					String notabd = nota.getText().trim();
 
-						Connection conexion = Metodos.conexionBD();
-
-						Statement s = conexion.createStatement();
+					if (!usuariobd.equals("") && !tipobd.equals("") && !notabd.equals("")) {
 
 						try {
 
-							s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + usuariobd + "','"
-									+ tipobd + "','" + notabd + "')");
-							AgendaInterfaz.verNotas();
-							dispose();
-							Metodos.mensaje("La nota se ha insertado correctamente", 2);
+							Connection conexion = Metodos.conexionBD();
 
-						} catch (SQLException e1) {
-							dispose();
-							Metodos.mensaje("El usuario " + usuario.getText() + " ya está en la BD", 3);
+							Statement s = conexion.createStatement();
 
-						} catch (NullPointerException e1) {
-							dispose();
+							try {
 
+								s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + usuariobd
+										+ "','" + tipobd + "','" + notabd + "')");
+								AgendaInterfaz.verNotas();
+								dispose();
+								Metodos.mensaje("La nota se ha insertado correctamente", 2);
+
+							} catch (SQLException e1) {
+								dispose();
+								Metodos.mensaje("El usuario " + usuario.getText() + " ya está en la BD", 3);
+
+							} catch (NullPointerException e1) {
+								dispose();
+
+							}
+
+						} catch (Exception e) {
+							dispose();
+							try {
+								new Bd().setVisible(true);
+							} catch (IOException e1) {
+								//
+							}
 						}
-
-					} catch (Exception e) {
-						dispose();
-						try {
-							new Bd().setVisible(true);
-						} catch (IOException e1) {
-							//
-						}
+					} else {
+						Metodos.mensaje("Rellene todos los campos", 3);
 					}
 				} else {
 					Metodos.mensaje("Rellene todos los campos", 3);
 				}
-
 			}
 		});
 
@@ -163,7 +168,7 @@ public class Agregar extends javax.swing.JFrame implements ActionListener, Chang
 		nota.setFont(new Font("Monospaced", Font.PLAIN, 20));
 		scrollPane.setViewportView(nota);
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(573, 514));
+		setSize(new Dimension(586, 521));
 		setLocationRelativeTo(null);
 	}
 
