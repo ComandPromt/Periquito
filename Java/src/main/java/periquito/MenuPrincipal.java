@@ -50,12 +50,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import utils.ComprobarSha;
 import utils.DragAndDrop;
-import utils.ImageResizer;
 import utils.Metodos;
 import utils.MyInterface;
 import utils.PhotoFrame;
 
 @SuppressWarnings("serial")
+
 public class MenuPrincipal extends JFrame implements ActionListener, ChangeListener, MyInterface {
 	private JMenuBar menuopciones;
 	private JMenu menu;
@@ -110,14 +110,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private static String[] user = Metodos.leerFicheroArray("Config/User.txt", 2);
 	private String carpeta = "";
 
-	public static String[] getUser() {
-		return user;
-	}
-
-	public static void setUser(String[] user) {
-		MenuPrincipal.user = user;
-	}
-
 	static String separador = Metodos.saberSeparador(os);
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
@@ -141,6 +133,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JSeparator separator_8;
 	private JMenuItem mntmComentarios;
 	private JSeparator separator_9;
+
+	public static String[] getUser() {
+		return user;
+	}
+
+	public static void setUser(String[] user) {
+		MenuPrincipal.user = user;
+	}
 
 	public static void setLectura(String[] lectura) {
 		MenuPrincipal.lectura = lectura;
@@ -214,12 +214,17 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	private void eliminararchivos(String extension) {
+
 		listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes", extension);
 
 		for (int i = 0; i < listaImagenes.size(); i++) {
 			Metodos.eliminarFichero(
 					directorioActual + "Config" + separador + "imagenes" + separador + listaImagenes.get(i));
 		}
+	}
+
+	public static LinkedList<String> getListaImagenes() {
+		return listaImagenes;
 	}
 
 	public static void hacerGIF() throws IOException {
@@ -243,13 +248,17 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								chrome.get(lectura[1] + "/Hacer_gif/crear_gif.php");
 
 								chrome.close();
+
 								Metodos.cerrarNavegador();
+
 								listaImagenes = Metodos
 										.directorio(lectura[0] + separador + "Hacer_gif" + separador + "Output", "gif");
+
 								LinkedList<String> frames = Metodos
 										.directorio(lectura[0] + separador + "Hacer_gif" + separador + "img", ".");
 
 								for (int x = 0; x < listaImagenes.size(); x++) {
+
 									Files.move(
 											FileSystems.getDefault()
 													.getPath(lectura[0] + separador + "Hacer_gif" + separador + "Output"
@@ -264,7 +273,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									Metodos.eliminarFichero(lectura[0] + separador + "Hacer_gif" + separador + "img"
 											+ separador + frames.get(x));
 								}
+
 								Metodos.abrirCarpeta("Config" + separador + "imagenes");
+
 							} else {
 								new Config().setVisible(true);
 							}
@@ -272,6 +283,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						} catch (ArrayIndexOutOfBoundsException e1) {
 
 							new Config().setVisible(true);
+
 						} catch (IOException e1) {
 							Metodos.mensaje("Error", 1);
 						}
@@ -289,17 +301,24 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	private void video2Frames() {
+
 		try {
 			Metodos.comprobarConexion("Config/Config.txt",
 					lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
-		} catch (ArrayIndexOutOfBoundsException e1) {
+		}
+
+		catch (ArrayIndexOutOfBoundsException e1) {
 			Metodos.mensaje("Error en el  archivo Config.txt", 1);
-		} catch (Exception e1) {
+		}
+
+		catch (Exception e1) {
 			Metodos.mensaje("Error", 1);
 		}
+
 	}
 
 	private void videoToFrame() throws Exception {
+
 		File directorio = new File(
 				lectura[0] + separador + "FrameExtractor" + separador + "examples" + separador + "video");
 		directorio.mkdir();
@@ -310,10 +329,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		directorio.mkdir();
 
 		try {
+
 			if (lectura[1] == null || lectura[1].equals("")) {
 				Config guardar = new Config();
 				guardar.guardarDatos(false);
-			} else {
+			}
+
+			else {
+
 				if (Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/FrameExtractor/examples/output"),
 						".") > 0) {
 					Metodos.mensaje("Ya has convertido un video a frames!", 3);
@@ -352,19 +375,27 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	public static void mensaje170() {
+
 		Metodos.mensaje("Tienes más de 170 imágenes", 3);
+
 		try {
 			Metodos.abrirCarpeta(lectura[0] + separador + "Hacer_gif" + separador + "img");
-		} catch (IOException e1) {
+		}
+
+		catch (IOException e1) {
+
 			try {
 				new Config().setVisible(true);
-			} catch (IOException e2) {
+			}
+
+			catch (IOException e2) {
 				Metodos.mensaje("Error", 1);
 			}
 		}
 	}
 
 	public MenuPrincipal() throws Exception {
+
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(MenuPrincipal.class.getResource("/imagenes/maxresdefault.jpg")));
 		Metodos.crearFichero("Config" + separador + "GifFrames", "", true);
@@ -408,6 +439,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			}
 		}
+
 		setTitle("Periquito v3");
 
 		menuopciones = new JMenuBar();
@@ -431,8 +463,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 				try {
+
 					int recuento = Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".");
+
 					if (recuento <= 170) {
 						if (os.equals("Linux")) {
 
@@ -442,10 +477,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						hacerGIF();
 
-					} else {
+					}
+
+					else {
 						mensaje170();
 					}
-				} catch (Exception e1) {
+				}
+
+				catch (Exception e1) {
+
 					try {
 						new Config().setVisible(true);
 					} catch (IOException e2) {
@@ -456,6 +496,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			}
 
 		});
+
 		menuItem.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gifanim.png")));
 		menuItem.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		menu1.add(menuItem);
@@ -464,9 +505,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu1.add(separator);
 
 		menuItem1 = new JMenuItem("GIF Extractor");
+
 		menuItem1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 				try {
 					if (Metodos.probarconexion("www.google.com")) {
 
@@ -522,14 +565,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						Metodos.eliminarDuplicados(directorioActual + "Config" + separador + "imagenes_para_recortar",
 								separador);
 
-						for (int x = 0; x < listaImagenes.size(); x++) {
-
-							ImageResizer.copyImage(
-									directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
-											+ listaImagenes.get(x),
-									directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
-											+ listaImagenes.get(x));
-						}
+						Metodos.renombrarArchivos(listaImagenes,
+								directorioActual + "Config" + separador + "imagenes_para_recortar" + separador);
 
 					}
 
@@ -1149,6 +1186,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		this.setVisible(true);
 	}
 
+	public static String getDirectorioActual() {
+		return directorioActual;
+	}
+
 	public void initComponents() throws IOException {
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("");
 		rdbtnNewRadioButton.setSelected(true);
@@ -1190,11 +1231,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						Metodos.cerrarNavegador();
 
-						Metodos.conversion("jpeg", "jpg");
-
-						Metodos.conversion("JPEG", "jpg");
-
-						Metodos.conversion("JPG", "jpg");
+						Metodos.convertir();
 
 						if (gif) {
 							eliminararchivos("gif");

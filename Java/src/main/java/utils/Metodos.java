@@ -71,6 +71,15 @@ public abstract class Metodos {
 		return "http://" + servidor + separador + carpeta;
 	}
 
+	public static String eliminarpuntos(String cadena) {
+
+		String cadena2 = cadena.substring(0, cadena.length() - 4);
+
+		cadena = cadena2.replace(".", "_") + "." + extraerExtension(cadena);
+
+		return cadena;
+	}
+
 	public static void cerrarNavegador() {
 
 		try {
@@ -259,6 +268,21 @@ public abstract class Metodos {
 		return sb.toString();
 	}
 
+	public static void convertir() {
+
+		Metodos.conversion("jpeg", "jpg");
+
+		Metodos.conversion("JPEG", "jpg");
+
+		Metodos.conversion("webp", "png");
+
+		Metodos.conversion("JPG", "jpg");
+
+		Metodos.conversion("PNG", "png");
+
+		Metodos.conversion("GIF", "gif");
+	}
+
 	public static JSONObject readJsonFromUrl(String url) throws IOException {
 		InputStream is = new URL(url).openStream();
 
@@ -313,20 +337,32 @@ public abstract class Metodos {
 	}
 
 	public static void moverArchivosDrop(java.io.File[] files, String separador) throws IOException {
+
 		String imagen;
 		String comprobacion;
 		boolean filtro = false;
 		String origen;
 		String destino;
+
 		if (files.length > 0) {
+
+			LinkedList<String> listaImagenes = directorio(
+					MenuPrincipal.getDirectorioActual() + "Config" + separador + "imagenes", ".");
+
+			String busqueda;
+
+			String salida;
+
 			for (int i = 0; i < files.length; i++) {
 
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
 						files[i].getCanonicalPath().length());
+
 				comprobacion = extraerExtension(imagen);
+
 				if (comprobacion.equals("jpg") || comprobacion.equals("JPG") || comprobacion.equals("peg")
 						|| comprobacion.equals("png") || comprobacion.equals("gif") || comprobacion.equals("avi")
-						|| comprobacion.equals("mp4")) {
+						|| comprobacion.equals("mp4") || comprobacion.equals("webp")) {
 
 					origen = files[i].getCanonicalPath();
 					destino = new File(".").getCanonicalPath() + separador + "Config" + separador + "imagenes";
@@ -337,12 +373,36 @@ public abstract class Metodos {
 
 					else {
 
+						busqueda = origen.substring(origen.lastIndexOf(separador) + 1, origen.length());
+						busqueda = eliminarpuntos(busqueda);
+
+						salida = origen.substring(0, origen.lastIndexOf(separador)) + separador + busqueda;
+
+						renombrar(origen, salida);
+
+						origen = salida;
+
+						busqueda = origen.substring(origen.lastIndexOf(separador) + 1, origen.length());
+
+						if (listaImagenes.indexOf(busqueda) != -1) {
+
+							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
+
+							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
+
+							renombrar(origen, salida);
+
+							origen = salida;
+						}
+
 						Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
 
 								destino + separador
 										+ origen.substring(origen.lastIndexOf(separador) + 1, origen.length())
 
 						), StandardCopyOption.REPLACE_EXISTING);
+
+						convertir();
 
 					}
 
@@ -352,7 +412,7 @@ public abstract class Metodos {
 			}
 
 			if (filtro) {
-				mensaje("Uno o varios archivos no tiene el formato correcto", 1);
+				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
 			} else {
 				mensaje("Los archivos se han movido correctamente", 2);
 			}
@@ -367,23 +427,23 @@ public abstract class Metodos {
 		FileNameExtensionFilter filter = null;
 
 		switch (tipo) {
+
 		case 1:
 			filter = new FileNameExtensionFilter(rotulo, "jpg");
 			chooser.setFileFilter(filter);
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			break;
+
 		case 2:
 			filter = new FileNameExtensionFilter(rotulo, "jpg", "gif", "jpeg", "png", "avi", "mp4");
 			chooser.setFileFilter(filter);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
 			break;
 
 		case 3:
 			filter = new FileNameExtensionFilter(rotulo, "txt");
 			chooser.setFileFilter(filter);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
 			break;
 
 		default:
@@ -399,7 +459,6 @@ public abstract class Metodos {
 
 		if (files.length == 0) {
 			mensaje(mensaje, 3);
-
 		}
 
 		return files;
@@ -439,18 +498,26 @@ public abstract class Metodos {
 		}
 	}
 
+	public static String convertToUTF8(String s) {
+
+		String out = "";
+
+		try {
+			out = new String(s.getBytes("UTF-8"), "ISO-8859-1");
+		} catch (java.io.UnsupportedEncodingException e) {
+			//
+		}
+		return out;
+	}
+
 	public static void muestraContenido(String archivo, String tipo, String descripcion)
 			throws FileNotFoundException, IOException {
-
-		File file = null;
 
 		FileReader fr = null;
 
 		BufferedReader br = null;
 
 		try {
-
-			file = new File(archivo);
 
 			fr = new FileReader(archivo);
 
@@ -461,11 +528,13 @@ public abstract class Metodos {
 			LinkedList<String> contenido = new LinkedList<>();
 
 			while ((linea = br.readLine()) != null) {
-				contenido.add(linea);
+				linea = linea.trim();
+				linea = linea.replaceAll("  ", " ");
+				contenido.add(convertToUTF8(linea));
 			}
 
 			// Creamos un objeto HashSet
-			HashSet hs = new HashSet();
+			HashSet<String> hs = new HashSet<String>();
 
 			// Lo cargamos con los valores del array, esto hace quite los repetidos
 			hs.addAll(contenido);
@@ -484,6 +553,7 @@ public abstract class Metodos {
 			int i = 0;
 
 			try {
+
 				for (i = 0; i < size; i++) {
 					if (!contenido.get(i).isEmpty()) {
 						s.executeUpdate("INSERT INTO notas (nombre,tipo,descripcion) VALUES('" + contenido.get(i)
@@ -504,9 +574,7 @@ public abstract class Metodos {
 		}
 
 		catch (Exception e) {
-
-			e.printStackTrace();
-
+//
 		} finally {
 
 			try {
@@ -518,8 +586,7 @@ public abstract class Metodos {
 				}
 
 			} catch (Exception e2) {
-
-				e2.printStackTrace();
+//
 
 			}
 
@@ -702,10 +769,12 @@ public abstract class Metodos {
 	}
 
 	public static boolean comprobarConexionBd(String sql, String fila) throws SQLException {
+
 		boolean resultado = false;
 		Connection conexion = null;
 		Statement s = null;
 		ResultSet rs = null;
+
 		try {
 			conexion = Metodos.conexionBD();
 
@@ -718,18 +787,22 @@ public abstract class Metodos {
 			if (!rs.getString(fila).equals("")) {
 				resultado = true;
 			}
+
 			s.close();
 			rs.close();
+
 		} catch (SQLException e) {
 			Metodos.mensaje("No hay registros en la base de datos", 3);
 		}
 
 		catch (Exception e) {
+
 			try {
 				new Bd().setVisible(true);
 			} catch (IOException e1) {
 				//
 			}
+
 		} finally {
 			if (s != null) {
 				s.close();
@@ -743,16 +816,21 @@ public abstract class Metodos {
 	}
 
 	public static String saberFecha() {
+
 		Calendar c = Calendar.getInstance();
 		String mes = Integer.toString(c.get(Calendar.MONTH) + 1);
+
 		if (Integer.parseInt(mes) <= 9) {
 			mes = "0" + mes;
 		}
+
 		return Integer.toString(c.get(Calendar.YEAR)) + "-" + mes + "-" + Integer.toString(c.get(Calendar.DATE));
 	}
 
 	public static void comprobarConexion(String archivo, String ruta) throws IOException {
+
 		File af = new File(archivo);
+
 		if (af.exists()) {
 			File comprobacion = new File(ruta);
 
@@ -763,6 +841,7 @@ public abstract class Metodos {
 
 				Metodos.abrirCarpeta(ruta);
 			}
+
 		} else {
 			new Config().setVisible(true);
 		}
@@ -771,6 +850,7 @@ public abstract class Metodos {
 	public static boolean comprobarConexion(boolean mensaje) throws IOException {
 
 		boolean conexion = false;
+
 		try {
 			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 7);
 
@@ -785,6 +865,7 @@ public abstract class Metodos {
 				}
 
 			}
+
 		} catch (Exception e) {
 
 			if (mensaje && MenuPrincipal.isConexion()) {
@@ -814,25 +895,31 @@ public abstract class Metodos {
 			}
 
 			try {
+
 				if (conexionBD() != null) {
 					comprobacion = true;
 				}
+
 			} catch (SQLException e) {
 				new Bd().setVisible(true);
 			}
 
 		}
+
 		return comprobacion;
 
 	}
 
 	public static ArrayList<String> comprobarConexionBD() throws IOException {
+
 		ArrayList<String> categorias = null;
+
 		try {
 			categorias = verCategorias();
 		} catch (SQLException e1) {
 			new Bd().setVisible(true);
 		}
+
 		return categorias;
 	}
 
@@ -865,10 +952,12 @@ public abstract class Metodos {
 	}
 
 	public static int numeroLineas(String fichero) throws FileNotFoundException {
+
 		File input = new File("Config/" + fichero);
 		Scanner iterate;
 		int numLines = 0;
 		iterate = new Scanner(input);
+
 		try {
 
 			while (iterate.hasNextLine()) {
@@ -878,10 +967,10 @@ public abstract class Metodos {
 		} finally {
 			iterate.close();
 		}
+
 		return numLines;
 	}
 
-	@SuppressWarnings("all")
 	public static void guardarConfig(int opcion, String separador) throws IOException {
 
 		String ruta;
@@ -893,6 +982,7 @@ public abstract class Metodos {
 		}
 
 		switch (opcion) {
+
 		case 1:
 			Metodos.crearFichero("Config/Config.txt", ruta + System.getProperty("user.name") + separador + "Downloads",
 					false);
@@ -920,11 +1010,15 @@ public abstract class Metodos {
 
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
 					+ separador + "output", "", true);
+
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
 					+ separador + "tmp", "", true);
+
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "FrameExtractor" + separador + "examples"
 					+ separador + "video", "", true);
+
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "Hacer_gif" + separador + "img", "", true);
+
 			Metodos.crearFichero(MenuPrincipal.getLectura()[0] + separador + "Hacer_gif" + separador + "Output", "",
 					true);
 			break;
@@ -936,11 +1030,15 @@ public abstract class Metodos {
 	}
 
 	public static void crearFichero(String ruta, String texto, boolean carpeta) throws IOException {
+
 		File archivo = new File(ruta);
+
 		if (carpeta) {
+
 			if (!archivo.exists()) {
 				archivo.mkdir();
 			}
+
 		} else {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
 			try {
@@ -976,6 +1074,8 @@ public abstract class Metodos {
 
 		String extension = nombreArchivo.substring(nombreArchivo.length() - 3, nombreArchivo.length());
 
+		extension = extension.toLowerCase();
+
 		if (extension.equals("peg")) {
 			extension = "jpg";
 		}
@@ -984,13 +1084,20 @@ public abstract class Metodos {
 	}
 
 	public static int listarFicherosPorCarpeta(final File carpeta) {
+
 		int ocurrencias = 0;
+
 		String extension = "";
+
 		ArrayList<String> permitidos = new ArrayList<>();
+
 		permitidos.add(".jpg");
+		permitidos.add(".JPG");
 		permitidos.add("jpeg");
 		permitidos.add(".png");
+		permitidos.add(".PNG");
 		permitidos.add(".gif");
+		permitidos.add(".GIF");
 
 		for (final File ficheroEntrada : carpeta.listFiles()) {
 
@@ -1003,6 +1110,7 @@ public abstract class Metodos {
 				}
 			}
 		}
+
 		return ocurrencias;
 	}
 
@@ -1050,12 +1158,27 @@ public abstract class Metodos {
 
 			File[] ficheros = f.listFiles();
 
+			String fichero = "";
+
 			for (int x = 0; x < ficheros.length; x++) {
 
-				String fichero = ficheros[x].getName();
+				fichero = ficheros[x].getName();
 
 				if (extension.equals(".") && !fichero.equals("recortes")
 						|| (fichero.substring(fichero.length() - size, fichero.length()).equals(extension))) {
+
+					if (fichero.substring(0, fichero.length() - 5).contains(".")) {
+
+						File f1 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes"
+								+ MenuPrincipal.getSeparador() + fichero);
+
+						File f2 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes"
+								+ MenuPrincipal.getSeparador() + eliminarpuntos(fichero));
+
+						f1.renameTo(f2);
+
+					}
+
 					lista.add(fichero);
 				}
 
@@ -1199,7 +1322,7 @@ public abstract class Metodos {
 
 	public static boolean pingURL(String url) {
 
-		int timeout = 20000;
+		int timeout = 80000;
 
 		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
 
@@ -1300,6 +1423,25 @@ public abstract class Metodos {
 			f1.renameTo(f2);
 		}
 
+	}
+
+	public static void renombrarArchivos(LinkedList<String> listaImagenes, String ruta) {
+
+		File f1;
+		File f2;
+
+		for (int x = 0; x < listaImagenes.size(); x++) {
+			f1 = new File(ruta + listaImagenes.get(x));
+			f2 = new File(ruta + Metodos.eliminarpuntos(listaImagenes.get(x)));
+			f1.renameTo(f2);
+		}
+
+	}
+
+	public static void renombrar(String ruta1, String ruta2) {
+		File f1 = new File(ruta1);
+		File f2 = new File(ruta2);
+		f1.renameTo(f2);
 	}
 
 }

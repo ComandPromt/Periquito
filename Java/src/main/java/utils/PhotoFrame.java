@@ -11,6 +11,7 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -118,7 +119,16 @@ public class PhotoFrame extends javax.swing.JFrame {
 		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				try {
+					LinkedList<String> listaImagenes = new LinkedList<>();
+
+					listaImagenes = Metodos.directorio(MenuPrincipal.getDirectorioActual() + "Config"
+							+ MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+
+					Metodos.renombrarArchivos(listaImagenes, MenuPrincipal.getDirectorioActual() + "Config"
+							+ MenuPrincipal.getSeparador() + "imagenes_para_recortar" + MenuPrincipal.getSeparador());
+
 					jMenuItem1ActionPerformed();
+
 				} catch (IOException e) {
 					Metodos.mensaje("Error", 1);
 				}
