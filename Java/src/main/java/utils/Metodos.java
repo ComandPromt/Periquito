@@ -1146,8 +1146,6 @@ public abstract class Metodos {
 
 	public static LinkedList<String> directorio(String ruta, String extension) {
 
-		int size = extension.length();
-
 		LinkedList<String> lista = new LinkedList<>();
 
 		String directorio = ruta;
@@ -1159,13 +1157,22 @@ public abstract class Metodos {
 			File[] ficheros = f.listFiles();
 
 			String fichero = "";
+			String extensionArchivo;
+
+			File folder;
 
 			for (int x = 0; x < ficheros.length; x++) {
 
 				fichero = ficheros[x].getName();
 
-				if (extension.equals(".") && !fichero.equals("recortes")
-						|| (fichero.substring(fichero.length() - size, fichero.length()).equals(extension))) {
+				folder = new File(ruta + MenuPrincipal.getSeparador() + fichero);
+
+				extensionArchivo = extraerExtension(fichero);
+
+				if (!folder.isDirectory() &&
+
+						extension.equals(".") && !fichero.equals("recortes")
+						&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png"))) {
 
 					if (fichero.substring(0, fichero.length() - 5).contains(".")) {
 
@@ -1322,7 +1329,7 @@ public abstract class Metodos {
 
 	public static boolean pingURL(String url) {
 
-		int timeout = 80000;
+		int timeout = 100000;
 
 		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
 
