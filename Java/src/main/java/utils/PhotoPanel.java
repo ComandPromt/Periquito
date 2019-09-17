@@ -83,7 +83,6 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 						+ MenuPrincipal.getSeparador() + "recortes");
 				directorio.mkdir();
 				try {
-					e1.printStackTrace();
 					new Config().setVisible(true);
 				} catch (IOException e2) {
 					//
@@ -248,6 +247,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 					if (y >= 10 && y < 100) {
 						numero = "00" + y;
 					} else {
+
 						if (y >= 100 && y < 1000) {
 							numero = "0" + y;
 						} else {
@@ -267,7 +267,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			PhotoFrame.photoPanel.photo = null;
 
 			int n = 2;
-			System.out.println(y);
+
 			if (--y <= 170) {
 
 				n = JOptionPane.showConfirmDialog(null, "¿Quieres crear un gif con las imágenes recortadas?",
@@ -295,6 +295,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 						int recuento = Metodos.listarFicherosPorCarpeta(
 								new File(MenuPrincipal.getLectura()[0] + "/Hacer_gif/img"), ".");
+
 						if (recuento <= 170) {
 							if (MenuPrincipal.getOs().equals("Linux")) {
 
@@ -307,10 +308,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 						} else {
 							MenuPrincipal.mensaje170();
 						}
+
 					} catch (Exception e1) {
 
 						try {
-							e1.printStackTrace();
 							new Config().setVisible(true);
 						} catch (IOException e2) {
 							//
