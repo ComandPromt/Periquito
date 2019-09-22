@@ -184,10 +184,6 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 			int vueltas = 1;
 
-			Metodos.eliminarDuplicados(
-					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar",
-					MenuPrincipal.getSeparador());
-
 			listaImagenes = Metodos.directorio(
 					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
 

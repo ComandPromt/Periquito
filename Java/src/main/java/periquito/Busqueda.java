@@ -188,12 +188,13 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 
 												rs = s.executeQuery(sql2);
 
-												MenuPrincipal.getImagenes().clear();
+												MenuPrincipal.getListaImagenes().clear();
 												MenuPrincipal.getCategorias().clear();
 
 												while (rs.next()) {
 
-													MenuPrincipal.getImagenes().add(rs.getString("image_media_file"));
+													MenuPrincipal.getListaImagenes()
+															.add(rs.getString("image_media_file"));
 													MenuPrincipal.getCategorias().add(rs.getString("cat_id"));
 												}
 

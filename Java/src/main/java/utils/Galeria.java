@@ -26,23 +26,23 @@ public class Galeria {
 
 		try {
 
-			int numeroImagenes = MenuPrincipal.getImagenes().size();
+			int numeroImagenes = MenuPrincipal.getListaImagenes().size();
 
 			String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
 			InetAddress ping;
 
 			ping = InetAddress.getByName(new URL("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
-					+ MenuPrincipal.getCategorias().get(0) + "/" + MenuPrincipal.getImagenes().get(0)).getHost());
+					+ MenuPrincipal.getCategorias().get(0) + "/" + MenuPrincipal.getListaImagenes().get(0)).getHost());
 
 			if (!ping.getCanonicalHostName().equals("")) {
 
 				for (int i = 0; i < numeroImagenes; i++) {
 					urlFotos.add("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
-							+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getImagenes().get(i));
+							+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getListaImagenes().get(i));
 					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + lecturaurl[0] + "/"
 							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
-							+ MenuPrincipal.getImagenes().get(i)))));
+							+ MenuPrincipal.getListaImagenes().get(i)))));
 				}
 
 			}

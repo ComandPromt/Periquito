@@ -35,7 +35,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 	JLabel lblThumbnails;
 	private JTextField textField1;
 	private JTextField textField2;
-	public static JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Complex");
+	private static JRadioButton botonRadio1 = new JRadioButton("Complex");
 	JRadioButton rdbtnNewRadioButton = new JRadioButton("Simple");
 	public static final JTextField textField3 = new JTextField();
 
@@ -54,7 +54,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 	}
 
 	private void modoPorDefecto() {
-		if (!rdbtnNewRadioButton.isSelected() && !rdbtnNewRadioButton_1.isSelected()) {
+		if (!rdbtnNewRadioButton.isSelected() && !getBotonRadio1().isSelected()) {
 			rdbtnNewRadioButton.setSelected(true);
 		}
 	}
@@ -182,9 +182,9 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		JLabel lblSalto;
 		lblSalto = new JLabel("Salto");
 		lblSalto.setFont(new Font("Dialog", Font.BOLD, 20));
-		rdbtnNewRadioButton_1.setFont(new Font("Dialog", Font.BOLD, 20));
+		getBotonRadio1().setFont(new Font("Dialog", Font.BOLD, 20));
 
-		rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
+		getBotonRadio1().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				rdbtnNewRadioButton.setSelected(false);
@@ -202,7 +202,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				rdbtnNewRadioButton_1.setSelected(false);
+				getBotonRadio1().setSelected(false);
 			}
 
 			@Override
@@ -245,7 +245,7 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
 								.addGap(80).addComponent(rdbtnNewRadioButton).addGap(27)
-								.addComponent(rdbtnNewRadioButton_1)))
+								.addComponent(getBotonRadio1())))
 				.addContainerGap(20, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -269,10 +269,12 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 						.addComponent(lblExtension, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textField3, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
 				.addGap(20)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(rdbtnNewRadioButton)
-								.addComponent(rdbtnNewRadioButton_1))
-						.addGap(18)).addGroup(
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(rdbtnNewRadioButton).addComponent(getBotonRadio1()))
+								.addGap(18))
+						.addGroup(
 								layout.createSequentialGroup()
 										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 51,
 												GroupLayout.PREFERRED_SIZE)
@@ -291,5 +293,13 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 
 	public void stateChanged(ChangeEvent e) {
 		//
+	}
+
+	public static JRadioButton getBotonRadio1() {
+		return botonRadio1;
+	}
+
+	public void setBotonRadio1(JRadioButton botonRadio1) {
+		this.botonRadio1 = botonRadio1;
 	}
 }

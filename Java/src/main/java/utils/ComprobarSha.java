@@ -32,6 +32,7 @@ import periquito.MenuPrincipal;
 @SuppressWarnings("serial")
 
 public class ComprobarSha extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	private JTextArea imagenes = new JTextArea();
 	String comprobacion;
 	transient Statement s;
@@ -39,6 +40,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	transient ResultSet rs;
 	String[] categorias;
 	static LinkedList<String> lectura = new LinkedList<>();
+	static LinkedList<String> rutas = new LinkedList<>();
 	static LinkedList<String> shaimages = new LinkedList<>();
 	static JComboBox<?> comboBox;
 
@@ -48,6 +50,10 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 	public static void setShaimages(LinkedList<String> shaimages) {
 		ComprobarSha.shaimages = shaimages;
+	}
+
+	public static LinkedList<String> getRutas() {
+		return rutas;
 	}
 
 	public static LinkedList<String> getLectura() {
@@ -63,13 +69,21 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		try {
 
 			lectura.clear();
+
+			shaimages.clear();
+
 			String nombreArchivo;
+			String ruta;
 
 			for (int x = 0; x < files.length; x++) {
 
-				nombreArchivo = files[x].getCanonicalPath().substring(
+				ruta = files[x].getCanonicalPath();
+
+				nombreArchivo = ruta.substring(
 						files[x].getCanonicalPath().lastIndexOf(MenuPrincipal.getSeparador()) + 1,
 						files[x].getCanonicalPath().length());
+
+				rutas.add(ruta);
 
 				lectura.add(nombreArchivo);
 
@@ -77,18 +91,22 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 			}
 
-			if (lectura.size() > 0) {
+			Metodos.renombrarArchivos(ComprobarSha.getLectura(),
+					ComprobarSha.getRutas().get(0).substring(0,
+							ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
+							+ MenuPrincipal.getSeparador());
+
+			if (!lectura.isEmpty()) {
 
 				dispose();
 
-				try {
-					new ImagenesSha();
-				} catch (Exception e) {
-					//
-				}
+				new ImagenesSha();
 
 			}
-		} catch (Exception e) {
+
+		}
+
+		catch (Exception e) {
 			//
 		}
 	}
@@ -98,6 +116,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ComprobarSha.class.getResource("/imagenes/db.png")));
 
 		setTitle("Periquito v3 Comprobador SHA");
+
 		initComponents();
 
 		this.setVisible(true);
@@ -162,6 +181,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
 
 		try {
+
 			new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
 
 				public void filesDropped(java.io.File[] files) {
@@ -171,7 +191,9 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 			});
 
-		} catch (TooManyListenersException e1) {
+		}
+
+		catch (TooManyListenersException e1) {
 			Metodos.mensaje("Error", 1);
 		}
 
