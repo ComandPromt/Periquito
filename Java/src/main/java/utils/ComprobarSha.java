@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TooManyListenersException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -39,29 +40,25 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	boolean filtro = false;
 	transient ResultSet rs;
 	String[] categorias;
-	static LinkedList<String> lectura = new LinkedList<>();
-	static LinkedList<String> rutas = new LinkedList<>();
-	static LinkedList<String> shaimages = new LinkedList<>();
+	static List<String> lectura = new LinkedList<>();
+	static List<String> rutas = new LinkedList<>();
+	static List<String> shaimages = new LinkedList<>();
 	static JComboBox<?> comboBox;
 
-	public static LinkedList<String> getShaimages() {
+	public static List<String> getShaimages() {
 		return shaimages;
 	}
 
-	public static void setShaimages(LinkedList<String> shaimages) {
+	public static void setShaimages(List<String> shaimages) {
 		ComprobarSha.shaimages = shaimages;
 	}
 
-	public static LinkedList<String> getRutas() {
+	public static List<String> getRutas() {
 		return rutas;
 	}
 
-	public static LinkedList<String> getLectura() {
+	public static List<String> getLectura() {
 		return lectura;
-	}
-
-	public void setLectura(LinkedList<String> lectura) {
-		ComprobarSha.lectura = lectura;
 	}
 
 	private void comprobarSha(java.io.File[] files) {
@@ -91,13 +88,11 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 			}
 
-			Metodos.renombrarArchivos(ComprobarSha.getLectura(),
-					ComprobarSha.getRutas().get(0).substring(0,
-							ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
-							+ MenuPrincipal.getSeparador());
+			Metodos.renombrarArchivos(ComprobarSha.getLectura(), ComprobarSha.getRutas().get(0).substring(0,
+					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1));
 
 			if (!lectura.isEmpty()) {
-
+			
 				dispose();
 
 				new ImagenesSha();
@@ -109,6 +104,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		catch (Exception e) {
 			//
 		}
+		
 	}
 
 	public ComprobarSha() throws IOException {
@@ -137,14 +133,18 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		imagenes.setBackground(Color.WHITE);
 
 		JLabel lblNewLabel = new JLabel("");
+		
 		lblNewLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				
 				File[] files = Metodos.seleccionar(2, "Imagen & Video",
 						"Elije un archivo de imagen o video para mover");
+				
 				if (files != null) {
 					comprobarSha(files);
 				}
+				
 			}
 		});
 
@@ -153,6 +153,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		comboBox = new JComboBox();
 		comboBox.setFont(new Font("Tahoma", Font.BOLD, 22));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] { "SHA", "Nombre" }));
+		
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
@@ -194,17 +195,13 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		}
 
 		catch (TooManyListenersException e1) {
-			Metodos.mensaje("Error", 1);
+			//
 		}
 
 	}
 
 	public static JComboBox<?> getComboBox() {
 		return comboBox;
-	}
-
-	public void setComboBox(JComboBox<?> comboBox) {
-		ComprobarSha.comboBox = comboBox;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
@@ -214,4 +211,5 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
+	
 }

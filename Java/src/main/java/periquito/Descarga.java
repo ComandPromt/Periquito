@@ -27,8 +27,7 @@ import utils.Metodos;
 import utils.MyInterface;
 
 @SuppressWarnings("serial")
-
-public class Descarga extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+public class Descarga extends JFrame implements ActionListener, ChangeListener, MyInterface {
 	javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
@@ -299,7 +298,4 @@ public class Descarga extends javax.swing.JFrame implements ActionListener, Chan
 		return botonRadio1;
 	}
 
-	public void setBotonRadio1(JRadioButton botonRadio1) {
-		this.botonRadio1 = botonRadio1;
-	}
 }

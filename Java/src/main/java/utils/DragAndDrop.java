@@ -85,14 +85,20 @@ public class DragAndDrop {
 		dt.addDropTargetListener(dropListener);
 
 		c.addHierarchyListener(new java.awt.event.HierarchyListener() {
+
 			public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
 
 				java.awt.Component parent = c.getParent();
+
 				if (parent == null) {
+
 					c.setDropTarget(null);
-				} else {
+				}
+
+				else {
 					new java.awt.dnd.DropTarget(c, dropListener);
 				}
+
 			}
 		});
 		if (c.getParent() != null)

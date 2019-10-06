@@ -34,19 +34,23 @@ import utils.MyInterface;
 @SuppressWarnings("all")
 
 public class Busqueda extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
 
 	public Busqueda() throws IOException {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/imagenes/lupa.png")));
 		setTitle("Periquito v3 Busqueda ");
 		initComponents();
 		this.setVisible(true);
+
 	}
 
 	@SuppressWarnings("all")
 	public void initComponents() throws IOException {
+
 		jTextField1 = new javax.swing.JTextField();
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField1.setToolTipText("");
@@ -63,7 +67,9 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("");
 
 		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("");
+
 		rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 
@@ -82,6 +88,7 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 				}
 			}
 		});
+
 		rdbtnNewRadioButton_1.setSelected(true);
 
 		rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
@@ -96,9 +103,11 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+
 				if (!rdbtnNewRadioButton_1.isSelected() && !rdbtnNewRadioButton.isSelected()) {
 					rdbtnNewRadioButton_1.setSelected(true);
 				}
+
 			}
 		});
 
@@ -116,7 +125,9 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 		btnNewButton.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/lupa.png")));
 
 		btnNewButton.addMouseListener(new MouseAdapter() {
+
 			@Override
+
 			public void mousePressed(MouseEvent e) {
 
 				if (!jTextField1.getText().trim().equals("")) {
@@ -184,11 +195,14 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 																MenuPrincipal.getLecturaurl()[1])
 																+ "/search.php?filtro=" + busqueda);
 
-											} else {
+											}
+
+											else {
 
 												rs = s.executeQuery(sql2);
 
 												MenuPrincipal.getListaImagenes().clear();
+
 												MenuPrincipal.getCategorias().clear();
 
 												while (rs.next()) {
@@ -201,6 +215,7 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 											}
 
 											s.close();
+
 											rs.close();
 
 											if (recuento == 0) {
@@ -215,7 +230,9 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 
 														new Galeria();
 														new InterfazGaleria().setVisible(true);
-													} catch (Exception e1) {
+													}
+
+													catch (Exception e1) {
 
 														Metodos.mensaje("No se han podido cargar las imágenes", 1);
 
@@ -226,28 +243,41 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 												}
 											}
 
-										} else {
+										}
+
+										else {
 											Metodos.mensaje("La búsqueda no tiene resultados", 3);
 										}
 
 									}
 
 								}
-							} catch (Exception e1) {
+							}
+
+							catch (Exception e1) {
 								Metodos.mensaje("Revise la búsqueda", 3);
 							}
 						}
-					} catch (SQLException e1) {
+					}
+
+					catch (SQLException e1) {
+
 						try {
 							new Bd().setVisible(true);
-						} catch (IOException e11) {
+						}
+
+						catch (IOException e11) {
 							//
 						}
+
 					}
-				} else {
+				}
+
+				else {
 					Metodos.mensaje("Introduzca un nombre para buscar", 2);
 				}
 			}
+
 		});
 
 		textField = new JTextField();
@@ -296,4 +326,5 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
+
 }
