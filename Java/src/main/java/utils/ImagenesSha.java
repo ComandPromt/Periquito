@@ -134,17 +134,16 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				}
 
 				ResultSet rs = s.executeQuery(
-						"select COUNT(image_id) from " + MenuPrincipal.getLecturabd()[3] + "images " + sentenciaFinal);
+						"select COUNT(image_id),image_id from " + MenuPrincipal.getLecturabd()[3] + "images " + sentenciaFinal);
 				rs.next();
 
 				int recuento = Integer.parseInt(rs.getString("count(image_id)"));
 			
 				if (recuento > 0) {
 					
-					comprobacionSha=separador+"SI";
+					comprobacionSha=separador+"SI , su image_id es: "+rs.getString("image_id");
 					
 					imagenesRepetidas.add(ComprobarSha.getLectura().get(x));
-
 				}
 
 				else {

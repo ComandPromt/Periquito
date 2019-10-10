@@ -1,5 +1,6 @@
 package utils;
 
+import java.text.NumberFormat;
 import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,6 +17,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -65,6 +67,24 @@ public abstract class Metodos {
 		throw new IllegalStateException("Utility class");
 	}
 
+	public static int calcularPorcentaje(int valor,int total) {
+		
+		float resultado=(valor*100)/total;
+		
+		int salida;
+		
+		NumberFormat numberFormat = NumberFormat.getInstance();
+
+		numberFormat.setMaximumFractionDigits(0);
+
+		numberFormat.setRoundingMode( RoundingMode.DOWN);
+
+		salida=Integer.parseInt(numberFormat.format(resultado));
+		
+		return salida;
+		
+	}
+	
 	public static String obtenerEnlaceCms(String servidor, String carpeta) {
 
 		String separador = "";
@@ -390,7 +410,8 @@ public abstract class Metodos {
 			String busqueda;
 
 			String salida;
-
+			boolean error=false;
+			
 			for (int i = 0; i < files.size(); i++) {
 
 				imagen = files.get(i).substring(files.get(i).lastIndexOf(separador) + 1,
@@ -408,6 +429,8 @@ public abstract class Metodos {
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
+						i = files.size();
+						error=true;
 					}
 
 					else {
@@ -453,7 +476,11 @@ public abstract class Metodos {
 			if (filtro) {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
 			} else {
-				mensaje("Los archivos se han movido correctamente", 2);
+				
+				if(!error) {
+					mensaje("Los archivos se han movido correctamente", 2);
+				}
+
 			}
 
 		}
@@ -476,6 +503,8 @@ public abstract class Metodos {
 
 			String salida;
 
+			boolean error=false;
+			
 			for (int i = 0; i < files.length; i++) {
 
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
@@ -493,6 +522,8 @@ public abstract class Metodos {
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
+						i =files.length;
+						error=true;
 					}
 
 					else {
@@ -537,8 +568,14 @@ public abstract class Metodos {
 
 			if (filtro) {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
-			} else {
-				mensaje("Los archivos se han movido correctamente", 2);
+			} 
+			
+			else {
+				
+				if(!error) {
+					mensaje("Los archivos se han movido correctamente", 2);
+				}
+				
 			}
 
 		}
@@ -1408,7 +1445,7 @@ public abstract class Metodos {
 
 					}
 
-					if (extension.equals(".") || extension.equals(extraerExtension(fichero))) {
+					if (extension.equals(".") || extensionArchivo.equals("png") || extension.equals(extraerExtension(fichero))) {
 						lista.add(fichero);
 					}
 
@@ -1629,6 +1666,10 @@ public abstract class Metodos {
 	public static void crearCarpetas() {
 		File directorio = new File("Config/imagenes");
 		directorio.mkdir();
+		
+		directorio = new File("Config/imagenes/bn");
+		directorio.mkdir();
+		
 		directorio = new File("Config/imagenes_para_recortar");
 		directorio.mkdir();
 		directorio = new File("Config/imagenes_para_recortar/recortes");

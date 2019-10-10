@@ -28,6 +28,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -59,16 +60,23 @@ import utils.PhotoFrame;
 @SuppressWarnings("serial")
 
 public class MenuPrincipal extends JFrame implements ActionListener, ChangeListener, MyInterface {
-public static LinkedList<String> idCategorias = new LinkedList<>();
+	
+	public static LinkedList<String> idCategorias = new LinkedList<>();
 
 	public static LinkedList<String> getIdCategorias() {
-	return idCategorias;
-}
+		return idCategorias;
+	}
 
-public static void setIdCategorias(String string) {
-	idCategorias.add(string);
-}
+	public static void setIdCategorias(String string) {
+		idCategorias.add(string);
+	}
 
+	JSONObject json;
+
+	Progreso progreso;
+
+	JCheckBox chckbxNewCheckBox;
+	
 	private int tecla1, tecla2, vuelta;
 
 	private JMenuBar menuopciones;
@@ -97,7 +105,7 @@ public static void setIdCategorias(String string) {
 
 	private JTextField textField;
 
-	private JRadioButton rdbtnNewRadioButton = new JRadioButton("");
+	private JCheckBox rdbtnNewRadioButton = new JCheckBox("");
 
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 
@@ -111,7 +119,7 @@ public static void setIdCategorias(String string) {
 
 	private JMenuItem mmenu1, mmenu2, mmenu3, mmenu4, mmenu5;
 
-	static LinkedList<String> listaImagenes = new LinkedList<>();
+	 static LinkedList<String> listaImagenes = new LinkedList<>();
 
 	static LinkedList<String> categorias = new LinkedList<>();
 
@@ -679,7 +687,6 @@ public static void setIdCategorias(String string) {
 		try {
 			Metodos.probarconexion("www.google.com");
 		} catch (UnknownHostException e) {
-			conexion = false;
 			Metodos.mensaje("No hay conexión a internet", 3);
 		}
 
@@ -1410,7 +1417,7 @@ public static void setIdCategorias(String string) {
 	private void subirFotos() {
 
 		try {
-
+			
 			if (Metodos.pingURL("http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
 					+ "/index.php")) {
 
@@ -1426,6 +1433,7 @@ public static void setIdCategorias(String string) {
 				if (comboBox.getSelectedIndex() == -1) {
 
 					Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
+					
 					new Bd().setVisible(true);
 
 				} else {
@@ -1451,7 +1459,9 @@ public static void setIdCategorias(String string) {
 						}
 
 						else {
-
+			
+							
+							
 							String parametros = "";
 							String extension = "";
 							StringBuilder bld = new StringBuilder();
@@ -1503,16 +1513,15 @@ public static void setIdCategorias(String string) {
 
 										s = conexion.createStatement();
 
-										listaImagenes = Metodos.directorio(directorioImagenes, "png");
-
-										if (listaImagenes.size() > 0) {
-											subirArchivos(s, categoria, imagenesBD, "png");
-										}
-
 										listaImagenes = Metodos.directorio(directorioImagenes, "jpg");
 
 										if (listaImagenes.size() > 0) {
+											
+				
+																						
 											subirArchivos(s, categoria, imagenesBD, "jpg");
+											
+											
 										}
 
 										if (rdbtnNewRadioButton.isSelected()) {
@@ -1647,7 +1656,7 @@ public static void setIdCategorias(String string) {
 		int imageId = 0;
 
 		try {
-
+			
 			String imagen;
 
 			Connection conexionSubida = Metodos.conexionBD();
@@ -1657,8 +1666,94 @@ public static void setIdCategorias(String string) {
 
 			String imagenbd = "";
 
-			for (int i = 0; i < listaImagenes.size(); i++) {
+			int y;
+			
+			int total;
+				
+			progreso.setProgressBarRecorridoValor(0);
 
+					if(!chckbxNewCheckBox.isSelected()){
+	
+						total=listaImagenes.size();
+						
+						LinkedList<String> imagenesBN = new LinkedList<>();
+						
+						LinkedList<String> imagenesColor = new LinkedList<>();
+						
+						String ruta="http://"+lecturaurl[0]+"/bn-image-check-api/index.php";
+						
+						if(!lecturaurl[1].isBlank()) {
+							ruta="http://"+lecturaurl[0]+"/"+lecturaurl[1]+"/bn-image-check-api/index.php";
+						}
+						
+						for (int i = 0; i < total; i++) {
+					
+							WebDriver chrome = new ChromeDriver();
+												
+							chrome.get(ruta);
+
+							imagen = directorioActual + "Config" + separador + "imagenes" + separador + listaImagenes.get(i);
+						
+							chrome.findElement(By.name("uploadedfile")).sendKeys(imagen);
+						
+							chrome.findElement(By.name("subir")).click();
+								
+							String text = chrome.findElement(By.cssSelector("pre")).getText();
+						
+							chrome.close();
+						
+							imagen = listaImagenes.get(i);
+							
+							json = new JSONObject(text);
+						
+							boolean resultado= json.getBoolean("resultado");
+							
+							int respuesta = json.getInt("respuesta");
+										
+							if(respuesta==200 && resultado ) {
+							
+								imagenesBN.add(imagen);
+							}
+							
+							else {
+								
+								if(respuesta==200 && !resultado ) {
+									imagenesColor.add(imagen);
+								}
+								
+							}
+							
+						}
+						
+						if(!imagenesBN.isEmpty()) {
+							
+							for(int i=0;i<imagenesBN.size();i++) {
+								
+								Files.move(FileSystems.getDefault().getPath(directorioActual + "Config" + separador + "imagenes" + separador +imagenesBN.get(i)), FileSystems.getDefault().getPath(
+
+										directorioActual + "Config" + separador + "imagenes" + separador + "bn"+separador+imagenesBN.get(i)
+
+								), StandardCopyOption.REPLACE_EXISTING);
+						
+							}
+													
+						}
+						
+						if(!imagenesColor.isEmpty()) {
+							
+							listaImagenes.clear();
+							
+							listaImagenes=imagenesColor;
+						}
+							
+					}	
+			
+					total=listaImagenes.size();
+					
+			for (int i = 0; i < total; i++) {
+				
+				y=i;
+				
 				imagen = directorioActual + "Config" + separador + "imagenes" + separador + listaImagenes.get(i);
 
 				rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images" + " WHERE sha256='"
@@ -1670,6 +1765,10 @@ public static void setIdCategorias(String string) {
 
 				if (comprobarSha == 0) {
 
+					progreso.setProgressBarRecorrido("Imagen "+(++y)+" de "+total);
+					
+					progreso.setProgressBar(Metodos.calcularPorcentaje(y,total));
+					
 					imageId = maximo;
 
 					imagenbd = imagenesBD.get(i).toString().substring(0, imagenesBD.get(i).toString().length() - 3)
@@ -1678,11 +1777,13 @@ public static void setIdCategorias(String string) {
 					File f1 = new File(imagen);
 
 					File f2 = new File(directorioActual + "Config" + separador + "imagenes", separador + imagenbd);
-
+					
 					f1.renameTo(f2);
 
 					imagen = directorioActual + "Config" + separador + "imagenes" + separador + imagenbd;
 
+				
+					
 					s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','" + categoria
 							+ "','1','" + textField.getText().trim() + "','','','" + Metodos.saberFecha() + "','1','"
 							+ imagenbd + "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen) + "',DEFAULT,DEFAULT)");
@@ -1692,7 +1793,7 @@ public static void setIdCategorias(String string) {
 					maximo++;
 
 				}
-
+			
 			}
 
 			conexionSubida.close();
@@ -1707,9 +1808,7 @@ public static void setIdCategorias(String string) {
 
 			conexionBorrado.close();
 
-			maximo = 0;
-
-			return maximo;
+			return 0;
 		}
 
 		return maximo;
@@ -1791,7 +1890,6 @@ public static void setIdCategorias(String string) {
 						//
 					}
 				}
-
 
 				if (tecla1 == 70 && tecla2 == 17 || tecla1 == 17 && tecla2 == 70) {
 
@@ -1881,9 +1979,25 @@ public static void setIdCategorias(String string) {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
+				try {
+					
+					progreso= new Progreso();
+					progreso.setVisible(true);
 
-				subirFotos();
-
+					
+					subirFotos();		
+							
+							
+						
+											
+					
+										
+				} catch (Exception e1) {
+					
+					progreso.dispose();
+				}
+			
 			}
 
 		});
@@ -1920,51 +2034,77 @@ public static void setIdCategorias(String string) {
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gifanim.png")));
+		
+		chckbxNewCheckBox = new JCheckBox("B / N");
+		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addGap(21)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(lblNewLabel).addGap(6).addComponent(rdbtnNewRadioButton))
+		layout.setHorizontalGroup(
+			layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addGap(21)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+									.addGap(6)
+									.addComponent(rdbtnNewRadioButton))
 								.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
 								.addComponent(label2)))
-						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(label3,
-								GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addGap(54)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false).addComponent(textField)
-								.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE).addComponent(
-										comboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-						.addGroup(layout.createSequentialGroup().addGap(101).addComponent(button,
-								GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)))
-				.addGap(46)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label2, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup().addGap(18)
-												.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-														.addComponent(button, GroupLayout.PREFERRED_SIZE, 71,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(lblNewLabel)))
-										.addGroup(layout.createSequentialGroup().addGap(46)
-												.addComponent(rdbtnNewRadioButton))))
-								.addGroup(layout.createSequentialGroup().addGap(22).addComponent(comboBox,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
-						.addGap(23)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label4))
-						.addGap(45)));
+						.addGroup(layout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(label3, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+							.addGap(54)
+							.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(textField)
+								.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+								.addComponent(comboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+						.addGroup(layout.createSequentialGroup()
+							.addGap(101)
+							.addComponent(button, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
+							.addGap(18)
+							.addComponent(chckbxNewCheckBox)))
+					.addGap(45))
+		);
+		layout.setVerticalGroup(
+			layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label2, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+							.addComponent(label3, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
+									.addGap(18)
+									.addComponent(button, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup()
+									.addGap(30)
+									.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup()
+									.addGap(44)
+									.addComponent(rdbtnNewRadioButton)))
+							.addGap(8)
+							.addGap(15))
+						.addGroup(layout.createSequentialGroup()
+							.addGap(22)
+							.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(chckbxNewCheckBox)
+							.addGap(48)))
+					.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label4))
+					.addGap(45))
+		);
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(560, 460));
 		setLocationRelativeTo(null);
