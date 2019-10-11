@@ -1413,9 +1413,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private void subirFotos() {
 
 		try {
-			
-			if (Metodos.pingURL("http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
-					+ "/index.php")) {
+
 
 				Metodos.cerrarNavegador();
 
@@ -1437,7 +1435,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					if (!textField.getText().trim().isEmpty()) {
 
 						listaImagenes = Metodos.directorio(directorioImagenes, ".");
-
+	
 						if (listaImagenes.isEmpty() || user.length != 2) {
 
 							if (user.length != 2) {
@@ -1456,7 +1454,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						else {
 			
-							
+
 							
 							String parametros = "";
 							String extension = "";
@@ -1512,12 +1510,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										listaImagenes = Metodos.directorio(directorioImagenes, "jpg");
 
 										if (listaImagenes.size() > 0) {
-											
-				
-																						
+																																
 											subirArchivos(s, categoria, imagenesBD, "jpg");
-											
-											
 										}
 
 										if (rdbtnNewRadioButton.isSelected()) {
@@ -1621,15 +1615,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					}
 
 				}
-
-			}
-
-			else {
-
-				Metodos.mensaje("Por favor, revisa la configuración", 3);
-				new Config2().setVisible(true);
-			}
-
+		
 		} 
 		
 		catch (Exception e4) {
@@ -1777,9 +1763,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					f1.renameTo(f2);
 
 					imagen = directorioActual + "Config" + separador + "imagenes" + separador + imagenbd;
-
-				
-					
+	
 					s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','" + categoria
 							+ "','1','" + textField.getText().trim() + "','','','" + Metodos.saberFecha() + "','1','"
 							+ imagenbd + "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen) + "',DEFAULT,DEFAULT)");
@@ -1811,8 +1795,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	public void initComponents() throws IOException {
-
-		rdbtnNewRadioButton.setSelected(true);
 		Metodos.crearCarpetas();
 
 		if (Metodos.comprobarArchivo("Config/Config.txt", true)) {

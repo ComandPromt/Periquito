@@ -18,7 +18,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.math.RoundingMode;
-import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -1434,24 +1433,19 @@ public abstract class Metodos {
 
 				comprobacion = !folder.isDirectory();
 
-				if (comprobacion && extension.equals(".")
-						&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")
-								|| extensionArchivo.equals("gif"))
-						|| comprobacion && extensionArchivo.equals(extension)) {
+				if (comprobacion && fichero.length()>5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
-					if (fichero.substring(0, fichero.length() - 5).contains(".")) {
-
-						renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
-
-					}
-
-					if (extension.equals(".") || extensionArchivo.equals("png") || extension.equals(extraerExtension(fichero))) {
-						lista.add(fichero);
-					}
+					renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
 
 				}
+	
+				if (comprobacion && (extension.equals(".") &&  extensionArchivo.length()==3|| extension.equals(extraerExtension(fichero))||extensionArchivo.equals("png"))) {
 
+					lista.add(fichero);
+				}
+				
 			}
+			
 		}
 
 		return lista;
@@ -1493,7 +1487,9 @@ public abstract class Metodos {
 
 			mensaje = imagenes.size();
 
-		} else {
+		}
+		
+		else {
 			mensaje = 0;
 		}
 
@@ -1639,28 +1635,6 @@ public abstract class Metodos {
 		}
 
 		return result;
-	}
-
-	public static boolean pingURL(String url) {
-
-		int timeout = 100000;
-
-		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
-
-		try {
-
-			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-			connection.setConnectTimeout(timeout);
-			connection.setReadTimeout(timeout);
-			connection.setRequestMethod("HEAD");
-
-			int responseCode = connection.getResponseCode();
-
-			return (200 <= responseCode && responseCode <= 399);
-
-		} catch (IOException exception) {
-			return false;
-		}
 	}
 
 	public static void crearCarpetas() {
