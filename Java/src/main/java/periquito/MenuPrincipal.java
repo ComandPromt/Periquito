@@ -115,8 +115,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JMenuItem mmenu1, mmenu2, mmenu3, mmenu4, mmenu5;
 
-	 static LinkedList<String> listaImagenes = new LinkedList<>();
+	static LinkedList<String> listaImagenes = new LinkedList<>();
 
+	boolean subidaPng=false;
+	boolean subidaJpg=false;
+	
 	static LinkedList<String> categorias = new LinkedList<>();
 
 	static boolean conexion = true;
@@ -1507,13 +1510,20 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 										s = conexion.createStatement();
 
+										listaImagenes = Metodos.directorio(directorioImagenes, "png");
+
+										if (listaImagenes.size() > 0) {
+											subirArchivos(s, categoria, imagenesBD, "png");
+											subidaPng=true;
+										}
+
 										listaImagenes = Metodos.directorio(directorioImagenes, "jpg");
 
 										if (listaImagenes.size() > 0) {
-																																
 											subirArchivos(s, categoria, imagenesBD, "jpg");
+											subidaJpg=true;
 										}
-
+										
 										if (rdbtnNewRadioButton.isSelected()) {
 
 											listaImagenes = Metodos.directorio(directorioImagenes, "gif");
@@ -1578,9 +1588,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 										Metodos.mensaje("Las imágenes se han subio correctamente ", 2);
 
-										Metodos.eliminarArchivos("png", directorioImagenes);
-
-										Metodos.eliminarArchivos("jpg", directorioImagenes);
+										if(subidaPng) {
+											Metodos.eliminarArchivos("png", directorioImagenes);
+										}
+								
+										if(subidaJpg) {
+											Metodos.eliminarArchivos("jpg", directorioImagenes);
+										}
+										
 
 										if (gif) {
 											Metodos.eliminarArchivos("gif", directorioImagenes);
@@ -1759,11 +1774,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					File f1 = new File(imagen);
 
 					File f2 = new File(directorioActual + "Config" + separador + "imagenes", separador + imagenbd);
-					
+
 					f1.renameTo(f2);
 
 					imagen = directorioActual + "Config" + separador + "imagenes" + separador + imagenbd;
 	
+
+					
 					s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','" + categoria
 							+ "','1','" + textField.getText().trim() + "','','','" + Metodos.saberFecha() + "','1','"
 							+ imagenbd + "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen) + "',DEFAULT,DEFAULT)");

@@ -1433,19 +1433,24 @@ public abstract class Metodos {
 
 				comprobacion = !folder.isDirectory();
 
-				if (comprobacion && fichero.length()>5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
+				if (comprobacion && extension.equals(".")
+						&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")
+								|| extensionArchivo.equals("gif"))
+						|| comprobacion && extensionArchivo.equals(extension)) {
 
-					renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
+					if (fichero.substring(0, fichero.length() - 5).contains(".")) {
+
+						renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
+
+					}
+
+					if (extension.equals(".") || extension.equals(extraerExtension(fichero))) {
+						lista.add(fichero);
+					}
 
 				}
-	
-				if (comprobacion && (extension.equals(".") &&  extensionArchivo.length()==3|| extension.equals(extraerExtension(fichero))||extensionArchivo.equals("png"))) {
 
-					lista.add(fichero);
-				}
-				
 			}
-			
 		}
 
 		return lista;
@@ -1679,7 +1684,7 @@ public abstract class Metodos {
 					+ listaImagenes.get(i));
 
 			File f2 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
-					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto) + salida);
+					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto)+"."+ extraerExtension(listaImagenes.get(i)));
 
 			f1.renameTo(f2);
 
@@ -1696,6 +1701,7 @@ public abstract class Metodos {
 
 			f1 = new File(ruta + list.get(x));
 			f2 = new File(ruta + Metodos.eliminarPuntos(list.get(x)));
+
 			f1.renameTo(f2);
 		}
 
@@ -1705,7 +1711,6 @@ public abstract class Metodos {
 
 		File f1 = new File(ruta1);
 		File f2 = new File(ruta2);
-
 		f1.renameTo(f2);
 
 	}
