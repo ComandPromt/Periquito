@@ -1046,11 +1046,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mmenu5.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				try {
 
-					if (!lecturaurl[1].isEmpty()) {
-						carpeta = "/" + lecturaurl[1];
-					}
+					
 
 					Metodos.abrirCarpeta("http://" + lecturaurl[0] + carpeta);
 
@@ -1353,6 +1352,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu7.add(menuItem19);
 
 		Metodos.comprobarArchivo("Config", false);
+		
+		if (!lecturaurl[1].isEmpty()) {
+			carpeta = "/" + lecturaurl[1];
+		}
+		
 		initComponents();
 		this.setVisible(true);
 	}
@@ -1667,83 +1671,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			
 			int total;
 				
-			progreso.setProgressBarRecorridoValor(0);
-
-					if(!chckbxNewCheckBox.isSelected()){
-	
-						total=listaImagenes.size();
-						
-						LinkedList<String> imagenesBN = new LinkedList<>();
-						
-						LinkedList<String> imagenesColor = new LinkedList<>();
-						
-						String ruta="http://"+lecturaurl[0]+"/bn-image-check-api/index.php";
-						
-						if(!lecturaurl[1].isBlank()) {
-							ruta="http://"+lecturaurl[0]+"/"+lecturaurl[1]+"/bn-image-check-api/index.php";
-						}
-						
-						for (int i = 0; i < total; i++) {
-					
-							WebDriver chrome = new ChromeDriver();
-												
-							chrome.get(ruta);
-
-							imagen = directorioActual + "Config" + separador + "imagenes" + separador + listaImagenes.get(i);
-						
-							chrome.findElement(By.name("uploadedfile")).sendKeys(imagen);
-						
-							chrome.findElement(By.name("subir")).click();
-								
-							String text = chrome.findElement(By.cssSelector("pre")).getText();
-						
-							chrome.close();
-						
-							imagen = listaImagenes.get(i);
-							
-							json = new JSONObject(text);
-						
-							boolean resultado= json.getBoolean("resultado");
-							
-							int respuesta = json.getInt("respuesta");
-										
-							if(respuesta==200 && resultado ) {
-							
-								imagenesBN.add(imagen);
-							}
-							
-							else {
-								
-								if(respuesta==200 && !resultado ) {
-									imagenesColor.add(imagen);
-								}
-								
-							}
-							
-						}
-						
-						if(!imagenesBN.isEmpty()) {
-							
-							for(int i=0;i<imagenesBN.size();i++) {
-								
-								Files.move(FileSystems.getDefault().getPath(directorioActual + "Config" + separador + "imagenes" + separador +imagenesBN.get(i)), FileSystems.getDefault().getPath(
-
-										directorioActual + "Config" + separador + "imagenes" + separador + "bn"+separador+imagenesBN.get(i)
-
-								), StandardCopyOption.REPLACE_EXISTING);
-						
-							}
-													
-						}
-						
-						if(!imagenesColor.isEmpty()) {
-							
-							listaImagenes.clear();
-							
-							listaImagenes=imagenesColor;
-						}
-							
-					}	
+			progreso.setProgressBarRecorrido("Resultado de la subida");
+			progreso.setProgressBar(0);	
 			
 					total=listaImagenes.size();
 					
@@ -1977,18 +1906,98 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				
 				try {
 					
+					String imagen;
+					
+					if(!chckbxNewCheckBox.isSelected()){
+						
+						lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+						
+						int total=listaImagenes.size();
+						
+						LinkedList<String> imagenesBN = new LinkedList<>();
+						
+						LinkedList<String> imagenesColor = new LinkedList<>();
+						
+						String ruta="http://"+lecturaurl[0]+"/bn-image-check-api/index.php";
+						
+						lecturaurl[1]= lecturaurl[1].trim();
+						
+						lecturaurl[1] = lecturaurl[1].replace("  ", " ");
+						
+						if(lecturaurl[1].length()>1) {
+							ruta="http://"+lecturaurl[0]+"/"+lecturaurl[1]+"/bn-image-check-api/index.php";
+						}
+						
+						for (int i = 0; i < total; i++) {
+					
+							WebDriver chrome = new ChromeDriver();
+												
+							chrome.get(ruta);
+
+							imagen = directorioActual + "Config" + separador + "imagenes" + separador + listaImagenes.get(i);
+						
+							chrome.findElement(By.name("uploadedfile")).sendKeys(imagen);
+						
+							chrome.findElement(By.name("subir")).click();
+								
+							String text = chrome.findElement(By.cssSelector("pre")).getText();
+						
+							chrome.close();
+						
+							imagen = listaImagenes.get(i);
+							
+							json = new JSONObject(text);
+						
+							boolean resultado= json.getBoolean("resultado");
+							
+							int respuesta = json.getInt("respuesta");
+										
+							if(respuesta==200 && resultado ) {
+							
+								imagenesBN.add(imagen);
+							}
+							
+							else {
+								
+								if(respuesta==200 && !resultado ) {
+									imagenesColor.add(imagen);
+								}
+								
+							}
+							
+						}
+						
+						if(!imagenesBN.isEmpty()) {
+							
+							for(int i=0;i<imagenesBN.size();i++) {
+								
+								Files.move(FileSystems.getDefault().getPath(directorioActual + "Config" + separador + "imagenes" + separador +imagenesBN.get(i)), FileSystems.getDefault().getPath(
+
+										directorioActual + "Config" + separador + "imagenes" + separador + "bn"+separador+imagenesBN.get(i)
+
+								), StandardCopyOption.REPLACE_EXISTING);
+						
+							}
+													
+						}
+						
+						if(!imagenesColor.isEmpty()) {
+							
+							listaImagenes.clear();
+							
+							listaImagenes=imagenesColor;
+						}
+							
+					}
+					
 					progreso= new Progreso();
 					progreso.setVisible(true);
-
 					
 					subirFotos();		
-							
-							
-						
-											
-					
-										
-				} catch (Exception e1) {
+														
+				} 
+				
+				catch (Exception e1) {
 					
 					progreso.dispose();
 				}
