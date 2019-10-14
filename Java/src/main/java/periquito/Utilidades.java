@@ -172,7 +172,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 												+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
 												+ "',DEFAULT,'" + imagen
 												+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
-												+ Metodos.getSHA256Checksum(files[i].toString()) + "');");
+												+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
 								fS.newLine();
 
 								id++;
@@ -191,6 +191,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 								Metodos.mensaje("Se han recuperado " + i + " registros", 2);
 							}
 						} catch (Exception e) {
+							e.printStackTrace();
 							Metodos.mensaje("Error al recuperar la BD", 1);
 						}
 					} else {

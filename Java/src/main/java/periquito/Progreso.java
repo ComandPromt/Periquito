@@ -23,7 +23,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import rojerusan.componentes.RSProgressBar;
 import utils.Metodos;
 import utils.MyInterface;
@@ -40,6 +39,7 @@ public class Progreso extends javax.swing.JFrame implements ActionListener, Chan
 	RSProgressBar progressBar = new RSProgressBar();
 	
 	public Progreso() throws IOException {
+		setAlwaysOnTop(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
 		setTitle("Periquito v3 Uploading");
 		setType(Type.UTILITY);

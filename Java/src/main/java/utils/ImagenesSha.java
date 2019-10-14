@@ -147,7 +147,9 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				}
 
 				else {
+					
 					comprobacionSha=separador+"NO";
+					
 					imagenes.add(ComprobarSha.getRutas().get(0).substring(0,
 							ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
 							+ MenuPrincipal.getSeparador()+ComprobarSha.getLectura().get(x));
@@ -189,6 +191,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 												ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
 												+ MenuPrincipal.getSeparador());
 
+								Metodos.mensaje("Se han borrado correctamente todas las imágenes que ya están en el CMS", 2);
 							}
 						});
 						
@@ -213,6 +216,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 								try {
 									Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador());
 									frmShaImages.dispose();
+									Metodos.mensaje("Las imágenes se han movido correctamente", 2);
 								} 
 								
 								catch (IOException e1) {
@@ -277,7 +281,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 									});
 
 			frmShaImages.setVisible(true);
-
+						
 		}
 
 		catch (Exception e) {

@@ -65,6 +65,8 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 		try {
 
+			rutas.clear();
+			
 			lectura.clear();
 
 			shaimages.clear();

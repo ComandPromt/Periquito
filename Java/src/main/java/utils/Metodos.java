@@ -170,6 +170,7 @@ public abstract class Metodos {
 			in.close();
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			//
 		}
 	}
@@ -316,13 +317,12 @@ public abstract class Metodos {
 
 		Metodos.conversion("JPEG", "jpg");
 
-		Metodos.conversion("webp", "png");
-
 		Metodos.conversion("JPG", "jpg");
 
 		Metodos.conversion("PNG", "png");
 
 		Metodos.conversion("GIF", "gif");
+
 	}
 
 	public static JSONObject readJsonFromUrl(String url) throws IOException {
@@ -450,7 +450,7 @@ public abstract class Metodos {
 							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
 							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
-
+		
 							renombrar(origen, salida);
 
 							origen = salida;
@@ -531,7 +531,7 @@ public abstract class Metodos {
 						busqueda = eliminarPuntos(busqueda);
 
 						salida = origen.substring(0, origen.lastIndexOf(separador)) + separador + busqueda;
-
+					
 						renombrar(origen, salida);
 
 						origen = salida;
@@ -543,20 +543,19 @@ public abstract class Metodos {
 							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
 							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
-
+						
 							renombrar(origen, salida);
 
 							origen = salida;
 						}
 
+						
 						Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
 
 								destino + separador
 										+ origen.substring(origen.lastIndexOf(separador) + 1, origen.length())
 
 						), StandardCopyOption.REPLACE_EXISTING);
-
-						convertir();
 
 					}
 
@@ -950,16 +949,6 @@ public abstract class Metodos {
 		return categorias;
 	}
 
-	public static void eliminarArchivos(String extension, String ruta) {
-
-		LinkedList<String> listaImagenes = Metodos.directorio(ruta, extension);
-
-		for (int i = 0; i < listaImagenes.size(); i++) {
-
-			Metodos.eliminarFichero(ruta + MenuPrincipal.getSeparador() + listaImagenes.get(i));
-		}
-	}
-
 	public static void eliminarArchivos(List<String> listaImagenes, String ruta) {
 
 		for (int i = 0; i < listaImagenes.size(); i++) {
@@ -1336,6 +1325,10 @@ public abstract class Metodos {
 			if (extension.equals("peg")) {
 				extension = "jpg";
 			}
+			
+			if (extension.equals("ebp")) {
+				extension = "webp";
+			}
 
 		}
 
@@ -1412,7 +1405,9 @@ public abstract class Metodos {
 		File f = new File(ruta);
 
 		if (f.exists()) {
-
+			
+			lista.clear();
+			
 			File[] ficheros = f.listFiles();
 
 			String fichero = "";
@@ -1422,7 +1417,7 @@ public abstract class Metodos {
 			File folder;
 
 			boolean comprobacion;
-
+				
 			for (int x = 0; x < ficheros.length; x++) {
 
 				fichero = ficheros[x].getName();
@@ -1433,22 +1428,16 @@ public abstract class Metodos {
 
 				comprobacion = !folder.isDirectory();
 
-				if (comprobacion && extension.equals(".")
-						&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")
-								|| extensionArchivo.equals("gif"))
-						|| comprobacion && extensionArchivo.equals(extension)) {
-
-					if (fichero.substring(0, fichero.length() - 5).contains(".")) {
+					if (comprobacion && fichero.length()>5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
 						renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
 
 					}
-
-					if (extension.equals(".") || extension.equals(extraerExtension(fichero))) {
+			
+					if (comprobacion && extension.equals("webp") && extensionArchivo.equals("webp") || comprobacion && extension.equals("jpeg") && extensionArchivo.equals("jpg") ||comprobacion && extension.equals(".") || comprobacion && extension.equals(extensionArchivo)) {
+	
 						lista.add(fichero);
 					}
-
-				}
 
 			}
 		}
@@ -1675,21 +1664,22 @@ public abstract class Metodos {
 		int resto = 3;
 
 		if (extension.length() == 4) {
-			resto = 4;
+			resto = 5;
 		}
-
+	
 		for (int i = 0; i < listaImagenes.size(); i++) {
-
+	
 			File f1 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
 					+ listaImagenes.get(i));
 
 			File f2 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
-					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto)+"."+ extraerExtension(listaImagenes.get(i)));
+					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto)+"."+salida);
 
 			f1.renameTo(f2);
 
 		}
-
+		
+		listaImagenes.clear();
 	}
 
 	public static void renombrarArchivos(List<String> list, String ruta) {
@@ -1711,6 +1701,7 @@ public abstract class Metodos {
 
 		File f1 = new File(ruta1);
 		File f2 = new File(ruta2);
+
 		f1.renameTo(f2);
 
 	}
