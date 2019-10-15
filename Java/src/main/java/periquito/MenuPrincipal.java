@@ -82,7 +82,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JMenuBar menuopciones;
 
-	private JMenu menu, menu1, menu2, menu3, menu4, mnConfig;
+	private JMenu mnAcciones, menu1, menu2, menu3, menu4, mnConfig;
 
 	private JMenuItem menuItem, menuItem1, menuItem4;
 
@@ -106,7 +106,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JTextField textField;
 
-	private JCheckBox rdbtnNewRadioButton = new JCheckBox("Subir GIF");
+	private JCheckBox rdbtnNewRadioButton = new JCheckBox(" Subir GIF");
 
 	private static String[] lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
 
@@ -118,7 +118,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JMenu mnNewMenu, mnNewMenu1;
 
-	private JMenuItem mmenu1, mmenu2, mmenu3, mmenu4, mmenu5;
+	private JMenuItem mmenu1, mmenu2, mmenu3, mmenu5;
 
 	static LinkedList<String> listaImagenes = new LinkedList<>();
 
@@ -148,16 +148,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	boolean gif = false;
 
-	JSeparator miSeparator7;
-
 	JSeparator miSeparator8;
 
 	JSeparator miSeparator9;
 	private JMenu mnNewMenu_1;
-	private JMenu mnNewMenu_2;
 	private JMenuItem mntmNewMenuItem_1;
 	private JMenu mnNewMenu_3;
 	private JCheckBox soloGif;
+	private JSeparator separator_2;
+	private JMenuItem mntmNewMenuItem_2;
+	private JSeparator separator_3;
+	private JMenuItem mntmNewMenuItem_3;
+	private JSeparator separator_6;
 
 	public static String getDirectorioImagenes() {
 		return directorioImagenes;
@@ -728,18 +730,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuopciones = new JMenuBar();
 		setJMenuBar(menuopciones);
 
-		menu = new JMenu("     ");
-		menu.setMnemonic(' ');
-		menu.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png")));
-		menu.setForeground(Color.BLACK);
-		menu.setFont(new Font("Segoe UI", Font.BOLD, 10));
-		menu.setBackground(Color.BLACK);
-		menuopciones.add(menu);
+		mnAcciones = new JMenu("Acciones");
+		mnAcciones.setMnemonic(' ');
+		mnAcciones.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png")));
+		mnAcciones.setForeground(Color.BLACK);
+		mnAcciones.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mnAcciones.setBackground(Color.BLACK);
+		menuopciones.add(mnAcciones);
 
 		menu1 = new JMenu("Imagen");
 		menu1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gif.png")));
-		menu1.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu.add(menu1);
+		menu1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnAcciones.add(menu1);
 
 		menuItem = new JMenuItem("GIF Animator");
 		menuItem.addMouseListener(new MouseAdapter() {
@@ -860,12 +862,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu1.add(mntmNewMenuItem1);
 
 		separator1 = new JSeparator();
-		menu.add(separator1);
+		mnAcciones.add(separator1);
 
 		menu2 = new JMenu("Video");
 		menu2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_frame.png")));
-		menu2.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu.add(menu2);
+		menu2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnAcciones.add(menu2);
 
 		menuItem2 = new JMenuItem("Video 2 Frame");
 
@@ -945,12 +947,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menu2.add(menuItem3);
 
 		separator3 = new JSeparator();
-		menu.add(separator3);
+		mnAcciones.add(separator3);
 
 		menu3 = new JMenu("Base de datos   ");
 		menu3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
-		menu3.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		menu.add(menu3);
+		menu3.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnAcciones.add(menu3);
 
 		menuItem4 = new JMenuItem("Backup");
 		menuItem4.addMouseListener(new MouseAdapter() {
@@ -1018,27 +1020,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mmenu2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
 		menu3.add(mmenu2);
 
-		miSeparator7 = new JSeparator();
-		menu3.add(miSeparator7);
-
-		mmenu4 = new JMenuItem("Insertar Categorías");
-		mmenu4.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				new AgregarCategoria().setVisible(true);
-			}
-		});
-		mmenu4.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		mmenu4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/tag.png")));
-		menu3.add(mmenu4);
-
 		separator4 = new JSeparator();
-		menu.add(separator4);
+		mnAcciones.add(separator4);
 
 		mnNewMenu_3 = new JMenu("Ver");
-		mnNewMenu_3.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mnNewMenu_3.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/view.png")));
-		menu.add(mnNewMenu_3);
+		mnAcciones.add(mnNewMenu_3);
 
 		menuItem5 = new JMenuItem("Notas");
 		mnNewMenu_3.add(menuItem5);
@@ -1076,6 +1064,28 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		miSeparator8 = new JSeparator();
 		mnNewMenu_3.add(miSeparator8);
 
+		mntmNewMenuItem_3 = new JMenuItem("Categorías");
+		mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				try {
+					new Categorias().setVisible(true);
+				}
+
+				catch (Exception e1) {
+					//
+				}
+
+			}
+		});
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/tag.png")));
+		mnNewMenu_3.add(mntmNewMenuItem_3);
+
+		separator_6 = new JSeparator();
+		mnNewMenu_3.add(separator_6);
+
 		mmenu5 = new JMenuItem("CMS");
 		mnNewMenu_3.add(mmenu5);
 		mmenu5.addMouseListener(new MouseAdapter() {
@@ -1095,10 +1105,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mmenu5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/remote.png")));
 		mmenu5.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
-		menu4 = new JMenu("    ");
+		menu4 = new JMenu("Abrir");
+		menu4.setForeground(Color.BLACK);
 
 		menu4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
-		menu4.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		menu4.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		menu4.setBackground(Color.BLACK);
 		menuopciones.add(menu4);
 
@@ -1124,7 +1135,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 
 		menuItem8.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
-		menuItem8.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		menuItem8.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
 		separator9 = new JSeparator();
 		mnNewMenu.add(separator9);
@@ -1139,7 +1150,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 
 		menuItem9.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gif.png")));
-		menuItem9.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		menuItem9.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
 		separator7 = new JSeparator();
 		mnNewMenu.add(separator7);
@@ -1161,7 +1172,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 
 		menuItem10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/GIF_Extract.png")));
-		menuItem10.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		menuItem10.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
 		separator11 = new JSeparator();
 		mnNewMenu.add(separator11);
@@ -1183,7 +1194,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 
 		menuItem13.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/crop.png")));
-		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		menuItem13.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
 		mntmDownloads = new JMenuItem("Descargas");
 		mntmDownloads.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
@@ -1203,7 +1214,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		JSeparator separador6 = new JSeparator();
 		mnNewMenu.add(separador6);
-		mntmDownloads.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		mntmDownloads.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu.add(mntmDownloads);
 
 		separator8 = new JSeparator();
@@ -1224,12 +1235,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		});
 		menuItem11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
-		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		menuItem11.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
 		separator10 = new JSeparator();
 		mnNewMenu1.add(separator10);
 
 		menuItem12 = new JMenuItem("Video 2 GIF");
+		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video2frames.png")));
 		mnNewMenu1.add(menuItem12);
 		menuItem12.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1237,19 +1249,19 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				video2Frames();
 			}
 		});
-		menuItem12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
-		menuItem12.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+		menuItem12.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
 		mnConfig = new JMenu("Config  ");
 		mnConfig.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
-		mnConfig.setForeground(Color.DARK_GRAY);
+		mnConfig.setForeground(Color.BLACK);
 		mnConfig.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		mnConfig.setBackground(Color.BLACK);
 		menuopciones.add(mnConfig);
 
 		mnNewMenu_1 = new JMenu("Conexiones");
 		mnNewMenu_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/remote.png")));
-		mnNewMenu_1.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mnNewMenu_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnConfig.add(mnNewMenu_1);
 
 		menuItem14 = new JMenuItem("Local");
@@ -1340,13 +1352,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator12 = new JSeparator();
 		mnConfig.add(separator12);
 
-		mnNewMenu_2 = new JMenu("Otros");
-		mnNewMenu_2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
-		mnNewMenu_2.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		mnConfig.add(mnNewMenu_2);
-
 		menuItem17 = new JMenuItem("Backup DB");
-		mnNewMenu_2.add(menuItem17);
+		mnConfig.add(menuItem17);
 		menuItem17.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -1364,7 +1371,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem17.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
 		menuItem17.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
+		separator_2 = new JSeparator();
+		mnConfig.add(separator_2);
+
 		mntmNewMenuItem_1 = new JMenuItem("Configuración");
+		mnConfig.add(mntmNewMenuItem_1);
 		mntmNewMenuItem_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
@@ -1378,24 +1389,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			}
 		});
 
-		JSeparator separator_2 = new JSeparator();
-		mnNewMenu_2.add(separator_2);
-		mnNewMenu_2.add(mntmNewMenuItem_1);
-
 		menu7 = new JMenu("Ayuda");
 		menu7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/help.png")));
-		menu7.setForeground(Color.DARK_GRAY);
+		menu7.setForeground(Color.BLACK);
 		menu7.setFont(new Font("Segoe UI", Font.BOLD, 24));
 		menu7.setBackground(Color.BLACK);
 		menuopciones.add(menu7);
-
-		menuItem19 = new JMenuItem("Sobre");
-		menuItem19.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				new About().setVisible(true);
-			}
-		});
 
 		mmenu3 = new JMenuItem("DB Fix");
 		mmenu3.addMouseListener(new MouseAdapter() {
@@ -1411,9 +1410,26 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 			}
 		});
-		mmenu3.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		mmenu3.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mmenu3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
 		menu7.add(mmenu3);
+
+		JSeparator separator_4 = new JSeparator();
+		menu7.add(separator_4);
+
+		mntmNewMenuItem_2 = new JMenuItem("HotKeyz");
+		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new Hotkeyz().setVisible(true);
+			}
+		});
+		menu7.add(mntmNewMenuItem_2);
+		mntmNewMenuItem_2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
+		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
+		separator_3 = new JSeparator();
+		menu7.add(separator_3);
 
 		menuItem18 = new JMenuItem("IMG 2 Color");
 		menuItem18.addMouseListener(new MouseAdapter() {
@@ -1429,17 +1445,22 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 			}
 		});
-
-		JSeparator separator_4 = new JSeparator();
-		menu7.add(separator_4);
 		menuItem18.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/30-07-2018 1-07-31.png")));
-		menuItem18.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		menuItem18.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu7.add(menuItem18);
+
+		menuItem19 = new JMenuItem("Sobre");
+		menuItem19.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new About().setVisible(true);
+			}
+		});
 
 		JSeparator separator_5 = new JSeparator();
 		menu7.add(separator_5);
 		menuItem19.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/about.png")));
-		menuItem19.setFont(new Font("Segoe UI", Font.BOLD, 24));
+		menuItem19.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		menu7.add(menuItem19);
 
 		Metodos.comprobarArchivo("Config", false);
@@ -1610,10 +1631,20 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										if (rdbtnNewRadioButton.isSelected()) {
 
 											listaImagenes = Metodos.directorio(directorioImagenes, "gif");
+											int total = listaImagenes.size();
 
-											if (listaImagenes.size() > 0) {
+											if (total > 0) {
 
-												for (int i = 0; i < listaImagenes.size(); i++) {
+												int y;
+
+												for (int i = 0; i < total; i++) {
+
+													y = i;
+
+													progreso.setProgressBarRecorrido(
+															"Imagen " + (++y) + " de " + total);
+
+													progreso.setProgressBar(Metodos.calcularPorcentaje(y, total));
 
 													imagenActual = directorioImagenes + separador
 															+ listaImagenes.get(i);
@@ -1654,7 +1685,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 													}
 
 													gif = true;
-
+													imagenesSubidas.add(imagenActual);
 												}
 
 											}
@@ -1903,14 +1934,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				if (tecla1 == 112 || tecla2 == 112) {
 
-					try {
-						new AyudaComandos().setVisible(true);
-					}
-
-					catch (IOException e1) {
-						//
-					}
-
+					new Hotkeyz().setVisible(true);
 				}
 
 				if (tecla1 == 113 || tecla2 == 113) {
@@ -2172,71 +2196,74 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/gifanim.png")));
 
-		chckbxNewCheckBox = new JCheckBox("B / N");
+		chckbxNewCheckBox = new JCheckBox(" B / N");
 		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-		soloGif = new JCheckBox("Sólo GIF");
-		soloGif.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		soloGif = new JCheckBox(" Sólo GIF");
+		soloGif.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addGap(21)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(19).addComponent(label2))
+						.addGroup(layout.createSequentialGroup().addGap(21).addGroup(layout
+								.createParallelGroup(Alignment.LEADING)
+								.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+								.addGroup(layout.createSequentialGroup()
 										.addComponent(
 												lblNewLabel, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-										.addGap(6)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(soloGif)
-												.addComponent(rdbtnNewRadioButton)))
-								.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label2)))
-						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(label3,
-								GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addGap(54)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false).addComponent(textField)
-								.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
-								.addGroup(Alignment.LEADING,
-										layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-						.addGroup(layout.createSequentialGroup().addGap(72)
-								.addComponent(button, GroupLayout.PREFERRED_SIZE, 235, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(chckbxNewCheckBox)))
-				.addGap(13)));
-		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label2, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(rdbtnNewRadioButton).addComponent(soloGif)))))
+						.addGroup(layout.createSequentialGroup().addContainerGap()
+								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)))
+						.addGap(63)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(19).addComponent(comboBox,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-								.addGap(28)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addComponent(button, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 71,
-												GroupLayout.PREFERRED_SIZE)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING, false).addGroup(layout
-												.createSequentialGroup().addComponent(rdbtnNewRadioButton)
-												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-														Short.MAX_VALUE)
-												.addComponent(soloGif)).addComponent(lblNewLabel, Alignment.LEADING,
-														GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))))
-								.addGroup(layout.createSequentialGroup().addGap(48).addComponent(chckbxNewCheckBox)))
+								.addComponent(comboBox, 0, 382, Short.MAX_VALUE)
+								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+												.addGroup(layout.createSequentialGroup()
+														.addComponent(button, GroupLayout.PREFERRED_SIZE, 266,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(18).addComponent(chckbxNewCheckBox)))))
+						.addGap(42)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup()
+						.addGroup(layout
+								.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(26).addComponent(label2,
+										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+								.addGroup(
+										layout.createSequentialGroup().addGap(45).addComponent(textField,
+												GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(label3, GroupLayout.PREFERRED_SIZE, 82,
+												GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup().addGap(36).addComponent(
+										comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)))
 						.addGap(23)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(28).addComponent(chckbxNewCheckBox))
+								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(rdbtnNewRadioButton)
+												.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+														.addComponent(soloGif).addComponent(lblNewLabel))
+												.addComponent(button, GroupLayout.PREFERRED_SIZE, 71,
+														GroupLayout.PREFERRED_SIZE))))
+						.addPreferredGap(ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 								.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
 								.addComponent(label4))
-						.addGap(45)));
+						.addGap(26)));
+		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(571, 460));
+		setSize(new Dimension(673, 511));
 		setLocationRelativeTo(null);
 
 		try {
