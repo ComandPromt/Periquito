@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.TooManyListenersException;
 
 import javax.swing.GroupLayout;
@@ -31,6 +32,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import utils.DragAndDrop;
 import utils.Metodos;
@@ -51,18 +55,25 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	private JTextField nombre;
 
 	public Utilidades() {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/db.png")));
+
 		try {
+
 			if (Metodos.comprobarConexion(true)) {
 
 				Metodos.ponerCategoriasBd(comboBox);
 			}
+
 			setTitle("Periquito v3 Recomponer Imágenes");
 			setType(Type.UTILITY);
 			initComponents();
 
 			this.setVisible(true);
-		} catch (SQLException | IOException e3) {
+
+		}
+
+		catch (SQLException | IOException e3) {
 			this.dispose();
 		}
 
@@ -116,12 +127,17 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
+
 		try {
+
 			new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
+
 				public void filesDropped(java.io.File[] files) {
+
 					String nombre_input = nombre.getText().trim();
 
 					if (!MenuPrincipal.getLecturabd()[1].equals("") && !nombre_input.equals("")) {
+
 						try {
 
 							String imagen;
@@ -130,7 +146,10 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
 
 							String tabla = MenuPrincipal.getLecturabd()[3] + "images";
-							int categoria = comboBox.getSelectedIndex() + 1;
+
+							int categoria = Integer
+									.parseInt(MenuPrincipal.getIdCategorias().get(comboBox.getSelectedIndex()));
+
 							int id;
 
 							Connection conexion = Metodos.conexionBD();
@@ -146,7 +165,6 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 							else {
 								id = Integer.parseInt(rs.getString("MAX(image_id)+1"));
-
 							}
 
 							s.close();
@@ -162,44 +180,83 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 							String separador = MenuPrincipal.getSeparador();
 
 							int i;
+
+							LinkedList<String> imagenes = new LinkedList();
+
+							String carpeta = files[0].toString().substring(0,
+									files[0].toString().lastIndexOf(MenuPrincipal.getSeparador()) + 1);
+
 							for (i = 0; i < files.length; i++) {
-								imagen = files[i].toString();
-								imagen = imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length());
 
-								fS.write(
+								imagenes.add(files[i].toString().substring(
+										files[i].toString().lastIndexOf(MenuPrincipal.getSeparador()),
+										files[i].toString().length()));
+							}
 
-										"INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
-												+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
-												+ "',DEFAULT,'" + imagen
-												+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
-												+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
+							String parametros = Metodos.obtenerParametros(imagenes);
+
+							JSONObject json;
+
+							json = Metodos.apiImagenes(parametros);
+
+							JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
+
+							for (i = 0; i < imagenesBD.length(); i++) {
+
+								Metodos.renombrar(files[i].toString(), carpeta + imagenesBD.get(i));
+
+								// Comprobar si ya está subida
+
+								fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
+										+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha) + "',DEFAULT,'"
+										+ imagenesBD.get(i) + "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
+										+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
 								fS.newLine();
 
 								id++;
+
 							}
+
 							fS.close();
+
 							flS.close();
+
 							conexion = Metodos.conexionBD();
 
 							s = conexion.createStatement();
+
 							InputStream archivo = new FileInputStream("Config/SQL.sql");
+
 							Metodos.executeScript(conexion, archivo);
+
 							Metodos.eliminarFichero("Config/SQL.sql");
+
 							if (i == 1) {
 								Metodos.mensaje("Se ha recuperado 1 registro", 2);
-							} else {
+							}
+
+							else {
 								Metodos.mensaje("Se han recuperado " + i + " registros", 2);
 							}
-						} catch (Exception e) {
-							e.printStackTrace();
+
+						}
+
+						catch (Exception e) {
 							Metodos.mensaje("Error al recuperar la BD", 1);
 						}
-					} else {
+					}
+
+					else {
 						Metodos.mensaje("Por favor, rellene el nombre", 3);
 					}
+
 				}
+
 			});
-		} catch (TooManyListenersException e) {
+
+		}
+
+		catch (TooManyListenersException e) {
 			Metodos.mensaje("Error al recuperar la BD", 1);
 		}
 

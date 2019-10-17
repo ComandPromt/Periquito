@@ -1,6 +1,5 @@
 package utils;
 
-import java.text.NumberFormat;
 import java.awt.Font;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -35,6 +34,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -66,24 +66,24 @@ public abstract class Metodos {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static int calcularPorcentaje(int valor,int total) {
-		
-		float resultado=(valor*100)/total;
-		
+	public static int calcularPorcentaje(int valor, int total) {
+
+		float resultado = (valor * 100) / total;
+
 		int salida;
-		
+
 		NumberFormat numberFormat = NumberFormat.getInstance();
 
 		numberFormat.setMaximumFractionDigits(0);
 
-		numberFormat.setRoundingMode( RoundingMode.DOWN);
+		numberFormat.setRoundingMode(RoundingMode.DOWN);
 
-		salida=Integer.parseInt(numberFormat.format(resultado));
-		
+		salida = Integer.parseInt(numberFormat.format(resultado));
+
 		return salida;
-		
+
 	}
-	
+
 	public static String obtenerEnlaceCms(String servidor, String carpeta) {
 
 		String separador = "";
@@ -169,10 +169,12 @@ public abstract class Metodos {
 
 			in.close();
 
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		}
+
+		catch (Exception ex) {
 			//
 		}
+
 	}
 
 	public static void descargarFoto(String enlace) throws IOException {
@@ -394,7 +396,7 @@ public abstract class Metodos {
 		s.close();
 	}
 
-	public static void moverArchivos ( LinkedList<String> files, String separador) throws IOException {
+	public static void moverArchivos(LinkedList<String> files, String separador) throws IOException {
 
 		String imagen;
 		String comprobacion;
@@ -409,12 +411,11 @@ public abstract class Metodos {
 			String busqueda;
 
 			String salida;
-			boolean error=false;
-			
+			boolean error = false;
+
 			for (int i = 0; i < files.size(); i++) {
 
-				imagen = files.get(i).substring(files.get(i).lastIndexOf(separador) + 1,
-						files.get(i).length());
+				imagen = files.get(i).substring(files.get(i).lastIndexOf(separador) + 1, files.get(i).length());
 
 				comprobacion = extraerExtension(imagen);
 
@@ -429,7 +430,7 @@ public abstract class Metodos {
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
 						i = files.size();
-						error=true;
+						error = true;
 					}
 
 					else {
@@ -450,7 +451,7 @@ public abstract class Metodos {
 							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
 							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
-		
+
 							renombrar(origen, salida);
 
 							origen = salida;
@@ -475,8 +476,8 @@ public abstract class Metodos {
 			if (filtro) {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
 			} else {
-				
-				if(!error) {
+
+				if (!error) {
 					mensaje("Los archivos se han movido correctamente", 2);
 				}
 
@@ -485,7 +486,7 @@ public abstract class Metodos {
 		}
 
 	}
-	
+
 	public static void moverArchivosDrop(java.io.File[] files, String separador) throws IOException {
 
 		String imagen;
@@ -502,8 +503,8 @@ public abstract class Metodos {
 
 			String salida;
 
-			boolean error=false;
-			
+			boolean error = false;
+
 			for (int i = 0; i < files.length; i++) {
 
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
@@ -521,8 +522,8 @@ public abstract class Metodos {
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
-						i =files.length;
-						error=true;
+						i = files.length;
+						error = true;
 					}
 
 					else {
@@ -531,7 +532,7 @@ public abstract class Metodos {
 						busqueda = eliminarPuntos(busqueda);
 
 						salida = origen.substring(0, origen.lastIndexOf(separador)) + separador + busqueda;
-					
+
 						renombrar(origen, salida);
 
 						origen = salida;
@@ -543,13 +544,12 @@ public abstract class Metodos {
 							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
 							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
-						
+
 							renombrar(origen, salida);
 
 							origen = salida;
 						}
 
-						
 						Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(
 
 								destino + separador
@@ -566,14 +566,14 @@ public abstract class Metodos {
 
 			if (filtro) {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
-			} 
-			
+			}
+
 			else {
-				
-				if(!error) {
+
+				if (!error) {
 					mensaje("Los archivos se han movido correctamente", 2);
 				}
-				
+
 			}
 
 		}
@@ -900,7 +900,7 @@ public abstract class Metodos {
 
 			try {
 				for (int x = 0; x < categorias.size(); x++) {
-							combobox.addItem(categorias.get(x));
+					combobox.addItem(categorias.get(x));
 				}
 			}
 
@@ -923,10 +923,11 @@ public abstract class Metodos {
 			Statement s;
 
 			try {
-		
+
 				conexion = conexionBD();
 				s = conexion.createStatement();
-				rs = s.executeQuery("SELECT cat_name,cat_id FROM "+MenuPrincipal.getLecturabd()[3]+"categories WHERE cat_parent_id>0 UNION SELECT cat_name,cat_id FROM 4images_categories WHERE cat_parent_id=0 AND cat_id NOT IN (SELECT DISTINCT(cat_parent_id) FROM 4images_categories WHERE	cat_parent_id!=0) order by cat_name");
+				rs = s.executeQuery("SELECT cat_name,cat_id FROM " + MenuPrincipal.getLecturabd()[3]
+						+ "categories WHERE cat_parent_id>0 UNION SELECT cat_name,cat_id FROM 4images_categories WHERE cat_parent_id=0 AND cat_id NOT IN (SELECT DISTINCT(cat_parent_id) FROM 4images_categories WHERE	cat_parent_id!=0) order by cat_name");
 
 				while (rs.next()) {
 
@@ -934,7 +935,7 @@ public abstract class Metodos {
 
 					MenuPrincipal.setIdCategorias(rs.getString("cat_id"));
 				}
-				
+
 				s.close();
 				rs.close();
 				conexion.close();
@@ -1325,7 +1326,7 @@ public abstract class Metodos {
 			if (extension.equals("peg")) {
 				extension = "jpg";
 			}
-			
+
 			if (extension.equals("ebp")) {
 				extension = "webp";
 			}
@@ -1405,9 +1406,9 @@ public abstract class Metodos {
 		File f = new File(ruta);
 
 		if (f.exists()) {
-			
+
 			lista.clear();
-			
+
 			File[] ficheros = f.listFiles();
 
 			String fichero = "";
@@ -1417,7 +1418,7 @@ public abstract class Metodos {
 			File folder;
 
 			boolean comprobacion;
-				
+
 			for (int x = 0; x < ficheros.length; x++) {
 
 				fichero = ficheros[x].getName();
@@ -1428,16 +1429,19 @@ public abstract class Metodos {
 
 				comprobacion = !folder.isDirectory();
 
-					if (comprobacion && fichero.length()>5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
+				if (comprobacion && fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
-						renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
+					renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
 
-					}
-			
-					if (comprobacion && extension.equals("webp") && extensionArchivo.equals("webp") || comprobacion && extension.equals("jpeg") && extensionArchivo.equals("jpg") ||comprobacion && extension.equals(".") || comprobacion && extension.equals(extensionArchivo)) {
-	
-						lista.add(fichero);
-					}
+				}
+
+				if (comprobacion && extension.equals("webp") && extensionArchivo.equals("webp")
+						|| comprobacion && extension.equals("jpeg") && extensionArchivo.equals("jpg")
+						|| comprobacion && extension.equals(".")
+						|| comprobacion && extension.equals(extensionArchivo)) {
+
+					lista.add(fichero);
+				}
 
 			}
 		}
@@ -1482,7 +1486,7 @@ public abstract class Metodos {
 			mensaje = imagenes.size();
 
 		}
-		
+
 		else {
 			mensaje = 0;
 		}
@@ -1634,10 +1638,10 @@ public abstract class Metodos {
 	public static void crearCarpetas() {
 		File directorio = new File("Config/imagenes");
 		directorio.mkdir();
-		
+
 		directorio = new File("Config/imagenes/bn");
 		directorio.mkdir();
-		
+
 		directorio = new File("Config/imagenes_para_recortar");
 		directorio.mkdir();
 		directorio = new File("Config/imagenes_para_recortar/recortes");
@@ -1666,19 +1670,19 @@ public abstract class Metodos {
 		if (extension.length() == 4) {
 			resto = 5;
 		}
-	
+
 		for (int i = 0; i < listaImagenes.size(); i++) {
-	
+
 			File f1 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
 					+ listaImagenes.get(i));
 
 			File f2 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
-					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto)+"."+salida);
+					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto) + "." + salida);
 
 			f1.renameTo(f2);
 
 		}
-		
+
 		listaImagenes.clear();
 	}
 
@@ -1691,7 +1695,6 @@ public abstract class Metodos {
 
 			f1 = new File(ruta + list.get(x));
 			f2 = new File(ruta + Metodos.eliminarPuntos(list.get(x)));
-
 			f1.renameTo(f2);
 		}
 
@@ -1704,6 +1707,36 @@ public abstract class Metodos {
 
 		f1.renameTo(f2);
 
+	}
+
+	public static JSONObject apiImagenes(String parametros) throws IOException {
+		JSONObject json = readJsonFromUrl("https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=" + parametros);
+		return json;
+	}
+
+	public static String obtenerParametros(LinkedList<String> listaImagenes) {
+
+		StringBuilder bld = new StringBuilder();
+		String extension;
+
+		for (int i = 0; i < listaImagenes.size(); i++) {
+
+			extension = listaImagenes.get(i).substring(listaImagenes.get(i).length() - 3,
+					listaImagenes.get(i).length());
+
+			if (listaImagenes.size() == 1 || i + 1 == listaImagenes.size()) {
+				bld.append(i + "." + extension);
+
+			}
+
+			else {
+
+				bld.append(i + "." + extension + ",");
+			}
+
+		}
+
+		return bld.toString();
 	}
 
 }

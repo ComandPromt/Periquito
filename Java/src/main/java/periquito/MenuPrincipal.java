@@ -1570,29 +1570,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					else {
 
 						String parametros = "";
-						String extension = "";
-						StringBuilder bld = new StringBuilder();
 
 						if (user[0] != null && user[1] != null && !user[0].isEmpty() && !user[1].isEmpty()) {
 
-							for (int i = 0; i < listaImagenes.size(); i++) {
-
-								extension = listaImagenes.get(i).substring(listaImagenes.get(i).length() - 3,
-										listaImagenes.get(i).length());
-
-								if (listaImagenes.size() == 1 || i + 1 == listaImagenes.size()) {
-									bld.append(i + "." + extension);
-
-								}
-
-								else {
-
-									bld.append(i + "." + extension + ",");
-								}
-
-							}
-
-							parametros = bld.toString();
+							parametros = Metodos.obtenerParametros(listaImagenes);
 
 							if (!parametros.isEmpty()) {
 
@@ -1616,9 +1597,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 									if (!soloGif.isSelected()) {
 
-										json = Metodos.readJsonFromUrl(
-												"https://apiperiquito.herokuapp.com/recibo-json.php?imagenes="
-														+ parametros);
+										json = Metodos.apiImagenes(parametros);
 
 										JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
 
@@ -1631,6 +1610,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										if (rdbtnNewRadioButton.isSelected()) {
 
 											listaImagenes = Metodos.directorio(directorioImagenes, "gif");
+
 											int total = listaImagenes.size();
 
 											if (total > 0) {
@@ -1827,7 +1807,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						File f1 = new File(imagen);
 
-						File f2 = new File(directorioActual + "Config" + separador + "imagenes", separador + imagenbd);
+						File f2 = new File(directorioActual + "Config" + separador + "imagenes" + separador + imagenbd);
 
 						f1.renameTo(f2);
 
