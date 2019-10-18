@@ -152,7 +152,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	JSeparator miSeparator9;
 	private JMenu mnNewMenu_1;
-	private JMenuItem mntmNewMenuItem_1;
 	private JMenu mnNewMenu_3;
 	private JCheckBox soloGif;
 	private JSeparator separator_2;
@@ -160,6 +159,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JSeparator separator_3;
 	private JMenuItem mntmNewMenuItem_3;
 	private JSeparator separator_6;
+	private JMenu mnNewMenu_2;
+	private JMenuItem mntmNewMenuItem_1;
+	private JMenuItem mntmNewMenuItem_4;
 
 	public static String getDirectorioImagenes() {
 		return directorioImagenes;
@@ -1374,9 +1376,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator_2 = new JSeparator();
 		mnConfig.add(separator_2);
 
-		mntmNewMenuItem_1 = new JMenuItem("Configuración");
-		mnConfig.add(mntmNewMenuItem_1);
-		mntmNewMenuItem_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
+		mnNewMenu_2 = new JMenu("Configuración");
+		mnNewMenu_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
+		mnConfig.add(mnNewMenu_2);
+
+		mntmNewMenuItem_1 = new JMenuItem("Subida imágenes");
+		mntmNewMenuItem_1.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/remote.png")));
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1384,10 +1390,26 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				try {
 					new Configuracion().setVisible(true);
 				} catch (IOException e1) {
-					//
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
+		mnNewMenu_2.add(mntmNewMenuItem_1);
+
+		JSeparator separator_7 = new JSeparator();
+		mnNewMenu_2.add(separator_7);
+
+		mntmNewMenuItem_4 = new JMenuItem("Sonido");
+		mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/wav.png")));
+		mntmNewMenuItem_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new ConfiguracionSonido().setVisible(true);
+			}
+		});
+		mnNewMenu_2.add(mntmNewMenuItem_4);
 
 		menu7 = new JMenu("Ayuda");
 		menu7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/help.png")));
