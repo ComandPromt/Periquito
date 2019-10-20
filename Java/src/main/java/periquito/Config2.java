@@ -72,7 +72,8 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			fS.write(jTextField1.getText().trim());
 			fS.newLine();
 			fS.write(textField.getText().trim());
-
+			fS.close();
+			flS.close();
 			dispose();
 
 			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));

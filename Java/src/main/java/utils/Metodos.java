@@ -17,6 +17,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.math.RoundingMode;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -42,6 +43,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -64,6 +70,28 @@ public abstract class Metodos {
 
 	private Metodos() {
 		throw new IllegalStateException("Utility class");
+	}
+
+	public static boolean pingURL(String url) {
+
+		int timeout = 100000;
+
+		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
+
+		try {
+
+			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+			connection.setConnectTimeout(timeout);
+			connection.setReadTimeout(timeout);
+			connection.setRequestMethod("HEAD");
+
+			int responseCode = connection.getResponseCode();
+
+			return (200 <= responseCode && responseCode <= 399);
+
+		} catch (IOException exception) {
+			return false;
+		}
 	}
 
 	public static int calcularPorcentaje(int valor, int total) {
@@ -664,6 +692,25 @@ public abstract class Metodos {
 		return out;
 	}
 
+	public static void reproducirSonido(String nombreSonido, boolean repetir) {
+
+		try {
+
+			AudioInputStream audioInputStream = AudioSystem
+					.getAudioInputStream(new File(nombreSonido).getAbsoluteFile());
+
+			Clip clip = AudioSystem.getClip();
+
+			clip.open(audioInputStream);
+
+			clip.start();
+
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+			//
+		}
+
+	}
+
 	public static void muestraContenido(String archivo, String tipo, String descripcion) throws IOException {
 
 		FileReader fr = null;
@@ -808,7 +855,7 @@ public abstract class Metodos {
 
 	}
 
-	public static void exportarBd(int tipo) throws IOException {
+	public static void exportarBd() throws IOException {
 
 		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 7);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
@@ -1089,7 +1136,7 @@ public abstract class Metodos {
 		catch (Exception e) {
 
 			if (mensaje && MenuPrincipal.isConexion()) {
-				Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 2);
+				Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 3);
 			}
 		}
 
@@ -1578,7 +1625,7 @@ public abstract class Metodos {
 
 	public static void mensaje(String mensaje, int titulo) {
 
-		String tituloSuperior = "";
+		String tituloSuperior = "", sonido = "";
 
 		int tipo = 0;
 
@@ -1587,23 +1634,33 @@ public abstract class Metodos {
 		case 1:
 			tipo = JOptionPane.ERROR_MESSAGE;
 			tituloSuperior = "Error";
+			sonido = "duck-quack.wav";
 			break;
 
 		case 2:
 			tipo = JOptionPane.INFORMATION_MESSAGE;
 			tituloSuperior = "Informacion";
+			sonido = "gong.wav";
 			break;
 
 		case 3:
 			tipo = JOptionPane.WARNING_MESSAGE;
 			tituloSuperior = "Advertencia";
+			sonido = "advertencia.wav";
 			break;
 
 		default:
 			break;
+
+		}
+
+		if (MenuPrincipal.getSonido()[1].equals("1")) {
+			reproducirSonido(MenuPrincipal.getDirectorioActual() + "sonidos" + MenuPrincipal.getSeparador() + sonido,
+					true);
 		}
 
 		JLabel alerta = new JLabel(mensaje);
+
 		alerta.setFont(new Font("Arial", Font.BOLD, 18));
 
 		JOptionPane.showMessageDialog(null, alerta, tituloSuperior, tipo);
@@ -1636,6 +1693,7 @@ public abstract class Metodos {
 	}
 
 	public static void crearCarpetas() {
+
 		File directorio = new File("Config/imagenes");
 		directorio.mkdir();
 
@@ -1649,6 +1707,10 @@ public abstract class Metodos {
 		directorio = new File("Config/Downloads");
 		directorio.mkdir();
 		directorio = new File("Config/Image_rotate");
+		directorio.mkdir();
+
+		directorio = new File("sonidos");
+
 		directorio.mkdir();
 	}
 

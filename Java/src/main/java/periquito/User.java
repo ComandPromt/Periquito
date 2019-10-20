@@ -36,10 +36,13 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException {
+
 		File af = new File("Config/User.txt");
 
 		if (af.exists()) {
+
 			String[] lectura;
+
 			try {
 
 				lectura = Metodos.leerFicheroArray("Config/User.txt", 2);
@@ -51,19 +54,26 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 				jTextField1.setText(lectura[0]);
 				txtHttplocalhost.setText(lectura[1]);
 
-			} catch (ArrayIndexOutOfBoundsException e) {
+			}
+
+			catch (ArrayIndexOutOfBoundsException e) {
 
 			}
+
 			guardarDatos(false);
 		}
 	}
 
 	public void guardarDatos(Boolean mensaje) {
+
 		try {
+
 			String texto = jTextField1.getText().trim();
+
 			String servidor = txtHttplocalhost.getText().trim();
 
 			FileWriter flS = new FileWriter("Config/User.txt");
+
 			BufferedWriter fS = new BufferedWriter(flS);
 
 			fS.write(texto);

@@ -46,21 +46,27 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException, SQLException {
+
 		File af = new File("Config/Bd.txt");
 
 		if (af.exists()) {
 
 			try {
-				lectura = Metodos.leerFicheroArray("Config/Bd.txt", 7);
+
+				lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+
 				if (lectura[0] == null) {
 					lectura[0] = "";
 				}
+
 				if (lectura[1] == null) {
 					lectura[1] = "";
 				}
+
 				if (lectura[2] == null) {
 					lectura[2] = "";
 				}
+
 				direccion.setText(lectura[5]);
 				base.setText(lectura[0]);
 				jTextField1.setText(lectura[1]);
@@ -92,8 +98,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			fS.write(textField2.getText().trim());
 			fS.newLine();
 			fS.write(direccion.getText().trim());
-			fS.newLine();
-			fS.write(servidorWeb);
 			fS.close();
 			flS.close();
 

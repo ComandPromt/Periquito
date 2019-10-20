@@ -112,6 +112,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private static String[] user = Metodos.leerFicheroArray("Config/User.txt", 2);
 
+	static String[] sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
+
 	private String carpeta = "";
 
 	private JMenuItem mntmNewMenuItem, mntmNewMenuItem1, mntmDownloads, mntmComentarios;
@@ -134,7 +136,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
-	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
+	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 
 	static JButton button = new JButton("");
 
@@ -179,6 +181,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		MenuPrincipal.lectura = lectura;
 	}
 
+	public static void setSonido(String[] sonido) {
+		MenuPrincipal.sonido = sonido;
+	}
+
 	public static void setLecturaurl(String[] lecturaurl) {
 		MenuPrincipal.lecturaurl = lecturaurl;
 	}
@@ -201,6 +207,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	public static void setLecturabd(String[] lecturabd) {
 		MenuPrincipal.lecturabd = lecturabd;
+	}
+
+	public static String[] getSonido() {
+		return sonido;
 	}
 
 	public static void setLecturabackup(String[] lecturabackup) {
@@ -325,8 +335,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				if (Metodos.comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
 
-					lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 7);
-					Metodos.exportarBd(Integer.parseInt(lecturabd[6]));
+					Metodos.exportarBd();
 
 					if (!os.equals("Linux")) {
 						Metodos.eliminarFichero("backupbd.bat");
@@ -704,12 +713,21 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		try {
 			Metodos.probarconexion("www.google.com");
-		} catch (UnknownHostException e) {
+		}
+
+		catch (UnknownHostException e) {
 			Metodos.mensaje("No hay conexión a internet", 3);
 		}
 
+		if (sonido[0] == null) {
+			Metodos.crearFichero("Config/sonido.txt", "gong.wav\n1", false);
+		}
+
 		if (conexion && (lecturabd[0] == null || lecturabd[0].equals(""))) {
-			Metodos.crearFichero("Config/Bd.txt", "", false);
+
+			Metodos.crearFichero("Config/Bd.txt",
+					"4images\r\n" + "root\r\n" + "root\r\n" + "4images_\r\n" + "3306\r\n" + "localhost", false);
+
 			new Bd().setVisible(true);
 		}
 
@@ -773,7 +791,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					if (Metodos.probarconexion("www.google.com")) {
 
-						listaImagenes = Metodos.directorio("Config" + separador + "GifFrames", "gif");
+						listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "GifFrames",
+								"gif");
 
 						if (Metodos.listarFicherosPorCarpeta(new File("Config" + separador + "GifFrames"),
 								"gif") == 1) {
@@ -1487,8 +1506,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		Metodos.comprobarArchivo("Config", false);
 
-		if (!lecturaurl[1].isEmpty()) {
-			carpeta = "/" + lecturaurl[1];
+		try {
+			if (!lecturaurl[1].isEmpty()) {
+				carpeta = "/" + lecturaurl[1];
+			}
+		} catch (NullPointerException e) {
+			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1\n4images_", false);
 		}
 
 		initComponents();
@@ -1570,6 +1593,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			}
 
 			else {
+
+				progreso = new Progreso();
+				progreso.setVisible(true);
 
 				if (!textField.getText().trim().isEmpty()) {
 
@@ -2046,108 +2072,113 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				try {
 
-					listaImagenes.clear();
+					if (Metodos.pingURL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
+							+ MenuPrincipal.getLecturaurl()[1] + "/index.php")) {
 
-					String imagen;
+						listaImagenes.clear();
 
-					if (!soloGif.isSelected()) {
+						String imagen;
 
-						if (!chckbxNewCheckBox.isSelected()) {
+						if (!soloGif.isSelected()) {
 
-							listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes",
-									"jpg");
+							if (!chckbxNewCheckBox.isSelected()) {
 
-							lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+								listaImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes",
+										"jpg");
 
-							int total = listaImagenes.size();
+								lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
-							LinkedList<String> imagenesColor = new LinkedList<>();
+								int total = listaImagenes.size();
 
-							String ruta = "http://" + lecturaurl[0] + "/bn-image-check-api/index.php";
+								LinkedList<String> imagenesColor = new LinkedList<>();
 
-							lecturaurl[1] = lecturaurl[1].trim();
+								String ruta = "http://" + lecturaurl[0] + "/bn-image-check-api/index.php";
 
-							lecturaurl[1] = lecturaurl[1].replace("  ", " ");
+								lecturaurl[1] = lecturaurl[1].trim();
 
-							if (lecturaurl[1].length() > 1) {
-								ruta = "http://" + lecturaurl[0] + "/" + lecturaurl[1]
-										+ "/bn-image-check-api/index.php";
-							}
+								lecturaurl[1] = lecturaurl[1].replace("  ", " ");
 
-							for (int i = 0; i < total; i++) {
-
-								WebDriver chrome = new ChromeDriver();
-
-								chrome.get(ruta);
-
-								imagen = directorioActual + "Config" + separador + "imagenes" + separador
-										+ listaImagenes.get(i);
-
-								chrome.findElement(By.name("uploadedfile")).sendKeys(imagen);
-
-								chrome.findElement(By.name("subir")).click();
-
-								String text = chrome.findElement(By.cssSelector("pre")).getText();
-
-								chrome.close();
-
-								imagen = listaImagenes.get(i);
-
-								json = new JSONObject(text);
-
-								boolean resultado = json.getBoolean("resultado");
-
-								int respuesta = json.getInt("respuesta");
-
-								if (respuesta == 200 && resultado) {
-
-									imagenesBN.add(imagen);
+								if (lecturaurl[1].length() > 1) {
+									ruta = "http://" + lecturaurl[0] + "/" + lecturaurl[1]
+											+ "/bn-image-check-api/index.php";
 								}
 
-								else {
+								for (int i = 0; i < total; i++) {
 
-									if (respuesta == 200 && !resultado) {
-										imagenesColor.add(imagen);
+									WebDriver chrome = new ChromeDriver();
+
+									chrome.get(ruta);
+
+									imagen = directorioActual + "Config" + separador + "imagenes" + separador
+											+ listaImagenes.get(i);
+
+									chrome.findElement(By.name("uploadedfile")).sendKeys(imagen);
+
+									chrome.findElement(By.name("subir")).click();
+
+									String text = chrome.findElement(By.cssSelector("pre")).getText();
+
+									chrome.close();
+
+									imagen = listaImagenes.get(i);
+
+									json = new JSONObject(text);
+
+									boolean resultado = json.getBoolean("resultado");
+
+									int respuesta = json.getInt("respuesta");
+
+									if (respuesta == 200 && resultado) {
+
+										imagenesBN.add(imagen);
+									}
+
+									else {
+
+										if (respuesta == 200 && !resultado) {
+											imagenesColor.add(imagen);
+										}
+
 									}
 
 								}
 
+								for (int i = 0; i < imagenesBN.size(); i++) {
+
+									Files.move(
+											FileSystems.getDefault()
+													.getPath(directorioActual + "Config" + separador + "imagenes"
+															+ separador + imagenesBN.get(i)),
+											FileSystems.getDefault().getPath(
+
+													directorioActual + "Config" + separador + "imagenes" + separador
+															+ "bn" + separador + imagenesBN.get(i)
+
+											), StandardCopyOption.REPLACE_EXISTING);
+
+								}
+
+								if (!imagenesColor.isEmpty()) {
+
+									listaImagenes = imagenesColor;
+								}
+
 							}
 
-							for (int i = 0; i < imagenesBN.size(); i++) {
-
-								Files.move(
-										FileSystems.getDefault()
-												.getPath(directorioActual + "Config" + separador + "imagenes"
-														+ separador + imagenesBN.get(i)),
-										FileSystems.getDefault().getPath(
-
-												directorioActual + "Config" + separador + "imagenes" + separador + "bn"
-														+ separador + imagenesBN.get(i)
-
-										), StandardCopyOption.REPLACE_EXISTING);
-
-							}
-
-							if (!imagenesColor.isEmpty()) {
-
-								listaImagenes = imagenesColor;
+							else {
+								listaImagenes = Metodos.directorio(directorioImagenes, ".");
 							}
 
 						}
 
-						else {
-							listaImagenes = Metodos.directorio(directorioImagenes, ".");
-						}
+						subirFotos();
 
+						listaImagenes.clear();
+
+					} else {
+						Metodos.mensaje("Por favor, revisa la configuración", 3);
+						new Config2().setVisible(true);
 					}
-
-					progreso = new Progreso();
-					progreso.setVisible(true);
-
-					subirFotos();
-
-					listaImagenes.clear();
 				}
 
 				catch (Exception e1) {
