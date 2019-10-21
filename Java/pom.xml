@@ -5,7 +5,7 @@
 
 	<groupId>periquito-gui</groupId>
 	<artifactId>periquito-gui</artifactId>
-	<version>0.0.1</version>
+	<version>4.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>periquito-gui</name>

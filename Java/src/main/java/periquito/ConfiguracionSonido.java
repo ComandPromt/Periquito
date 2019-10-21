@@ -30,7 +30,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 
 	JCheckBox checkBox_1;
 	JComboBox comboBox;
-
+	static String[] sonido;
 	public static LinkedList<String> sonidos = new LinkedList<>();
 
 	public ConfiguracionSonido() {
@@ -40,8 +40,9 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 		setType(Type.UTILITY);
 
 		initComponents();
+		sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
 
-		if (MenuPrincipal.getSonido()[1].equals(1)) {
+		if (sonido[1].equals("1")) {
 
 			checkBox_1.setSelected(true);
 		}

@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
@@ -181,13 +182,9 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 18));
 			menuBar.add(mnNewMenu);
 
-			JSeparator separator_6 = new JSeparator();
-			mnNewMenu.add(separator_6);
-
-			JButton btnNewButton = new JButton("Eliminar fotos duplicadas");
-			mnNewMenu.add(btnNewButton);
-
-			btnNewButton.addMouseListener(new MouseAdapter() {
+			JMenuItem mntmNewMenuItem = new JMenuItem("Eliminar imágenes duplicadas");
+			mntmNewMenuItem.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/delete.png")));
+			mntmNewMenuItem.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
 
@@ -199,24 +196,18 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					Metodos.mensaje("Se han borrado correctamente todas las imágenes que ya están en el CMS", 2);
 				}
 			});
+			mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
+			mnNewMenu.add(mntmNewMenuItem);
 
-			btnNewButton.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/delete.png")));
-			btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+			JSeparator separator_6 = new JSeparator();
+			mnNewMenu.add(separator_6);
 
-			JSeparator separator_3 = new JSeparator();
-			mnNewMenu.add(separator_3);
-
-			JButton btnNewButton_2 = new JButton("  Mover para subir al CMS");
-			mnNewMenu.add(btnNewButton_2);
-			btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 16));
-			btnNewButton_2.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/utilities.png")));
-
-			JSeparator separator_7 = new JSeparator();
-			mnNewMenu.add(separator_7);
-
-			btnNewButton_2.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
+			JMenuItem mntmNewMenuItem_1 = new JMenuItem("Mover para subir al CMS");
+			mntmNewMenuItem_1.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
+			mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+			mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
 
 					try {
 						Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador());
@@ -229,8 +220,16 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					}
 
 				}
-
 			});
+			mnNewMenu.add(mntmNewMenuItem_1);
+
+			JSeparator separator = new JSeparator();
+			mnNewMenu.add(separator);
+
+			JMenuItem mntmNewMenuItem_2 = new JMenuItem("Ver imágenes de la tabla");
+			mntmNewMenuItem_2.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/view.png")));
+			mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+			mnNewMenu.add(mntmNewMenuItem_2);
 
 			JButton btnNewButton_1 = new JButton("Abrir carpeta");
 			menuBar.add(btnNewButton_1);

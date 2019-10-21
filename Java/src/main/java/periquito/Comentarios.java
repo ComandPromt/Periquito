@@ -22,10 +22,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -96,19 +99,41 @@ public class Comentarios extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JButton insertar = new JButton();
-		insertar.addMouseListener(new MouseAdapter() {
+		JMenu mnNewMenu = new JMenu("Insertar");
+		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu.setBackground(Color.BLACK);
+		mnNewMenu.setForeground(Color.BLACK);
+		mnNewMenu.setIcon(new ImageIcon(Comentarios.class.getResource("/imagenes/insert.png")));
+		menuBar.add(mnNewMenu);
+
+		JMenuItem mntmNewMenuItem = new JMenuItem("Comentario");
+		mntmNewMenuItem.setIcon(new ImageIcon(Comentarios.class.getResource("/imagenes/name.png")));
+		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				new AgregarComentario().setVisible(true);
 			}
 		});
-		insertar.setIcon(new ImageIcon(Comentarios.class.getResource("/imagenes/insert.png")));
-		insertar.setToolTipText("Eliminar");
-		insertar.setFocusPainted(false);
-		insertar.setContentAreaFilled(false);
-		insertar.setBorderPainted(false);
-		menuBar.add(insertar);
+		mnNewMenu.add(mntmNewMenuItem);
+
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Desde archivo");
+		mntmNewMenuItem_1.setIcon(new ImageIcon(Comentarios.class.getResource("/imagenes/nota.png")));
+		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					new LeerComentario().setVisible(true);
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+
+		JSeparator separator = new JSeparator();
+		mnNewMenu.add(separator);
+		mnNewMenu.add(mntmNewMenuItem_1);
 
 		JButton editarContacto = new JButton();
 		menuBar.add(editarContacto);
@@ -248,6 +273,10 @@ public class Comentarios extends JFrame {
 		eliminarContacto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		eliminarContacto.setFocusPainted(false);
 		eliminarContacto.setRolloverIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/delete_1.png")));
+
+		JLabel lblNewLabel = new JLabel("[URL][/URL] [USER][/USER]");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		menuBar.add(lblNewLabel);
 		eliminarContacto.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				try {

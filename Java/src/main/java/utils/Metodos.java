@@ -813,12 +813,13 @@ public abstract class Metodos {
 			fE = new BufferedReader(flE);
 			texto = fE.readLine();
 
-			while (texto != null) {
+			while (texto != null && i < longitud) {
 
 				salida[i] = texto;
 				i++;
 
 				texto = fE.readLine();
+
 			}
 
 			fE.close();
@@ -826,8 +827,8 @@ public abstract class Metodos {
 
 		}
 
-		catch (IOException e) {
-//
+		catch (Exception e) {
+			//
 		}
 
 		finally {
@@ -857,7 +858,7 @@ public abstract class Metodos {
 
 	public static void exportarBd() throws IOException {
 
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 7);
+		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 
 		if (!MenuPrincipal.getOs().equals("Linux")) {
@@ -959,7 +960,7 @@ public abstract class Metodos {
 
 	public static ArrayList<String> verCategorias() throws SQLException, IOException {
 
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 7);
+		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 
 		ArrayList<String> categorias = new ArrayList<>();
 
@@ -1117,7 +1118,7 @@ public abstract class Metodos {
 
 		try {
 
-			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 7);
+			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
 			if (!lectura2[5].isEmpty()) {
 
@@ -1196,7 +1197,7 @@ public abstract class Metodos {
 
 	public static Connection conexionBD() throws SQLException, IOException {
 
-		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 7);
+		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
 
 		if (comprobarConexion(false)) {
 

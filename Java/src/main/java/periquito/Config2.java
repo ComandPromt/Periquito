@@ -37,16 +37,21 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException {
+
 		File af = new File("Config/Config2.txt");
 
 		if (af.exists()) {
+
 			String[] lectura;
+
 			try {
+
 				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "";
 				}
+
 				if (lectura[1] == null) {
 					lectura[1] = "";
 				}
@@ -56,9 +61,12 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 
 				jTextField1.setText(lectura[0]);
 				textField.setText(lectura[1]);
-			} catch (ArrayIndexOutOfBoundsException e) {
+			}
+
+			catch (ArrayIndexOutOfBoundsException e) {
 
 			}
+
 			guardarDatos(false);
 		}
 	}

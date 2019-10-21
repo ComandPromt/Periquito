@@ -114,6 +114,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static String[] sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
 
+	// private static String[] configuracion =
+	// Metodos.leerFicheroArray("Config/Configuracion.txt", 2);
+
 	private String carpeta = "";
 
 	private JMenuItem mntmNewMenuItem, mntmNewMenuItem1, mntmDownloads, mntmComentarios;
@@ -150,8 +153,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	boolean gif = false;
 
-	JSeparator miSeparator8;
-
 	JSeparator miSeparator9;
 	private JMenu mnNewMenu_1;
 	private JMenu mnNewMenu_3;
@@ -164,6 +165,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenu mnNewMenu_2;
 	private JMenuItem mntmNewMenuItem_1;
 	private JMenuItem mntmNewMenuItem_4;
+	private JMenuItem mntmNewMenuItem_5;
+	private JSeparator separator_8;
+	private JMenu mnNewMenu_4;
+	private JSeparator separator_9;
 
 	public static String getDirectorioImagenes() {
 		return directorioImagenes;
@@ -1061,51 +1066,26 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
 		menuItem5.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
-		miSeparator9 = new JSeparator();
-		mnNewMenu_3.add(miSeparator9);
-
-		mntmComentarios = new JMenuItem("Comentarios");
-		mnNewMenu_3.add(mntmComentarios);
-		mntmComentarios.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-				try {
-					new Comentarios().setVisible(true);
-				}
-
-				catch (Exception e1) {
-					//
-				}
-			}
-		});
-		mntmComentarios.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		mntmComentarios.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
-
-		miSeparator8 = new JSeparator();
-		mnNewMenu_3.add(miSeparator8);
-
-		mntmNewMenuItem_3 = new JMenuItem("Categorías");
-		mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-				try {
-					new Categorias().setVisible(true);
-				}
-
-				catch (Exception e1) {
-					//
-				}
-
-			}
-		});
-		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		mntmNewMenuItem_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/tag.png")));
-		mnNewMenu_3.add(mntmNewMenuItem_3);
-
 		separator_6 = new JSeparator();
 		mnNewMenu_3.add(separator_6);
+
+		mntmNewMenuItem_5 = new JMenuItem("Bots");
+		mntmNewMenuItem_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					new Bots().setVisible(true);
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+		mntmNewMenuItem_5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bot.png")));
+		mntmNewMenuItem_5.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_3.add(mntmNewMenuItem_5);
+
+		separator_8 = new JSeparator();
+		mnNewMenu_3.add(separator_8);
 
 		mmenu5 = new JMenuItem("CMS");
 		mnNewMenu_3.add(mmenu5);
@@ -1125,6 +1105,54 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		mmenu5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/remote.png")));
 		mmenu5.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
+		separator_9 = new JSeparator();
+		mnAcciones.add(separator_9);
+
+		mnNewMenu_4 = new JMenu("Administrar");
+		mnNewMenu_4.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
+		mnAcciones.add(mnNewMenu_4);
+
+		mntmNewMenuItem_3 = new JMenuItem("Categorías");
+		mnNewMenu_4.add(mntmNewMenuItem_3);
+		mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				try {
+					new Categorias().setVisible(true);
+				}
+
+				catch (Exception e1) {
+					//
+				}
+
+			}
+		});
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_3.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/tag.png")));
+
+		miSeparator9 = new JSeparator();
+		mnNewMenu_4.add(miSeparator9);
+
+		mntmComentarios = new JMenuItem("Comentarios");
+		mnNewMenu_4.add(mntmComentarios);
+		mntmComentarios.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				try {
+					new Comentarios().setVisible(true);
+				}
+
+				catch (Exception e1) {
+					//
+				}
+			}
+		});
+		mntmComentarios.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmComentarios.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
 
 		menu4 = new JMenu("Abrir");
 		menu4.setForeground(Color.BLACK);
@@ -1406,12 +1434,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 				try {
 					new Configuracion().setVisible(true);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
+
+				catch (IOException e1) {
+					//
+				}
+
 			}
 		});
 		mnNewMenu_2.add(mntmNewMenuItem_1);
@@ -1506,17 +1537,27 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		Metodos.comprobarArchivo("Config", false);
 
-		try {
-			if (!lecturaurl[1].isEmpty()) {
-				carpeta = "/" + lecturaurl[1];
-			}
-		} catch (NullPointerException e) {
-			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1\n4images_", false);
-		}
+		obtenerCarpeta();
 
 		initComponents();
 
 		this.setVisible(true);
+	}
+
+	private void obtenerCarpeta() throws IOException {
+
+		try {
+
+			if (!lecturaurl[1].isEmpty()) {
+				carpeta = "/" + lecturaurl[1];
+			}
+
+		}
+
+		catch (NullPointerException e) {
+			new Config2().setVisible(true);
+		}
+
 	}
 
 	public static String getDirectorioActual() {
@@ -1679,9 +1720,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 													if (!Metodos.extraerExtension(imagenActual).equals("ini")) {
 
-														if (!lecturaurl[1].isEmpty()) {
-															carpeta = "/" + lecturaurl[1];
-														}
+														obtenerCarpeta();
 
 														WebDriver chrome = new ChromeDriver();
 
@@ -1867,6 +1906,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								+ Metodos.getSHA256Checksum(imagen) + "',DEFAULT,DEFAULT)");
 
 						Metodos.postFile(f2, imagenbd, user[0], user[1], categoria);
+
+						System.out.println("http://" + lecturaurl[0] + carpeta + "/data/media/" + categoria + "/"
+								+ imagenbd + "\n");
+
+						System.out.println("DELETE FROM " + lecturabd[3] + "images WHERE image_id='" + maximo + "')");
+
+						if (!Metodos.pingURL(
+								"http://" + lecturaurl[0] + carpeta + "/data/media/" + categoria + "/" + imagenbd)) {
+
+							// s.executeUpdate("DELETE FROM " + lecturabd[3] + "images WHERE image_id='" +
+							// maximo + "')");
+						}
 
 						imagenesSubidas.add(imagen);
 
@@ -2072,8 +2123,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				try {
 
-					if (Metodos.pingURL("http://" + MenuPrincipal.getLecturaurl()[0] + "/"
-							+ MenuPrincipal.getLecturaurl()[1] + "/index.php")) {
+					if (Metodos.pingURL("http://" + lecturaurl[0] + carpeta + "/index.php")) {
 
 						listaImagenes.clear();
 
@@ -2088,6 +2138,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 								lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
+								obtenerCarpeta();
+
 								int total = listaImagenes.size();
 
 								LinkedList<String> imagenesColor = new LinkedList<>();
@@ -2099,8 +2151,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								lecturaurl[1] = lecturaurl[1].replace("  ", " ");
 
 								if (lecturaurl[1].length() > 1) {
-									ruta = "http://" + lecturaurl[0] + "/" + lecturaurl[1]
-											+ "/bn-image-check-api/index.php";
+									ruta = "http://" + lecturaurl[0] + carpeta + "/bn-image-check-api/index.php";
 								}
 
 								for (int i = 0; i < total; i++) {
@@ -2171,14 +2222,27 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						}
 
-						subirFotos();
+						/*
+						 * String respuesta = "";
+						 * 
+						 * if (configuracion[3].isEmpty()) {
+						 * 
+						 * respuesta = JOptionPane.showInputDialog(null, "Escribe tu nombre");
+						 * 
+						 * }
+						 */
+						// }
+						// subirFotos();
 
 						listaImagenes.clear();
 
-					} else {
+					}
+
+					else {
 						Metodos.mensaje("Por favor, revisa la configuración", 3);
 						new Config2().setVisible(true);
 					}
+
 				}
 
 				catch (Exception e1) {

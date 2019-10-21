@@ -80,6 +80,8 @@ public class AgendaInterfaz extends JFrame {
 		setJMenuBar(menuBar);
 
 		JMenu mnNewMenu = new JMenu("Insertar");
+		mnNewMenu.setForeground(Color.BLACK);
+		mnNewMenu.setBackground(Color.BLACK);
 		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/insert.png")));
 		menuBar.add(mnNewMenu);
