@@ -210,7 +210,8 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				public void mousePressed(MouseEvent e) {
 
 					try {
-						Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador());
+						Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador(),
+								MenuPrincipal.getDirectorioImagenes(), true);
 						frmShaImages.dispose();
 						Metodos.mensaje("Las imágenes se han movido correctamente", 2);
 					}

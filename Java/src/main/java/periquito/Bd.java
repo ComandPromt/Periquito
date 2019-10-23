@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -160,6 +162,18 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		textField1.setHorizontalAlignment(SwingConstants.CENTER);
 		textField1.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		textField2 = new JTextField();
+		textField2.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						guardarDatos(true);
+					} catch (Exception e1) {
+						//
+					}
+				}
+			}
+		});
 		textField2.setText("3306");
 		textField2.setToolTipText("");
 		textField2.setHorizontalAlignment(SwingConstants.CENTER);

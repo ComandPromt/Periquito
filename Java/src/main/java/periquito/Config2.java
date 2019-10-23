@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -130,6 +132,18 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		textField = new JTextField();
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						guardarDatos(true);
+					} catch (IOException e1) {
+						//
+					}
+				}
+			}
+		});
 		textField.setHorizontalAlignment(SwingConstants.LEFT);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));

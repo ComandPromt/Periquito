@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -34,6 +36,20 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 	public static LinkedList<String> sonidos = new LinkedList<>();
 
 	public ConfiguracionSonido() {
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						guardarDatos(true);
+					}
+
+					catch (IOException e1) {
+						//
+					}
+				}
+			}
+		});
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ConfiguracionSonido.class.getResource("/imagenes/wav.png")));
 		setTitle("Periquito v3 Conf.Sonido");
@@ -80,6 +96,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 				}
 			}
 		});
+
 		button.setIcon(new ImageIcon(ConfiguracionSonido.class.getResource("/imagenes/folder.png")));
 		button.setFont(new Font("Tahoma", Font.BOLD, 16));
 
@@ -109,15 +126,22 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 		checkBox_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		JButton button_2 = new JButton("");
+
 		button_2.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
+
 				try {
 					guardarDatos(true);
-				} catch (IOException e1) {
+				}
+
+				catch (IOException e1) {
 					//
 				}
+
 			}
 		});
+
 		button_2.setIcon(new ImageIcon(ConfiguracionSonido.class.getResource("/imagenes/save.png")));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
@@ -182,11 +206,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 
 			dispose();
 
-			System.out.println(Metodos.leerFicheroArray("Config/sonido.txt", 2)[1]);
-
 			MenuPrincipal.setSonido(Metodos.leerFicheroArray("Config/sonido.txt", 2));
-
-			System.out.println("Guardado: " + MenuPrincipal.getSonido()[1]);
 
 		}
 
@@ -205,7 +225,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-//
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {

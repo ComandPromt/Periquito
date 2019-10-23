@@ -34,23 +34,22 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import utils.Metodos;
 
 @SuppressWarnings("all")
+
 public class Categorias extends JFrame {
+
 	private JButton buscar;
 	private JButton contactos;
 	private JButton editar;
-
 	private JButton eliminarContacto;
-
 	private static JList<String> jList1;
-
 	private JTextArea nota;
 	private JTextPane nombre;
 	private JTextPane tipo;
+
 	static DefaultListModel<String> modelo = new DefaultListModel<>();
 
 	String iduser;
@@ -95,6 +94,7 @@ public class Categorias extends JFrame {
 				new Agregar().setVisible(true);
 			}
 		});
+
 		mntmNewMenuItem_1.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/name.png")));
 		mnNewMenu.add(mntmNewMenuItem_1);
 
@@ -102,16 +102,21 @@ public class Categorias extends JFrame {
 		mnNewMenu.add(separator_2);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Desde Archivo");
+
 		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+
 				try {
 					new LeerArchivo().setVisible(true);
-				} catch (IOException e1) {
+				}
+
+				catch (IOException e1) {
 					//
 				}
 			}
 		});
+
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/nota.png")));
 		mnNewMenu.add(mntmNewMenuItem);
@@ -125,15 +130,20 @@ public class Categorias extends JFrame {
 		editarContacto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		editarContacto.setFocusPainted(false);
 		editarContacto.setRolloverIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/edit.png")));
+
 		editarContacto.addMouseListener(new java.awt.event.MouseAdapter() {
+
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 
 				try {
+
 					if (jList1.getModel().getSize() == 0) {
 						java.awt.EventQueue.invokeLater(() -> {
 							new Agregar().setVisible(true);
 						});
-					} else {
+					}
+
+					else {
 						Connection conexion = Metodos.conexionBD();
 
 						s = conexion.createStatement();
@@ -145,7 +155,9 @@ public class Categorias extends JFrame {
 								modelo.addElement(rs.getString("Nombre"));
 							}
 
-						} else {
+						}
+
+						else {
 
 							try {
 
@@ -176,13 +188,17 @@ public class Categorias extends JFrame {
 						}
 
 					}
-				} catch (Exception e) {
+				}
+
+				catch (Exception e) {
 					//
 				}
 			}
 		});
+
 		JButton btnNewButton = new JButton();
 		menuBar.add(btnNewButton);
+
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -223,9 +239,13 @@ public class Categorias extends JFrame {
 					}
 
 					else {
+
 						if (usuario.equals("") && tipo1.equals("") && nota1.equals("")) {
 							Metodos.mensaje("Por favor, visualize un usuario", 2);
-						} else {
+						}
+
+						else {
+
 							if (usuario.equals("") || tipo1.equals("") || nota1.equals("")) {
 								Metodos.mensaje("Por favor, rellena todos los campos", 2);
 							}
@@ -242,6 +262,7 @@ public class Categorias extends JFrame {
 			}
 
 		});
+
 		btnNewButton.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/actualizar.png")));
 		btnNewButton.setFocusPainted(false);
 		btnNewButton.setContentAreaFilled(false);
@@ -256,25 +277,33 @@ public class Categorias extends JFrame {
 		eliminarContacto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		eliminarContacto.setFocusPainted(false);
 		eliminarContacto.setRolloverIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/delete_1.png")));
+
 		eliminarContacto.addMouseListener(new java.awt.event.MouseAdapter() {
+
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
+
 				try {
 					eliminarContactoMouseClicked();
-				} catch (IOException e) {
+				}
+
+				catch (IOException e) {
 					Metodos.mensaje("No se ha podido eliminar la nota", 1);
 				}
+
 			}
 		});
 
 	}
 
 	public void vaciarDatos() {
+
 		nombre.setText("");
 		tipo.setText("");
 		nota.setText("");
 	}
 
 	private void initComponents() throws SQLException, IOException {
+
 		JLabel jLabel1;
 		JPanel jPanel3;
 		JPanel jPanel4;
@@ -466,17 +495,22 @@ public class Categorias extends JFrame {
 		getContentPane().setLayout(layout);
 
 		if (jList1.getModel().getSize() == 0) {
+
 			try {
 				verNotas();
-			} catch (Exception e) {
+			}
+
+			catch (Exception e) {
 //
 			}
+
 		}
 
 		pack();
 	}
 
 	public static void verNotas() throws SQLException, IOException {
+
 		modelo.removeAllElements();
 		Connection conexion = Metodos.conexionBD();
 
@@ -496,9 +530,11 @@ public class Categorias extends JFrame {
 	private void eliminarContactoMouseClicked() throws IOException {
 
 		if (!controlarSeleccion()) {
+
 			JLabel mensaje = new JLabel("Seguro que quieres borrar a " + jList1.getSelectedValue().toString() + "?");
 			mensaje.setFont(new Font("Arial", Font.BOLD, 18));
 			int confirmado = JOptionPane.showConfirmDialog(null, mensaje, "WARNING", 0);
+
 			if (JOptionPane.OK_OPTION == confirmado) {
 
 				try {
@@ -515,16 +551,22 @@ public class Categorias extends JFrame {
 				}
 
 			}
-		} else {
+
+		}
+
+		else {
 			Metodos.mensaje("Seleccione un registro para borrar", 2);
 		}
 	}
 
 	public boolean controlarSeleccion() {
+
 		try {
 			jList1.getSelectedValue().toString();
 			return false;
-		} catch (NullPointerException e1) {
+		}
+
+		catch (NullPointerException e1) {
 			return true;
 		}
 	}
@@ -538,30 +580,28 @@ public class Categorias extends JFrame {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
-		} catch (UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
 		}
+
+		catch (Exception e) {
+			//
+		}
+
 		java.awt.EventQueue.invokeLater(new Runnable() {
+
 			public void run() {
 
 				try {
 					new AgendaInterfaz().setVisible(true);
-				} catch (IOException | SQLException e) {
+				}
+
+				catch (Exception e) {
 					//
 				}
 
 			}
+
 		});
 
 	}
+
 }

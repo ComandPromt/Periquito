@@ -424,13 +424,13 @@ public abstract class Metodos {
 		s.close();
 	}
 
-	public static void moverArchivos(LinkedList<String> files, String separador) throws IOException {
+	public static void moverArchivos(LinkedList<String> files, String separador, String destino, boolean mensaje)
+			throws IOException {
 
 		String imagen;
 		String comprobacion;
 		boolean filtro = false;
 		String origen;
-		String destino;
 
 		if (!files.isEmpty()) {
 
@@ -452,8 +452,6 @@ public abstract class Metodos {
 						|| comprobacion.equals("mp4") || comprobacion.equals("webp")) {
 
 					origen = files.get(i);
-
-					destino = MenuPrincipal.getDirectorioImagenes();
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
@@ -479,7 +477,6 @@ public abstract class Metodos {
 							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
 							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
-
 							renombrar(origen, salida);
 
 							origen = salida;
@@ -505,7 +502,7 @@ public abstract class Metodos {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
 			} else {
 
-				if (!error) {
+				if (!error && mensaje) {
 					mensaje("Los archivos se han movido correctamente", 2);
 				}
 
@@ -711,6 +708,12 @@ public abstract class Metodos {
 
 	}
 
+	public static String eliminarEspacios(String cadena) {
+		cadena = cadena.trim();
+		cadena = cadena.replace("  ", " ");
+		return cadena;
+	}
+
 	public static void muestraContenido(String archivo, String tipo, String descripcion) throws IOException {
 
 		FileReader fr = null;
@@ -728,8 +731,7 @@ public abstract class Metodos {
 			LinkedList<String> contenido = new LinkedList<>();
 
 			while ((linea = br.readLine()) != null) {
-				linea = linea.trim();
-				linea = linea.replace("  ", " ");
+				linea = eliminarEspacios(linea);
 				contenido.add(convertToUTF8(linea));
 			}
 
@@ -947,9 +949,11 @@ public abstract class Metodos {
 		if (!categorias.isEmpty()) {
 
 			try {
+
 				for (int x = 0; x < categorias.size(); x++) {
 					combobox.addItem(categorias.get(x));
 				}
+
 			}
 
 			catch (Exception e) {
@@ -1372,7 +1376,7 @@ public abstract class Metodos {
 			extension = extension.toLowerCase();
 
 			if (extension.equals("peg")) {
-				extension = "jpg";
+				extension = "jpeg";
 			}
 
 			if (extension.equals("ebp")) {
@@ -1484,7 +1488,7 @@ public abstract class Metodos {
 				}
 
 				if (comprobacion && extension.equals("webp") && extensionArchivo.equals("webp")
-						|| comprobacion && extension.equals("jpeg") && extensionArchivo.equals("jpg")
+						|| comprobacion && extension.equals("jpeg") && extensionArchivo.equals("jpeg")
 						|| comprobacion && extension.equals(".")
 						|| comprobacion && extension.equals(extensionArchivo)) {
 
@@ -1655,9 +1659,15 @@ public abstract class Metodos {
 
 		}
 
-		if (MenuPrincipal.getSonido()[1].equals("1")) {
-			reproducirSonido(MenuPrincipal.getDirectorioActual() + "sonidos" + MenuPrincipal.getSeparador() + sonido,
-					true);
+		try {
+
+			if (MenuPrincipal.getSonido()[1].equals("1")) {
+				reproducirSonido(
+						MenuPrincipal.getDirectorioActual() + "sonidos" + MenuPrincipal.getSeparador() + sonido, true);
+			}
+
+		} catch (Exception e) {
+			//
 		}
 
 		JLabel alerta = new JLabel(mensaje);
@@ -1701,12 +1711,21 @@ public abstract class Metodos {
 		directorio = new File("Config/imagenes/bn");
 		directorio.mkdir();
 
+		directorio = new File("Config/imagenes/imagenes_duplicadas");
+		directorio.mkdir();
+
+		directorio = new File("Config/imagenes/imagenes_subidas");
+		directorio.mkdir();
+
 		directorio = new File("Config/imagenes_para_recortar");
 		directorio.mkdir();
+
 		directorio = new File("Config/imagenes_para_recortar/recortes");
 		directorio.mkdir();
+
 		directorio = new File("Config/Downloads");
 		directorio.mkdir();
+
 		directorio = new File("Config/Image_rotate");
 		directorio.mkdir();
 

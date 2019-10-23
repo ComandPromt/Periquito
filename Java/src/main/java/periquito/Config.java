@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -29,6 +31,7 @@ import utils.MyInterface;
 
 @SuppressWarnings("all")
 public class Config extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	private javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JLabel label;
@@ -112,6 +115,14 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		jTextField1.setToolTipText("");
 
 		txtHttplocalhost = new JTextField();
+		txtHttplocalhost.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					guardarDatos(true);
+				}
+			}
+		});
 		txtHttplocalhost.setText("http://localhost/Periquito");
 		txtHttplocalhost.setToolTipText("");
 		txtHttplocalhost.setHorizontalAlignment(SwingConstants.CENTER);
