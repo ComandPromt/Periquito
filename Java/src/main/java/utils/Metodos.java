@@ -1628,6 +1628,50 @@ public abstract class Metodos {
 		return retorno;
 	}
 
+	public static int saberMaximo(String tabla, String campo) throws SQLException, IOException {
+
+		int maximo = 0;
+
+		ResultSet rs = null;
+
+		Statement s = null;
+
+		try {
+
+			Connection conexion = Metodos.conexionBD();
+
+			s = conexion.createStatement();
+
+			rs = s.executeQuery("SELECT MAX(" + campo + ")+1 as maximo FROM " + MenuPrincipal.getLecturabd()[3] + tabla
+					+ " order by image_id");
+
+			rs.next();
+
+			if (rs.getString("maximo") != null) {
+				maximo = Integer.parseInt(rs.getString("maximo"));
+			}
+
+		}
+
+		catch (Exception e) {
+			//
+		}
+
+		finally {
+
+			if (rs != null) {
+				rs.close();
+			}
+
+			if (s != null) {
+				s.close();
+			}
+
+		}
+
+		return maximo;
+	}
+
 	public static void mensaje(String mensaje, int titulo) {
 
 		String tituloSuperior = "", sonido = "";

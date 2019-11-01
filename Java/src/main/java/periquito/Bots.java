@@ -104,7 +104,6 @@ public class Bots extends javax.swing.JFrame implements ActionListener, ChangeLi
 	public Bots() throws IOException {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Bots.class.getResource("/imagenes/bot.png")));
 		setTitle("Periquito v3 Bots");
-		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}

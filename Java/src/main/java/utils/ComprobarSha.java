@@ -66,27 +66,32 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		try {
 
 			rutas.clear();
-			
+
 			lectura.clear();
 
 			shaimages.clear();
 
 			String nombreArchivo;
 			String ruta;
+			String extension;
 
 			for (int x = 0; x < files.length; x++) {
 
 				ruta = files[x].getCanonicalPath();
 
-				nombreArchivo = ruta.substring(
-						files[x].getCanonicalPath().lastIndexOf(MenuPrincipal.getSeparador()) + 1,
-						files[x].getCanonicalPath().length());
+				extension = Metodos.extraerExtension(ruta);
 
-				rutas.add(ruta);
+				if (extension.equals("jpg") || extension.equals("gif") || extension.equals("png")) {
 
-				lectura.add(nombreArchivo);
+					nombreArchivo = ruta.substring(ruta.lastIndexOf(MenuPrincipal.getSeparador()) + 1, ruta.length());
 
-				shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
+					rutas.add(ruta);
+
+					lectura.add(nombreArchivo);
+
+					shaimages.add(Metodos.getSHA256Checksum(files[x].getCanonicalPath()));
+
+				}
 
 			}
 
@@ -94,7 +99,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1));
 
 			if (!lectura.isEmpty()) {
-			
+
 				dispose();
 
 				new ImagenesSha();
@@ -106,10 +111,16 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		catch (Exception e) {
 			//
 		}
-		
+
 	}
 
 	public ComprobarSha() throws IOException {
+
+		rutas.clear();
+
+		lectura.clear();
+
+		shaimages.clear();
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ComprobarSha.class.getResource("/imagenes/db.png")));
 
@@ -135,18 +146,18 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		imagenes.setBackground(Color.WHITE);
 
 		JLabel lblNewLabel = new JLabel("");
-		
+
 		lblNewLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				
+
 				File[] files = Metodos.seleccionar(2, "Imagen & Video",
 						"Elije un archivo de imagen o video para mover");
-				
+
 				if (files != null) {
 					comprobarSha(files);
 				}
-				
+
 			}
 		});
 
@@ -155,7 +166,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		comboBox = new JComboBox();
 		comboBox.setFont(new Font("Tahoma", Font.BOLD, 22));
 		comboBox.setModel(new DefaultComboBoxModel(new String[] { "SHA", "Nombre" }));
-		
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
@@ -178,7 +189,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				.addContainerGap(16, Short.MAX_VALUE)));
 
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(641, 123));
+		setSize(new Dimension(641, 134));
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
@@ -213,5 +224,5 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
-	
+
 }

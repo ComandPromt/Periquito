@@ -44,6 +44,7 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 	JTextArea textArea;
 	JCheckBox chckbxEliminarImagenesLocales;
 	JCheckBox chckbxNewCheckBox;
+	String[] configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
 
 	public Configuracion() throws IOException {
 
@@ -55,13 +56,36 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		setType(Type.UTILITY);
 		initComponents();
 
+		if (!configuracion[0].isEmpty()) {
+			jTextField1.setText(configuracion[0]);
+		}
+
+		if (!configuracion[2].isEmpty()) {
+			textArea.setText(configuracion[2]);
+		}
+
+		if (!configuracion[3].isEmpty()) {
+			textField.setText(configuracion[3]);
+		}
+
+		if (configuracion[4].equals("1")) {
+
+			chckbxEliminarImagenesLocales.setSelected(true);
+		}
+
+		if (configuracion[5].equals("1")) {
+			chckbxNewCheckBox_1.setSelected(true);
+		}
+
+		if (configuracion[6].equals("1")) {
+			chckbxNewCheckBox.setSelected(true);
+		}
+
 		if (Metodos.comprobarConexion(true)) {
 
 			try {
-
 				Metodos.ponerCategoriasBd(comboBox);
 				comboBox.addItem("Ninguna");
-
 			}
 
 			catch (Exception e) {

@@ -66,7 +66,6 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 			}
 
 			setTitle("Periquito v3 Recomponer Imágenes");
-			setType(Type.UTILITY);
 			initComponents();
 
 			this.setVisible(true);
@@ -85,7 +84,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
-		imagenes.setText("  Arrastra los archivos aqui");
+		imagenes.setText("Arrastra los archivos aqui");
 		imagenes.setForeground(Color.DARK_GRAY);
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
 		imagenes.setEditable(false);
