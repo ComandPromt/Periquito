@@ -26,13 +26,14 @@ import utils.MyInterface;
 
 @SuppressWarnings("all")
 public class LeerArchivo extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
 
 	public LeerArchivo() throws IOException {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Config.class.getResource("/imagenes/config.png")));
 		setTitle("Periquito v3");
-		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
 	}
@@ -50,6 +51,7 @@ public class LeerArchivo extends javax.swing.JFrame implements ActionListener, C
 		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		JButton btnNewButton = new JButton("");
+
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -68,11 +70,15 @@ public class LeerArchivo extends javax.swing.JFrame implements ActionListener, C
 							Metodos.mensaje("Notas insertadas correctamente", 2);
 
 						}
-					} catch (Exception e3) {
+					}
+
+					catch (Exception e3) {
 						//
 					}
 
-				} else {
+				}
+
+				else {
 					Metodos.mensaje("Por favor, rellena todos los campos", 3);
 				}
 

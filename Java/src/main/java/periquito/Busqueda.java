@@ -8,10 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,8 +23,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import utils.Galeria;
-import utils.InterfazGaleria;
 import utils.Metodos;
 import utils.MyInterface;
 
@@ -170,84 +165,7 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 
 									if (!busqueda.isEmpty()) {
 
-										Connection conexion = Metodos.conexionBD();
-
-										Statement s = conexion.createStatement();
-
-										ResultSet rs = s.executeQuery(sql);
-
-										rs.next();
-
-										recuento = Integer.parseInt(rs.getString("count(image_id)"));
-
-										if (recuento > 0) {
-
-											if (recuento > 500) {
-
-												Metodos.mensaje(
-														"Has introducido un nombre que está en más de 500 imágenes", 3);
-												Metodos.mensaje(
-														"Por favor,introduce un nombre con menos registros para mostrarlos",
-														2);
-
-												Metodos.abrirCarpeta(
-														Metodos.obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0],
-																MenuPrincipal.getLecturaurl()[1])
-																+ "/search.php?filtro=" + busqueda);
-
-											}
-
-											else {
-
-												rs = s.executeQuery(sql2);
-
-												MenuPrincipal.getListaImagenes().clear();
-
-												MenuPrincipal.getCategorias().clear();
-
-												while (rs.next()) {
-
-													MenuPrincipal.getListaImagenes()
-															.add(rs.getString("image_media_file"));
-													MenuPrincipal.getCategorias().add(rs.getString("cat_id"));
-												}
-
-											}
-
-											s.close();
-
-											rs.close();
-
-											if (recuento == 0) {
-
-												Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
-
-											} else {
-
-												if (recuento < 500) {
-
-													try {
-
-														new Galeria();
-														new InterfazGaleria().setVisible(true);
-													}
-
-													catch (Exception e1) {
-
-														Metodos.mensaje("No se han podido cargar las imágenes", 1);
-
-														new Config2().setVisible(true);
-
-													}
-
-												}
-											}
-
-										}
-
-										else {
-											Metodos.mensaje("La búsqueda no tiene resultados", 3);
-										}
+										Metodos.mostrarGaleriaSql(busqueda, sql, sql2);
 
 									}
 

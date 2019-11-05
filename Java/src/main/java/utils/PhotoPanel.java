@@ -295,7 +295,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 						if (recuento <= 170) {
 							if (MenuPrincipal.getOs().equals("Linux")) {
 
-								MenuPrincipal.cambiarPermisos();
+								Metodos.cambiarPermisos();
 
 							}
 
@@ -325,8 +325,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 						+ MenuPrincipal.getSeparador() + "recortes");
 			}
 
+		} else {
+			Metodos.mensaje("Las imágenes deben estar en la carpeta imágenes_para_recortar", 2);
 		}
-
 	}
 
 	@Override

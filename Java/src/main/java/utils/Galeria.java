@@ -25,7 +25,7 @@ public class Galeria {
 	public Galeria() {
 
 		try {
-
+			String ruta;
 			int numeroImagenes = MenuPrincipal.getListaImagenes().size();
 
 			String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
@@ -38,11 +38,14 @@ public class Galeria {
 			if (!ping.getCanonicalHostName().equals("")) {
 
 				for (int i = 0; i < numeroImagenes; i++) {
-					urlFotos.add("http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
-							+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getListaImagenes().get(i));
-					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL("http://" + lecturaurl[0] + "/"
-							+ lecturaurl[1] + "/data/media/" + MenuPrincipal.getCategorias().get(i) + "/"
-							+ MenuPrincipal.getListaImagenes().get(i)))));
+
+					ruta = "http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
+							+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getListaImagenes().get(i);
+
+					urlFotos.add(ruta);
+
+					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL(ruta))));
+
 				}
 
 			}
@@ -54,10 +57,13 @@ public class Galeria {
 	}
 
 	public Icon getPreview(int num) {
+
 		if (num >= 0 && num < fotos.size()) {
 			Image mini = fotos.get(num).getImage().getScaledInstance(100, 100, Image.SCALE_AREA_AVERAGING);
 			return new ImageIcon(mini);
-		} else {
+		}
+
+		else {
 			return null;
 		}
 	}

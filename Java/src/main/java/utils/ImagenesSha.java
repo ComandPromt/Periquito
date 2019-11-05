@@ -227,7 +227,19 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			JSeparator separator = new JSeparator();
 			mnNewMenu.add(separator);
 
-			JMenuItem mntmNewMenuItem_2 = new JMenuItem("Ver imágenes de la tabla");
+			JMenuItem mntmNewMenuItem_2 = new JMenuItem("Ver imágenes subidas");
+			mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+
+					String busqueda = "";
+
+					busqueda = Metodos.separarPorComas(ComprobarSha.getShaimages());
+
+					Metodos.mostrarGaleriaConWhere(busqueda);
+				}
+
+			});
 			mntmNewMenuItem_2.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/view.png")));
 			mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
 			mnNewMenu.add(mntmNewMenuItem_2);

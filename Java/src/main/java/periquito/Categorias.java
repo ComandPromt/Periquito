@@ -18,6 +18,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -46,18 +47,18 @@ public class Categorias extends JFrame {
 	private JButton editar;
 	private JButton eliminarContacto;
 	private static JList<String> jList1;
-	private JTextArea nota;
 	private JTextPane nombre;
-	private JTextPane tipo;
-
+	JTextArea nota = new JTextArea("", 0, 50);
 	static DefaultListModel<String> modelo = new DefaultListModel<>();
-
+	JTextPane nvGif = new JTextPane();
 	String iduser;
 	transient ResultSet rs;
 	transient Statement s;
 	String cnombre;
 	String ctipo;
 	String cnota;
+	JTextPane tipo = new JTextPane();
+	JTextPane nvUpload = new JTextPane();
 
 	public Categorias() throws IOException, SQLException {
 
@@ -67,7 +68,7 @@ public class Categorias extends JFrame {
 		setResizable(false);
 		setAutoRequestFocus(false);
 
-		this.setSize(new Dimension(670, 605));
+		this.setSize(new Dimension(680, 640));
 		buscar.setToolTipText("Buscar");
 
 		contactos.setToolTipText("Mostrar todos los contactos");
@@ -144,15 +145,19 @@ public class Categorias extends JFrame {
 					}
 
 					else {
+
 						Connection conexion = Metodos.conexionBD();
 
 						s = conexion.createStatement();
 
 						if (jList1.getModel().getSize() == 0) {
-							rs = s.executeQuery("select Nombre from notas order by Nombre");
+
+							rs = s.executeQuery("select cat_name from " + MenuPrincipal.getLecturabd()[3]
+									+ "categories order by cat_name");
+
 							while (rs.next()) {
 
-								modelo.addElement(rs.getString("Nombre"));
+								modelo.addElement(rs.getString("cat_name"));
 							}
 
 						}
@@ -161,25 +166,26 @@ public class Categorias extends JFrame {
 
 							try {
 
-								rs = s.executeQuery("select Nombre,tipo,descripcion from notas WHERE Nombre='"
-										+ jList1.getSelectedValue().toString() + "' order by Nombre");
+								rs = s.executeQuery("select cat_id,cat_name,cat_parent_id,cat_description from "
+										+ MenuPrincipal.getLecturabd()[3] + "categories WHERE cat_id='"
+										+ jList1.getSelectedValue().substring(0, jList1.getSelectedValue().indexOf(" "))
+										+ "' order by cat_name");
+
 								rs.next();
-								cnombre = rs.getString("Nombre");
-								ctipo = rs.getString("tipo");
-								cnota = rs.getString("descripcion");
+
+								iduser = rs.getString("cat_id");
+								cnombre = rs.getString("cat_name");
+								ctipo = rs.getString("cat_parent_id");
+								cnota = rs.getString("cat_description");
 								nombre.setText(cnombre);
 								tipo.setText(ctipo);
 								nota.setText(cnota);
 
-								rs = s.executeQuery("select id from notas WHERE Nombre='" + rs.getString("Nombre")
-										+ "' order by Nombre");
-								rs.next();
-								iduser = rs.getString("id");
-
 								nombre.setEditable(true);
 								tipo.setEditable(true);
 								nota.setEditable(true);
-
+								nvGif.setEditable(true);
+								nvUpload.setEditable(true);
 							} catch (NullPointerException e) {
 								Metodos.mensaje("Seleccione un registro para editar", 2);
 
@@ -218,8 +224,9 @@ public class Categorias extends JFrame {
 
 						try {
 
-							s.executeUpdate("UPDATE notas SET nombre='" + usuario + "',tipo='" + tipo1
-									+ "',descripcion='" + nota1 + "' WHERE id='" + iduser + "'");
+							s.executeUpdate("UPDATE " + MenuPrincipal.getLecturabd()[3] + "categories SET cat_name='"
+									+ usuario + "',cat_parent_id='" + tipo1 + "',cat_description='" + nota1
+									+ "' WHERE cat_id='" + iduser + "'");
 
 							rs.close();
 							s.close();
@@ -227,12 +234,16 @@ public class Categorias extends JFrame {
 							verNotas();
 							Metodos.mensaje("La nota " + usuario + " se ha actualizado correctamente", 2);
 
-						} catch (SQLException e1) {
+						}
+
+						catch (SQLException e1) {
 
 							Metodos.mensaje("La nota " + usuario + " ya está en la BD", 3);
 
 							vaciarDatos();
-						} catch (IOException e1) {
+						}
+
+						catch (IOException e1) {
 							//
 						}
 
@@ -320,10 +331,7 @@ public class Categorias extends JFrame {
 		buscar.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		jPanel3 = new JPanel();
 		JScrollPane jScrollPane1;
-		JPanel panelCasa;
-		JPanel panelCelular;
 		JPanel panelNombre;
-		JScrollPane scrollPane;
 		jScrollPane1 = new JScrollPane();
 		jList1.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		jList1.setFixedCellHeight(40);
@@ -368,8 +376,6 @@ public class Categorias extends JFrame {
 		jScrollPane1.setViewportView(jList1);
 		panelNombre = new JPanel();
 		JLabel jLabel3;
-		JLabel jLabel5;
-		JLabel jLabel6;
 		jLabel3 = new JLabel();
 
 		panelNombre.setBackground(new Color(214, 217, 223));
@@ -381,85 +387,151 @@ public class Categorias extends JFrame {
 		nombre.setEditable(false);
 		nombre.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
+		JCheckBox chckbxNewCheckBox = new JCheckBox("Visible");
+		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(Categorias.class.getResource("/imagenes/view.png")));
+
+		JLabel label_2 = new JLabel("");
+		label_2.setIcon(new ImageIcon(Categorias.class.getResource("/imagenes/download.png")));
+
+		JCheckBox chckbxDescarga = new JCheckBox("Descarga");
+		chckbxDescarga.setFont(new Font("Tahoma", Font.BOLD, 16));
+
 		GroupLayout panelNombreLayout = new GroupLayout(panelNombre);
 		panelNombreLayout.setHorizontalGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelNombreLayout.createSequentialGroup().addContainerGap().addComponent(jLabel3).addGap(18)
-						.addComponent(nombre, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(14, Short.MAX_VALUE)));
-		panelNombreLayout.setVerticalGroup(panelNombreLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(panelNombreLayout.createSequentialGroup().addContainerGap()
+						.addGroup(panelNombreLayout
+								.createParallelGroup(Alignment.LEADING).addComponent(jLabel3).addComponent(lblNewLabel))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(nombre, GroupLayout.PREFERRED_SIZE, 271, GroupLayout.PREFERRED_SIZE)
+								.addGroup(panelNombreLayout.createSequentialGroup().addComponent(chckbxNewCheckBox)
+										.addGap(18)
+										.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 64,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(chckbxDescarga)))
+						.addContainerGap(20, Short.MAX_VALUE)));
+		panelNombreLayout.setVerticalGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(panelNombreLayout.createSequentialGroup()
 						.addGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(panelNombreLayout.createSequentialGroup().addContainerGap()
-										.addComponent(jLabel3, GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
-								.addGroup(panelNombreLayout.createSequentialGroup().addGap(32).addComponent(nombre,
-										GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap()));
+								.addGroup(panelNombreLayout.createSequentialGroup().addGap(26).addComponent(nombre,
+										GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE))
+								.addGroup(panelNombreLayout.createSequentialGroup().addContainerGap().addComponent(
+										jLabel3, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
+								.addGroup(panelNombreLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(panelNombreLayout.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+												.addGroup(panelNombreLayout.createParallelGroup(Alignment.TRAILING)
+														.addGroup(panelNombreLayout.createSequentialGroup()
+																.addComponent(lblNewLabel).addGap(12))
+														.addGroup(panelNombreLayout.createSequentialGroup()
+																.addComponent(chckbxNewCheckBox).addGap(29))))
+										.addGroup(panelNombreLayout.createSequentialGroup().addGap(18)
+												.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)
+												.addContainerGap()))
+								.addGroup(Alignment.TRAILING, panelNombreLayout.createSequentialGroup()
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(chckbxDescarga,
+												GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+										.addGap(30)))));
 		panelNombre.setLayout(panelNombreLayout);
-		panelCasa = new JPanel();
-		jLabel5 = new JLabel();
 
-		panelCasa.setBackground(new Color(214, 217, 223));
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(214, 217, 223));
 
-		jLabel5.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/name.png")));
+		JLabel label = new JLabel();
+		label.setText("Num. categoria padre");
+		label.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		tipo = new JTextPane();
-		tipo.setBackground(new Color(255, 255, 255));
-		tipo.setEditable(false);
 		tipo.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		panelCelular = new JPanel();
-		jLabel6 = new JLabel();
-		jLabel6.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/nota.png")));
+		tipo.setEditable(false);
+		tipo.setBackground(Color.WHITE);
 
-		panelCelular.setBackground(new Color(214, 217, 223));
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(214, 217, 223));
 
-		scrollPane = new JScrollPane((Component) null);
+		JLabel label_1 = new JLabel();
+		label_1.setIcon(new ImageIcon(Categorias.class.getResource("/imagenes/nota.png")));
+
+		JScrollPane scrollPane = new JScrollPane((Component) null);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+		gl_panel_1.setHorizontalGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
+						.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE).addGap(28)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE).addContainerGap()));
+		gl_panel_1.setVerticalGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel_1.createSequentialGroup().addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+								.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap()));
 
-		GroupLayout panelCelularLayout = new GroupLayout(panelCelular);
-		panelCelularLayout.setHorizontalGroup(panelCelularLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelCelularLayout.createSequentialGroup()
-						.addComponent(jLabel6, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE).addGap(18)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(573, Short.MAX_VALUE)));
-		panelCelularLayout
-				.setVerticalGroup(panelCelularLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING,
-								panelCelularLayout.createSequentialGroup().addGap(50)
-										.addComponent(jLabel6, GroupLayout.PREFERRED_SIZE, 81,
-												GroupLayout.PREFERRED_SIZE)
-										.addContainerGap(60, Short.MAX_VALUE))
-						.addGroup(panelCelularLayout.createSequentialGroup().addContainerGap(13, Short.MAX_VALUE)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap()));
-
-		nota = new JTextArea("", 0, 50);
-		scrollPane.setViewportView(nota);
-		nota.setBackground(new Color(255, 255, 255));
-		nota.setEditable(false);
 		nota.setWrapStyleWord(true);
-		nota.setFont(new Font("Monospaced", Font.PLAIN, 20));
 		nota.setLineWrap(true);
-		panelCelular.setLayout(panelCelularLayout);
+		nota.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		nota.setEditable(false);
+		nota.setBackground(Color.WHITE);
+		scrollPane.setViewportView(nota);
+		panel_1.setLayout(gl_panel_1);
 
-		GroupLayout panelCasaLayout = new GroupLayout(panelCasa);
-		panelCasaLayout.setHorizontalGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING,
-						panelCasaLayout.createSequentialGroup().addContainerGap().addComponent(jLabel5).addGap(18)
-								.addComponent(tipo, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(573, Short.MAX_VALUE))
-				.addGroup(panelCasaLayout.createSequentialGroup()
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(panelCelular,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)));
-		panelCasaLayout.setVerticalGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelCasaLayout.createSequentialGroup()
-						.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(panelCasaLayout.createSequentialGroup().addGap(26).addComponent(jLabel5))
-								.addGroup(panelCasaLayout.createSequentialGroup().addGap(34).addComponent(tipo,
-										GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
-						.addGap(18)
-						.addComponent(panelCelular, GroupLayout.PREFERRED_SIZE, 191, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
-		panelCasa.setLayout(panelCasaLayout);
+		JLabel lblNivelGif = new JLabel();
+		lblNivelGif.setText("Nivel GIF");
+		lblNivelGif.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		nvGif.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		nvGif.setEditable(false);
+		nvGif.setBackground(Color.WHITE);
+
+		JLabel lblNivelDescarga = new JLabel();
+		lblNivelDescarga.setText("Nivel subida");
+		lblNivelDescarga.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		nvUpload.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		nvUpload.setEditable(false);
+		nvUpload.setBackground(Color.WHITE);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
+				.createSequentialGroup().addContainerGap()
+				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup()
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panel.createSequentialGroup().addComponent(label).addGap(18).addComponent(
+										tipo, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE))
+								.addComponent(panel_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addContainerGap())
+						.addGroup(gl_panel.createSequentialGroup().addComponent(lblNivelGif).addGap(18)
+								.addComponent(nvGif, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblNivelDescarga).addGap(18)
+								.addComponent(nvUpload, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+								.addGap(23)))));
+		gl_panel.setVerticalGroup(
+				gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_panel.createSequentialGroup().addContainerGap(22, Short.MAX_VALUE)
+												.addComponent(label))
+										.addGroup(gl_panel.createSequentialGroup().addGap(19)
+												.addComponent(tipo, GroupLayout.PREFERRED_SIZE, 23, Short.MAX_VALUE)))
+								.addGap(40)
+								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(nvUpload, GroupLayout.PREFERRED_SIZE, 27,
+												GroupLayout.PREFERRED_SIZE)
+										.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblNivelGif, GroupLayout.PREFERRED_SIZE, 20,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblNivelDescarga, GroupLayout.PREFERRED_SIZE, 20,
+														GroupLayout.PREFERRED_SIZE))
+										.addComponent(nvGif, GroupLayout.PREFERRED_SIZE, 27,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(29)
+								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap()));
+		panel.setLayout(gl_panel);
 
 		GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
 		jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
@@ -467,31 +539,28 @@ public class Categorias extends JFrame {
 						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(panelCasa, 0, 0, Short.MAX_VALUE)
-								.addComponent(panelNombre, GroupLayout.DEFAULT_SIZE, 377, Short.MAX_VALUE))
-						.addContainerGap(89, Short.MAX_VALUE)));
-		jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(Alignment.TRAILING).addGroup(jPanel3Layout
-				.createSequentialGroup().addGap(28)
-				.addGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
-						.addComponent(jScrollPane1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
-						.addGroup(jPanel3Layout.createSequentialGroup()
-								.addComponent(panelNombre, GroupLayout.PREFERRED_SIZE, 113, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(panelCasa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap()));
+								.addComponent(panel, 0, 0, Short.MAX_VALUE)
+								.addComponent(panelNombre, GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+						.addContainerGap(34, Short.MAX_VALUE)));
+		jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(jPanel3Layout.createSequentialGroup().addGap(28).addGroup(jPanel3Layout
+						.createParallelGroup(Alignment.TRAILING, false).addComponent(jScrollPane1, Alignment.LEADING)
+						.addGroup(Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+								.addComponent(panelNombre, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(panel, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)))
+						.addGap(83)));
 		jPanel3.setLayout(jPanel3Layout);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup()
-						.addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 727, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(302, Short.MAX_VALUE)));
+						.addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 670, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(359, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout
-						.createSequentialGroup().addComponent(jPanel3, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(217, Short.MAX_VALUE)));
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, 576, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(109, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
 
 		if (jList1.getModel().getSize() == 0) {
@@ -512,14 +581,16 @@ public class Categorias extends JFrame {
 	public static void verNotas() throws SQLException, IOException {
 
 		modelo.removeAllElements();
+
 		Connection conexion = Metodos.conexionBD();
 
 		Statement s = conexion.createStatement();
 
-		ResultSet rs = s.executeQuery("select Nombre from notas order by Nombre");
+		ResultSet rs = s.executeQuery(
+				"select cat_id,cat_name from " + MenuPrincipal.getLecturabd()[3] + "categories order by cat_name");
 
 		while (rs.next()) {
-			modelo.addElement(rs.getString("Nombre"));
+			modelo.addElement(rs.getString("cat_id") + " - " + rs.getString("cat_name"));
 		}
 
 		jList1.setModel(modelo);
@@ -542,7 +613,8 @@ public class Categorias extends JFrame {
 
 					s = conexion.createStatement();
 
-					s.executeUpdate("DELETE FROM notas WHERE Nombre='" + jList1.getSelectedValue() + "'");
+					s.executeUpdate("DELETE FROM " + MenuPrincipal.getLecturabd()[3] + "categories WHERE cat_name='"
+							+ jList1.getSelectedValue() + "'");
 					vaciarDatos();
 					verNotas();
 					s.close();
@@ -603,5 +675,4 @@ public class Categorias extends JFrame {
 		});
 
 	}
-
 }

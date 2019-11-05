@@ -860,35 +860,401 @@ public abstract class Metodos {
 
 	public static void exportarBd() throws IOException {
 
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 
-		if (!MenuPrincipal.getOs().equals("Linux")) {
+		try {
 
-			try {
+			String ruta = backup[0] + MenuPrincipal.getSeparador() + "backupbd.txt";
 
-				Runtime.getRuntime()
-						.exec("cmd.exe /K mysqldump.exe --no-defaults -h " + lectura[5] + " -u " + lectura[1] + " -p"
-								+ lectura[2] + " " + lectura[0] + " > " + backup[0] + MenuPrincipal.getSeparador()
-								+ "backupbd.sql");
+			String contenido = "CREATE TABLE bots (\r\n" + "id int(11) AUTO_INCREMENT PRIMARY KEY,\r\n"
+					+ "IP varchar(64) NOT NULL UNIQUE\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE tbl_tracking (\r\n" + "id_tracking int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "tx_pagina varchar(70) NOT NULL DEFAULT '',\r\n"
+					+ "tx_paginaOrigen varchar(200) NOT NULL DEFAULT '',\r\n"
+					+ "tx_ipRemota varchar(15) NOT NULL DEFAULT '',\r\n"
+					+ "tx_navegador varchar(255) NOT NULL DEFAULT '',\r\n" + "dt_fechaVisita date NOT NULL,\r\n"
+					+ "pais varchar(25) NOT NULL,\r\n" + "ciudad varchar(30) NOT NULL\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE polaco(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE coreano(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE vietnamita (\r\n" + "id int(11)PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "accion varchar(40) NOT NULL UNIQUE,\r\n" + "texto text NOT NULL\r\n"
+					+ ")DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE aleman(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE ingles(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40 )NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE spanish(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE frances(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE portuges(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE italiano(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE hindu(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE chino(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE japones(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE arabe(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE bengali(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE catalan(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE euskera(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE ruso(\r\n"
+					+ "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "accion varchar(40) NOT NULL UNIQUE,\r\n"
+					+ "texto text NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE "
+					+ MenuPrincipal.getLecturabd()[3] + "users (\r\n"
+					+ "user_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "user_level int(11) NOT NULL DEFAULT '1',\r\n"
+					+ "user_name varchar(255) NOT NULL UNIQUE,\r\n"
+					+ "user_password varchar(255) NOT NULL DEFAULT '',\r\n" + "user_email varchar(255) NOT NULL,\r\n"
+					+ "user_allowemails tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "user_invisible tinyint(1) NOT NULL DEFAULT '0',\r\n"
+					+ "user_comments int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "nacionalidad varchar(15) DEFAULT 'spanish' NOT NULL,\r\n"
+					+ "avatar varchar(255) DEFAULT 'nofoto.jpg' NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE mensajes (\r\n" + "id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "remitente int(11),\r\n" + "destinatario  int(11),\r\n" + "asunto varchar(30),\r\n"
+					+ "mensaje text,\r\n" + "leido tinyint(1) DEFAULT '0' NOT NULL,\r\n"
+					+ "oculto tinyint(1) DEFAULT '0' NOT NULL,\r\n" + "FOREIGN KEY (remitente) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "users (user_id),\r\n"
+					+ "FOREIGN KEY (destinatario) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "users (user_id)\r\n"
+					+ ");\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3] + "sessions (\r\n"
+					+ "session_id int(11),\r\n" + "session_user_id int(11),\r\n"
+					+ "session_lastaction int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "session_location varchar(255) NOT NULL DEFAULT '',\r\n"
+					+ "session_ip varchar(15) NOT NULL DEFAULT '',\r\n" + "session_date date,\r\n"
+					+ "FOREIGN KEY (session_user_id) REFERENCES " + MenuPrincipal.getLecturabd()[3]
+					+ "users (user_id),\r\n" + "PRIMARY KEY (session_id , session_user_id)\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3]
+					+ "lightboxes (\r\n" + "user_id int(11),\r\n" + "lightbox_image_id int(11),\r\n"
+					+ "orden int(11),\r\n" + "PRIMARY KEY (user_id ,lightbox_image_id),\r\n"
+					+ "FOREIGN KEY (user_id) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "users (user_id),\r\n"
+					+ "FOREIGN KEY (user_id) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "users (user_id)\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3]
+					+ "categories (\r\n" + "cat_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "cat_name varchar(255) NOT NULL UNIQUE,\r\n" + "cat_description text NOT NULL,\r\n"
+					+ "cat_parent_id int(11) NOT NULL DEFAULT '0',\r\n" + "cat_hits int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "auth_download tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "auth_upload tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "auth_vote tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "auth_sendpostcard tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "visibilidad TINYINT NOT NULL DEFAULT '1',\r\n" + "permitir_gif TINYINT NOT NULL DEFAULT '1'\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3]
+					+ "images (\r\n" + "image_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "cat_id int(11) NOT NULL DEFAULT '0',\r\n" + "user_id int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "image_name varchar(255) NOT NULL,\r\n" + "image_description text,\r\n"
+					+ "image_keywords text,\r\n" + "image_date date NOT NULL,\r\n"
+					+ "image_active tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "image_media_file varchar(255) NOT NULL UNIQUE,\r\n"
+					+ "image_allow_comments tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "image_comments int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "image_downloads int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "image_votes int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "image_rating decimal(4,2) NOT NULL DEFAULT '0.00',\r\n"
+					+ "image_hits int(11) NOT NULL DEFAULT '0',\r\n" + "sha256 varchar(64) NOT NULL,\r\n"
+					+ "descargable tinyint(1) NOT NULL DEFAULT '1',\r\n"
+					+ "nivel_descarga tinyint(1) NOT NULL DEFAULT '2',\r\n"
+					+ "nivel_comentario tinyint(1) NOT NULL DEFAULT '2',\r\n" + "FOREIGN KEY (cat_id) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "categories (cat_id),\r\n" + "FOREIGN KEY (user_id) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "users (user_id)\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE " + MenuPrincipal.getLecturabd()[3] + "comments (\r\n"
+					+ "comment_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "image_id int(11) NOT NULL DEFAULT '0',\r\n" + "user_id int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "comment_headline varchar(255) NOT NULL DEFAULT '',\r\n" + "comment_text text NOT NULL,\r\n"
+					+ "comment_ip varchar(20) NOT NULL DEFAULT '',\r\n" + "comment_date date NOT NULL,\r\n"
+					+ "visible tinyint(1) NOT NULL DEFAULT '0',\r\n" + "FOREIGN KEY(image_id) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "images (image_id) ON DELETE CASCADE,\r\n"
+					+ "FOREIGN KEY(user_id) REFERENCES  " + MenuPrincipal.getLecturabd()[3] + "images (user_id)\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3]
+					+ "scrapting (\r\n" + "comment_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "image_id int(11) NOT NULL DEFAULT '0',\r\n" + "user_id int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "comment_headline varchar(255) NOT NULL DEFAULT '',\r\n" + "comment_text text NOT NULL,\r\n"
+					+ "comment_ip varchar(20) NOT NULL DEFAULT '',\r\n" + "comment_date date NOT NULL,\r\n"
+					+ "visible tinyint(1) NOT NULL DEFAULT '0',\r\n" + "tag varchar(30) NOT NULL DEFAULT 'scrapt',\r\n"
+					+ "FOREIGN KEY (image_id) REFERENCES " + MenuPrincipal.getLecturabd()[3]
+					+ "images (image_id) ON DELETE CASCADE,\r\n" + "FOREIGN KEY (user_id) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "users (user_id)\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE " + MenuPrincipal.getLecturabd()[3] + "etiquetas (\r\n"
+					+ "id int(11) PRIMARY KEY,\r\n" + "nombre varchar(20) UNIQUE\r\n" + ") DEFAULT CHARSET=utf8;\r\n"
+					+ "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3] + "tags (\r\n"
+					+ "id_imagen int(11),\r\n" + "id_tag int(11),\r\n" + "FOREIGN KEY (id_imagen) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "images (image_id),\r\n" + "FOREIGN KEY (id_tag) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "etiquetas (id),\r\n" + "PRIMARY KEY (id_imagen,id_tag)\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3]
+					+ "groups (\r\n" + "group_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "group_name varchar(25) NOT NULL UNIQUE\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE " + MenuPrincipal.getLecturabd()[3] + "imgroups (\r\n"
+					+ "id_group int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "user_id int(11),\r\n"
+					+ "nombre varchar(30),\r\n" + "parent_group int(11),\r\n" + "description varchar(50),\r\n"
+					+ "nivel_visible tinyint(1) NOT NULL,\r\n" + "nivel_descarga tinyint(1) NOT NULL,\r\n"
+					+ "nivel_comentario tinyint(1) NOT NULL,\r\n" + "FOREIGN KEY(user_id) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "users(user_id)\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
+					+ "CREATE TABLE " + MenuPrincipal.getLecturabd()[3] + "msgroups (\r\n"
+					+ "id_group int(11) PRIMARY KEY AUTO_INCREMENT,\r\n" + "nombre varchar(30),\r\n"
+					+ "parent_group int(11) NOT NULL DEFAULT 0,\r\n" + "description varchar(50)\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE " + MenuPrincipal.getLecturabd()[3]
+					+ "musugroup (\r\n" + "usuario int(11),\r\n" + "grupo int(11),\r\n"
+					+ "FOREIGN KEY(usuario) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "users (user_id),\r\n"
+					+ "FOREIGN KEY(grupo) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "msgroups (id_group),\r\n"
+					+ "PRIMARY KEY(usuario,grupo)\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE "
+					+ MenuPrincipal.getLecturabd()[3] + "video (\r\n" + "video_id int(11) PRIMARY KEY,\r\n"
+					+ "nombre varchar(30) NOT NULL,\r\n" + "ruta varchar(50) NOT NULL,\r\n"
+					+ "nivel_visible tinyint(1) NOT NULL\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE "
+					+ MenuPrincipal.getLecturabd()[3] + "imv (\r\n" + "imagen int(11),\r\n" + "video int(11),\r\n"
+					+ "FOREIGN KEY (imagen) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "images (image_id),\r\n"
+					+ "FOREIGN KEY (video) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "video (video_id),\r\n"
+					+ "PRIMARY KEY(imagen)\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE "
+					+ MenuPrincipal.getLecturabd()[3] + "videocomments (\r\n"
+					+ "comment_id int(11) PRIMARY KEY AUTO_INCREMENT,\r\n"
+					+ "video_id int(11) NOT NULL DEFAULT '0',\r\n" + "user_id int(11) NOT NULL DEFAULT '0',\r\n"
+					+ "comment_headline varchar(255) NOT NULL DEFAULT '',\r\n" + "comment_text text NOT NULL,\r\n"
+					+ "comment_ip varchar(20) NOT NULL DEFAULT '',\r\n" + "comment_date date NOT NULL,\r\n"
+					+ "visible tinyint(1) NOT NULL DEFAULT '0',\r\n" + "FOREIGN KEY (video_id) REFERENCES "
+					+ MenuPrincipal.getLecturabd()[3] + "video (video_id) ON DELETE CASCADE,\r\n"
+					+ "FOREIGN KEY (user_id) REFERENCES " + MenuPrincipal.getLecturabd()[3] + "users (user_id)\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE notas (\r\n"
+					+ "id int(11) AUTO_INCREMENT PRIMARY KEY,\r\n" + "Nombre varchar(50) NOT NULL UNIQUE,\r\n"
+					+ "tipo varchar(50) NOT NULL,\r\n" + "descripcion varchar(255) NOT NULL\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE antispam (\r\n"
+					+ "id int(11) AUTO_INCREMENT PRIMARY KEY,\r\n" + "Nombre varchar(25) NOT NULL UNIQUE\r\n"
+					+ ") DEFAULT CHARSET=utf8;\r\n" + "\r\n" + "CREATE TABLE descargas (\r\n" + "usuario int(11),\r\n"
+					+ "imagen int(11),\r\n" + "FOREIGN KEY (usuario) REFERENCES " + MenuPrincipal.getLecturabd()[3]
+					+ "users(user_id),\r\n" + "FOREIGN KEY (imagen) REFERENCES " + MenuPrincipal.getLecturabd()[3]
+					+ "images(image_id),\r\n" + "PRIMARY KEY (usuario,imagen)\r\n" + ") DEFAULT CHARSET=utf8;\r\n"
+					+ "\r\n"
+					+ "CREATE OR REPLACE VIEW ver_bots AS SELECT distinct(tx_ipRemota) FROM tbl_tracking where tx_navegador like '%crawler%' OR tx_navegador like '%Bot%' AND tx_ipRemota!='127.0.0.1';\r\n\r\n"
+					+ "CREATE OR REPLACE VIEW pais_desconocido AS SELECT distinct(tx_ipRemota) from tbl_tracking where pais='unknow';\r\n";
 
-			} catch (Exception e) {
-				Metodos.mensaje("Error", 1);
+			File file = new File(ruta);
+
+			if (!file.exists()) {
+				file.createNewFile();
 			}
 
-		}
-
-		else {
-
-			String[] cmdarray = { "/bin/sh", "-c", "mysqldump --no-defaults -h " + lectura[5] + " -u " + lectura[1]
-					+ " -p" + lectura[2] + " " + lectura[0] + " > " + backup[0] + "/backupbd.sql" };
-			Runtime.getRuntime().exec(cmdarray);
-
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(contenido);
+			bw.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		Metodos.mensaje("Backup realizado correctamente", 2);
 
 		abrirCarpeta(backup[0]);
+	}
+
+	public static void mostrarGaleriaSql(String busqueda, String sql, String sql2) throws SQLException, IOException {
+
+		int recuento;
+
+		Connection conexion = Metodos.conexionBD();
+
+		Statement s = conexion.createStatement();
+
+		ResultSet rs = s.executeQuery(sql);
+
+		rs.next();
+
+		recuento = Integer.parseInt(rs.getString("count(image_id)"));
+
+		if (recuento > 0) {
+
+			if (recuento > 500) {
+
+				Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+				Metodos.mensaje("Por favor,introduce un nombre con menos registros para mostrarlos", 2);
+
+				Metodos.abrirCarpeta(
+						Metodos.obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0], MenuPrincipal.getLecturaurl()[1])
+								+ "/search.php?filtro=" + busqueda);
+
+			}
+
+			else {
+
+				rs = s.executeQuery(sql2);
+
+				MenuPrincipal.getListaImagenes().clear();
+
+				MenuPrincipal.getCategorias().clear();
+
+				while (rs.next()) {
+
+					MenuPrincipal.getListaImagenes().add(rs.getString("image_media_file"));
+					MenuPrincipal.getCategorias().add(rs.getString("cat_id"));
+				}
+
+			}
+
+			s.close();
+
+			rs.close();
+
+			conexion.close();
+
+			if (recuento == 0) {
+
+				Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+
+			} else {
+
+				if (recuento < 500) {
+
+					try {
+
+						new Galeria();
+						new InterfazGaleria().setVisible(true);
+					}
+
+					catch (Exception e1) {
+
+						Metodos.mensaje("No se han podido cargar las imágenes", 1);
+
+						new Config2().setVisible(true);
+
+					}
+
+				}
+			}
+
+		}
+
+		else {
+			Metodos.mensaje("La búsqueda no tiene resultados", 3);
+		}
+	}
+
+	public static void mostrarGaleriaConWhere(String busqueda) {
+
+		try {
+
+			if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM " + MenuPrincipal.getLecturabd()[3] + "images",
+					"COUNT(image_id)")) {
+
+				try {
+
+					if (Metodos.comprobarConfiguracion()) {
+
+						String sql = "";
+
+						String sql2 = "";
+
+						sql = "select count(image_id) from " + MenuPrincipal.getLecturabd()[3] + "images WHERE "
+								+ busqueda;
+
+						sql2 = "select image_media_file,cat_id from " + MenuPrincipal.getLecturabd()[3]
+								+ "images WHERE " + busqueda;
+
+						int recuento;
+
+						if (!busqueda.isEmpty()) {
+
+							Connection conexion = Metodos.conexionBD();
+
+							Statement s = conexion.createStatement();
+
+							ResultSet rs = s.executeQuery(sql);
+
+							rs.next();
+
+							recuento = Integer.parseInt(rs.getString("count(image_id)"));
+
+							if (recuento > 0) {
+
+								if (recuento > 500) {
+
+									Metodos.mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+									Metodos.mensaje("Por favor,introduce un nombre con menos registros para mostrarlos",
+											2);
+
+									Metodos.abrirCarpeta(Metodos.obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0],
+											MenuPrincipal.getLecturaurl()[1]) + "/search.php?filtro=" + busqueda);
+
+								}
+
+								else {
+
+									rs = s.executeQuery(sql2);
+
+									MenuPrincipal.getListaImagenes().clear();
+
+									MenuPrincipal.getCategorias().clear();
+
+									while (rs.next()) {
+
+										MenuPrincipal.getListaImagenes().add(rs.getString("image_media_file"));
+										MenuPrincipal.getCategorias().add(rs.getString("cat_id"));
+									}
+
+								}
+
+								s.close();
+
+								rs.close();
+
+								conexion.close();
+
+								if (recuento == 0) {
+
+									Metodos.mensaje("No hay resultados, intente con otro nombre", 2);
+
+								} else {
+
+									if (recuento < 500) {
+
+										try {
+
+											new Galeria();
+											new InterfazGaleria().setVisible(true);
+										}
+
+										catch (Exception e1) {
+
+											Metodos.mensaje("No se han podido cargar las imágenes", 1);
+
+											new Config2().setVisible(true);
+
+										}
+
+									}
+								}
+
+							}
+
+							else {
+								Metodos.mensaje("La búsqueda no tiene resultados", 3);
+							}
+
+						}
+
+					}
+				}
+
+				catch (Exception e1) {
+					Metodos.mensaje("Revise la búsqueda", 3);
+				}
+			}
+		}
+
+		catch (SQLException e1) {
+
+			try {
+				new Bd().setVisible(true);
+			}
+
+			catch (IOException e11) {
+				//
+			}
+
+		}
 	}
 
 	public static void crearScript(String archivo, String contenido, boolean opcional, String os) throws IOException {
@@ -1747,9 +2113,23 @@ public abstract class Metodos {
 		return result;
 	}
 
+	public static void cambiarPermisos() {
+
+		try {
+			crearScript("change_permisos.sh", "sudo chmod 777 -R /var/www", true, MenuPrincipal.getOs());
+		}
+
+		catch (Exception e1) {
+			//
+		}
+	}
+
 	public static void crearCarpetas() {
 
-		File directorio = new File("Config/imagenes");
+		File directorio = new File("Config");
+		directorio.mkdir();
+
+		directorio = new File("Config/imagenes");
 		directorio.mkdir();
 
 		directorio = new File("Config/imagenes/bn");
@@ -1863,6 +2243,61 @@ public abstract class Metodos {
 		}
 
 		return bld.toString();
+	}
+
+	public static String separarPorComas(List<String> shaimages) {
+
+		String resultado = "";
+
+		int y = 1;
+
+		for (int i = 0; i < shaimages.size(); i++) {
+
+			resultado += "sha256='" + shaimages.get(i) + "'";
+
+			if (y < shaimages.size()) {
+
+				resultado += ", AND ";
+			}
+
+			y++;
+		}
+
+		return resultado;
+	}
+
+	public static int saberIdUsuario(String user) {
+
+		ResultSet rs;
+		Connection conexion;
+		Statement s;
+
+		int resultado = 0;
+
+		try {
+
+			conexion = conexionBD();
+
+			s = conexion.createStatement();
+
+			rs = s.executeQuery(
+					"SELECT user_id FROM " + MenuPrincipal.getLecturabd()[3] + "users WHERE user_name='" + user + "'");
+
+			rs.next();
+
+			resultado = Integer.parseInt(rs.getString("user_id"));
+
+			s.close();
+			rs.close();
+			conexion.close();
+		}
+
+		catch (Exception e) {
+			//
+		}
+
+		return resultado;
+
 	}
 
 }

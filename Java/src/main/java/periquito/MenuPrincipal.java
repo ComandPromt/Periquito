@@ -401,17 +401,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
-	public static void cambiarPermisos() {
-
-		try {
-			Metodos.crearScript("change_permisos.sh", "sudo chmod 777 -R /var/www", true, os);
-		}
-
-		catch (Exception e1) {
-			//
-		}
-	}
-
 	public static LinkedList<String> getListaImagenes() {
 		return listaImagenes;
 	}
@@ -449,10 +438,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				if (Metodos.comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
 
 					Metodos.exportarBd();
-
-					if (!os.equals("Linux")) {
-						Metodos.eliminarFichero("backupbd.bat");
-					}
 
 				} else {
 					new Bd().setVisible(true);
@@ -708,9 +693,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			int recuento = Metodos.listarFicherosPorCarpeta(new File(lectura[0] + "/Hacer_gif/img"), ".");
 
 			if (recuento <= 170) {
+
 				if (os.equals("Linux")) {
 
-					cambiarPermisos();
+					Metodos.cambiarPermisos();
 
 				}
 
@@ -745,6 +731,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		catch (IOException e) {
 
 			try {
+
 				Metodos.mensaje("Comprueba la configuración", 3);
 				new Bd().setVisible(true);
 				new Config2().setVisible(true);
@@ -760,7 +747,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private void video2Frame() {
 
 		if (os.equals("Linux")) {
-			cambiarPermisos();
+			Metodos.cambiarPermisos();
 		}
 
 		try {
@@ -2033,6 +2020,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			String imagen;
 
 			Connection conexionSubida = Metodos.conexionBD();
+
 			ResultSet rs;
 
 			int comprobarSha = 0;
@@ -2049,6 +2037,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			total = listaImagenes.size();
 
 			File file;
+
+			int idUsuario = Metodos.saberIdUsuario(user[0]);
 
 			for (int i = 0; i < total; i++) {
 
@@ -2085,9 +2075,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						imagen = directorioImagenes + separador + imagenbd;
 
 						s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','" + categoria
-								+ "','1','" + nombreSubida + "','" + descripcion + "','" + etiqueta + "','"
-								+ Metodos.saberFecha() + "','1','" + imagenbd + "','1','0','0','0',DEFAULT,'0','"
-								+ Metodos.getSHA256Checksum(imagen) + "',DEFAULT,DEFAULT)");
+								+ "','" + idUsuario + "','" + nombreSubida + "','" + descripcion + "','" + etiqueta
+								+ "','" + Metodos.saberFecha() + "','1','" + imagenbd
+								+ "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen)
+								+ "',DEFAULT,DEFAULT)");
 
 						Metodos.postFile(f2, imagenbd, user[0], user[1], categoria);
 
