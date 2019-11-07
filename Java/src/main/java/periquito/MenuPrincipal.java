@@ -135,6 +135,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 
+	static String[] permisos = Metodos.leerFicheroArray("Config/Permisos.txt", 4);
+
 	static String[] lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
 
 	static JButton button = new JButton("");
@@ -174,6 +176,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JSeparator separator_10;
 
 	String nombreImagenes = "";
+	private JMenuItem mntmNewMenuItem_7;
+
+	public static String[] getPermisos() {
+		return permisos;
+	}
+
+	public static void setPermisos(String[] permisos) {
+		MenuPrincipal.permisos = permisos;
+	}
 
 	public static String getDirectorioImagenes() {
 		return directorioImagenes;
@@ -825,6 +836,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		catch (UnknownHostException e) {
 			Metodos.mensaje("No hay conexión a internet", 3);
+		}
+
+		if (permisos[0] == null) {
+			Metodos.crearFichero("Config/Permisos.txt", "2\r\n" + "1\r\n" + "1\r\n" + "1\r\n", false);
 		}
 
 		if (sonido[0] == null) {
@@ -1587,6 +1602,20 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		mnNewMenu_2.add(mntmNewMenuItem_4);
 
+		JSeparator separator_11 = new JSeparator();
+		mnNewMenu_2.add(separator_11);
+
+		mntmNewMenuItem_7 = new JMenuItem("Permiso");
+		mntmNewMenuItem_7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new Permiso().setVisible(true);
+			}
+		});
+		mntmNewMenuItem_7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/key.png")));
+		mntmNewMenuItem_7.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_2.add(mntmNewMenuItem_7);
+
 		menu7 = new JMenu("Ayuda");
 		menu7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/help.png")));
 		menu7.setForeground(Color.BLACK);
@@ -2083,9 +2112,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						s.executeUpdate("INSERT INTO " + lecturabd[3] + "images VALUES('" + maximo + "','" + categoria
 								+ "','" + idUsuario + "','" + nombreSubida + "','" + descripcion + "','" + etiqueta
-								+ "','" + Metodos.saberFecha() + "','1','" + imagenbd
-								+ "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen)
-								+ "',DEFAULT,DEFAULT,DEFAULT)");
+								+ "','" + Metodos.saberFecha() + "','1','" + imagenbd + "','" + permisos[3]
+								+ "','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen) + "','"
+								+ permisos[0] + "','" + permisos[1] + "','" + permisos[2] + "')");
 
 						Metodos.postFile(f2, imagenbd, user[0], user[1], categoria);
 
