@@ -860,7 +860,7 @@ public abstract class Metodos {
 
 	public static void exportarBd() throws IOException {
 
-		String[] backup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+		String[] backup = leerFicheroArray("Config/Backup.txt", 1);
 
 		try {
 
@@ -1350,7 +1350,7 @@ public abstract class Metodos {
 				while (rs.next()) {
 
 					categorias.add(rs.getString("cat_name"));
-
+					MenuPrincipal.setCategorias(rs.getString("cat_name"));
 					MenuPrincipal.setIdCategorias(rs.getString("cat_id"));
 				}
 
@@ -1373,7 +1373,7 @@ public abstract class Metodos {
 		for (int i = 0; i < listaImagenes.size(); i++) {
 
 			if (!listaImagenes.get(i).isEmpty()) {
-				Metodos.eliminarFichero(ruta + listaImagenes.get(i));
+				eliminarFichero(ruta + listaImagenes.get(i));
 			}
 
 		}

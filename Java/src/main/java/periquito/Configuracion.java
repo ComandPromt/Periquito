@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,6 +47,7 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 	JCheckBox chckbxEliminarImagenesLocales;
 	JCheckBox chckbxNewCheckBox;
 	String[] configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
+	JCheckBox chckbxNewCheckBox_2;
 
 	public Configuracion() throws IOException {
 
@@ -53,7 +56,6 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		getContentPane().setFont(new Font("Tahoma", Font.BOLD, 16));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Configuracion.class.getResource("/imagenes/config.png")));
 		setTitle("Periquito v3 Configuración de subida de imágenes");
-		setType(Type.UTILITY);
 		initComponents();
 
 		if (!configuracion[0].isEmpty()) {
@@ -81,17 +83,23 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 			chckbxNewCheckBox.setSelected(true);
 		}
 
-		if (Metodos.comprobarConexion(true)) {
+		if (!configuracion[1].equals("0")) {
 
-			try {
-				Metodos.ponerCategoriasBd(comboBox);
-				comboBox.addItem("Ninguna");
+			if (Metodos.comprobarConexion(true)) {
+
+				try {
+					Metodos.ponerCategoriasBd(comboBox);
+				}
+
+				catch (Exception e) {
+					//
+				}
+
 			}
+		}
 
-			catch (Exception e) {
-				//
-			}
-
+		else {
+			chckbxNewCheckBox_2.setSelected(true);
 		}
 
 		this.setVisible(true);
@@ -109,11 +117,11 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 
 		try {
 
-			fS.write(jTextField1.getText());
+			fS.write(Metodos.eliminarEspacios(jTextField1.getText()));
 
 			fS.newLine();
 
-			if (!comboBox.getSelectedItem().toString().equals("Ninguna")) {
+			if (!chckbxNewCheckBox_2.isSelected()) {
 				idCategoria = MenuPrincipal.getIdCategorias().get(comboBox.getSelectedIndex());
 			}
 
@@ -121,11 +129,11 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 
 			fS.newLine();
 
-			fS.write(textArea.getText());
+			fS.write(Metodos.eliminarEspacios(textArea.getText()));
 
 			fS.newLine();
 
-			fS.write(textField.getText());
+			fS.write(Metodos.eliminarEspacios(textField.getText()));
 
 			fS.newLine();
 
@@ -179,6 +187,7 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 			fS.close();
 			flS.close();
 		}
+
 	}
 
 	public void initComponents() throws IOException {
@@ -235,10 +244,15 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
 
 		JButton button = new JButton("");
+
 		button.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
+
 				try {
+
 					guardarDatos(true);
+
 				} catch (IOException e1) {
 					//
 				}
@@ -257,40 +271,78 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 
 		chckbxNewCheckBox_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 
+		chckbxNewCheckBox_2 = new JCheckBox("No usar categoría por defecto");
+		chckbxNewCheckBox_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				if (chckbxNewCheckBox_2.isSelected()) {
+
+					comboBox.setVisible(true);
+
+					try {
+						Metodos.ponerCategoriasBd(comboBox);
+					} catch (Exception e1) {
+						//
+					}
+
+				}
+
+				else {
+					comboBox.setVisible(false);
+
+				}
+
+			}
+		});
+
+		chckbxNewCheckBox_2.setFont(new Font("Tahoma", Font.BOLD, 16));
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addGap(21)
+		layout.setHorizontalGroup(layout
+				.createParallelGroup(
+						Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(21)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel)
 								.addComponent(label, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE)
 								.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)
 								.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+								.addGap(18)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 265,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 268,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(textField, 269, 269, 269)))
+								.addGroup(layout.createSequentialGroup().addGap(14)
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(chckbxNewCheckBox_2).addComponent(jTextField1,
+														GroupLayout.PREFERRED_SIZE, 269, GroupLayout.PREFERRED_SIZE))))
+						.addContainerGap(35, Short.MAX_VALUE))
+				.addGroup(Alignment.TRAILING,
+						layout.createSequentialGroup().addContainerGap(107, Short.MAX_VALUE).addComponent(lblNewLabel_2)
+								.addGap(105))
+				.addGroup(layout.createSequentialGroup().addGap(23)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(14).addComponent(jTextField1,
-										GroupLayout.PREFERRED_SIZE, 269, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup().addGap(18)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING)
-												.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 265,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 268,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(textField, 269, 269, 269)))))
-						.addGroup(layout.createSequentialGroup().addGap(23).addGroup(layout
-								.createParallelGroup(Alignment.LEADING).addComponent(chckbxEliminarImagenesLocales)
-								.addComponent(chckbxNewCheckBox_1)
 								.addGroup(layout.createSequentialGroup().addComponent(chckbxNewCheckBox)
-										.addPreferredGap(ComponentPlacement.RELATED, 177, Short.MAX_VALUE).addComponent(
-												button, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)))))
-				.addContainerGap(26, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(110).addComponent(lblNewLabel_2).addContainerGap(102,
-						Short.MAX_VALUE)));
+										.addPreferredGap(ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
+										.addComponent(button, GroupLayout.PREFERRED_SIZE, 63,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(26))
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(chckbxEliminarImagenesLocales)
+												.addComponent(chckbxNewCheckBox_1))
+										.addContainerGap(130, Short.MAX_VALUE)))));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(5).addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
-				.addGap(18)
+				.addGap(6).addComponent(lblNewLabel_2, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.UNRELATED)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel).addComponent(
 						jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(15)
+				.addPreferredGap(ComponentPlacement.RELATED).addComponent(chckbxNewCheckBox_2)
+				.addPreferredGap(ComponentPlacement.RELATED)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
 						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -305,11 +357,13 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(chckbxEliminarImagenesLocales).addGap(18).addComponent(chckbxNewCheckBox_1)
-				.addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(chckbxNewCheckBox)
-						.addComponent(button, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
-				.addContainerGap(23, Short.MAX_VALUE)));
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(chckbxEliminarImagenesLocales)
+								.addGap(18).addComponent(chckbxNewCheckBox_1).addGap(18).addComponent(chckbxNewCheckBox)
+								.addContainerGap(65, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(button, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap()))));
 
 		textArea = new JTextArea("", 0, 50);
 		textArea.setWrapStyleWord(true);
@@ -318,7 +372,7 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		textArea.setBackground(Color.WHITE);
 		scrollPane.setViewportView(textArea);
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(518, 688));
+		setSize(new Dimension(518, 716));
 		setLocationRelativeTo(null);
 	}
 

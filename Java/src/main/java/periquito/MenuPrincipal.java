@@ -260,60 +260,71 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		try {
 
-			configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
+			int idCategoria = Integer.parseInt(idCategorias.get(comboBox.getSelectedIndex()));
 
-			listaImagenes.clear();
+			int resp = JOptionPane.showConfirmDialog(null, "Las imágenes se subirán a la categoría : "
+					+ categorias.get(comboBox.getSelectedIndex()) + " ¿Está seguro?");
 
-			if (Metodos.pingURL("http://" + lecturaurl[0] + carpeta + "/index.php")) {
+			if (resp == 0) {
 
-				if (!chckbxNewCheckBox.isSelected()) {
+				configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
 
-					comprobarBN();
+				listaImagenes.clear();
 
-				}
+				if (Metodos.pingURL("http://" + lecturaurl[0] + carpeta + "/index.php")) {
 
-				if (!soloGif.isSelected()) {
+					if (!chckbxNewCheckBox.isSelected()) {
 
-					listaImagenes = Metodos.directorio(directorioImagenes, ".");
+						comprobarBN();
+
+					}
+
+					if (!soloGif.isSelected()) {
+
+						listaImagenes = Metodos.directorio(directorioImagenes, ".");
+
+					}
+
+					else {
+
+						subirSoloGif = true;
+
+						listaImagenes = Metodos.directorio(directorioImagenes, "gif");
+					}
+
+					if (configuracion[3].isEmpty()) {
+
+						etiqueta = JOptionPane.showInputDialog(null, "Escribe la/s etiqueta/s");
+
+					}
+
+					else {
+						etiqueta = configuracion[3];
+					}
+
+					extraerNombreComun();
+
+					subirFotos(idCategoria);
 
 				}
 
 				else {
 
-					subirSoloGif = true;
+					Metodos.mensaje("Por favor, revisa la configuración", 3);
 
-					listaImagenes = Metodos.directorio(directorioImagenes, "gif");
-				}
-
-				if (configuracion[3].isEmpty()) {
-
-					etiqueta = JOptionPane.showInputDialog(null, "Escribe la/s etiqueta/s");
+					new Config2().setVisible(true);
 
 				}
-
-				else {
-					etiqueta = configuracion[3];
-				}
-
-				extraerNombreComun();
-
-				subirFotos();
-
 			}
-
-			else {
-
-				Metodos.mensaje("Por favor, revisa la configuración", 3);
-
-				new Config2().setVisible(true);
-
-			}
-
 		}
 
 		catch (Exception e1) {
-			//
+			e1.printStackTrace();
 		}
+	}
+
+	public static void setCategorias(String string) {
+		categorias.add(string);
 	}
 
 	protected void comprobarBN() throws IOException {
@@ -1729,7 +1740,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		return retorno;
 	}
 
-	private void subirFotos() {
+	private void subirFotos(int categoria) {
 
 		try {
 
@@ -1738,8 +1749,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			Metodos.convertir();
 
 			listaImagenes.clear();
-
-			int categoria = Integer.parseInt(idCategorias.get(comboBox.getSelectedIndex()));
 
 			if (subirSoloGif) {
 				listaImagenes = Metodos.directorio(directorioImagenes, "gif");
@@ -2027,7 +2036,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			String imagenbd = "";
 
-			int y;
+			int y = 1;
 
 			int total;
 
@@ -2041,8 +2050,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			int idUsuario = Metodos.saberIdUsuario(user[0]);
 
 			for (int i = 0; i < total; i++) {
-
-				y = i;
 
 				imagen = directorioImagenes + separador + listaImagenes.get(i);
 
@@ -2059,7 +2066,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					if (comprobarSha == 0) {
 
-						progreso.setProgressBarRecorrido("Imagen " + (++y) + " de " + total);
+						progreso.setProgressBarRecorrido("Imagen " + y + " de " + total);
 
 						progreso.setProgressBar(Metodos.calcularPorcentaje(y, total));
 
@@ -2078,7 +2085,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								+ "','" + idUsuario + "','" + nombreSubida + "','" + descripcion + "','" + etiqueta
 								+ "','" + Metodos.saberFecha() + "','1','" + imagenbd
 								+ "','1','0','0','0',DEFAULT,'0','" + Metodos.getSHA256Checksum(imagen)
-								+ "',DEFAULT,DEFAULT)");
+								+ "',DEFAULT,DEFAULT,DEFAULT)");
 
 						Metodos.postFile(f2, imagenbd, user[0], user[1], categoria);
 
@@ -2091,7 +2098,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						imagenesSubidas.add(imagen);
 
 						maximo++;
-
+						y++;
 					}
 
 					else {
