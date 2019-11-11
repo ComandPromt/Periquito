@@ -1,8 +1,8 @@
-# Periquito v3.0
+# Periquito - Cliente del CMS 4images-UPDATED
 
 ---
 
-# 1. ¿Qué es Periquito v3.0?
+# 1. ¿Qué es Periquito?
 
 - Este programa principalmente está pensado para subir imágenes masivas a un CMS de gestión de imágenes
 
@@ -15,9 +15,11 @@
 - Cada imagen se redimensiona y se renombra con la fecha y hora actual y se convierte a JPG 
 
 - Mueve las imágenes procesadas al servidor
+
 ---
 
 ## 1.2 Requisitos
+
 ### Sistemas Operativos soportados
 
 -Windows Vista o posterior
@@ -95,11 +97,13 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 ![Preview](previews/2.png)
 
 - Frames a GIF
+
 - GIF a frames
 
 ![Preview](previews/2_1.png)
 
 - Video a Frames
+
 - Video a Gif
 
 ![Preview](previews/2_2.png)
@@ -117,6 +121,7 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 ----
 
 # 4. Utilidades
+
 ---
 
 - Copia de seguridad de la base de datos
@@ -154,4 +159,5 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 *Nota: se usa esta API para asegurar que las imágenes se suben en orden alfabético, es decir, en el mismo orden que tenían antes de ser renombradas. Esta API se usará en el programa Java para que el usuario sólo tenga en el servidor web las utilidades del programa
 
 [API](https://dashboard.heroku.com/apps/apiperiquito)
+
 [Source](https://github.com/ComandPromt/Images-Periquito-API)

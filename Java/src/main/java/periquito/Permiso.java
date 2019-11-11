@@ -26,6 +26,7 @@ import javax.swing.event.ChangeListener;
 import utils.Metodos;
 
 @SuppressWarnings("all")
+
 public class Permiso extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	private JTextField nvDescarga;
@@ -191,7 +192,9 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 					}
 				}
 			}
+
 		});
+
 		button.setIcon(new ImageIcon(Permiso.class.getResource("/imagenes/save.png")));
 
 		chckbxNewCheckBox = new JCheckBox("Permitir comentario");
@@ -272,7 +275,9 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 			if (chckbxNewCheckBox.isSelected()) {
 				fS.write("1");
-			} else {
+			}
+
+			else {
 				fS.write("0");
 			}
 
@@ -307,13 +312,11 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
-
+		//
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-
+		//
 	}
 }

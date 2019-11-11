@@ -177,6 +177,16 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	String nombreImagenes = "";
 	private JMenuItem mntmNewMenuItem_7;
+	private JMenuItem mntmNewMenuItem_8;
+	private JSeparator separator_12;
+	private JMenu mnNewMenu_5;
+	private JMenuItem mntmNewMenuItem_9;
+	private JMenuItem mntmNewMenuItem_10;
+	private JMenuItem mntmNewMenuItem_11;
+	private JSeparator separator_15;
+	private JSeparator separator_14;
+	private JMenuItem mntmNewMenuItem_12;
+	private JSeparator separator_16;
 
 	public static String[] getPermisos() {
 		return permisos;
@@ -271,10 +281,35 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		try {
 
-			int idCategoria = Integer.parseInt(idCategorias.get(comboBox.getSelectedIndex()));
+			lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
+			lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+			configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
+			user = Metodos.leerFicheroArray("Config/User.txt", 2);
+			sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
+			permisos = Metodos.leerFicheroArray("Config/Permisos.txt", 4);
+			lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+			lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 
-			int resp = JOptionPane.showConfirmDialog(null, "Las imágenes se subirán a la categoría : "
-					+ categorias.get(comboBox.getSelectedIndex()) + " ¿Está seguro?");
+			String categoria = "";
+
+			int idCategoria = 0;
+
+			if (!configuracion[1].equals("0") && Integer.parseInt(configuracion[1]) > 0) {
+
+				idCategoria = Integer.parseInt(configuracion[1]);
+
+				categoria = Metodos.saberCategoria(idCategoria);
+			}
+
+			else {
+
+				idCategoria = Metodos.saberIdCategoria(comboBox.getSelectedItem().toString());
+
+				categoria = categorias.get(comboBox.getSelectedIndex());
+			}
+
+			int resp = JOptionPane.showConfirmDialog(null,
+					"Las imágenes se subirán a la categoría : " + categoria + " ¿Está seguro?");
 
 			if (resp == 0) {
 
@@ -445,41 +480,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			//
 		}
 
-	}
-
-	private void backupBd() {
-
-		ArrayList<String> categoriasSeleccion;
-
-		try {
-
-			categoriasSeleccion = Metodos.comprobarConexionBD();
-
-			if (categoriasSeleccion != null && categoriasSeleccion.size() > 0) {
-
-				if (Metodos.comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
-
-					Metodos.exportarBd();
-
-				} else {
-					new Bd().setVisible(true);
-
-				}
-
-			}
-		}
-
-		catch (IOException e2) {
-
-			try {
-				new Bd().setVisible(true);
-			}
-
-			catch (IOException e1) {
-				//
-			}
-
-		}
 	}
 
 	public static void hacerGIF() throws IOException {
@@ -1107,19 +1107,33 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem4.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				backupBd();
+
+				new BackupBd().setVisible(true);
 			}
 		});
 
-		menuItem4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
-		menuItem4.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		menu3.add(menuItem4);
+		mnNewMenu_5 = new JMenu("Utilidades");
+		mnNewMenu_5.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_5.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png")));
+		menu3.add(mnNewMenu_5);
 
-		separator6 = new JSeparator();
-		menu3.add(separator6);
+		mntmNewMenuItem_9 = new JMenuItem("Eliminar Imágenes");
+		mntmNewMenuItem_9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new EliminarImagen().setVisible(true);
+
+			}
+		});
+		mntmNewMenuItem_9.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
+		mntmNewMenuItem_9.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_5.add(mntmNewMenuItem_9);
+
+		separator_15 = new JSeparator();
+		mnNewMenu_5.add(separator_15);
 
 		menuItem6 = new JMenuItem("Recomponer Inserts");
-		menu3.add(menuItem6);
+		mnNewMenu_5.add(menuItem6);
 		menuItem6.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -1145,6 +1159,21 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem6.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
 		menuItem6.setFont(new Font("Segoe UI", Font.BOLD, 20));
 
+		JSeparator separator_13 = new JSeparator();
+		mnNewMenu_5.add(separator_13);
+
+		mntmNewMenuItem_10 = new JMenuItem("Cambiador de categoría");
+		mntmNewMenuItem_10.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/tag.png")));
+		mntmNewMenuItem_10.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_5.add(mntmNewMenuItem_10);
+
+		separator6 = new JSeparator();
+		menu3.add(separator6);
+
+		menuItem4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/bd.png")));
+		menuItem4.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		menu3.add(menuItem4);
+
 		mmenu2 = new JMenuItem("Comprobador SHA");
 
 		mmenu2.addMouseListener(new MouseAdapter() {
@@ -1168,6 +1197,20 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mmenu2.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mmenu2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
 		menu3.add(mmenu2);
+
+		separator_12 = new JSeparator();
+		menu3.add(separator_12);
+
+		mntmNewMenuItem_8 = new JMenuItem("Descargas");
+		mntmNewMenuItem_8.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new DescargasScrapting().setVisible(true);
+			}
+		});
+		mntmNewMenuItem_8.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_8.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/download.png")));
+		menu3.add(mntmNewMenuItem_8);
 
 		separator4 = new JSeparator();
 		mnAcciones.add(separator4);
@@ -1209,6 +1252,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		separator_8 = new JSeparator();
 		mnNewMenu_3.add(separator_8);
+
+		mntmNewMenuItem_11 = new JMenuItem("Estadísticas");
+		mnNewMenu_3.add(mntmNewMenuItem_11);
+		mntmNewMenuItem_11.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
+
+		separator_14 = new JSeparator();
+		mnNewMenu_3.add(separator_14);
 
 		mmenu5 = new JMenuItem("CMS");
 		mnNewMenu_3.add(mmenu5);
@@ -1294,6 +1345,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		});
 		mntmComentarios.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmComentarios.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
+
+		separator_16 = new JSeparator();
+		mnNewMenu_4.add(separator_16);
+
+		mntmNewMenuItem_12 = new JMenuItem("Grupos");
+		mntmNewMenuItem_12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
+		mntmNewMenuItem_12.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_4.add(mntmNewMenuItem_12);
 
 		menu4 = new JMenu("Abrir");
 		menu4.setForeground(Color.BLACK);
@@ -2043,10 +2102,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		try {
 
-			if (!configuracion[1].equals("0")) {
-				categoria = Integer.parseInt(configuracion[1]);
-			}
-
 			String descripcion = "";
 
 			configuracion[2] = Metodos.eliminarEspacios(configuracion[2]);
@@ -2121,7 +2176,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 						if (!Metodos.pingURL(
 								"http://" + lecturaurl[0] + carpeta + "/data/media/" + categoria + "/" + imagenbd)) {
 
-							s.executeUpdate("DELETE FROM " + lecturabd[3] + "images WHERE image_id='" + maximo + "')");
+							s.executeUpdate("DELETE FROM " + lecturabd[3] + "images WHERE image_id='" + maximo + "'");
 						}
 
 						imagenesSubidas.add(imagen);
@@ -2142,7 +2197,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 
 		catch (Exception e) {
-
+			e.printStackTrace();
 			progreso.setProgressBarRecorrido("Error");
 
 			progreso.setProgressBar(Metodos.calcularPorcentaje(0, 0));
@@ -2278,7 +2333,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				if (tecla1 == 66 && tecla2 == 17 || tecla1 == 17 && tecla2 == 66) {
 
-					backupBd();
+					new BackupBd().setVisible(true);
 				}
 
 				if (tecla1 == 82 && tecla2 == 17 || tecla1 == 17 && tecla2 == 82) {

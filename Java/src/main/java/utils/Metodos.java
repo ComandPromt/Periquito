@@ -2266,6 +2266,109 @@ public abstract class Metodos {
 		return resultado;
 	}
 
+	public static void backupBd() {
+
+		ArrayList<String> categoriasSeleccion;
+
+		try {
+
+			categoriasSeleccion = Metodos.comprobarConexionBD();
+
+			if (categoriasSeleccion != null && categoriasSeleccion.size() > 0) {
+
+				if (comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
+
+					exportarBd();
+
+				} else {
+					new Bd().setVisible(true);
+
+				}
+
+			}
+		}
+
+		catch (IOException e2) {
+
+			try {
+				new Bd().setVisible(true);
+			}
+
+			catch (IOException e1) {
+				//
+			}
+
+		}
+	}
+
+	public static int saberIdCategoria(String categoria) {
+
+		ResultSet rs;
+		Connection conexion;
+		Statement s;
+
+		int resultado = 0;
+
+		try {
+
+			conexion = conexionBD();
+
+			s = conexion.createStatement();
+
+			rs = s.executeQuery("SELECT cat_id FROM " + MenuPrincipal.getLecturabd()[3] + "categories WHERE cat_name='"
+					+ categoria + "'");
+
+			rs.next();
+
+			resultado = Integer.parseInt(rs.getString("cat_id"));
+
+			s.close();
+			rs.close();
+			conexion.close();
+		}
+
+		catch (Exception e) {
+			//
+		}
+
+		return resultado;
+
+	}
+
+	public static String saberCategoria(int categoria) {
+
+		ResultSet rs;
+		Connection conexion;
+		Statement s;
+
+		String resultado = "";
+
+		try {
+
+			conexion = conexionBD();
+
+			s = conexion.createStatement();
+
+			rs = s.executeQuery("SELECT cat_name FROM " + MenuPrincipal.getLecturabd()[3] + "categories WHERE cat_id='"
+					+ categoria + "'");
+
+			rs.next();
+
+			resultado = rs.getString("cat_name");
+
+			s.close();
+			rs.close();
+			conexion.close();
+		}
+
+		catch (Exception e) {
+			//
+		}
+
+		return resultado;
+
+	}
+
 	public static int saberIdUsuario(String user) {
 
 		ResultSet rs;
