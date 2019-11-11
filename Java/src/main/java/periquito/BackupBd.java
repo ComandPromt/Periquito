@@ -22,7 +22,12 @@ import utils.Metodos;
 
 @SuppressWarnings("all")
 public class BackupBd extends javax.swing.JFrame implements ActionListener, ChangeListener {
+
 	private JTextField textField;
+
+	private JRadioButton rdbtnNewRadioButton;
+
+	private JRadioButton rdbtnNewRadioButton_1;
 
 	public BackupBd() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
@@ -40,18 +45,23 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 		setResizable(false);
 
 		JButton btnNewButton = new JButton("Backup de la BD");
+
 		btnNewButton.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
-				Metodos.backupBd();
+
+				if (rdbtnNewRadioButton.isSelected()) {
+					Metodos.backupBd();
+				}
 			}
 		});
 
 		JLabel lblNewLabel = new JLabel("");
 
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Backup Completo");
+		rdbtnNewRadioButton = new JRadioButton("Backup Completo");
 		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Backup de tablas específicas");
+		rdbtnNewRadioButton_1 = new JRadioButton("Backup de tablas específicas");
 		rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		JTextPane txtpnMostrartablasDeBd = new JTextPane();

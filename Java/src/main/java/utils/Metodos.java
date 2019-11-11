@@ -862,6 +862,8 @@ public abstract class Metodos {
 
 		String[] backup = leerFicheroArray("Config/Backup.txt", 1);
 
+		LinkedList<String> datos = new LinkedList<>();
+		int filas = 0;
 		try {
 
 			String ruta = backup[0] + MenuPrincipal.getSeparador() + "backupbd.txt";
@@ -1039,10 +1041,31 @@ public abstract class Metodos {
 			}
 
 			FileWriter fw = new FileWriter(file);
+
 			BufferedWriter bw = new BufferedWriter(fw);
+
 			bw.write(contenido);
+
+			filas = 10;
+
+			datos = Metodos.mostrarDatosTabla("4images_users", filas);
+
+			// Elegir nombre del fichero .sql
+
+			for (int i = 0; i < datos.size(); i++) {
+
+				System.out.println("INSERT INTO 4images_users VALUES('");
+
+				for (int y = 0; y < filas; y++) {
+					System.out.println(datos.get(i) + "',");
+				}
+			}
+
 			bw.close();
-		} catch (Exception e) {
+
+		}
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -2299,6 +2322,47 @@ public abstract class Metodos {
 			}
 
 		}
+	}
+
+	public static LinkedList<String> mostrarDatosTabla(String tabla, int filas) {
+
+		LinkedList<String> datos = new LinkedList<>();
+
+		ResultSet rs;
+
+		Connection conexion;
+
+		Statement s;
+
+		try {
+
+			conexion = conexionBD();
+
+			s = conexion.createStatement();
+
+			rs = s.executeQuery("SELECT * FROM " + tabla + "  ODER BY 1 ASC");
+
+			while (rs.next()) {
+
+				for (int i = 0; i < filas; i++) {
+					datos.add(rs.getNString(i));
+				}
+
+			}
+
+			s.close();
+
+			rs.close();
+
+			conexion.close();
+		}
+
+		catch (Exception e) {
+			//
+		}
+
+		return datos;
+
 	}
 
 	public static int saberIdCategoria(String categoria) {
