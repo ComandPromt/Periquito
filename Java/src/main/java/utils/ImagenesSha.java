@@ -39,6 +39,10 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 	static LinkedList<String> imagenesRepetidas = new LinkedList<>();
 
+	JMenuItem mntmNewMenuItem_1;
+
+	private LinkedList<String> imagenes;
+
 	public static LinkedList<String> comprobacionSha;
 	int x;
 
@@ -86,7 +90,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 		setTitle("Periquito v3 SHA Images Checker");
 		setType(Type.UTILITY);
 
-		LinkedList<String> imagenes = new LinkedList<>();
+		imagenes = new LinkedList<>();
 
 		Connection conexion;
 
@@ -193,6 +197,10 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 									ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
 									+ MenuPrincipal.getSeparador());
 
+					if (imagenes.size() == 0) {
+						mntmNewMenuItem_1.setEnabled(false);
+					}
+
 					Metodos.mensaje("Se han borrado correctamente todas las imágenes que ya están en el CMS", 2);
 				}
 			});
@@ -202,7 +210,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			JSeparator separator_6 = new JSeparator();
 			mnNewMenu.add(separator_6);
 
-			JMenuItem mntmNewMenuItem_1 = new JMenuItem("Mover para subir al CMS");
+			mntmNewMenuItem_1 = new JMenuItem("Mover para subir al CMS");
 			mntmNewMenuItem_1.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
 			mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
 			mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
@@ -210,9 +218,11 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				public void mousePressed(MouseEvent e) {
 
 					try {
+
 						Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador(),
 								MenuPrincipal.getDirectorioImagenes(), true);
 						frmShaImages.dispose();
+
 						Metodos.mensaje("Las imágenes se han movido correctamente", 2);
 					}
 
@@ -258,6 +268,8 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				public void actionPerformed(ActionEvent e) {
 
 					try {
+
+						imagenes.clear();
 
 						new ComprobarSha().setVisible(true);
 

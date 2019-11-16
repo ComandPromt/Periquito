@@ -28,10 +28,11 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 	private JRadioButton rdbtnNewRadioButton;
 
 	private JRadioButton rdbtnNewRadioButton_1;
+	private JTextField textField_1;
 
 	public BackupBd() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
-		setTitle("Periquito v3 About");
+		setTitle("Periquito v3 BackupBD");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
@@ -51,8 +52,19 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 			public void actionPerformed(ActionEvent e) {
 
 				if (rdbtnNewRadioButton.isSelected()) {
-					Metodos.backupBd();
+
+					String nombreArchivo = "";
+
+					nombreArchivo = Metodos.eliminarEspacios(textField_1.getText());
+
+					if (nombreArchivo.isBlank() || nombreArchivo.isEmpty()) {
+						nombreArchivo = "backup-BD";
+					}
+
+					Metodos.backupBd(nombreArchivo);
+
 				}
+
 			}
 		});
 
@@ -73,36 +85,47 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 
 		JLabel lblEscribeLasTablas = new JLabel("Escribe las tablas separadas por coma para hacer el backup");
 		lblEscribeLasTablas.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+
+		JLabel lblNewLabel_1 = new JLabel("Nombre del archivo (sin extension)");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout
-						.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(23)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel)
-										.addComponent(rdbtnNewRadioButton_1).addComponent(rdbtnNewRadioButton)
-										.addComponent(lblEscribeLasTablas)))
-						.addGroup(layout.createSequentialGroup().addGap(61)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(btnNewButton)
-										.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)))
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup().addGap(60).addComponent(txtpnMostrartablasDeBd,
-								GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap(114, Short.MAX_VALUE)));
+								GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(212).addComponent(textField,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(23)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1).addGap(30)
+												.addComponent(textField_1, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblNewLabel).addComponent(rdbtnNewRadioButton_1)
+										.addComponent(rdbtnNewRadioButton).addComponent(lblEscribeLasTablas)))
+						.addGroup(layout.createSequentialGroup().addGap(233).addComponent(btnNewButton)))
+						.addContainerGap(114, Short.MAX_VALUE)));
 		layout.setVerticalGroup(
 				layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								layout.createSequentialGroup().addGap(21).addComponent(rdbtnNewRadioButton).addGap(28)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-												.addComponent(lblNewLabel).addComponent(rdbtnNewRadioButton_1))
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(txtpnMostrartablasDeBd, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(18).addComponent(lblEscribeLasTablas)
-										.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-										.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(18).addComponent(btnNewButton).addGap(28)));
+						.addGroup(layout.createSequentialGroup().addGap(21).addComponent(rdbtnNewRadioButton).addGap(28)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(lblNewLabel)
+										.addComponent(rdbtnNewRadioButton_1))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(txtpnMostrartablasDeBd, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(18).addComponent(lblEscribeLasTablas)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
+										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(34).addComponent(btnNewButton).addGap(27)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(627, 305));
+		setSize(new Dimension(627, 381));
 		setLocationRelativeTo(null);
 	}
 

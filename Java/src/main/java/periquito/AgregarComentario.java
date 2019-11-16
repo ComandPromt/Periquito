@@ -1,8 +1,10 @@
 package periquito;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -28,6 +30,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import rojeru_san.componentes.RSDateChooser;
 import utils.Metodos;
 import utils.MyInterface;
 
@@ -38,9 +41,10 @@ public class AgregarComentario extends javax.swing.JFrame implements ActionListe
 	static javax.swing.JTextField usuario;
 	JTextArea nota = new JTextArea("", 0, 50);
 	private JTextField tipo;
-	private JTextField textField;
+	private RSDateChooser textField;
 
 	public AgregarComentario() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(AgregarComentario.class.getResource("/imagenes/nota.png")));
 		setTitle("Periquito v3 Agregar Comentario");
 		setType(Type.UTILITY);
 		initComponents();
@@ -135,34 +139,47 @@ public class AgregarComentario extends javax.swing.JFrame implements ActionListe
 
 		JLabel lblCommentid = new JLabel();
 		lblCommentid.setIcon(new ImageIcon(AgregarComentario.class.getResource("/imagenes/name.png")));
-		lblCommentid.setText(" Asunto");
+		lblCommentid.setText(" Día");
 		lblCommentid.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCommentid.setFont(new Font("Tahoma", Font.BOLD, 20));
 
-		textField = new JTextField();
+		textField = new RSDateChooser();
 		textField.setToolTipText("");
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
+
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("Publico");
 
 		JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("Solo los usuarios");
+
 		rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				rdbtnNewRadioButton_1.setSelected(true);
+
 				rdbtnNewRadioButton.setSelected(false);
 			}
 
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if (!rdbtnNewRadioButton_1.isSelected() && !rdbtnNewRadioButton.isSelected()) {
+					rdbtnNewRadioButton_1.setSelected(true);
+				}
+			}
 		});
 
 		rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				rdbtnNewRadioButton.setSelected(true);
 				rdbtnNewRadioButton_1.setSelected(false);
 			}
 
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if (!rdbtnNewRadioButton_1.isSelected() && !rdbtnNewRadioButton.isSelected()) {
+					rdbtnNewRadioButton.setSelected(true);
+				}
+			}
 		});
 		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
@@ -174,37 +191,41 @@ public class AgregarComentario extends javax.swing.JFrame implements ActionListe
 		lblComentario.setHorizontalAlignment(SwingConstants.CENTER);
 		lblComentario.setFont(new Font("Tahoma", Font.BOLD, 20));
 
+		JTextArea textArea = new JTextArea();
+		textArea.setText(" Arrastra los archivos aqui");
+		textArea.setForeground(Color.DARK_GRAY);
+		textArea.setFont(new Font("Tahoma", Font.BOLD, 24));
+		textArea.setEditable(false);
+		textArea.setBackground(Color.WHITE);
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
+				.addGap(22)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout
+								.createSequentialGroup()
+								.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 327, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 162,
+										Short.MAX_VALUE)
+								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 109,
+										GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblComentario)
+										.addComponent(lblCommentid).addComponent(lblTipo).addComponent(jLabel1))
+								.addGap(36)
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup()
-												.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(lblTipo).addComponent(jLabel1))
-												.addGap(62))
-										.addGroup(layout.createSequentialGroup().addContainerGap()
-												.addComponent(lblCommentid, GroupLayout.PREFERRED_SIZE, 155,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)))
-								.addGroup(layout
-										.createSequentialGroup().addContainerGap().addComponent(lblComentario)
-										.addPreferredGap(ComponentPlacement.RELATED)))
-						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(tipo, GroupLayout.PREFERRED_SIZE, 366, GroupLayout.PREFERRED_SIZE)
-								.addComponent(usuario, 366, 366, 366)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 366, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(rdbtnNewRadioButton).addGap(18)
-										.addComponent(rdbtnNewRadioButton_1))
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 109,
+										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 372,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 366,
-												GroupLayout.PREFERRED_SIZE)))
-						.addGap(42)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(textField, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+										.addComponent(tipo, GroupLayout.PREFERRED_SIZE, 371, GroupLayout.PREFERRED_SIZE)
+										.addGroup(
+												layout.createSequentialGroup().addComponent(rdbtnNewRadioButton)
+														.addPreferredGap(ComponentPlacement.RELATED, 132,
+																Short.MAX_VALUE)
+														.addComponent(rdbtnNewRadioButton_1))
+										.addComponent(usuario, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE))))
+				.addGap(161)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(layout.createSequentialGroup().addGap(24)
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(usuario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -215,28 +236,31 @@ public class AgregarComentario extends javax.swing.JFrame implements ActionListe
 								.addComponent(tipo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblTipo))
-						.addGap(48)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblCommentid, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+						.addGap(34)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(26)
-										.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-												.addComponent(rdbtnNewRadioButton).addComponent(rdbtnNewRadioButton_1))
-										.addGap(18)
-										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 167,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(26).addComponent(btnNewButton))
-								.addGroup(layout.createSequentialGroup().addGap(129).addComponent(lblComentario,
-										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(63, Short.MAX_VALUE)));
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblCommentid, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(76).addComponent(lblComentario,
+										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup().addGap(18).addComponent(scrollPane,
+										GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)))
+						.addGap(18)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(rdbtnNewRadioButton)
+								.addComponent(rdbtnNewRadioButton_1))
+						.addGap(30)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnNewButton))
+						.addGap(33)));
 
 		nota.setWrapStyleWord(true);
 		nota.setLineWrap(true);
 		nota.setFont(new Font("Monospaced", Font.PLAIN, 20));
 		scrollPane.setViewportView(nota);
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(636, 687));
+		setSize(new Dimension(670, 687));
 		setLocationRelativeTo(null);
 	}
 

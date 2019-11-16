@@ -858,15 +858,15 @@ public abstract class Metodos {
 
 	}
 
-	public static void exportarBd() throws IOException {
+	public static void exportarBd(String archivo) throws IOException {
 
 		String[] backup = leerFicheroArray("Config/Backup.txt", 1);
 
 		LinkedList<String> datos = new LinkedList<>();
-		int filas = 0;
+
 		try {
 
-			String ruta = backup[0] + MenuPrincipal.getSeparador() + "backupbd.txt";
+			String ruta = backup[0] + MenuPrincipal.getSeparador() + archivo + ".sql";
 
 			String contenido = "CREATE TABLE bots (\r\n" + "id int(11) AUTO_INCREMENT PRIMARY KEY,\r\n"
 					+ "IP varchar(64) NOT NULL UNIQUE\r\n" + ") DEFAULT CHARSET=utf8;\r\n" + "\r\n"
@@ -1040,26 +1040,226 @@ public abstract class Metodos {
 				file.createNewFile();
 			}
 
+			String prefix = MenuPrincipal.getLecturabd()[3];
+
 			FileWriter fw = new FileWriter(file);
 
 			BufferedWriter bw = new BufferedWriter(fw);
 
 			bw.write(contenido);
 
-			filas = 10;
+			bw.newLine();
 
-			datos = Metodos.mostrarDatosTabla("4images_users", filas);
+			datos = Metodos.mostrarDatosTabla(MenuPrincipal.getLecturabd()[3] + "users", 10);
 
-			// Elegir nombre del fichero .sql
+			bw.write(escribirInserts(prefix + "users", datos, 10));
 
-			for (int i = 0; i < datos.size(); i++) {
+			bw.newLine();
 
-				System.out.println("INSERT INTO 4images_users VALUES('");
+			datos = Metodos.mostrarDatosTabla(MenuPrincipal.getLecturabd()[3] + "comments", 8);
 
-				for (int y = 0; y < filas; y++) {
-					System.out.println(datos.get(i) + "',");
-				}
-			}
+			bw.write(escribirInserts(prefix + "comments", datos, 8));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla(prefix + "categories", 15);
+
+			bw.write(escribirInserts(prefix + "categories", datos, 15));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla(prefix + "etiquetas", 2);
+
+			bw.write(escribirInserts(prefix + "etiquetas", datos, 2));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla(prefix + "groups", 2);
+
+			bw.write(escribirInserts(prefix + "groups", datos, 2));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla(prefix + "images", 19);
+
+			bw.write(escribirInserts(prefix + "images", datos, 19));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla(prefix + "imgroups", 8);
+
+			bw.write(escribirInserts(prefix + "imgroups", datos, 8));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "imv", 2);
+
+			bw.write(escribirInserts(prefix + "imv", datos, 2));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "lightboxes", 3);
+
+			bw.write(escribirInserts(prefix + "lightboxes", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "msgroups", 4);
+
+			bw.write(escribirInserts(prefix + "msgroups", datos, 4));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "musugroup", 2);
+
+			bw.write(escribirInserts(prefix + "musugroup", datos, 2));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "scrapting", 9);
+
+			bw.write(escribirInserts(prefix + "scrapting", datos, 9));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "tags", 2);
+
+			bw.write(escribirInserts(prefix + "tags", datos, 2));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "video", 4);
+
+			bw.write(escribirInserts(prefix + "video", datos, 4));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla(prefix + "videocomments", 8);
+
+			bw.write(escribirInserts(prefix + "videocomments", datos, 8));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("antispam", 2);
+
+			bw.write(escribirInserts("antispam", datos, 2));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("bots", 2);
+
+			bw.write(escribirInserts("bots", datos, 2));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("descargas", 2);
+
+			bw.write(escribirInserts("descargas", datos, 2));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("grupos", 2);
+
+			bw.write(escribirInserts("grupos", datos, 2));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("mensajes", 7);
+
+			bw.write(escribirInserts("mensajes", datos, 7));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("notas", 4);
+
+			bw.write(escribirInserts("notas", datos, 4));
+
+			datos = Metodos.mostrarDatosTabla("aleman", 3);
+
+			bw.write(escribirInserts("aleman", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("arabe", 3);
+
+			bw.write(escribirInserts("arabe", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("bengali", 3);
+
+			bw.write(escribirInserts("bengali", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("catalan", 3);
+
+			bw.write(escribirInserts("catalan", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("chino", 3);
+
+			bw.write(escribirInserts("chino", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("coreano", 3);
+
+			bw.write(escribirInserts("coreano", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("euskera", 3);
+
+			bw.write(escribirInserts("euskera", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("frances", 3);
+
+			bw.write(escribirInserts("frances", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("hindu", 3);
+
+			bw.write(escribirInserts("hindu", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("ingles", 3);
+
+			bw.write(escribirInserts("ingles", datos, 3));
+
+			bw.newLine();
+
+			datos = Metodos.mostrarDatosTabla("italiano", 3);
+
+			bw.write(escribirInserts("italiano", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("japones", 3);
+
+			bw.write(escribirInserts("japones", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("polaco", 3);
+
+			bw.write(escribirInserts("polaco", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("portuges", 3);
+
+			bw.write(escribirInserts("portuges", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("ruso", 3);
+
+			bw.write(escribirInserts("ruso", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("spanish", 3);
+
+			bw.write(escribirInserts("spanish", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("vietnamita", 3);
+
+			bw.write(escribirInserts("vietnamita", datos, 3));
+
+			bw.newLine();
+			datos = Metodos.mostrarDatosTabla("tbl_tracking", 8);
+
+			bw.write(escribirInserts("tbl_tracking", datos, 8));
 
 			bw.close();
 
@@ -1072,6 +1272,50 @@ public abstract class Metodos {
 		Metodos.mensaje("Backup realizado correctamente", 2);
 
 		abrirCarpeta(backup[0]);
+	}
+
+	private static String escribirInserts(String tabla, LinkedList<String> datos, int filas) {
+
+		String espaciador;
+
+		String sentencia = "INSERT INTO " + tabla + " VALUES ";
+
+		int y = 1;
+
+		for (int i = 0; i < datos.size(); i++) {
+
+			espaciador = "),(";
+
+			if (i == 0) {
+				sentencia += "(";
+			}
+
+			sentencia += "'" + datos.get(i) + "'";
+
+			i++;
+
+			if (y == filas && i < datos.size()) {
+				sentencia += espaciador;
+				y = 1;
+			}
+
+			else {
+
+				if (i < datos.size()) {
+					sentencia += ",";
+				}
+
+				y++;
+			}
+
+			i--;
+
+		}
+
+		sentencia += ");";
+
+		return sentencia;
+
 	}
 
 	public static void mostrarGaleriaSql(String busqueda, String sql, String sql2) throws SQLException, IOException {
@@ -2289,7 +2533,7 @@ public abstract class Metodos {
 		return resultado;
 	}
 
-	public static void backupBd() {
+	public static void backupBd(String archivo) {
 
 		ArrayList<String> categoriasSeleccion;
 
@@ -2297,13 +2541,15 @@ public abstract class Metodos {
 
 			categoriasSeleccion = Metodos.comprobarConexionBD();
 
-			if (categoriasSeleccion != null && categoriasSeleccion.size() > 0) {
+			if (categoriasSeleccion != null && !categoriasSeleccion.isEmpty()) {
 
 				if (comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
 
-					exportarBd();
+					exportarBd(archivo);
 
-				} else {
+				}
+
+				else {
 					new Bd().setVisible(true);
 
 				}
@@ -2340,12 +2586,13 @@ public abstract class Metodos {
 
 			s = conexion.createStatement();
 
-			rs = s.executeQuery("SELECT * FROM " + tabla + "  ODER BY 1 ASC");
+			rs = s.executeQuery("SELECT * FROM " + tabla + " ORDER BY 1 ASC");
 
 			while (rs.next()) {
 
-				for (int i = 0; i < filas; i++) {
-					datos.add(rs.getNString(i));
+				for (int i = 1; i <= filas; i++) {
+
+					datos.add(rs.getString(i));
 				}
 
 			}
@@ -2355,6 +2602,7 @@ public abstract class Metodos {
 			rs.close();
 
 			conexion.close();
+
 		}
 
 		catch (Exception e) {
