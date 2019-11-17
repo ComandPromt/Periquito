@@ -5,9 +5,13 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +19,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -29,6 +34,8 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 
 	private JRadioButton rdbtnNewRadioButton_1;
 	private JTextField textField_1;
+
+	private LinkedList<String> tablas = new LinkedList();
 
 	public BackupBd() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
@@ -46,23 +53,91 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 		setResizable(false);
 
 		JButton btnNewButton = new JButton("Backup de la BD");
+		btnNewButton.setIcon(new ImageIcon(BackupBd.class.getResource("/imagenes/db.png")));
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		btnNewButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
+				tablas.clear();
+
+				String nombreArchivo = "";
+
+				nombreArchivo = Metodos.eliminarEspacios(textField_1.getText());
+
+				if (nombreArchivo.isBlank() || nombreArchivo.isEmpty()) {
+					nombreArchivo = "backup-BD";
+				}
+
 				if (rdbtnNewRadioButton.isSelected()) {
 
-					String nombreArchivo = "";
+					tablas.add("users");
+					tablas.add("comments");
+					tablas.add("categories");
+					tablas.add("etiquetas");
+					tablas.add("groups");
+					tablas.add("images");
+					tablas.add("imgroups");
+					tablas.add("imv");
+					tablas.add("lightboxes");
+					tablas.add("msgroups");
+					tablas.add("musugroup");
+					tablas.add("scrapting");
+					tablas.add("tags");
+					tablas.add("video");
+					tablas.add("videocomments");
 
-					nombreArchivo = Metodos.eliminarEspacios(textField_1.getText());
+					tablas.add("antispam");
+					tablas.add("bots");
+					tablas.add("descargas");
+					tablas.add("grupos");
+					tablas.add("mensajes");
+					tablas.add("groups");
+					tablas.add("images");
+					tablas.add("imgroups");
+					tablas.add("imv");
+					tablas.add("notas");
+					tablas.add("tbl_tracking");
 
-					if (nombreArchivo.isBlank() || nombreArchivo.isEmpty()) {
-						nombreArchivo = "backup-BD";
+					tablas.add("aleman");
+					tablas.add("arabe");
+					tablas.add("bengali");
+					tablas.add("catalan");
+					tablas.add("chino");
+					tablas.add("coreano");
+					tablas.add("euskera");
+					tablas.add("frances");
+					tablas.add("hindu");
+					tablas.add("ingles");
+					tablas.add("italiano");
+					tablas.add("japones");
+					tablas.add("polaco");
+					tablas.add("portuges");
+					tablas.add("ruso");
+					tablas.add("spanish");
+					tablas.add("vietnamita");
+
+				}
+
+				else {
+
+					String tablasBackup = Metodos.eliminarEspacios(textField.getText());
+
+					if (tablasBackup.indexOf(",") > 0) {
+
+						tablasBackup.split(",");
+
+						String[] elementos = tablasBackup.split(",");
+
+						for (int i = 0; i < elementos.length; i++) {
+							tablas.add(Metodos.eliminarEspacios(elementos[i]));
+						}
 					}
+				}
 
-					Metodos.backupBd(nombreArchivo);
-
+				if (!tablas.isEmpty()) {
+					Metodos.backupBd(nombreArchivo, tablas);
 				}
 
 			}
@@ -71,9 +146,38 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 		JLabel lblNewLabel = new JLabel("");
 
 		rdbtnNewRadioButton = new JRadioButton("Backup Completo");
+		rdbtnNewRadioButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				rdbtnNewRadioButton_1.setSelected(false);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if (!rdbtnNewRadioButton_1.isSelected() && !rdbtnNewRadioButton.isSelected()) {
+					rdbtnNewRadioButton.setSelected(true);
+				}
+			}
+		});
 		rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		rdbtnNewRadioButton_1 = new JRadioButton("Backup de tablas específicas");
+
+		rdbtnNewRadioButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				rdbtnNewRadioButton.setSelected(false);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				if (!rdbtnNewRadioButton_1.isSelected() && !rdbtnNewRadioButton.isSelected()) {
+					rdbtnNewRadioButton_1.setSelected(true);
+				}
+			}
+		});
 		rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		JTextPane txtpnMostrartablasDeBd = new JTextPane();
@@ -81,51 +185,65 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 		txtpnMostrartablasDeBd.setText("Mostrar todas las tablas de Bd");
 
 		textField = new JTextField();
+		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setColumns(10);
 
-		JLabel lblEscribeLasTablas = new JLabel("Escribe las tablas separadas por coma para hacer el backup");
+		JLabel lblEscribeLasTablas = new JLabel("Escribe las tablas (separadas por coma)");
 		lblEscribeLasTablas.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		textField_1 = new JTextField();
+		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_1.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("Nombre del archivo (sin extension)");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(60).addComponent(txtpnMostrartablasDeBd,
-								GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addGap(212).addComponent(textField,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addGap(23)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1).addGap(30)
-												.addComponent(textField_1, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addComponent(lblNewLabel).addComponent(rdbtnNewRadioButton_1)
-										.addComponent(rdbtnNewRadioButton).addComponent(lblEscribeLasTablas)))
-						.addGroup(layout.createSequentialGroup().addGap(233).addComponent(btnNewButton)))
-						.addContainerGap(114, Short.MAX_VALUE)));
-		layout.setVerticalGroup(
-				layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(21).addComponent(rdbtnNewRadioButton).addGap(28)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(lblNewLabel)
-										.addComponent(rdbtnNewRadioButton_1))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(txtpnMostrartablasDeBd, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(18).addComponent(lblEscribeLasTablas)
-								.addPreferredGap(ComponentPlacement.RELATED)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup().addGap(23)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel).addGroup(
+								Alignment.TRAILING,
+								layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton)
+												.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+												.addGroup(layout.createParallelGroup(Alignment.LEADING)
+														.addComponent(rdbtnNewRadioButton_1)
+														.addComponent(txtpnMostrartablasDeBd, GroupLayout.DEFAULT_SIZE,
+																283, Short.MAX_VALUE)))
+										.addGroup(Alignment.LEADING, layout.createSequentialGroup()
+												.addGroup(layout.createParallelGroup(Alignment.LEADING)
+														.addComponent(lblEscribeLasTablas).addComponent(lblNewLabel_1))
+												.addGap(26)
+												.addGroup(layout.createParallelGroup(Alignment.LEADING)
+														.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 153,
+																Short.MAX_VALUE)
+														.addComponent(textField, GroupLayout.DEFAULT_SIZE, 153,
+																Short.MAX_VALUE)
+														.addComponent(btnNewButton))))
+										.addGap(96)))
+						.addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(21)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton).addGap(8))
+								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton_1)
+										.addPreferredGap(ComponentPlacement.UNRELATED)))
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addGap(8))
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(txtpnMostrartablasDeBd, GroupLayout.PREFERRED_SIZE, 138,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(18)))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblEscribeLasTablas)
 								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
-										.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))
-								.addGap(34).addComponent(btnNewButton).addGap(27)));
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(22)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
+								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addGap(18).addComponent(btnNewButton).addGap(62)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(627, 381));
+		setSize(new Dimension(636, 428));
 		setLocationRelativeTo(null);
 	}
 

@@ -569,6 +569,7 @@ public class Comentarios extends JFrame {
 			java.util.logging.Logger.getLogger(AgendaInterfaz.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		}
+
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 

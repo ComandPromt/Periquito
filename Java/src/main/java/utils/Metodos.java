@@ -858,7 +858,7 @@ public abstract class Metodos {
 
 	}
 
-	public static void exportarBd(String archivo) throws IOException {
+	public static void exportarBd(String archivo, List<String> tablas) throws IOException {
 
 		String[] backup = leerFicheroArray("Config/Backup.txt", 1);
 
@@ -1049,217 +1049,217 @@ public abstract class Metodos {
 			bw.write(contenido);
 
 			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(MenuPrincipal.getLecturabd()[3] + "users", 10);
-
-			bw.write(escribirInserts(prefix + "users", datos, 10));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(MenuPrincipal.getLecturabd()[3] + "comments", 8);
-
-			bw.write(escribirInserts(prefix + "comments", datos, 8));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(prefix + "categories", 15);
-
-			bw.write(escribirInserts(prefix + "categories", datos, 15));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(prefix + "etiquetas", 2);
-
-			bw.write(escribirInserts(prefix + "etiquetas", datos, 2));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(prefix + "groups", 2);
-
-			bw.write(escribirInserts(prefix + "groups", datos, 2));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(prefix + "images", 19);
-
-			bw.write(escribirInserts(prefix + "images", datos, 19));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla(prefix + "imgroups", 8);
-
-			bw.write(escribirInserts(prefix + "imgroups", datos, 8));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "imv", 2);
-
-			bw.write(escribirInserts(prefix + "imv", datos, 2));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "lightboxes", 3);
-
-			bw.write(escribirInserts(prefix + "lightboxes", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "msgroups", 4);
-
-			bw.write(escribirInserts(prefix + "msgroups", datos, 4));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "musugroup", 2);
-
-			bw.write(escribirInserts(prefix + "musugroup", datos, 2));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "scrapting", 9);
-
-			bw.write(escribirInserts(prefix + "scrapting", datos, 9));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "tags", 2);
-
-			bw.write(escribirInserts(prefix + "tags", datos, 2));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "video", 4);
-
-			bw.write(escribirInserts(prefix + "video", datos, 4));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla(prefix + "videocomments", 8);
-
-			bw.write(escribirInserts(prefix + "videocomments", datos, 8));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("antispam", 2);
-
-			bw.write(escribirInserts("antispam", datos, 2));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("bots", 2);
-
-			bw.write(escribirInserts("bots", datos, 2));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("descargas", 2);
-
-			bw.write(escribirInserts("descargas", datos, 2));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("grupos", 2);
-
-			bw.write(escribirInserts("grupos", datos, 2));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("mensajes", 7);
-
-			bw.write(escribirInserts("mensajes", datos, 7));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("notas", 4);
-
-			bw.write(escribirInserts("notas", datos, 4));
-
-			datos = Metodos.mostrarDatosTabla("aleman", 3);
-
-			bw.write(escribirInserts("aleman", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("arabe", 3);
-
-			bw.write(escribirInserts("arabe", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("bengali", 3);
-
-			bw.write(escribirInserts("bengali", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("catalan", 3);
-
-			bw.write(escribirInserts("catalan", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("chino", 3);
-
-			bw.write(escribirInserts("chino", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("coreano", 3);
-
-			bw.write(escribirInserts("coreano", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("euskera", 3);
-
-			bw.write(escribirInserts("euskera", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("frances", 3);
-
-			bw.write(escribirInserts("frances", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("hindu", 3);
-
-			bw.write(escribirInserts("hindu", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("ingles", 3);
-
-			bw.write(escribirInserts("ingles", datos, 3));
-
-			bw.newLine();
-
-			datos = Metodos.mostrarDatosTabla("italiano", 3);
-
-			bw.write(escribirInserts("italiano", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("japones", 3);
-
-			bw.write(escribirInserts("japones", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("polaco", 3);
-
-			bw.write(escribirInserts("polaco", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("portuges", 3);
-
-			bw.write(escribirInserts("portuges", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("ruso", 3);
-
-			bw.write(escribirInserts("ruso", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("spanish", 3);
-
-			bw.write(escribirInserts("spanish", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("vietnamita", 3);
-
-			bw.write(escribirInserts("vietnamita", datos, 3));
-
-			bw.newLine();
-			datos = Metodos.mostrarDatosTabla("tbl_tracking", 8);
-
-			bw.write(escribirInserts("tbl_tracking", datos, 8));
+			int columnas = 0;
+			String tabla = "";
+			for (int i = 0; i < tablas.size(); i++) {
+
+				switch (tablas.get(i)) {
+
+				case "users":
+					tabla = prefix + "users";
+					columnas = 10;
+					break;
+
+				case "comments":
+					tabla = prefix + "comments";
+					columnas = 8;
+					break;
+
+				case "categories":
+					tabla = prefix + "categories";
+					columnas = 15;
+					break;
+
+				case "etiquetas":
+					tabla = prefix + "etiquetas";
+					columnas = 2;
+					break;
+
+				case "groups":
+					tabla = prefix + "groups";
+					columnas = 2;
+					break;
+
+				case "images":
+					tabla = prefix + "images";
+					columnas = 19;
+					break;
+
+				case "imgroups":
+					tabla = prefix + "imgroups";
+					columnas = 8;
+					break;
+
+				case "imv":
+					tabla = prefix + "imv";
+					columnas = 2;
+					break;
+
+				case "lightboxes":
+					tabla = prefix + "lightboxes";
+					columnas = 3;
+					break;
+
+				case "msgroups":
+					tabla = prefix + "msgroups";
+					columnas = 4;
+					break;
+
+				case "musugroup":
+					tabla = prefix + "musugroup";
+					columnas = 2;
+					break;
+
+				case "scrapting":
+					tabla = prefix + "scrapting";
+					columnas = 9;
+					break;
+
+				case "tags":
+					tabla = prefix + "tags";
+					columnas = 2;
+					break;
+
+				case "video":
+					tabla = prefix + "video";
+					columnas = 4;
+					break;
+
+				case "videocomments":
+					tabla = prefix + "videocomments";
+					columnas = 8;
+					break;
+
+				case "antispam":
+					tabla = prefix + "antispam";
+					columnas = 2;
+					break;
+
+				case "bots":
+					tabla = "bots";
+					columnas = 2;
+					break;
+
+				case "descargas":
+					tabla = "descargas";
+					columnas = 2;
+					break;
+
+				case "grupos":
+					tabla = "grupos";
+					columnas = 2;
+					break;
+
+				case "mensajes":
+					tabla = "mensajes";
+					columnas = 7;
+					break;
+
+				case "notas":
+					tabla = "notas";
+					columnas = 4;
+					break;
+
+				case "tbl_tracking":
+					tabla = "tbl_tracking";
+					columnas = 8;
+					break;
+
+				case "aleman":
+					tabla = "aleman";
+					columnas = 3;
+					break;
+
+				case "arabe":
+					tabla = "arabe";
+					columnas = 3;
+					break;
+
+				case "bengali":
+					tabla = "bengali";
+					columnas = 3;
+					break;
+
+				case "catalan":
+					tabla = "catalan";
+					columnas = 3;
+					break;
+
+				case "chino":
+					tabla = "chino";
+					columnas = 3;
+					break;
+
+				case "coreano":
+					tabla = "coreano";
+					columnas = 3;
+					break;
+
+				case "euskera":
+					tabla = "euskera";
+					columnas = 3;
+					break;
+
+				case "frances":
+					tabla = "frances";
+					columnas = 3;
+					break;
+
+				case "hindu":
+					tabla = "hindu";
+					columnas = 3;
+					break;
+
+				case "ingles":
+					tabla = "ingles";
+					columnas = 3;
+					break;
+
+				case "italiano":
+					tabla = "italiano";
+					columnas = 3;
+					break;
+
+				case "japones":
+					tabla = "japones";
+					columnas = 3;
+					break;
+
+				case "polaco":
+					tabla = "polaco";
+					columnas = 3;
+					break;
+
+				case "portuges":
+					tabla = "portuges";
+					columnas = 3;
+					break;
+
+				case "ruso":
+					tabla = "ruso";
+					columnas = 3;
+					break;
+
+				case "spanish":
+					tabla = "spanish";
+					columnas = 3;
+					break;
+
+				case "vietnamita":
+					tabla = "vietnamita";
+					columnas = 3;
+					break;
+
+				default:
+					break;
+				}
+
+				datos = Metodos.mostrarDatosTabla(tabla, columnas);
+
+				bw.write(escribirInserts(tabla, datos, columnas));
+
+				bw.newLine();
+			}
 
 			bw.close();
 
@@ -2533,7 +2533,7 @@ public abstract class Metodos {
 		return resultado;
 	}
 
-	public static void backupBd(String archivo) {
+	public static void backupBd(String archivo, List<String> tablas) {
 
 		ArrayList<String> categoriasSeleccion;
 
@@ -2545,7 +2545,7 @@ public abstract class Metodos {
 
 				if (comprobarConfiguracion() && Metodos.comprobarConexion(true)) {
 
-					exportarBd(archivo);
+					exportarBd(archivo, tablas);
 
 				}
 

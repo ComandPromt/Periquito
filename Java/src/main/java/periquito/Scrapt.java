@@ -357,6 +357,12 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		mnNewMenu_1.add(mnImport);
 
 		mntmNewMenuItem_6 = new JMenuItem("Desde archivo txt");
+		mntmNewMenuItem_6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new ImportarUrlScrapting().setVisible(true);
+			}
+		});
 		mnImport.add(mntmNewMenuItem_6);
 
 		separator_3 = new JSeparator();

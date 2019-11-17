@@ -191,6 +191,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JSeparator separator_17;
 	private JMenuItem mntmNewMenuItem_14;
 	private JSeparator separator_18;
+	private JMenuItem mntmNewMenuItem_15;
+	private JSeparator separator_19;
 
 	public static String[] getPermisos() {
 		return permisos;
@@ -1129,6 +1131,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			}
 		});
+
 		mntmNewMenuItem_9.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
 		mntmNewMenuItem_9.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu_5.add(mntmNewMenuItem_9);
@@ -1323,6 +1326,25 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			}
 		});
+
+		mntmNewMenuItem_15 = new JMenuItem("Usuario");
+		mntmNewMenuItem_15.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					new VerUser().setVisible(true);
+				} 
+				 catch (Exception e1) {
+					//
+				}
+			}
+		});
+		mntmNewMenuItem_15.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/user.png")));
+		mntmNewMenuItem_15.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_3.add(mntmNewMenuItem_15);
+
+		separator_19 = new JSeparator();
+		mnNewMenu_3.add(separator_19);
 		mnNewMenu_3.add(mntmNewMenuItem_11);
 		mntmNewMenuItem_11.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem_11.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
@@ -1401,6 +1423,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mnNewMenu_4.add(separator_16);
 
 		mntmNewMenuItem_12 = new JMenuItem("Grupos");
+		mntmNewMenuItem_12.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				new AdminGrupos().setVisible(true);
+			}
+		});
 		mntmNewMenuItem_12.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/db.png")));
 		mntmNewMenuItem_12.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu_4.add(mntmNewMenuItem_12);

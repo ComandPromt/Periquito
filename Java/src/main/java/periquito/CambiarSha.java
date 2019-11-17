@@ -14,15 +14,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("all")
+
 public class CambiarSha extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	public CambiarSha() {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
 		setTitle("Periquito v3 About");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
-
 	}
 
 	private void initComponents() {
@@ -53,10 +54,11 @@ public class CambiarSha extends javax.swing.JFrame implements ActionListener, Ch
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-//
+		//
 	}
 
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
+
 }

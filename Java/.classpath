@@ -27,5 +27,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/jsoup-1.12.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/RSCalendar.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/RSFoto_v1.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
