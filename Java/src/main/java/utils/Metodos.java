@@ -68,10 +68,6 @@ import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
-	private Metodos() {
-		throw new IllegalStateException("Utility class");
-	}
-
 	public static boolean pingURL(String url) {
 
 		int timeout = 100000;
@@ -653,7 +649,7 @@ public abstract class Metodos {
 
 		try {
 
-			Connection conexion = Metodos.conexionBD();
+			Connection conexion = conexionBD();
 
 			Statement s = conexion.createStatement();
 
@@ -1773,7 +1769,7 @@ public abstract class Metodos {
 
 		catch (Exception e) {
 
-			if (mensaje && MenuPrincipal.isConexion()) {
+			if (mensaje) {
 				Metodos.mensaje("Por favor, rellena la configuración de la base de datos", 3);
 			}
 		}
@@ -1901,8 +1897,8 @@ public abstract class Metodos {
 		switch (opcion) {
 
 		case 1:
-			Metodos.crearFichero("Config/Config.txt", ruta + System.getProperty("user.name") + separador + "Downloads",
-					false);
+
+			crearFichero("Config/Config.txt", ruta + System.getProperty("user.name") + separador + "Downloads", false);
 
 			Config guardar = new Config();
 			guardar.guardarDatos(false);
@@ -1911,7 +1907,7 @@ public abstract class Metodos {
 
 		case 2:
 
-			Metodos.crearFichero("Config/Config2.txt", "127.0.0.1\r" + "4images_", false);
+			crearFichero("Config/Config2.txt", "127.0.0.1\r" + "4images_", false);
 
 			Config2 guardar2 = new Config2();
 
@@ -2539,7 +2535,7 @@ public abstract class Metodos {
 
 		try {
 
-			categoriasSeleccion = Metodos.comprobarConexionBD();
+			categoriasSeleccion = comprobarConexionBD();
 
 			if (categoriasSeleccion != null && !categoriasSeleccion.isEmpty()) {
 

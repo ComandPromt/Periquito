@@ -503,15 +503,25 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 				try {
 
-					int imagen = Integer.parseInt(textField_6.getText());
+					datos.clear();
+					urls.clear();
 
-					int de = Integer.parseInt(textField_4.getText());
+					int imagen = Integer.parseInt(Metodos.eliminarEspacios(textField_6.getText()));
 
-					int hasta = Integer.parseInt(textField_5.getText());
+					int de = Integer.parseInt(Metodos.eliminarEspacios(textField_4.getText()));
 
-					int paso = Integer.parseInt(textField_1.getText());
+					int hasta = Integer.parseInt(Metodos.eliminarEspacios(textField_5.getText()));
 
-					if (imagen > 0 && de > 0 && hasta < 0 && paso > 0) {
+					int paso = Integer.parseInt(Metodos.eliminarEspacios(textField_1.getText()));
+
+					if (!checkBox.isSelected()) {
+						System.out.println("entro");
+						de = 1;
+						hasta = 1;
+						paso = 1;
+					}
+
+					if (imagen > 0 && de > 0 && hasta > 0 && paso > 0) {
 
 						for (int contador = de; contador <= hasta; contador += paso) {
 
@@ -550,15 +560,18 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 							}
 						}
 
-						s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3]
-								+ "comments (image_id,user_id,comment_headline,comment_text,comment_ip,comment_date) SELECT '"
-								+ imagen + "',user_id,comment_headline,comment_text,comment_ip,comment_date FROM "
-								+ MenuPrincipal.getLecturabd()[3] + "scrapting WHERE comment_text like '%"
-								+ txtHttp.getText() + "%' AND tag='" + etiqueta + "' ORDER BY comment_id ASC");
+						if (urls.size() > 0) {
+
+							s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3]
+									+ "comments (image_id,user_id,comment_headline,comment_text,comment_ip,comment_date) SELECT '"
+									+ imagen + "',user_id,comment_headline,comment_text,comment_ip,comment_date FROM "
+									+ MenuPrincipal.getLecturabd()[3] + "scrapting WHERE comment_text like '%"
+									+ txtHttp.getText() + "%' AND tag='" + etiqueta + "' ORDER BY comment_id ASC");
+
+							Metodos.mensaje("Se han insertado " + urls.size() + " URLs!", 2);
+						}
 
 						conexion.close();
-
-						Metodos.mensaje("Se han insertado " + urls.size() + " URLs!", 2);
 
 					}
 
@@ -572,8 +585,12 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 				}
 
+				catch (NumberFormatException e1) {
+					Metodos.mensaje("Por favor, inserta los campos con su valor adecuado", 3);
+				}
+
 				catch (Exception e1) {
-					e1.printStackTrace();
+					//
 				}
 
 			}
@@ -607,6 +624,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		textField_1.setColumns(10);
 
 		checkBox = new JCheckBox(" Recorrer paginas?");
+		checkBox.setSelected(true);
 		checkBox.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		lblNewLabel_2 = new JLabel("Filtro");

@@ -127,8 +127,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static LinkedList<String> categorias = new LinkedList<>();
 
-	static boolean conexion = true;
-
 	static String os = System.getProperty("os.name");
 
 	static String separador = Metodos.saberSeparador(os);
@@ -224,10 +222,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	public static void setLecturaurl(String[] lecturaurl) {
 		MenuPrincipal.lecturaurl = lecturaurl;
-	}
-
-	public static boolean isConexion() {
-		return conexion;
 	}
 
 	public static LinkedList<String> getCategorias() {
@@ -857,7 +851,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					" \r\n" + "0\r\n" + " \r\n" + " \r\n" + "0\r\n" + "0\r\n" + "0", false);
 		}
 
-		if (conexion && (lecturabd[0] == null || lecturabd[0].equals(""))) {
+		if (!Metodos.comprobarConexion(false) || lecturabd[0] == null || lecturabd[0].equals("")) {
 
 			Metodos.crearFichero("Config/Bd.txt",
 					"4images\r\n" + "root\r\n" + "root\r\n" + "4images_\r\n" + "3306\r\n" + "localhost", false);
@@ -1333,8 +1327,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			public void mousePressed(MouseEvent e) {
 				try {
 					new VerUser().setVisible(true);
-				} 
-				 catch (Exception e1) {
+				} catch (Exception e1) {
 					//
 				}
 			}
@@ -1978,8 +1971,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									Statement s;
 
 									Connection conexion = Metodos.conexionBD();
-
-									conexion = Metodos.conexionBD();
 
 									s = conexion.createStatement();
 

@@ -100,24 +100,6 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 					tablas.add("notas");
 					tablas.add("tbl_tracking");
 
-					tablas.add("aleman");
-					tablas.add("arabe");
-					tablas.add("bengali");
-					tablas.add("catalan");
-					tablas.add("chino");
-					tablas.add("coreano");
-					tablas.add("euskera");
-					tablas.add("frances");
-					tablas.add("hindu");
-					tablas.add("ingles");
-					tablas.add("italiano");
-					tablas.add("japones");
-					tablas.add("polaco");
-					tablas.add("portuges");
-					tablas.add("ruso");
-					tablas.add("spanish");
-					tablas.add("vietnamita");
-
 				}
 
 				else {
