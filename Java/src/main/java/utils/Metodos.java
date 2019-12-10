@@ -54,6 +54,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -71,6 +72,27 @@ import periquito.Descarga;
 import periquito.MenuPrincipal;
 
 public abstract class Metodos {
+
+	public static void generarExcel(String hoja, LinkedList<String> datos, LinkedList<String> lista) {
+
+		HSSFWorkbook workbook = new ExcelGenerator().generateExcel(hoja, datos, lista);
+
+		try {
+
+			OutputStream out = null;
+			out = new FileOutputStream("archivo.xls");
+
+			// JOptionPane.showMessageDialog(this, "Archivo generado con Ã©xito");
+
+			workbook.write(out);
+			workbook.close();
+			out.flush();
+			out.close();
+		} catch (IOException ex) {
+			//
+		}
+
+	}
 
 	public static LinkedList<String> obtenerEnlaces(String url, int tomarUrl, String claseTabla, String claseTd,
 			int limite) {
@@ -142,11 +164,20 @@ public abstract class Metodos {
 
 					location = limpiarCadena(location);
 
+					String enlace = "";
+
 					for (int i = 0; i < extraerEnlaces(location, url).size(); i++) {
-						enlaces.add(extraerEnlaces(location, url).get(i));
+
+						enlace = extraerEnlaces(location, url).get(i);
+
+						if (!enlace.equals(url + "/#") && !enlaces.contains(enlace)) {
+							enlaces.add(enlace);
+						}
+
 					}
 
 				}
+
 				vueltas++;
 			}
 

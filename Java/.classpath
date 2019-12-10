@@ -24,9 +24,11 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/jsoup-1.12.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/RSCalendar.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/RSFoto_v1.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Yeah/Desktop/libraries/RSProgressBar.jar"/>
+	<classpathentry kind="lib" path="libraries/jsoup-1.12.1.jar"/>
+	<classpathentry kind="lib" path="libraries/jxl.jar"/>
+	<classpathentry kind="lib" path="libraries/poi-3.12-20150511.jar"/>
+	<classpathentry kind="lib" path="libraries/RSCalendar.jar"/>
+	<classpathentry kind="lib" path="libraries/RSFoto_v1.0.jar"/>
+	<classpathentry kind="lib" path="libraries/RSProgressBar.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -136,6 +136,8 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 
 			public void actionPerformed(ActionEvent e) {
 
+				modelo.clear();
+
 				url = Metodos.eliminarEspacios(textField.getText());
 
 				urls = Metodos.obtenerEnlaces(url, 1, "", "", 0);
@@ -149,6 +151,7 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 					}
 
 					list.setModel(modelo);
+
 				}
 
 				else {
@@ -198,6 +201,18 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 		button_1.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		JButton button_2 = new JButton("");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!urls.isEmpty()) {
+					LinkedList<String> leyenda = new LinkedList<String>();
+
+					leyenda.add("Datos");
+
+					Metodos.generarExcel("Hoja1", urls, leyenda);
+					Metodos.mensaje("archivo creado correctamente", 2);
+				}
+			}
+		});
 		button_2.setIcon(new ImageIcon(VerUrl.class.getResource("/imagenes/excel.png")));
 		button_2.setFont(new Font("Tahoma", Font.BOLD, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
