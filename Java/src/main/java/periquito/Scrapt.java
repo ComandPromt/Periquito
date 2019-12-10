@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,7 +23,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -44,9 +42,9 @@ import org.jsoup.select.Elements;
 import utils.Metodos;
 import utils.MyInterface;
 
-@SuppressWarnings("all")
-
 public class Scrapt extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
+	private static final long serialVersionUID = 1L;
 	javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
@@ -86,43 +84,52 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 	private JLabel lblNewLabel_2;
 	private JTextField txtHttp;
 
-	@SuppressWarnings("all")
-	public void buscarArchivoConf() throws IOException {
+	public void obtenerEnlaces(String url, int tomarUrl, String claseTabla, String claseTd) {
 
-		File af = new File("Config/Config2.txt");
+		try {
 
-		if (af.exists()) {
+			Document doc = Jsoup.connect(url).ignoreHttpErrors(false).get();
 
-			String[] lectura;
+			Elements elements;
 
-			try {
+			if (tomarUrl == 2) {
 
-				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
-
-				if (lectura[0] == null) {
-					lectura[0] = "";
-				}
-
-				if (lectura[1] == null) {
-					lectura[1] = "";
-				}
-
-				lectura[0] = Metodos.eliminarUltimoElemento(lectura[0]);
-				lectura[1] = Metodos.eliminarUltimoElemento(lectura[1]);
-
-				jTextField1.setText(lectura[0]);
-				textField.setText(lectura[1]);
+				elements = doc.select("." + claseTabla + " tr:has(td." + claseTd + ") + tr");
 			}
 
-			catch (ArrayIndexOutOfBoundsException e) {
+			else {
+				elements = doc.select("a[href]");
+			}
+
+			String location;
+
+			for (Element element : elements) {
+
+				if (tomarUrl == 2) {
+					location = element.previousElementSibling().select("td." + claseTd).text();
+				}
+
+				else {
+					location = element.attr("href");
+				}
+
+				location = Metodos.eliminarEspacios(location);
+
+				location = Metodos.limpiarCadena(location);
+
+				extraerEnlaces(location, txtHttp.getText());
 
 			}
 
-			guardarDatos(false);
 		}
+
+		catch (Exception e) {
+			//
+		}
+
 	}
 
-	private static void extraerEnlaces(String cadena) {
+	private static void extraerEnlaces(String cadena, String filtro) {
 
 		String residuo = "";
 
@@ -132,17 +139,15 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 		String cadenaEspacio = "";
 
-		String dato = "";
+		while (cadena.indexOf(' ') >= 0) {
 
-		while (cadena.indexOf(" ") > 0) {
+			if (puntero >= 0 && cadena.indexOf(' ') >= 0) {
 
-			if (puntero >= 0 && cadena.indexOf(" ") >= 0) {
+				residuo = cadena.substring(0, cadena.indexOf(' '));
 
-				residuo = cadena.substring(0, cadena.indexOf(" "));
+				if (residuo.contains("http") && residuo.contains(filtro)) {
 
-				if (residuo.contains("http")) {
-
-					urls.add(cadena.substring(0, cadena.indexOf(" ")));
+					urls.add(cadena.substring(0, cadena.indexOf(' ')));
 
 					if (capacidad > 0) {
 
@@ -163,12 +168,13 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 				else {
 
-					if (!residuo.contains("http")) {
+					if (!residuo.contains("http") && !residuo.contains(filtro)) {
 						capacidad++;
 						temporal.add(residuo);
 					}
 
 				}
+
 			}
 
 			cadena = cadena.substring(cadena.indexOf(" ") + 1, cadena.length());
@@ -181,6 +187,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 			datos.add("Links");
 
 		}
+
 	}
 
 	public void guardarDatos(Boolean mensaje) throws IOException {
@@ -198,112 +205,19 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));
 
-			if (mensaje) {
+			if (Boolean.TRUE.equals(mensaje)) {
 
 				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
 
 		} catch (IOException e) {
-			if (mensaje) {
+			if (Boolean.TRUE.equals(mensaje)) {
 				Metodos.mensaje("Error al crear el fichero de configuracion", 1);
 			}
 		} finally {
 			fS.close();
 			flS.close();
 		}
-	}
-
-	private void enlacePorDefecto(String location) {
-		if (!location.isEmpty()) {
-			datos.add("Link");
-			urls.add(location);
-		}
-	}
-
-	private String limpiarCadena(String urlObtenida) {
-
-		if (urlObtenida.indexOf("\">") > 0 && urlObtenida.indexOf("</a>") > 0) {
-			urlObtenida = urlObtenida.substring(urlObtenida.indexOf("\">") + 2, urlObtenida.indexOf("</a>"));
-		}
-
-		urlObtenida = urlObtenida.replace("</path>", "");
-		urlObtenida = urlObtenida.replace("</svg>", "");
-		urlObtenida = urlObtenida.replace("<span", "");
-		urlObtenida = urlObtenida.replace("</span>", "");
-		urlObtenida = urlObtenida.replace("<img>", "");
-		urlObtenida = urlObtenida.replace("</img>", "");
-		urlObtenida = urlObtenida.replace("itemscope", "");
-		urlObtenida = urlObtenida.replace("</button>", "");
-		urlObtenida = urlObtenida.replace("&nbsp;", "");
-		urlObtenida = urlObtenida.replace("data-v-4992eadc", "");
-		urlObtenida = urlObtenida.replace("data-v-4992eadcBlog", "");
-
-		urlObtenida = urlObtenida.replaceAll("class=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("onmouseover=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("onmouseout=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("height=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("rel=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("width=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("itemprop=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("itemtype=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("itemprop=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("<figure>(.*)</figure>", "");
-		urlObtenida = urlObtenida.replaceAll("target=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("style=(.*)\"", "");
-		urlObtenida = urlObtenida.replaceAll("<p(.*)</p>", "");
-		urlObtenida = urlObtenida.replaceAll("<svg(.*)>", "");
-		urlObtenida = urlObtenida.replaceAll("<path(.*)>", "");
-
-		urlObtenida = urlObtenida.replace("a href=\"", "");
-		urlObtenida = urlObtenida.replace("\"  >", "");
-		urlObtenida = urlObtenida.replace("<i ></i>", "");
-		urlObtenida = urlObtenida.replace("<img >", "");
-		urlObtenida = urlObtenida.replace(">", "");
-		urlObtenida = urlObtenida.replace("<img", "");
-		urlObtenida = urlObtenida.replace("data-v-23efff06", "");
-		urlObtenida = urlObtenida.replace("<button", "");
-		urlObtenida = urlObtenida.replace("»", "");
-		urlObtenida = urlObtenida.replace("…", "");
-		urlObtenida = urlObtenida.replace("???? ??????	", "");
-		urlObtenida = urlObtenida.replace("src=//", "");
-		urlObtenida = urlObtenida.replace("\"", "");
-		urlObtenida = urlObtenida.replace("src=", "");
-		urlObtenida = urlObtenida.replace("'", "");
-		return urlObtenida;
-
-	}
-
-	public void obtenerEnlaces(String url) {
-
-		try {
-
-			Document doc = Jsoup.connect(url).ignoreHttpErrors(false).get();
-
-			Elements elements = doc.select(".tbl-border tr:has(td.tbl1) + tr");
-
-			String cadena = "";
-
-			int y = 0;
-
-			for (Element element : elements) {
-
-				String location = element.previousElementSibling().select("td.tbl1").text();
-
-				location = Metodos.eliminarEspacios(location);
-
-				location = limpiarCadena(location);
-
-				extraerEnlaces(location);
-
-				y++;
-			}
-
-		}
-
-		catch (Exception e) {
-			//
-		}
-
 	}
 
 	public Scrapt() throws IOException {
@@ -426,8 +340,6 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		this.setVisible(true);
 	}
 
-	@SuppressWarnings("all")
-
 	public void initComponents() throws IOException {
 
 		jTextField1 = new javax.swing.JTextField();
@@ -439,7 +351,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		jLabel1.setIcon(new ImageIcon(Scrapt.class.getResource("/imagenes/target.png")));
 		jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
 
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
 
@@ -463,8 +375,6 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
-
-		buscarArchivoConf();
 
 		lblThumbnails = new JLabel("Etiqueta");
 		lblThumbnails.setIcon(new ImageIcon(Scrapt.class.getResource("/imagenes/tag.png")));
@@ -504,6 +414,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 				try {
 
 					datos.clear();
+
 					urls.clear();
 
 					int imagen = Integer.parseInt(Metodos.eliminarEspacios(textField_6.getText()));
@@ -515,7 +426,6 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 					int paso = Integer.parseInt(Metodos.eliminarEspacios(textField_1.getText()));
 
 					if (!checkBox.isSelected()) {
-						System.out.println("entro");
 						de = 1;
 						hasta = 1;
 						paso = 1;
@@ -525,7 +435,8 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 						for (int contador = de; contador <= hasta; contador += paso) {
 
-							obtenerEnlaces(Metodos.eliminarEspacios(jTextField1.getText() + contador));
+							obtenerEnlaces(Metodos.eliminarEspacios(jTextField1.getText() + contador), 2, "tbl-border",
+									"tbl1");
 
 						}
 
@@ -554,13 +465,13 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 							if (recuento == 0) {
 
 								s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3] + "scrapting VALUES('"
-										+ maximo + "','" + imagen + "','1','Link','[URL]" + urls.get(i)
-										+ "[/URL]','localhost','2019-10-04',DEFAULT,'" + etiqueta + "')");
+										+ maximo + "','" + imagen + "','1','" + datos.get(i) + "','[URL]" + urls.get(i)
+										+ "[/URL]','localhost','2019-10-04','1','" + etiqueta + "')");
 								maximo++;
 							}
 						}
 
-						if (urls.size() > 0) {
+						if (!urls.isEmpty()) {
 
 							s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3]
 									+ "comments (image_id,user_id,comment_headline,comment_text,comment_ip,comment_date) SELECT '"
@@ -740,7 +651,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(btnNewButton_2)
 								.addComponent(button, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)))));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(629, 529));
+		setSize(new Dimension(641, 539));
 		setLocationRelativeTo(null);
 	}
 

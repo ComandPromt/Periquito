@@ -23,6 +23,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.TooManyListenersException;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -273,7 +274,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 
 		else {
-			nombreSubida = configuracion[0];
+			if (!configuracion[0].isEmpty()) {
+				nombreSubida = Metodos.eliminarEspacios(configuracion[0]);
+			}
 		}
 	}
 
@@ -281,85 +284,100 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		try {
 
-			lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
-			lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
-			configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
-			user = Metodos.leerFicheroArray("Config/User.txt", 2);
-			sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
-			permisos = Metodos.leerFicheroArray("Config/Permisos.txt", 4);
-			lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
-			lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+			imagenesSubidas.clear();
+			imagenesDuplicadas.clear();
 
-			String categoria = "";
+			extraerNombreComun();
 
-			int idCategoria = 0;
+			if (nombreSubida.isEmpty()) {
+				Metodos.mensaje("Por favor, introduzca el nombre común de las imágenes", 3);
+			}
 
-			if (!configuracion[1].equals("0") && Integer.parseInt(configuracion[1]) > 0) {
-
-				idCategoria = Integer.parseInt(configuracion[1]);
-
-				categoria = Metodos.saberCategoria(idCategoria);
+			if (Metodos.listarFicherosPorCarpeta(new File(directorioImagenes), ".") == 0) {
+				Metodos.mensaje("La carpeta de las imágenes está vacía", 3);
+				Metodos.abrirCarpeta(directorioImagenes);
 			}
 
 			else {
 
-				idCategoria = Metodos.saberIdCategoria(comboBox.getSelectedItem().toString());
-
-				categoria = categorias.get(comboBox.getSelectedIndex());
-			}
-
-			int resp = JOptionPane.showConfirmDialog(null,
-					"Las imágenes se subirán a la categoría : " + categoria + " ¿Está seguro?");
-
-			if (resp == 0) {
-
+				lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
+				lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
 				configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
+				user = Metodos.leerFicheroArray("Config/User.txt", 2);
+				sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
+				permisos = Metodos.leerFicheroArray("Config/Permisos.txt", 4);
+				lecturabd = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+				lecturabackup = Metodos.leerFicheroArray("Config/Backup.txt", 1);
 
-				listaImagenes.clear();
+				String categoria = "";
 
-				if (Metodos.pingURL("http://" + lecturaurl[0] + carpeta + "/index.php")) {
+				int idCategoria = 0;
 
-					if (!chckbxNewCheckBox.isSelected()) {
+				if (!configuracion[1].equals("0") && Integer.parseInt(configuracion[1]) > 0) {
 
-						comprobarBN();
+					idCategoria = Integer.parseInt(configuracion[1]);
 
-					}
-
-					if (!soloGif.isSelected()) {
-
-						listaImagenes = Metodos.directorio(directorioImagenes, ".");
-
-					}
-
-					else {
-
-						subirSoloGif = true;
-
-						listaImagenes = Metodos.directorio(directorioImagenes, "gif");
-					}
-
-					if (configuracion[3].isEmpty()) {
-
-						etiqueta = JOptionPane.showInputDialog(null, "Escribe la/s etiqueta/s");
-
-					}
-
-					else {
-						etiqueta = configuracion[3];
-					}
-
-					extraerNombreComun();
-
-					subirFotos(idCategoria);
-
+					categoria = Metodos.saberCategoria(idCategoria);
 				}
 
 				else {
 
-					Metodos.mensaje("Por favor, revisa la configuración", 3);
+					idCategoria = Metodos.saberIdCategoria(comboBox.getSelectedItem().toString());
 
-					new Config2().setVisible(true);
+					categoria = categorias.get(comboBox.getSelectedIndex());
+				}
 
+				int resp = JOptionPane.showConfirmDialog(null,
+						"Las imágenes se subirán a la categoría : " + categoria + " ¿Está seguro?");
+
+				if (resp == 0) {
+
+					configuracion = Metodos.leerFicheroArray("Config/Configuracion.txt", 7);
+
+					listaImagenes.clear();
+
+					if (Metodos.pingURL("http://" + lecturaurl[0] + carpeta + "/index.php")) {
+
+						if (!chckbxNewCheckBox.isSelected()) {
+
+							comprobarBN();
+
+						}
+
+						if (!soloGif.isSelected()) {
+
+							listaImagenes = Metodos.directorio(directorioImagenes, ".");
+
+						}
+
+						else {
+
+							subirSoloGif = true;
+
+							listaImagenes = Metodos.directorio(directorioImagenes, "gif");
+						}
+
+						if (configuracion[3].isEmpty()) {
+
+							etiqueta = JOptionPane.showInputDialog(null, "Escribe la/s etiqueta/s");
+
+						}
+
+						else {
+							etiqueta = configuracion[3];
+						}
+
+						subirFotos(idCategoria);
+
+					}
+
+					else {
+
+						Metodos.mensaje("Por favor, revisa la configuración", 3);
+
+						new Config2().setVisible(true);
+
+					}
 				}
 			}
 		}
@@ -1918,10 +1936,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				listaImagenes = Metodos.directorio(directorioImagenes, ".");
 			}
 
-			if (gif) {
-				System.exit(0);
-			}
-
 			if (comboBox.getSelectedIndex() == -1) {
 
 				Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
@@ -2098,6 +2112,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		if (total > 0) {
 
+			WebDriver chrome = new ChromeDriver();
+
 			int y;
 
 			for (int i = 0; i < total; i++) {
@@ -2114,9 +2130,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					obtenerCarpeta();
 
-					WebDriver chrome = new ChromeDriver();
-
 					String userId = "";
+
+					chrome.manage().timeouts().setScriptTimeout(5, TimeUnit.SECONDS);
 
 					chrome.get("http://" + lecturaurl[0] + carpeta + "/index.php");
 
@@ -2267,7 +2283,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 
 		catch (Exception e) {
-			e.printStackTrace();
+
 			progreso.setProgressBarRecorrido("Error");
 
 			progreso.setProgressBar(Metodos.calcularPorcentaje(0, 0));
@@ -2597,6 +2613,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					}
 
 					catch (IOException e) {
+
 						Metodos.mensaje("Error al mover los archivos", 1);
 					}
 

@@ -55,6 +55,7 @@ public class DragAndDrop {
 
 					}
 				} catch (Exception io) {
+					io.printStackTrace();
 					Metodos.mensaje("Error", 1);
 				}
 			}

@@ -336,12 +336,7 @@ public class AgendaInterfaz extends JFrame {
 		jScrollPane1.setDoubleBuffered(true);
 
 		jList1.setBackground(new java.awt.Color(254, 254, 254));
-		jList1.addMouseListener(new java.awt.event.MouseAdapter() {
 
-		});
-		jList1.addKeyListener(new java.awt.event.KeyAdapter() {
-
-		});
 		jScrollPane1.setViewportView(jList1);
 		panelNombre = new JPanel();
 		JLabel jLabel3;
@@ -483,7 +478,9 @@ public class AgendaInterfaz extends JFrame {
 	}
 
 	public static void verNotas() throws SQLException, IOException {
+
 		modelo.removeAllElements();
+
 		Connection conexion = Metodos.conexionBD();
 
 		Statement s = conexion.createStatement();
@@ -495,7 +492,9 @@ public class AgendaInterfaz extends JFrame {
 		}
 
 		jList1.setModel(modelo);
+
 		rs.close();
+
 		s.close();
 	}
 

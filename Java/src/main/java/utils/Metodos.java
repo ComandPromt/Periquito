@@ -55,6 +55,10 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -67,6 +71,212 @@ import periquito.Descarga;
 import periquito.MenuPrincipal;
 
 public abstract class Metodos {
+
+	public static LinkedList<String> obtenerEnlaces(String url, int tomarUrl, String claseTabla, String claseTd,
+			int limite) {
+
+		LinkedList<String> enlaces = new LinkedList<String>();
+
+		try {
+
+			Document doc = Jsoup.connect(url).get();
+
+			Elements elements = null;
+
+			String location = null;
+
+			switch (tomarUrl) {
+
+			case 1:
+				elements = doc.select("a[href]");
+				break;
+
+			case 2:
+				elements = doc.select("." + claseTabla + " tr:has(td." + claseTd + ") + tr");
+				break;
+
+			case 3:
+				elements = doc.select("img[src]");
+				break;
+
+			case 4:
+				elements = doc.select("." + claseTabla + " a[href]");
+				break;
+
+			case 5:
+				elements = doc.select("img[src]");
+				break;
+
+			}
+
+			boolean darVueltas = false;
+
+			if (limite > 0) {
+				darVueltas = true;
+			}
+
+			int vueltas = 1;
+
+			for (Element element : elements) {
+
+				if (!darVueltas || darVueltas && vueltas <= limite) {
+
+					switch (tomarUrl) {
+
+					case 1:
+					case 4:
+						location = element.absUrl("href");
+						break;
+
+					case 2:
+						location = element.previousElementSibling().select("td." + claseTd).text();
+						break;
+
+					case 3:
+					case 5:
+						location = element.absUrl("src");
+						break;
+					}
+
+					location = eliminarEspacios(location);
+
+					location = limpiarCadena(location);
+
+					for (int i = 0; i < extraerEnlaces(location, url).size(); i++) {
+						enlaces.add(extraerEnlaces(location, url).get(i));
+					}
+
+				}
+				vueltas++;
+			}
+
+		}
+
+		catch (Exception e) {
+			Metodos.mensaje("Por favor, revisa la URL", 2);
+
+		}
+
+		return enlaces;
+
+	}
+
+	public static LinkedList<String> extraerEnlaces(String cadena, String url) {
+
+		LinkedList<String> urls = new LinkedList<String>();
+
+		LinkedList<String> temporal = new LinkedList<String>();
+
+		String residuo = "";
+
+		int puntero = cadena.indexOf("http");
+
+		int capacidad = 0;
+
+		String cadenaEspacio = "";
+
+		while (cadena.indexOf(" ") > 0) {
+
+			if (puntero >= 0 && cadena.indexOf(" ") >= 0) {
+
+				residuo = cadena.substring(0, cadena.indexOf(" "));
+
+				if (residuo.contains("http") && residuo.contains("http")) {
+
+					urls.add(cadena.substring(0, cadena.indexOf(" ")));
+
+					if (capacidad > 0) {
+
+						for (int i = 0; i < capacidad; i++) {
+							cadenaEspacio += temporal.get(i) + " ";
+						}
+
+						if (!cadenaEspacio.equals(url + "#")) {
+							urls.add(cadenaEspacio);
+						}
+
+						capacidad = 0;
+						temporal.clear();
+						cadenaEspacio = "";
+					}
+
+				}
+
+				else {
+
+					if (!residuo.contains("http")) {
+						capacidad++;
+						temporal.add(residuo);
+					}
+
+				}
+			}
+
+			cadena = cadena.substring(cadena.indexOf(" ") + 1, cadena.length());
+
+		}
+
+		if (!cadena.isEmpty() && !cadena.equals(url + "#") && cadena.indexOf("http") >= 0) {
+
+			urls.add(cadena);
+
+		}
+
+		return urls;
+	}
+
+	public static String limpiarCadena(String urlObtenida) {
+
+		if (urlObtenida.indexOf("\">") > 0 && urlObtenida.indexOf("</a>") > 0) {
+			urlObtenida = urlObtenida.substring(urlObtenida.indexOf("\">") + 2, urlObtenida.indexOf("</a>"));
+		}
+
+		urlObtenida = urlObtenida.replace("</path>", "");
+		urlObtenida = urlObtenida.replace("</svg>", "");
+		urlObtenida = urlObtenida.replace("<span", "");
+		urlObtenida = urlObtenida.replace("</span>", "");
+		urlObtenida = urlObtenida.replace("<img>", "");
+		urlObtenida = urlObtenida.replace("</img>", "");
+		urlObtenida = urlObtenida.replace("itemscope", "");
+		urlObtenida = urlObtenida.replace("</button>", "");
+		urlObtenida = urlObtenida.replace("&nbsp;", "");
+		urlObtenida = urlObtenida.replace("data-v-4992eadc", "");
+		urlObtenida = urlObtenida.replace("data-v-4992eadcBlog", "");
+
+		urlObtenida = urlObtenida.replaceAll("class=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("onmouseover=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("onmouseout=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("height=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("rel=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("width=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("itemprop=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("itemtype=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("itemprop=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("<figure>(.*)</figure>", "");
+		urlObtenida = urlObtenida.replaceAll("target=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("style=(.*)\"", "");
+		urlObtenida = urlObtenida.replaceAll("<p(.*)</p>", "");
+		urlObtenida = urlObtenida.replaceAll("<svg(.*)>", "");
+		urlObtenida = urlObtenida.replaceAll("<path(.*)>", "");
+
+		urlObtenida = urlObtenida.replace("a href=\"", "");
+		urlObtenida = urlObtenida.replace("\"  >", "");
+		urlObtenida = urlObtenida.replace("<i ></i>", "");
+		urlObtenida = urlObtenida.replace("<img >", "");
+		urlObtenida = urlObtenida.replace(">", "");
+		urlObtenida = urlObtenida.replace("<img", "");
+		urlObtenida = urlObtenida.replace("data-v-23efff06", "");
+		urlObtenida = urlObtenida.replace("<button", "");
+		urlObtenida = urlObtenida.replace("»", "");
+		urlObtenida = urlObtenida.replace("…", "");
+		urlObtenida = urlObtenida.replace("???? ??????	", "");
+		urlObtenida = urlObtenida.replace("src=//", "");
+		urlObtenida = urlObtenida.replace("\"", "");
+		urlObtenida = urlObtenida.replace("src=", "");
+		urlObtenida = urlObtenida.replace("'", "");
+		return urlObtenida;
+
+	}
 
 	public static boolean pingURL(String url) {
 
@@ -184,7 +394,9 @@ public abstract class Metodos {
 			writer.append("--" + limite + "--").append(crlf).flush();
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
 			String inputLine;
+
 			StringBuffer response = new StringBuffer();
 
 			while ((inputLine = in.readLine()) != null) {
@@ -203,7 +415,8 @@ public abstract class Metodos {
 
 	public static void descargarFoto(String enlace) throws IOException {
 
-		String folder = "Config" + MenuPrincipal.getSeparador() + "Downloads" + MenuPrincipal.getSeparador();
+		String folder = MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + "Downloads"
+				+ MenuPrincipal.getSeparador();
 
 		try {
 
@@ -248,7 +461,7 @@ public abstract class Metodos {
 		}
 
 		catch (Exception e) {
-			Metodos.abrirCarpeta(folder);
+			abrirCarpeta(folder);
 
 		}
 	}
@@ -259,36 +472,38 @@ public abstract class Metodos {
 
 			WebDriver chrome;
 
-			for (int x = inicio; x <= fin; x += salto) {
+			// for (int x = inicio; x <= fin; x += salto) {
 
-				if (Descarga.getBotonRadio1().isSelected()) {
+			// if (Descarga.getBotonRadio1().isSelected()) {
 
-					chrome = new ChromeDriver();
+			chrome = new ChromeDriver();
 
-					chrome.get(imagen + x);
+			chrome.get(imagen);
 
-					if (!chrome.findElements(By.tagName("img")).isEmpty()) {
+			if (!chrome.findElements(By.tagName("img")).isEmpty()) {
 
-						List<WebElement> image = chrome.findElements(By.tagName("img"));
+				List<WebElement> image = chrome.findElements(By.className("fotorama__img"));
 
-						descargarFoto(image.get(0).getAttribute("src"));
-					}
-
-					chrome.close();
-					Metodos.cerrarNavegador();
-				}
-
-				else {
-					descargar(imagen, x);
-				}
-
+				descargarFoto(image.get(0).getAttribute("src"));
 			}
 
-			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
+			chrome.close();
+			// Metodos.cerrarNavegador();
+			// }
+
+//				else {
+//					descargar(imagen, x);
+//				}
+
+			// }
+
+//			Metodos.abrirCarpeta(
+//					MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + "Downloads");
 
 		} catch (Exception e) {
-
-			Metodos.abrirCarpeta("Config" + MenuPrincipal.getSeparador() + "Downloads");
+			e.printStackTrace();
+			Metodos.abrirCarpeta(
+					MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + "Downloads");
 			System.exit(0);
 		}
 	}
@@ -511,7 +726,7 @@ public abstract class Metodos {
 	public static void moverArchivosDrop(java.io.File[] files, String separador) throws IOException {
 
 		String imagen;
-		String comprobacion;
+		String extension;
 		boolean filtro = false;
 		String origen;
 		String destino;
@@ -531,11 +746,22 @@ public abstract class Metodos {
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
 						files[i].getCanonicalPath().length());
 
-				comprobacion = extraerExtension(imagen);
+				extension = extraerExtension(imagen);
 
-				if (comprobacion.equals("jpg") || comprobacion.equals("JPG") || comprobacion.equals("peg")
-						|| comprobacion.equals("png") || comprobacion.equals("gif") || comprobacion.equals("avi")
-						|| comprobacion.equals("mp4") || comprobacion.equals("webp")) {
+				if (extension.equals("jfif")) {
+
+					int indice = files[i].getCanonicalPath().indexOf(".jfif");
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_.jfif",
+							files[i].getCanonicalPath().substring(0, indice) + "_.jpg");
+
+					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.jpg");
+
+					extension = "jpg";
+				}
+
+				if (extension.equals("jpg") || extension.equals("JPG") || extension.equals("peg")
+						|| extension.equals("png") || extension.equals("gif") || extension.equals("avi")
+						|| extension.equals("mp4") || extension.equals("webp")) {
 
 					origen = files[i].getCanonicalPath();
 
@@ -564,7 +790,7 @@ public abstract class Metodos {
 
 							salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
-							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
+							salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + extension;
 
 							renombrar(origen, salida);
 
@@ -1978,20 +2204,24 @@ public abstract class Metodos {
 
 		String extension;
 		String nombreArchivo;
-
+		File folder;
 		for (final File ficheroEntrada : carpeta.listFiles()) {
 
 			nombreArchivo = ficheroEntrada.getName();
+
 			extension = extraerExtension(nombreArchivo);
 
-			if (extension.equals(filtro) || filtro.equals(".")) {
+			folder = new File(carpeta + MenuPrincipal.getSeparador() + nombreArchivo);
 
+			if (!folder.isDirectory() && (extension.equals(filtro) || filtro.equals("."))) {
 				ocurrencias++;
+
 			}
 
 		}
 
 		return ocurrencias;
+
 	}
 
 	public static String extraerExtension(String nombreArchivo) {
@@ -2006,6 +2236,10 @@ public abstract class Metodos {
 
 			if (extension.equals("peg")) {
 				extension = "jpeg";
+			}
+
+			if (extension.equals("fif")) {
+				extension = "jfif";
 			}
 
 			if (extension.equals("ebp")) {

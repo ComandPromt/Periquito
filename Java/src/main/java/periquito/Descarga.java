@@ -15,6 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -39,6 +42,9 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 	public static final JTextField textField3 = new JTextField();
 
 	static boolean error = false;
+	private JMenuBar menuBar;
+	private JMenu mnNewMenu;
+	private JMenuItem mntmNewMenuItem;
 
 	public static void setError(boolean error) {
 		Descarga.error = error;
@@ -48,6 +54,25 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 		getContentPane().setFont(new Font("Dialog", Font.BOLD, 20));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Descarga.class.getResource("/imagenes/download.png")));
 		setTitle("Periquito v3 Config Remoto");
+
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		mnNewMenu = new JMenu("New menu");
+		menuBar.add(mnNewMenu);
+
+		mntmNewMenuItem = new JMenuItem("DescargaThumb");
+		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					new DescargaThumb().setVisible(true);
+				} catch (IOException e1) {
+					//
+				}
+			}
+		});
+		mnNewMenu.add(mntmNewMenuItem);
 		initComponents();
 		this.setVisible(true);
 	}
