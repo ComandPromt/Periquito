@@ -15,8 +15,6 @@ public abstract class MetodosPdf {
 	public static void crearPdf(LinkedList<String> url, String dato, String plantilla)
 			throws Exception, FileNotFoundException {
 
-		String outputFilePath = "samplePDF.pdf";
-
 		String tampleFile = "plantillas/" + plantilla;
 
 		Map<String, Object> variables = new HashMap<String, Object>();
@@ -29,7 +27,7 @@ public abstract class MetodosPdf {
 
 		String htmlStr = HtmlGenerator.generate(tampleFile, variables);
 
-		PdfGenerator.generate(htmlStr, new FileOutputStream(outputFilePath));
+		PdfGenerator.generate(htmlStr, new FileOutputStream(Metodos.extraerNombreArchivo("pdf")));
 	}
 
 	private static List<Url> createUserList(LinkedList<String> urls) {

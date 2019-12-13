@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -83,6 +84,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 	private JCheckBox checkBox;
 	private JLabel lblNewLabel_2;
 	private JTextField txtHttp;
+	private JButton btnNewButton;
 
 	public void obtenerEnlaces(String url, int tomarUrl, String claseTabla, String claseTd) {
 
@@ -397,11 +399,27 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		textField_4.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_4.setColumns(10);
 
-		btnNewButton_2 = new JButton("");
+		btnNewButton_2 = new JButton("Abrir Target");
+		btnNewButton_2.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnNewButton_2.setIcon(new ImageIcon(Scrapt.class.getResource("/imagenes/remote.png")));
+
 		btnNewButton_2.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
-				// Abrir navegador con la URL de target
+
+				try {
+
+					String url = jTextField1.getText() + textField_4.getText();
+
+					if (Metodos.pingURL(url)) {
+						Metodos.abrirCarpeta(url);
+					}
+
+				}
+
+				catch (Exception e1) {
+					//
+				}
 			}
 		});
 
@@ -417,77 +435,86 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 					urls.clear();
 
-					int imagen = Integer.parseInt(Metodos.eliminarEspacios(textField_6.getText()));
+					int respuesta = JOptionPane.showConfirmDialog(null,
+							"Las urls se subiran con la etiqueta " + textField.getText() + ", ¿está seguro?");
 
-					int de = Integer.parseInt(Metodos.eliminarEspacios(textField_4.getText()));
+					if (respuesta == 0) {
 
-					int hasta = Integer.parseInt(Metodos.eliminarEspacios(textField_5.getText()));
+						int imagen = Integer.parseInt(Metodos.eliminarEspacios(textField_6.getText()));
 
-					int paso = Integer.parseInt(Metodos.eliminarEspacios(textField_1.getText()));
+						int de = Integer.parseInt(Metodos.eliminarEspacios(textField_4.getText()));
 
-					if (!checkBox.isSelected()) {
-						de = 1;
-						hasta = 1;
-						paso = 1;
-					}
+						int hasta = Integer.parseInt(Metodos.eliminarEspacios(textField_5.getText()));
 
-					if (imagen > 0 && de > 0 && hasta > 0 && paso > 0) {
+						int paso = Integer.parseInt(Metodos.eliminarEspacios(textField_1.getText()));
 
-						for (int contador = de; contador <= hasta; contador += paso) {
-
-							obtenerEnlaces(Metodos.eliminarEspacios(jTextField1.getText() + contador), 2, "tbl-border",
-									"tbl1");
-
+						if (!checkBox.isSelected()) {
+							de = 1;
+							hasta = 1;
+							paso = 1;
 						}
 
-						int maximo = Metodos.saberMaximo("comments", "comment_id");
+						if (imagen > 0 && de > 0 && hasta > 0 && paso > 0) {
 
-						Connection conexion = Metodos.conexionBD();
+							for (int contador = de; contador <= hasta; contador += paso) {
 
-						Statement s;
+								obtenerEnlaces(Metodos.eliminarEspacios(jTextField1.getText() + contador), 2,
+										"tbl-border", "tbl1");
 
-						s = conexion.createStatement();
-
-						String etiqueta = Metodos.eliminarEspacios(textField.getText());
-
-						int recuento = 0;
-
-						for (int i = 0; i < urls.size(); i++) {
-
-							ResultSet rs = s
-									.executeQuery("SELECT COUNT(comment_id) FROM " + MenuPrincipal.getLecturabd()[3]
-											+ "scrapting WHERE comment_text='[URL]" + urls.get(i) + "[/URL]'");
-
-							rs.next();
-
-							recuento = Integer.parseInt(rs.getString("count(comment_id)"));
-
-							if (recuento == 0) {
-
-								s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3] + "scrapting VALUES('"
-										+ maximo + "','" + imagen + "','1','" + datos.get(i) + "','[URL]" + urls.get(i)
-										+ "[/URL]','localhost','2019-10-04','1','" + etiqueta + "')");
-								maximo++;
 							}
+
+							int maximo = Metodos.saberMaximo("comments", "comment_id");
+
+							Connection conexion = Metodos.conexionBD();
+
+							Statement s;
+
+							s = conexion.createStatement();
+
+							String etiqueta = Metodos.eliminarEspacios(textField.getText());
+
+							int recuento = 0;
+
+							for (int i = 0; i < urls.size(); i++) {
+
+								ResultSet rs = s
+										.executeQuery("SELECT COUNT(comment_id) FROM " + MenuPrincipal.getLecturabd()[3]
+												+ "scrapting WHERE comment_text='[URL]" + urls.get(i) + "[/URL]'");
+
+								rs.next();
+
+								recuento = Integer.parseInt(rs.getString("count(comment_id)"));
+
+								if (recuento == 0) {
+
+									s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3]
+											+ "scrapting VALUES('" + maximo + "','" + imagen + "','1','" + datos.get(i)
+											+ "','[URL]" + urls.get(i) + "[/URL]','localhost','2019-10-04','1','"
+											+ etiqueta + "')");
+									maximo++;
+								}
+							}
+
+							if (!urls.isEmpty()) {
+
+								s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3]
+										+ "comments (image_id,user_id,comment_headline,comment_text,comment_ip,comment_date) SELECT '"
+										+ imagen
+										+ "',user_id,comment_headline,comment_text,comment_ip,comment_date FROM "
+										+ MenuPrincipal.getLecturabd()[3] + "scrapting WHERE comment_text like '%"
+										+ txtHttp.getText() + "%' AND tag='" + etiqueta + "' ORDER BY comment_id ASC");
+
+								Metodos.mensaje("Se han insertado " + urls.size() + " URLs!", 2);
+							}
+
+							conexion.close();
+
 						}
 
-						if (!urls.isEmpty()) {
-
-							s.executeUpdate("INSERT INTO " + MenuPrincipal.getLecturabd()[3]
-									+ "comments (image_id,user_id,comment_headline,comment_text,comment_ip,comment_date) SELECT '"
-									+ imagen + "',user_id,comment_headline,comment_text,comment_ip,comment_date FROM "
-									+ MenuPrincipal.getLecturabd()[3] + "scrapting WHERE comment_text like '%"
-									+ txtHttp.getText() + "%' AND tag='" + etiqueta + "' ORDER BY comment_id ASC");
-
-							Metodos.mensaje("Se han insertado " + urls.size() + " URLs!", 2);
+						else {
+							Metodos.mensaje("Por favor, inserta números en los campos requeridos", 3);
 						}
 
-						conexion.close();
-
-					}
-
-					else {
-						Metodos.mensaje("Por favor, inserta números en los campos requeridos", 3);
 					}
 
 					urls.clear();
@@ -547,62 +574,70 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		txtHttp.setFont(new Font("Tahoma", Font.BOLD, 16));
 		txtHttp.setColumns(10);
 
+		btnNewButton = new JButton("Ver URLs");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new VerUrl().setVisible(true);
+			}
+		});
+		btnNewButton.setIcon(new ImageIcon(Scrapt.class.getResource("/imagenes/view.png")));
+		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGap(28)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(layout
-								.createParallelGroup(Alignment.LEADING).addComponent(
-										lblNewLabel_1)
-								.addComponent(jLabel1).addComponent(lblThumbnails))
-						.addComponent(checkBox, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createSequentialGroup().addGap(14).addGroup(layout
-								.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(Alignment.TRAILING)
-										.addComponent(button, GroupLayout.PREFERRED_SIZE, 193, Short.MAX_VALUE)
-										.addGroup(layout.createSequentialGroup()
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(lblDe, GroupLayout.PREFERRED_SIZE, 36,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 36,
-																GroupLayout.PREFERRED_SIZE))
-												.addGap(36)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 53,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 46,
-																GroupLayout.PREFERRED_SIZE))
-												.addGap(32)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-														.addComponent(textField_1, 0, 0, Short.MAX_VALUE)
-														.addComponent(label, GroupLayout.PREFERRED_SIZE, 36,
-																GroupLayout.PREFERRED_SIZE))))
-										.addPreferredGap(ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
-										.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-												.addGroup(layout.createSequentialGroup()
-														.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-																.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE,
-																		GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-																.addComponent(txtHttp, 0, 0, Short.MAX_VALUE))
-														.addGap(59))
-												.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_2)
-														.addGap(92))))
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(textField_6, Alignment.LEADING)
-										.addComponent(jTextField1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 364,
-												Short.MAX_VALUE)
-										.addComponent(textField)))
-								.addPreferredGap(ComponentPlacement.RELATED, 892, Short.MAX_VALUE)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(btnNewButton)
+								.addComponent(checkBox, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE))
+						.addGap(32)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout
+								.createSequentialGroup()
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
-										.addComponent(label_1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 36,
+										.addComponent(lblDe, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+										.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 36,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(36)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 53,
 												GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNewLabel, Alignment.TRAILING))
-								.addGap(112)))
-				.addGap(159)));
+										.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 46,
+												GroupLayout.PREFERRED_SIZE))
+								.addGap(32)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(textField_1, 0, 0, Short.MAX_VALUE).addComponent(label,
+												GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(button, GroupLayout.PREFERRED_SIZE, 193, Short.MAX_VALUE))
+						.addGroup(layout.createParallelGroup(Alignment.LEADING, false).addGroup(layout
+								.createSequentialGroup().addGap(39)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING, false).addComponent(txtHttp)
+										.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+								.addGroup(Alignment.TRAILING,
+										layout.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE)
+												.addComponent(lblNewLabel_2).addGap(75))))
+						.addGroup(Alignment.TRAILING, layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel_1)
+										.addComponent(lblThumbnails).addComponent(jLabel1))
+								.addPreferredGap(ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 417,
+												GroupLayout.PREFERRED_SIZE)
+										.addGroup(Alignment.TRAILING,
+												layout.createParallelGroup(Alignment.LEADING, false)
+														.addComponent(textField).addComponent(textField_6,
+																GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)))))
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout
+						.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addComponent(label_1, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 36,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel, Alignment.TRAILING))
+						.addGap(112))
+						.addGroup(layout.createSequentialGroup().addGap(1096).addComponent(textField_2,
+								GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)))));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addContainerGap()
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
@@ -611,47 +646,47 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblThumbnails).addComponent(
 						textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(23)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
+						.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+				.addGap(18)
 				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 						.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE).addGap(45))
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
-										.addComponent(textField_6, GroupLayout.PREFERRED_SIZE, 35,
-												GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addGroup(layout.createSequentialGroup()
-												.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-														.addComponent(lblDe, GroupLayout.PREFERRED_SIZE, 19,
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup().addGroup(layout
+										.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblDe, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+										.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 19,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(label, GroupLayout.PREFERRED_SIZE, 19,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblNewLabel_2)))
+										.addGap(11)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(textField_4, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+														.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, 26,
 																GroupLayout.PREFERRED_SIZE)
-														.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-																.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 19,
-																		GroupLayout.PREFERRED_SIZE)
-																.addComponent(label, GroupLayout.PREFERRED_SIZE, 19,
-																		GroupLayout.PREFERRED_SIZE)
-																.addComponent(lblNewLabel_2)))
-												.addGap(11)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(textField_4, GroupLayout.PREFERRED_SIZE,
-																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-														.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-																.addComponent(textField_5, GroupLayout.PREFERRED_SIZE,
-																		26, GroupLayout.PREFERRED_SIZE)
-																.addComponent(textField_1, GroupLayout.PREFERRED_SIZE,
-																		26, GroupLayout.PREFERRED_SIZE)
-																.addComponent(txtHttp, GroupLayout.PREFERRED_SIZE,
-																		GroupLayout.DEFAULT_SIZE,
-																		GroupLayout.PREFERRED_SIZE))))
-										.addComponent(checkBox, GroupLayout.PREFERRED_SIZE, 29,
-												GroupLayout.PREFERRED_SIZE))
+														.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 26,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(txtHttp, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+								.addComponent(checkBox, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(ComponentPlacement.RELATED)))
 				.addComponent(lblNewLabel).addGap(9)
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(83).addComponent(textField_2,
+						.addGroup(layout.createSequentialGroup().addGap(35).addComponent(textField_2,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(btnNewButton_2)
-								.addComponent(button, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)))));
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(btnNewButton)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(button, GroupLayout.PREFERRED_SIZE, 71,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(btnNewButton_2, GroupLayout.PREFERRED_SIZE, 71,
+												GroupLayout.PREFERRED_SIZE))))
+				.addGap(4)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(641, 539));
+		setSize(new Dimension(701, 561));
 		setLocationRelativeTo(null);
 	}
 

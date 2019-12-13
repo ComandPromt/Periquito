@@ -37,6 +37,7 @@ public class InterfazGaleria extends javax.swing.JFrame {
 	private GridBagConstraints gridBagConstraints_1;
 
 	public InterfazGaleria() {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(InterfazGaleria.class.getResource("/imagenes/lupa.png")));
 
 		setResizable(false);
@@ -111,7 +112,14 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu.add(mntmNewMenuItem_1);
 
+		JMenu mnNewMenu_1 = new JMenu("Ver imagen");
+		mnNewMenu_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_1.setForeground(Color.BLACK);
+		mnNewMenu_1.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/view.png")));
+		menuBar.add(mnNewMenu_1);
+
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Web");
+		mnNewMenu_1.add(mntmNewMenuItem_2);
 		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -138,7 +146,42 @@ public class InterfazGaleria extends javax.swing.JFrame {
 		mntmNewMenuItem_2.setBackground(new Color(240, 240, 240));
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem_2.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/remote.png")));
-		menuBar.add(mntmNewMenuItem_2);
+
+		JSeparator separator_2 = new JSeparator();
+		mnNewMenu_1.add(separator_2);
+
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("En el CMS");
+		mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				web = paso;
+
+				if (web > 0) {
+					--web;
+				}
+
+				if (atras) {
+					++web;
+				}
+
+				try {
+
+					String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
+							+ "/details.php?image_id=" + Galeria.getIdImagenes().get(web);
+
+					Metodos.abrirCarpeta(url);
+
+				} catch (Exception e1) {
+					//
+				}
+
+			}
+		});
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_3.setForeground(Color.BLACK);
+		mntmNewMenuItem_3.setIcon(new ImageIcon(InterfazGaleria.class.getResource("/imagenes/remote.png")));
+		mnNewMenu_1.add(mntmNewMenuItem_3);
 	}
 
 	private void initComponents() {

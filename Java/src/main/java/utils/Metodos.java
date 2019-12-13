@@ -55,6 +55,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -73,25 +74,38 @@ import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
-	public static void generarExcel(String hoja, LinkedList<String> datos, LinkedList<String> lista) {
+	public static void generarExcel(String hoja, LinkedList<String> datos, LinkedList<String> lista)
+			throws IOException {
 
-		HSSFWorkbook workbook = new ExcelGenerator().generateExcel(hoja, datos, lista);
+		HSSFWorkbook workbook = null;
 
 		try {
 
-			OutputStream out = null;
-			out = new FileOutputStream("archivo.xls");
+			workbook = new ExcelGenerator().generateExcel(hoja, datos, lista);
 
-			// JOptionPane.showMessageDialog(this, "Archivo generado con Ã©xito");
+			OutputStream out = null;
+
+			out = new FileOutputStream(extraerNombreArchivo("xls"));
 
 			workbook.write(out);
-			workbook.close();
+
 			out.flush();
+
 			out.close();
-		} catch (IOException ex) {
+
+			Metodos.mensaje("Lista exportada con éxito", 2);
+
+		} catch (Exception ex) {
 			//
 		}
 
+		finally {
+
+			if (workbook != null) {
+				workbook.close();
+			}
+
+		}
 	}
 
 	public static LinkedList<String> obtenerEnlaces(String url, int tomarUrl, String claseTabla, String claseTd,
@@ -2684,6 +2698,42 @@ public abstract class Metodos {
 		directorio = new File("sonidos");
 
 		directorio.mkdir();
+
+		directorio = new File("Scrapting");
+
+		directorio.mkdir();
+
+		directorio = new File("Notas");
+
+		directorio.mkdir();
+
+		directorio = new File("Usuarios");
+
+		directorio.mkdir();
+
+		directorio = new File("Comentarios");
+
+		directorio.mkdir();
+
+		directorio = new File("Bots");
+
+		directorio.mkdir();
+
+		directorio = new File("Descargas");
+
+		directorio.mkdir();
+
+		directorio = new File("Estadisticas");
+
+		directorio.mkdir();
+
+		directorio = new File("Grupos");
+
+		directorio.mkdir();
+
+		directorio = new File("Categorias");
+
+		directorio.mkdir();
 	}
 
 	public static String saberSeparador(String os) {
@@ -2746,6 +2796,16 @@ public abstract class Metodos {
 	public static JSONObject apiImagenes(String parametros) throws IOException {
 		JSONObject json = readJsonFromUrl("https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=" + parametros);
 		return json;
+	}
+
+	public static String extraerNombreArchivo(String extension) throws IOException {
+		JSONObject json = apiImagenes("archivo." + extension);
+
+		JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
+
+		String outputFilePath = MenuPrincipal.getDirectorioActual() + "Scrapting" + MenuPrincipal.getSeparador()
+				+ imagenesBD.get(0).toString();
+		return outputFilePath;
 	}
 
 	public static String obtenerParametros(LinkedList<String> listaImagenes) {

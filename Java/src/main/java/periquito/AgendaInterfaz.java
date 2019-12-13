@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -52,7 +53,7 @@ public class AgendaInterfaz extends JFrame {
 	private JTextPane nombre;
 	private JTextPane tipo;
 	static DefaultListModel<String> modelo = new DefaultListModel<>();
-
+	private static LinkedList<String> notas = new LinkedList<>();
 	String iduser;
 	transient ResultSet rs;
 	transient Statement s;
@@ -141,19 +142,25 @@ public class AgendaInterfaz extends JFrame {
 						s = conexion.createStatement();
 
 						if (jList1.getModel().getSize() == 0) {
+
 							rs = s.executeQuery("select Nombre from notas order by Nombre");
+
 							while (rs.next()) {
 
 								modelo.addElement(rs.getString("Nombre"));
 							}
 
-						} else {
+						}
+
+						else {
 
 							try {
 
 								rs = s.executeQuery("select Nombre,tipo,descripcion from notas WHERE Nombre='"
 										+ jList1.getSelectedValue().toString() + "' order by Nombre");
+
 								rs.next();
+
 								cnombre = rs.getString("Nombre");
 								ctipo = rs.getString("tipo");
 								cnota = rs.getString("descripcion");
@@ -258,6 +265,52 @@ public class AgendaInterfaz extends JFrame {
 		eliminarContacto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		eliminarContacto.setFocusPainted(false);
 		eliminarContacto.setRolloverIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/delete_1.png")));
+
+		JMenu mnNewMenu_1 = new JMenu("Exportar");
+		mnNewMenu_1.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/config.png")));
+		mnNewMenu_1.setForeground(Color.BLACK);
+		mnNewMenu_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		menuBar.add(mnNewMenu_1);
+
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("PDF");
+		mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if (notas.isEmpty()) {
+					Metodos.mensaje("Por favor, inserte una URL y vea sus enlaces", 3);
+				}
+
+				else {
+
+					try {
+
+						// MetodosPdf.crearPdf(notas, url, "template-verurl.html");
+
+					} catch (Exception e1) {
+						//
+					}
+				}
+			}
+		});
+		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_2.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/pdf.png")));
+		mnNewMenu_1.add(mntmNewMenuItem_2);
+
+		JSeparator separator = new JSeparator();
+		mnNewMenu_1.add(separator);
+
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Excel");
+		mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mntmNewMenuItem_3.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/excel.png")));
+		mnNewMenu_1.add(mntmNewMenuItem_3);
+
+		JSeparator separator_3 = new JSeparator();
+		mnNewMenu_1.add(separator_3);
+
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Txt");
+		mntmNewMenuItem_4.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/txt.png")));
+		mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnNewMenu_1.add(mntmNewMenuItem_4);
 		eliminarContacto.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				try {
@@ -479,6 +532,8 @@ public class AgendaInterfaz extends JFrame {
 
 	public static void verNotas() throws SQLException, IOException {
 
+		String nota;
+
 		modelo.removeAllElements();
 
 		Connection conexion = Metodos.conexionBD();
@@ -488,7 +543,9 @@ public class AgendaInterfaz extends JFrame {
 		ResultSet rs = s.executeQuery("select Nombre from notas order by Nombre");
 
 		while (rs.next()) {
-			modelo.addElement(rs.getString("Nombre"));
+			nota = rs.getString("Nombre");
+			modelo.addElement(nota);
+			notas.add(nota);
 		}
 
 		jList1.setModel(modelo);

@@ -2,9 +2,11 @@ package utils;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -17,6 +19,7 @@ public class Galeria {
 
 	private ArrayList<ImageIcon> fotos = new ArrayList<>();
 	public static ArrayList<String> urlFotos = new ArrayList<>();
+	public static ArrayList<String> idImagenes = new ArrayList<>();
 
 	public static ArrayList<String> getUrlFotos() {
 		return urlFotos;
@@ -25,7 +28,9 @@ public class Galeria {
 	public Galeria() {
 
 		try {
+
 			String ruta;
+
 			int numeroImagenes = MenuPrincipal.getListaImagenes().size();
 
 			String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
@@ -37,23 +42,55 @@ public class Galeria {
 
 			if (!ping.getCanonicalHostName().equals("")) {
 
-				for (int i = 0; i < numeroImagenes; i++) {
+				if (numeroImagenes > 0) {
 
-					ruta = "http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
-							+ MenuPrincipal.getCategorias().get(i) + "/" + MenuPrincipal.getListaImagenes().get(i);
+					String imagen;
 
-					urlFotos.add(ruta);
+					Connection conexion = Metodos.conexionBD();
 
-					fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL(ruta))));
+					ResultSet rs = null;
 
+					Statement s = conexion.createStatement();
+
+					for (int i = 0; i < numeroImagenes; i++) {
+
+						imagen = MenuPrincipal.getListaImagenes().get(i);
+
+						ruta = "http://" + lecturaurl[0] + "/" + lecturaurl[1] + "/data/media/"
+								+ MenuPrincipal.getCategorias().get(i) + "/" + imagen;
+
+						urlFotos.add(ruta);
+
+						fotos.add(new javax.swing.ImageIcon(ImageIO.read(new URL(ruta))));
+
+						rs = s.executeQuery("SELECT image_id FROM " + MenuPrincipal.getLecturabd()[3]
+								+ "images WHERE image_media_file='" + imagen + "'");
+						rs.next();
+						idImagenes.add(rs.getString("image_id"));
+					}
+
+					if (rs != null) {
+						rs.close();
+					}
+
+					s.close();
+					conexion.close();
 				}
 
 			}
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			//
 		}
 
+	}
+
+	public static void setIdImagenes(ArrayList<String> idImagenes) {
+		Galeria.idImagenes = idImagenes;
+	}
+
+	public static ArrayList<String> getIdImagenes() {
+		return idImagenes;
 	}
 
 	public Icon getPreview(int num) {
