@@ -205,7 +205,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 			flS.close();
 			dispose();
 
-			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));
+			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config2.txt", 2));
 
 			if (Boolean.TRUE.equals(mensaje)) {
 

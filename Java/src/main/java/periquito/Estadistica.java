@@ -23,6 +23,7 @@ public class Estadistica extends javax.swing.JFrame implements ActionListener, C
 	RSProgressCircle button = new RSProgressCircle();
 
 	public Estadistica() {
+		getContentPane().setForeground(Color.PINK);
 
 		Color color = new Color(255, 0, 0);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
@@ -59,6 +60,8 @@ public class Estadistica extends javax.swing.JFrame implements ActionListener, C
 		JLabel lblNewLabel_3 = new JLabel("Estadísticas por cidudad,pais,os y buscador");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 16));
 
+		JButton btnNewButton_1 = new JButton("estadisticas de imagenes y se usuarios");
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -73,15 +76,17 @@ public class Estadistica extends javax.swing.JFrame implements ActionListener, C
 								.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(lblNewLabel_2)
 										.addComponent(lblNewLabel_1))))
 						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(button, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE).addGap(37)));
+						.addComponent(button, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE).addGap(37))
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(btnNewButton_1)
+						.addContainerGap(483, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(38)
+				.addGap(4).addComponent(btnNewButton_1).addPreferredGap(ComponentPlacement.UNRELATED)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel)
 						.addComponent(btnNewButton))
 				.addGap(18)
 				.addComponent(lblDescargarEstadisticas, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 				.addGap(38).addComponent(lblNewLabel_1).addGap(18).addComponent(lblNewLabel_2)
-				.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE).addComponent(lblNewLabel_3)
+				.addPreferredGap(ComponentPlacement.RELATED, 30, Short.MAX_VALUE).addComponent(lblNewLabel_3)
 				.addGap(30))
 				.addGroup(layout.createSequentialGroup().addGap(163)
 						.addComponent(button, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)

@@ -26,7 +26,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -553,6 +552,28 @@ public abstract class Metodos {
 		}
 	}
 
+	public static String[] leerArchivo(String archivo, int longitud, String contenido, boolean carpeta)
+			throws IOException {
+
+		String[] sonido = null;
+
+		try {
+
+			sonido = leerFicheroArray(archivo, longitud);
+		}
+
+		catch (Exception e) {
+
+			crearFichero(MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + archivo,
+					contenido, carpeta);
+
+			sonido = leerFicheroArray(archivo, longitud);
+
+		}
+
+		return sonido;
+	}
+
 	private static void descargar(String imagen, int x) {
 		try {
 
@@ -597,17 +618,17 @@ public abstract class Metodos {
 		return sb.toString();
 	}
 
-	public static void convertir() {
+	public static void convertir(String carpeta) {
 
-		Metodos.conversion("jpeg", "jpg");
+		Metodos.conversion("jpeg", "jpg", carpeta);
 
-		Metodos.conversion("JPEG", "jpg");
+		Metodos.conversion("JPEG", "jpg", carpeta);
 
-		Metodos.conversion("JPG", "jpg");
+		Metodos.conversion("JPG", "jpg", carpeta);
 
-		Metodos.conversion("PNG", "png");
+		Metodos.conversion("PNG", "png", carpeta);
 
-		Metodos.conversion("GIF", "gif");
+		Metodos.conversion("GIF", "gif", carpeta);
 
 	}
 
@@ -690,7 +711,8 @@ public abstract class Metodos {
 
 		if (!files.isEmpty()) {
 
-			LinkedList<String> listaImagenes = directorio(MenuPrincipal.getDirectorioImagenes(), ".");
+			LinkedList<String> listaImagenes = directorio(
+					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".");
 
 			String busqueda;
 
@@ -745,7 +767,8 @@ public abstract class Metodos {
 
 						), StandardCopyOption.REPLACE_EXISTING);
 
-						convertir();
+						convertir(MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador()
+								+ "imagenes" + MenuPrincipal.getSeparador());
 
 					}
 
@@ -778,7 +801,8 @@ public abstract class Metodos {
 
 		if (files.length > 0) {
 
-			LinkedList<String> listaImagenes = directorio(MenuPrincipal.getDirectorioImagenes(), ".");
+			LinkedList<String> listaImagenes = directorio(
+					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".");
 
 			String busqueda;
 
@@ -1064,61 +1088,68 @@ public abstract class Metodos {
 
 	}
 
-	public static String[] leerFicheroArray(String fichero, int longitud) {
+	public static String[] leerFicheroArray(String fichero, int longitud) throws IOException {
 
 		String[] salida = new String[longitud];
 
-		String texto = "";
+		fichero = MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + fichero;
 
-		int i = 0;
+		File archivo = new File(fichero);
 
-		FileReader flE = null;
+		if (archivo.exists()) {
 
-		BufferedReader fE = null;
+			String texto = "";
 
-		try {
+			int i = 0;
 
-			flE = new FileReader(fichero);
-			fE = new BufferedReader(flE);
-			texto = fE.readLine();
+			FileReader flE = null;
 
-			while (texto != null && i < longitud) {
+			BufferedReader fE = null;
 
-				salida[i] = texto;
-				i++;
+			try {
 
+				flE = new FileReader(fichero);
+				fE = new BufferedReader(flE);
 				texto = fE.readLine();
 
-			}
+				while (texto != null && i < longitud) {
 
-			fE.close();
-			flE.close();
+					salida[i] = texto;
+					i++;
 
-		}
+					texto = fE.readLine();
 
-		catch (Exception e) {
-			//
-		}
-
-		finally {
-
-			if (fE != null) {
-				try {
-					fE.close();
-				} catch (IOException e) {
-					//
-				}
-			}
-
-			if (flE != null) {
-
-				try {
-					flE.close();
-				} catch (IOException e) {
-					//
 				}
 
+				fE.close();
+				flE.close();
+
+			} catch (Exception e) {
+				//
+			} finally {
+
+				if (fE != null) {
+					try {
+						fE.close();
+					} catch (IOException e) {
+						//
+					}
+				}
+
+				if (flE != null) {
+
+					try {
+						flE.close();
+					} catch (IOException e) {
+						//
+					}
+
+				}
 			}
+		}
+
+		else {
+			throw new IOException();
 		}
 
 		return salida;
@@ -1127,7 +1158,7 @@ public abstract class Metodos {
 
 	public static void exportarBd(String archivo, List<String> tablas) throws IOException {
 
-		String[] backup = leerFicheroArray("Config/Backup.txt", 1);
+		String[] backup = leerFicheroArray("Backup.txt", 1);
 
 		LinkedList<String> datos = new LinkedList<>();
 
@@ -1864,7 +1895,7 @@ public abstract class Metodos {
 
 	public static ArrayList<String> verCategorias() throws SQLException, IOException {
 
-		String[] lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+		String[] lectura = Metodos.leerFicheroArray("Bd.txt", 6);
 
 		ArrayList<String> categorias = new ArrayList<>();
 
@@ -2022,7 +2053,7 @@ public abstract class Metodos {
 
 		try {
 
-			String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
+			String[] lectura2 = leerFicheroArray("Bd.txt", 6);
 
 			if (!lectura2[5].isEmpty()) {
 
@@ -2101,7 +2132,7 @@ public abstract class Metodos {
 
 	public static Connection conexionBD() throws SQLException, IOException {
 
-		String[] lectura2 = leerFicheroArray("Config/Bd.txt", 6);
+		String[] lectura2 = leerFicheroArray("Bd.txt", 6);
 
 		if (comprobarConexion(false)) {
 
@@ -2383,7 +2414,7 @@ public abstract class Metodos {
 
 				fichero = ficheros[x].getName();
 
-				folder = new File(ruta + "/" + fichero);
+				folder = new File(ruta + fichero);
 
 				extensionArchivo = extraerExtension(fichero);
 
@@ -2391,7 +2422,7 @@ public abstract class Metodos {
 
 				if (comprobacion && fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
-					renombrar(ruta + "/" + fichero, ruta + "/" + eliminarPuntos(fichero));
+					renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
 
 				}
 
@@ -2408,50 +2439,6 @@ public abstract class Metodos {
 
 		return lista;
 
-	}
-
-	public static int salida(String origen, String destino, int opcion, String separador) throws IOException {
-
-		LinkedList<String> imagenes;
-
-		if (opcion != 9 || (opcion == 9 && origen.contains("Thumb"))) {
-			imagenes = directorio(origen, ".jpg");
-		}
-
-		else {
-			imagenes = directorio(origen, ".gif");
-		}
-
-		int mensaje;
-
-		if (!imagenes.isEmpty()) {
-
-			if (imagenes.size() == 1) {
-				destino += separador + imagenes.get(0);
-				Path origenPath = FileSystems.getDefault().getPath(origen + separador + imagenes.get(0));
-				Path destinoPath = FileSystems.getDefault().getPath(destino);
-				Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
-			}
-
-			else {
-
-				for (int x = 0; x < imagenes.size(); x++) {
-					Path origenPath = FileSystems.getDefault().getPath(origen + separador + imagenes.get(x));
-					Path destinoPath = FileSystems.getDefault().getPath(destino + separador + imagenes.get(x));
-					Files.move(origenPath, destinoPath, StandardCopyOption.REPLACE_EXISTING);
-				}
-
-			}
-
-			mensaje = imagenes.size();
-
-		}
-
-		else {
-			mensaje = 0;
-		}
-
-		return mensaje;
 	}
 
 	public static byte[] createChecksum(String filename) throws NoSuchAlgorithmException, IOException {
@@ -2538,7 +2525,7 @@ public abstract class Metodos {
 
 	public static int saberMaximo(String tabla, String campo) throws SQLException, IOException {
 
-		int maximo = 0;
+		int maximo = 1;
 
 		ResultSet rs = null;
 
@@ -2550,8 +2537,8 @@ public abstract class Metodos {
 
 			s = conexion.createStatement();
 
-			rs = s.executeQuery("SELECT MAX(" + campo + ")+1 as maximo FROM " + MenuPrincipal.getLecturabd()[3] + tabla
-					+ " order by image_id");
+			rs = s.executeQuery(
+					"SELECT MAX(" + campo + ")+1 as maximo FROM " + MenuPrincipal.getLecturabd()[3] + tabla);
 
 			rs.next();
 
@@ -2744,10 +2731,9 @@ public abstract class Metodos {
 		}
 	}
 
-	public static void conversion(String extension, String salida) {
+	public static void conversion(String extension, String salida, String carpeta) {
 
-		LinkedList<String> listaImagenes = Metodos.directorio("Config" + MenuPrincipal.getSeparador() + "imagenes",
-				extension);
+		LinkedList<String> listaImagenes = Metodos.directorio(carpeta, extension);
 
 		int resto = 3;
 
@@ -2757,10 +2743,9 @@ public abstract class Metodos {
 
 		for (int i = 0; i < listaImagenes.size(); i++) {
 
-			File f1 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
-					+ listaImagenes.get(i));
+			File f1 = new File(carpeta + MenuPrincipal.getSeparador() + listaImagenes.get(i));
 
-			File f2 = new File("Config" + MenuPrincipal.getSeparador() + "imagenes" + MenuPrincipal.getSeparador()
+			File f2 = new File(carpeta + MenuPrincipal.getSeparador()
 					+ listaImagenes.get(i).substring(0, listaImagenes.get(i).length() - resto) + "." + salida);
 
 			f1.renameTo(f2);

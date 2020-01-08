@@ -122,7 +122,8 @@ public class PhotoFrame extends javax.swing.JFrame {
 					LinkedList<String> listaImagenes = new LinkedList<>();
 
 					listaImagenes = Metodos.directorio(MenuPrincipal.getDirectorioActual() + "Config"
-							+ MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+							+ MenuPrincipal.getSeparador() + "imagenes_para_recortar" + MenuPrincipal.getSeparador(),
+							".");
 
 					Metodos.renombrarArchivos(listaImagenes, MenuPrincipal.getDirectorioActual() + "Config"
 							+ MenuPrincipal.getSeparador() + "imagenes_para_recortar" + MenuPrincipal.getSeparador());

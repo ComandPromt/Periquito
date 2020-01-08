@@ -36,7 +36,7 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 	static String[] permisos;
 
-	public Permiso() {
+	public Permiso() throws IOException {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Permiso.class.getResource("/imagenes/key.png")));
 
@@ -44,7 +44,7 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 		initComponents();
 
-		permisos = Metodos.leerFicheroArray("Config/Permisos.txt", 4);
+		permisos  = Metodos.leerArchivo("Permisos.txt",4,"2\r\n" + "1\r\n" + "1\r\n" + "1",false);
 
 		try {
 
@@ -287,7 +287,7 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 			dispose();
 
-			MenuPrincipal.setPermisos(Metodos.leerFicheroArray("Config/Permisos.txt", 4));
+			MenuPrincipal.setPermisos(Metodos.leerFicheroArray("Permisos.txt", 4));
 
 			if (mensaje) {
 

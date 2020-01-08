@@ -45,7 +45,7 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 
 			try {
 
-				lectura = Metodos.leerFicheroArray("Config/User.txt", 2);
+				lectura = Metodos.leerFicheroArray("User.txt", 2);
 
 				if (lectura[0] == null || lectura[0].isEmpty()) {
 					lectura[0] = "admin";
@@ -83,7 +83,7 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 			flS.close();
 			dispose();
 
-			MenuPrincipal.setUser(Metodos.leerFicheroArray("Config/User.txt", 2));
+			MenuPrincipal.setUser(Metodos.leerFicheroArray("User.txt", 2));
 
 			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);

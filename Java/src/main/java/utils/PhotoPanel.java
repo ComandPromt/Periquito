@@ -175,8 +175,8 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 		LinkedList<String> listaImagenes = new LinkedList<>();
 
-		listaImagenes = Metodos
-				.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+		listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
+				+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".");
 
 		listaImagenes.sort(String::compareToIgnoreCase);
 
@@ -184,8 +184,8 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 			int vueltas = 1;
 
-			listaImagenes = Metodos.directorio(
-					directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar", ".");
+			listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
+					+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".");
 
 			count = 1;
 
@@ -217,8 +217,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 			String numero = "";
 
-			int y = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
-					+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes", ".").size() + 1;
+			int y = Metodos
+					.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
+							+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador(), ".")
+					.size() + 1;
 
 			for (int x = 0; x < vueltas; x++) {
 
@@ -271,8 +273,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 				if (n == 0) {
 
-					listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
-							+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes", ".");
+					listaImagenes = Metodos.directorio(
+							directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
+									+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador(),
+							".");
 
 					for (int x = 0; x < listaImagenes.size(); x++) {
 						Files.move(

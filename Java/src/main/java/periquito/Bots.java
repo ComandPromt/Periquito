@@ -52,7 +52,7 @@ public class Bots extends javax.swing.JFrame implements ActionListener, ChangeLi
 		if (af.exists()) {
 			String[] lectura;
 			try {
-				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+				lectura = Metodos.leerFicheroArray("Config2.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "";
@@ -84,7 +84,7 @@ public class Bots extends javax.swing.JFrame implements ActionListener, ChangeLi
 			flS.close();
 			dispose();
 
-			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));
+			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config2.txt", 2));
 
 			if (mensaje) {
 

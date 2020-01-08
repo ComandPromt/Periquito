@@ -48,7 +48,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 
 			try {
 
-				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+				lectura = Metodos.leerFicheroArray("Config2.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "";
@@ -86,7 +86,7 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 			flS.close();
 			dispose();
 
-			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config/Config2.txt", 2));
+			MenuPrincipal.setLecturaurl(Metodos.leerFicheroArray("Config2.txt", 2));
 			MenuPrincipal.obtenerCarpeta();
 			if (mensaje) {
 

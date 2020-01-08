@@ -44,7 +44,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		if (af.exists()) {
 			String[] lectura;
 			try {
-				lectura = Metodos.leerFicheroArray("Config/Config.txt", 2);
+				lectura = Metodos.leerFicheroArray("Config.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "1";
@@ -86,7 +86,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 			fS.close();
 			flS.close();
 			dispose();
-			MenuPrincipal.setLectura(Metodos.leerFicheroArray("Config/Config.txt", 2));
+			MenuPrincipal.setLectura(Metodos.leerFicheroArray("Config.txt", 2));
 			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);
 			}
@@ -126,7 +126,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		txtHttplocalhost.setText("http://localhost/Periquito");
 		txtHttplocalhost.setToolTipText("");
 		txtHttplocalhost.setHorizontalAlignment(SwingConstants.CENTER);
-		txtHttplocalhost.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		txtHttplocalhost.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		jLabel1 = new javax.swing.JLabel();
 		jLabel1.setText("Utils");
@@ -137,7 +137,7 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		setResizable(false);
 
-		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		jTextField1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		jLabel1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		buscarArchivoConf();

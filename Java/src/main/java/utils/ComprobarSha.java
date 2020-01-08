@@ -29,13 +29,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import periquito.MenuPrincipal;
+import periquito.ModificarDatos;
 
 @SuppressWarnings("serial")
 
 public class ComprobarSha extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 
 	private JTextArea imagenes = new JTextArea();
-	String comprobacion;
 	transient Statement s;
 	boolean filtro = false;
 	transient ResultSet rs;
@@ -44,6 +44,15 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	static List<String> rutas = new LinkedList<>();
 	static List<String> shaimages = new LinkedList<>();
 	static JComboBox<?> comboBox;
+	static int tipo = 0;
+
+	public static int getTipo() {
+		return tipo;
+	}
+
+	public static void setTipo(int tipo) {
+		ComprobarSha.tipo = tipo;
+	}
 
 	public static List<String> getShaimages() {
 		return shaimages;
@@ -102,7 +111,23 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 				dispose();
 
-				new ImagenesSha();
+				switch (tipo) {
+
+				case 0:
+					new ImagenesSha();
+
+					break;
+
+				case 1:
+
+					new ModificarDatos().setVisible(true);
+
+					break;
+
+				default:
+					break;
+
+				}
 
 			}
 

@@ -100,17 +100,22 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		nombre.setHorizontalAlignment(SwingConstants.CENTER);
 		nombre.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		nombre.setColumns(10);
+
+		JLabel lblNewLabel = new JLabel("insertar en metadatos");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblNombreDeImgenes, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
 						.addGroup(layout.createSequentialGroup().addGap(29).addComponent(lblCategoraAInsertar,
-								GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)))
+								GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblNewLabel)))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(nombre).addComponent(imagenes))
-						.addContainerGap(40, Short.MAX_VALUE)));
+								.addComponent(nombre).addComponent(imagenes, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(54, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGap(23)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNombreDeImgenes)
@@ -119,7 +124,10 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(lblCategoraAInsertar))
 						.addGroup(layout.createSequentialGroup().addGap(33).addComponent(comboBox,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(18).addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+				.addGap(18)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblNewLabel))
 				.addGap(66)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(578, 289));
@@ -200,19 +208,35 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 							JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
 
-							for (i = 0; i < imagenesBD.length(); i++) {
+							int longitud = imagenesBD.length();
 
-								Metodos.renombrar(files[i].toString(), carpeta + imagenesBD.get(i));
+							if (longitud > 0) {
 
-								// Comprobar si ya está subida
+								/////////////////////////////////////////////////
 
-								fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
-										+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha) + "',DEFAULT,'"
-										+ imagenesBD.get(i) + "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
-										+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
-								fS.newLine();
+								for (i = 0; i < longitud; i++) {
 
-								id++;
+									Metodos.renombrar(files[i].toString(), carpeta + imagenesBD.get(i));
+
+									// Comprobar si la imagen ya está subida y en la tabla metadatos
+
+									fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
+											+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
+											+ "',DEFAULT,'" + imagenesBD.get(i)
+											+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
+											+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
+									fS.newLine();
+
+									fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
+											+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
+											+ "',DEFAULT,'" + imagenesBD.get(i)
+											+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
+											+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
+									fS.newLine();
+
+									id++;
+
+								}
 
 							}
 
@@ -268,5 +292,4 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
-
 }

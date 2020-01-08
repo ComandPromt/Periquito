@@ -229,11 +229,16 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 		setLocationRelativeTo(null);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-//
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		//
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
+
 }

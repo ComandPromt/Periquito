@@ -27,6 +27,7 @@ import utils.MyInterface;
 @SuppressWarnings("all")
 
 public class Backup extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	javax.swing.JLabel jLabel1;
 	javax.swing.JTextField jTextField1;
 
@@ -37,7 +38,7 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 		if (af.exists()) {
 			String[] lectura;
 			try {
-				lectura = Metodos.leerFicheroArray("Config/Backup.txt", 1);
+				lectura = Metodos.leerFicheroArray("Backup.txt", 1);
 
 				if (lectura[0] == null) {
 					lectura[0] = "1";
@@ -75,7 +76,7 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 			flS.close();
 			dispose();
 
-			MenuPrincipal.setLecturabackup(Metodos.leerFicheroArray("Config/Backup.txt", 1));
+			MenuPrincipal.setLecturabackup(Metodos.leerFicheroArray("Backup.txt", 1));
 
 			if (mensaje) {
 				Metodos.mensaje("Archivo guardado con exito!", 2);
@@ -163,11 +164,16 @@ public class Backup extends javax.swing.JFrame implements ActionListener, Change
 		setLocationRelativeTo(null);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		//
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		//
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
+
 }

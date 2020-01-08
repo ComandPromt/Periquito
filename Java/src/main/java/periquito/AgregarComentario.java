@@ -262,13 +262,19 @@ public class AgregarComentario extends javax.swing.JFrame implements ActionListe
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(670, 687));
 		setLocationRelativeTo(null);
+
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		//
-	}
-
+	@Override
 	public void stateChanged(ChangeEvent e) {
-		//
+		// TODO Auto-generated method stub
+
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

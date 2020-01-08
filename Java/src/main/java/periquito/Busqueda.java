@@ -204,20 +204,54 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 		textField.setFont(new Font("Tahoma", Font.BOLD, 16));
 		textField.setColumns(10);
 
+		JLabel lblNewLabel = new JLabel("Buscar imagenes subidas por usuario");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel_1 = new JLabel("Nº de imagenes subidas");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel_2 = new JLabel("Drag and drop de magen y mostrar ");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel_3 = new JLabel("informmación sobre el suario que subio ");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel_4 = new JLabel("la imagen y sus atributos");
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 16));
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap(152, Short.MAX_VALUE)
-						.addComponent(btnNewButton).addGap(147))
-				.addGroup(layout.createSequentialGroup().addGap(19).addGroup(layout
-						.createParallelGroup(Alignment.TRAILING, false).addComponent(textField, Alignment.LEADING)
-						.addGroup(Alignment.LEADING,
-								layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(rdbtnNewRadioButton).addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(jLabel1).addGap(34).addComponent(rdbtnNewRadioButton_1)
-										.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblNombre))
-						.addComponent(jTextField1, Alignment.LEADING)).addContainerGap(40, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(19)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addContainerGap())
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1)
+										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(btnNewButton).addGap(147))
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(textField).addComponent(jTextField1)
+												.addGroup(layout.createSequentialGroup()
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addGroup(layout.createParallelGroup(Alignment.LEADING)
+																.addComponent(lblNewLabel_2)
+																.addGroup(layout.createSequentialGroup()
+																		.addComponent(rdbtnNewRadioButton)
+																		.addPreferredGap(ComponentPlacement.RELATED)
+																		.addComponent(jLabel1).addGap(34)
+																		.addComponent(rdbtnNewRadioButton_1)
+																		.addPreferredGap(ComponentPlacement.UNRELATED)
+																		.addComponent(lblNombre)))
+														.addGap(21)))
+										.addContainerGap(40, Short.MAX_VALUE)))))
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblNewLabel_3)
+						.addContainerGap(404, Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblNewLabel_4)
+						.addContainerGap(330, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addContainerGap(12, Short.MAX_VALUE)
+				.addGroup(layout.createSequentialGroup().addGap(22).addComponent(lblNewLabel_2).addGap(27)
+						.addComponent(lblNewLabel_3).addGap(18).addComponent(lblNewLabel_4).addGap(12)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton).addGap(41))
 								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton_1).addGap(39))
@@ -231,9 +265,14 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE).addGap(18)
 						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(18).addComponent(btnNewButton).addGap(28)));
+						.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(layout.createSequentialGroup().addComponent(btnNewButton)
+										.addPreferredGap(ComponentPlacement.RELATED))
+								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1).addGap(36)))
+						.addComponent(lblNewLabel).addContainerGap()));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(402, 336));
+		setSize(new Dimension(402, 445));
 		setLocationRelativeTo(null);
 	}
 

@@ -33,7 +33,7 @@ public class Galeria {
 
 			int numeroImagenes = MenuPrincipal.getListaImagenes().size();
 
-			String[] lecturaurl = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+			String[] lecturaurl = Metodos.leerFicheroArray("Config2.txt", 2);
 
 			InetAddress ping;
 

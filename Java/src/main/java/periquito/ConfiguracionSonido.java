@@ -35,7 +35,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 	static String[] sonido;
 	public static LinkedList<String> sonidos = new LinkedList<>();
 
-	public ConfiguracionSonido() {
+	public ConfiguracionSonido() throws IOException {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -56,14 +56,15 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 		setType(Type.UTILITY);
 
 		initComponents();
-		sonido = Metodos.leerFicheroArray("Config/sonido.txt", 2);
+
+		sonido = Metodos.leerArchivo("sonido.txt", 2, "gong.wav\r\n" + "1", false);
 
 		if (sonido[1].equals("1")) {
 
 			checkBox_1.setSelected(true);
 		}
 
-		sonidos = Metodos.directorio(MenuPrincipal.directorioActual + "sonidos", "wav");
+		sonidos = Metodos.directorio(MenuPrincipal.directorioActual + "sonidos" + MenuPrincipal.getSeparador(), "wav");
 
 		sonidos.remove("advertencia.wav");
 
@@ -206,7 +207,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 
 			dispose();
 
-			MenuPrincipal.setSonido(Metodos.leerFicheroArray("Config/sonido.txt", 2));
+			MenuPrincipal.setSonido(Metodos.leerFicheroArray("sonido.txt", 2));
 
 		}
 

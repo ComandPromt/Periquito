@@ -60,7 +60,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			String[] lectura;
 
 			try {
-				lectura = Metodos.leerFicheroArray("Config/Config2.txt", 2);
+				lectura = Metodos.leerFicheroArray("Config2.txt", 2);
 
 				if (lectura[0] == null) {
 					lectura[0] = "";

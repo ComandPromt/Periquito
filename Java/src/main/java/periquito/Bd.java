@@ -55,7 +55,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 			try {
 
-				lectura = Metodos.leerFicheroArray("Config/Bd.txt", 6);
+				lectura = Metodos.leerFicheroArray("Bd.txt", 6);
 
 				if (lectura[0] == null) {
 					lectura[0] = "";
@@ -105,7 +105,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 
 			dispose();
 
-			MenuPrincipal.setLecturabd(Metodos.leerFicheroArray("Config/Bd.txt", 7));
+			MenuPrincipal.setLecturabd(Metodos.leerFicheroArray("Bd.txt", 7));
 
 			if (mensaje) {
 
@@ -126,6 +126,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	}
 
 	public Bd() throws IOException {
+		setAlwaysOnTop(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Bd.class.getResource("/imagenes/db.png")));
 		setTitle("Periquito v3 Config DB");
 		setType(Type.UTILITY);
