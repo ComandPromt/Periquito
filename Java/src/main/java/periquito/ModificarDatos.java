@@ -19,6 +19,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,7 +33,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -41,7 +41,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import utils.ComprobarSha;
 import utils.Metodos;
-import javax.swing.JCheckBox;
 
 public class ModificarDatos extends JFrame {
 	private JButton buscar;
@@ -105,7 +104,7 @@ public class ModificarDatos extends JFrame {
 				new Agregar().setVisible(true);
 			}
 		});
-		
+
 		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Buscar imagen por ID");
 		mntmNewMenuItem_5.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/lupa.png")));
 		mntmNewMenuItem_5.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -414,254 +413,284 @@ public class ModificarDatos extends JFrame {
 
 		JComboBox comboBox = new JComboBox();
 		comboBox.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Descripción");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		JScrollPane scrollPane_1 = new JScrollPane((Component) null);
 		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
 		JLabel lblCategora = new JLabel();
 		lblCategora.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/tag.png")));
 		lblCategora.setText("Categoría");
 		lblCategora.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCategora.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		nombre = new JTextField();
 		nombre.setEditable(false);
 		nombre.setHorizontalAlignment(SwingConstants.CENTER);
 		nombre.setFont(new Font("Tahoma", Font.BOLD, 16));
 		nombre.setColumns(10);
-		
+
 		JLabel label_2 = new JLabel("Palabras clave");
 		label_2.setHorizontalAlignment(SwingConstants.CENTER);
 		label_2.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		JLabel lblNivelVisibilidad = new JLabel("Nivel visibilidad");
 		lblNivelVisibilidad.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/view.png")));
 		lblNivelVisibilidad.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JLabel label = new JLabel("Nivel comentario");
 		label.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/nota.png")));
 		label.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JComboBox comboBox_3 = new JComboBox();
 		comboBox_3.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JComboBox comboBox_4 = new JComboBox();
 		comboBox_4.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JComboBox comboBox_2 = new JComboBox();
 		comboBox_2.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JLabel lblNivelDescarga = new JLabel("Nivel descarga");
 		lblNivelDescarga.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/download.png")));
 		lblNivelDescarga.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		JLabel lblId = new JLabel("ID");
 		lblId.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/tag.png")));
 		lblId.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.BOLD, 16));
 		textField.setColumns(10);
-		
+
 		JLabel lblNewLabel = new JLabel("Descargas");
 		lblNewLabel.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/download.png")));
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		textField_1 = new JTextField();
 		textField_1.setEditable(false);
 		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		textField_1.setColumns(10);
-		
+
 		JCheckBox chckbxNewCheckBox = new JCheckBox("Permitir comentarios");
 		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		JCheckBox chckbxImagenActiva = new JCheckBox("Imagen activa");
 		chckbxImagenActiva.setHorizontalAlignment(SwingConstants.CENTER);
 		chckbxImagenActiva.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		textField_2.setFont(new Font("Tahoma", Font.BOLD, 14));
 		textField_2.setColumns(10);
-		
+
 		textField_3 = new JTextField();
 		textField_3.setEditable(false);
 		textField_3.setColumns(10);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("Nº votos");
 		lblNewLabel_2.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		textField_4 = new JTextField();
 		textField_4.setEditable(false);
 		textField_4.setColumns(10);
-		
+
 		JLabel lblCalificacin = new JLabel("Calificación");
 		lblCalificacin.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCalificacin.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		JLabel lblNVistas = new JLabel("Nº vistas");
 		lblNVistas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNVistas.setFont(new Font("Tahoma", Font.BOLD, 16));
-		
+
 		textField_5 = new JTextField();
 		textField_5.setEditable(false);
 		textField_5.setColumns(10);
 
 		GroupLayout panelCasaLayout = new GroupLayout(panelCasa);
-		panelCasaLayout.setHorizontalGroup(
-			panelCasaLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelCasaLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
+		panelCasaLayout.setHorizontalGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(panelCasaLayout.createSequentialGroup().addContainerGap().addGroup(panelCasaLayout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(panelCasaLayout.createSequentialGroup().addGroup(panelCasaLayout
+								.createParallelGroup(Alignment.LEADING)
 								.addGroup(panelCasaLayout.createSequentialGroup()
-									.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-									.addGap(18)
-									.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
-									.addGap(18))
+										.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+										.addGap(18)
+										.addComponent(
+												label_2, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
+										.addGap(18))
 								.addGroup(Alignment.TRAILING, panelCasaLayout.createSequentialGroup()
-									.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)))
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(panelCasaLayout.createSequentialGroup()
-									.addGap(18)
-									.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(textField_4, Alignment.LEADING)
-										.addComponent(lblCalificacin, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(textField_3, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-										.addComponent(textField_5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-										.addComponent(lblNVistas, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-								.addGroup(panelCasaLayout.createSequentialGroup()
-									.addGap(17)
-									.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-							.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE))
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 272,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)))
 								.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(jLabel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblSubidoPor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblNewLabel))
-								.addComponent(lblCategora))
-							.addGap(48)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(panelCasaLayout.createSequentialGroup().addGap(18)
+												.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING, false)
+														.addComponent(textField_4, Alignment.LEADING)
+														.addComponent(lblCalificacin, Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)
+														.addComponent(textField_3, Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+														.addComponent(textField_5, Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+														.addComponent(lblNVistas, Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE)))
+										.addGroup(panelCasaLayout.createSequentialGroup().addGap(17).addComponent(
+												lblNewLabel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)))
+								.addPreferredGap(ComponentPlacement.RELATED, 46, Short.MAX_VALUE))
+						.addGroup(panelCasaLayout.createSequentialGroup().addGroup(panelCasaLayout
+								.createParallelGroup(Alignment.LEADING)
 								.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(comboBox, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(textField_1, Alignment.TRAILING)
-									.addComponent(chckbxNewCheckBox, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGroup(panelCasaLayout.createSequentialGroup()
-									.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(comboBox_1, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(nombre, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
-									.addPreferredGap(ComponentPlacement.RELATED)))
-							.addGap(18)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING, panelCasaLayout.createSequentialGroup()
-									.addComponent(lblId, GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING)
+										.addComponent(jLabel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(lblSubidoPor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(lblNewLabel))
+								.addComponent(lblCategora)).addGap(48)
+								.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING)
+										.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING, false)
+												.addComponent(comboBox, Alignment.TRAILING, 0, GroupLayout.DEFAULT_SIZE,
+														Short.MAX_VALUE)
+												.addComponent(textField_1, Alignment.TRAILING).addComponent(
+														chckbxNewCheckBox, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 										.addGroup(panelCasaLayout.createSequentialGroup()
-											.addComponent(chckbxImagenActiva, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
-											.addGap(8))
-										.addComponent(textField, GroupLayout.PREFERRED_SIZE, 143, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(Alignment.TRAILING, panelCasaLayout.createParallelGroup(Alignment.LEADING, false)
-									.addGroup(panelCasaLayout.createSequentialGroup()
-										.addComponent(lblNivelVisibilidad, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(comboBox_3, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-									.addGroup(panelCasaLayout.createSequentialGroup()
-										.addComponent(label, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(comboBox_4, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-									.addGroup(panelCasaLayout.createSequentialGroup()
-										.addComponent(lblNivelDescarga, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE))))
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addGap(105))
+												.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING, false)
+														.addComponent(comboBox_1, Alignment.LEADING, 0,
+																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+														.addComponent(nombre, Alignment.LEADING,
+																GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE))
+												.addPreferredGap(ComponentPlacement.RELATED)))
+								.addGap(18)
+								.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(Alignment.TRAILING, panelCasaLayout.createSequentialGroup()
+												.addComponent(lblId, GroupLayout.PREFERRED_SIZE, 88,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addGroup(panelCasaLayout.createParallelGroup(Alignment.TRAILING)
+														.addGroup(panelCasaLayout.createSequentialGroup()
+																.addComponent(chckbxImagenActiva,
+																		GroupLayout.PREFERRED_SIZE, 160,
+																		GroupLayout.PREFERRED_SIZE)
+																.addGap(8))
+														.addComponent(textField, GroupLayout.PREFERRED_SIZE, 143,
+																GroupLayout.PREFERRED_SIZE)))
+										.addGroup(Alignment.TRAILING, panelCasaLayout
+												.createParallelGroup(Alignment.LEADING, false)
+												.addGroup(panelCasaLayout.createSequentialGroup()
+														.addComponent(lblNivelVisibilidad, GroupLayout.PREFERRED_SIZE,
+																181, GroupLayout.PREFERRED_SIZE)
+														.addGap(18).addComponent(comboBox_3, 0,
+																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+												.addGroup(panelCasaLayout.createSequentialGroup()
+														.addComponent(label, GroupLayout.PREFERRED_SIZE, 196,
+																GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addComponent(comboBox_4, 0, GroupLayout.DEFAULT_SIZE,
+																Short.MAX_VALUE))
+												.addGroup(panelCasaLayout.createSequentialGroup()
+														.addComponent(lblNivelDescarga, GroupLayout.PREFERRED_SIZE, 184,
+																GroupLayout.PREFERRED_SIZE)
+														.addGap(18).addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE,
+																54, GroupLayout.PREFERRED_SIZE))))
+								.addPreferredGap(ComponentPlacement.RELATED)))
+						.addGap(105))
 				.addGroup(panelCasaLayout.createSequentialGroup()
-					.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(639, Short.MAX_VALUE))
-		);
-		panelCasaLayout.setVerticalGroup(
-			panelCasaLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(panelCasaLayout.createSequentialGroup()
-					.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(639, Short.MAX_VALUE)));
+		panelCasaLayout.setVerticalGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING).addGroup(panelCasaLayout
+				.createSequentialGroup()
+				.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING).addGroup(panelCasaLayout
+						.createSequentialGroup()
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel)
+								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblId, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addGap(7)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(chckbxNewCheckBox)
-								.addComponent(chckbxImagenActiva, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-					.addGap(11)
-					.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNivelVisibilidad, GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+						.addGroup(panelCasaLayout.createSequentialGroup().addGap(7)
+								.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(chckbxNewCheckBox).addComponent(chckbxImagenActiva,
+												GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+								.addGap(18)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+				.addGap(11)
+				.addGroup(panelCasaLayout.createParallelGroup(Alignment.LEADING).addGroup(panelCasaLayout
+						.createSequentialGroup()
+						.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNivelVisibilidad, GroupLayout.PREFERRED_SIZE, 58,
+										GroupLayout.PREFERRED_SIZE)
 								.addComponent(comboBox_3, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
+						.addGap(18)
+						.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(label, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
 								.addComponent(comboBox_4, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-							.addGap(24)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNivelDescarga)
+						.addGap(24)
+						.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE).addComponent(lblNivelDescarga)
 								.addComponent(comboBox_2, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addComponent(lblNewLabel_2))
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblSubidoPor, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
-								.addComponent(nombre, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblCategora, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-							.addGap(26)
-							.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1)
-								.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-					.addGap(9)
-					.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
-						.addGroup(panelCasaLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblCalificacin, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addGap(10)
-							.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(19)
-							.addComponent(lblNVistas, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(3))
-						.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(199, Short.MAX_VALUE))
-		);
-		
+						.addGap(18).addComponent(lblNewLabel_2)).addGroup(
+								panelCasaLayout.createSequentialGroup()
+										.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lblSubidoPor, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(comboBox, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 73,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(nombre, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lblCategora, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 25,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(26)
+										.addGroup(panelCasaLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 17,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblNewLabel_1)
+												.addComponent(textField_3, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+				.addGap(9)
+				.addGroup(
+						panelCasaLayout
+								.createParallelGroup(
+										Alignment.BASELINE)
+								.addGroup(panelCasaLayout.createSequentialGroup()
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(lblCalificacin, GroupLayout.PREFERRED_SIZE, 20,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(10)
+										.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(19)
+										.addComponent(lblNVistas, GroupLayout.PREFERRED_SIZE, 20,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(textField_5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(3))
+								.addComponent(scrollPane_1, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE))
+				.addContainerGap(199, Short.MAX_VALUE)));
+
 		JTextArea textArea = new JTextArea();
 		textArea.setEditable(false);
 		scrollPane_1.setViewportView(textArea);
@@ -671,27 +700,25 @@ public class ModificarDatos extends JFrame {
 		panelCasa.setLayout(panelCasaLayout);
 
 		GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
-		jPanel3Layout.setHorizontalGroup(
-			jPanel3Layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(jPanel3Layout.createSequentialGroup()
-					.addGap(18)
-					.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panelCasa, GroupLayout.PREFERRED_SIZE, 836, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-		jPanel3Layout.setVerticalGroup(
-			jPanel3Layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(jPanel3Layout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(jPanel3Layout.createSequentialGroup()
-							.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 518, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(jPanel3Layout.createSequentialGroup()
-							.addComponent(panelCasa, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addGap(112))))
-		);
+		jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(jPanel3Layout.createSequentialGroup().addGap(18)
+						.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(panelCasa, GroupLayout.PREFERRED_SIZE, 836, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		jPanel3Layout
+				.setVerticalGroup(
+						jPanel3Layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(jPanel3Layout.createSequentialGroup().addContainerGap()
+										.addGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+												.addGroup(jPanel3Layout.createSequentialGroup()
+														.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 518,
+																GroupLayout.PREFERRED_SIZE)
+														.addContainerGap())
+												.addGroup(jPanel3Layout.createSequentialGroup()
+														.addComponent(panelCasa, GroupLayout.DEFAULT_SIZE,
+																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+														.addGap(112)))));
 		jPanel3.setLayout(jPanel3Layout);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
@@ -720,31 +747,28 @@ public class ModificarDatos extends JFrame {
 	public static void verNotas() throws SQLException, IOException {
 
 		String nota;
-		
-		String finalSentencia="";
 
-		int longitudSha=ComprobarSha.getShaimages().size();
-System.out.println(longitudSha);
-		if(longitudSha>0) {
-	
-			for(int i=0;i<longitudSha;i++) {
-				
+		String finalSentencia = "";
 
-				
-				if(i>0 && i++ <longitudSha) {
+		int longitudSha = ComprobarSha.getShaimages().size();
+
+		if (longitudSha > 0) {
+
+			for (int i = 0; i < longitudSha; i++) {
+
+				if (i > 0 && i++ < longitudSha) {
 					i--;
-					finalSentencia=" AND sha256='"+ComprobarSha.getShaimages().get(i)+"'";
+					finalSentencia = " AND sha256='" + ComprobarSha.getShaimages().get(i) + "'";
 				}
-				
+
 				else {
-					if(i>0) {
-						i--;	
+					if (i > 0) {
+						i--;
 					}
-		
-					finalSentencia="sha256='"+ComprobarSha.getShaimages().get(i)+"'";
+
+					finalSentencia = "sha256='" + ComprobarSha.getShaimages().get(i) + "'";
 				}
-				
-				
+
 			}
 		}
 
@@ -754,7 +778,8 @@ System.out.println(longitudSha);
 
 		Statement s = conexion.createStatement();
 
-		ResultSet rs = s.executeQuery("SELECT image_id FROM " + MenuPrincipal.getLecturabd()[3] + "images WHERE "+finalSentencia+" ORDER BY image_id DESC");
+		ResultSet rs = s.executeQuery("SELECT image_id FROM " + MenuPrincipal.getLecturabd()[3] + "images WHERE "
+				+ finalSentencia + " ORDER BY image_id DESC");
 
 		while (rs.next()) {
 			nota = rs.getString("Nombre");

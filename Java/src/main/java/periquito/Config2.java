@@ -32,6 +32,7 @@ import utils.MyInterface;
 @SuppressWarnings("all")
 
 public class Config2 extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	javax.swing.JLabel jLabel1;
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
@@ -245,11 +246,16 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		setLocationRelativeTo(null);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		//
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		//
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
+
 }

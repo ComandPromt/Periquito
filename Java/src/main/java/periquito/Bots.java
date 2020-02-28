@@ -35,6 +35,7 @@ import utils.MyInterface;
 @SuppressWarnings("all")
 
 public class Bots extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	private JTextField textField;
 	JLabel lblThumbnails;
 	private JButton button_1;
@@ -258,11 +259,16 @@ public class Bots extends javax.swing.JFrame implements ActionListener, ChangeLi
 		setLocationRelativeTo(null);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		//
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		//
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
+
 }

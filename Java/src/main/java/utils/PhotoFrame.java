@@ -32,7 +32,13 @@ public class PhotoFrame extends javax.swing.JFrame {
 	javax.swing.JMenu jMenu1;
 	javax.swing.JMenuBar jMenuBar1;
 	javax.swing.JMenuItem jMenuItem1;
-	private javax.swing.JPanel jPanel1;
+	static javax.swing.JPanel jPanel1;
+	
+	public static javax.swing.JPanel getjPanel1() {
+		return jPanel1;
+	}
+
+
 	javax.swing.JScrollPane jScrollPane1;
 	private JRadioButton rdbtnSingle;
 	static JRadioButton rdbtnMultipleCrop;

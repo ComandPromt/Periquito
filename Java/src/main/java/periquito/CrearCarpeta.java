@@ -15,15 +15,16 @@ import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("all")
 
-public class CambiarSha extends javax.swing.JFrame implements ActionListener, ChangeListener {
+public class CrearCarpeta extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
-	public CambiarSha() {
-
-		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
-		setTitle("Periquito v3 About");
+	public CrearCarpeta() {
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(CrearCarpeta.class.getResource("/imagenes/CrearCarpeta.png")));
+		setTitle("Periquito v3 CrearCarpeta");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
+
 	}
 
 	private void initComponents() {
@@ -37,8 +38,8 @@ public class CambiarSha extends javax.swing.JFrame implements ActionListener, Ch
 		txtrAdvertenciaLa.setWrapStyleWord(true);
 		txtrAdvertenciaLa.setEditable(false);
 		txtrAdvertenciaLa.setLineWrap(true);
-		txtrAdvertenciaLa.setText(
-				"-----------------------------------------------\r\n            Periquito GUI\r\n-----------------------------------------------\r\n\r\n Creado por: ComandPromt\n\r\n Email: smr2gocar@gmail.com\r\n\r\n Ramón Jesús Gómez Carmona");
+		txtrAdvertenciaLa
+				.setText("Crear tantas carpetas como categorías haya o elegir categorías para crear las carpetas\r\n");
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21)
@@ -53,12 +54,16 @@ public class CambiarSha extends javax.swing.JFrame implements ActionListener, Ch
 		setLocationRelativeTo(null);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		//
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		//
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

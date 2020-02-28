@@ -37,10 +37,12 @@ import java.sql.Statement;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -72,6 +74,195 @@ import periquito.Descarga;
 import periquito.MenuPrincipal;
 
 public abstract class Metodos {
+
+	public static void borrarArchivosSubidos(String ruta) {
+
+		LinkedList<String> imagenes = new <String>LinkedList();
+
+		imagenes = directorio(ruta, ".");
+
+		String extension, imagen;
+
+		try {
+
+			Connection conexion = conexionBD();
+
+			Statement s = conexion.createStatement();
+
+			for (int x = 0; x < imagenes.size(); x++) {
+
+				imagen = ruta + imagenes.get(x);
+
+				extension = Metodos.extraerExtension(imagenes.get(x));
+
+				if (extension.equals("jpg") || extension.equals("png") || extension.equals("gif")) {
+
+					ResultSet rs = s
+							.executeQuery("select COUNT(image_id),image_id from " + MenuPrincipal.getLecturabd()[3]
+									+ "images " + "WHERE sha256='" + getSHA256Checksum(imagen) + "'");
+
+					rs.next();
+
+					int recuento = Integer.parseInt(rs.getString("count(image_id)"));
+
+					if (recuento > 0) {
+						eliminarFichero(imagen);
+					}
+
+				}
+
+			}
+
+		}
+
+		catch (Exception e) {
+			//
+		}
+
+	}
+
+	public static List<String> borrarArchivosDuplicados(String directorio) {
+
+		LinkedList<String> listaImagenes = directorio(directorio, ".");
+
+		LinkedList<String> listaImagenesSha = new LinkedList<String>();
+
+		for (int i = 0; i < listaImagenes.size(); i++) {
+			listaImagenesSha.add(getSHA256Checksum(directorio + MenuPrincipal.getSeparador() + listaImagenes.get(i)));
+		}
+
+		List<String> duplicateList = listaImagenesSha.stream()
+
+				.collect(Collectors.groupingBy(s -> s)).entrySet().stream()
+
+				.filter(e -> e.getValue().size() > 1).map(e -> e.getKey()).collect(Collectors.toList());
+
+		int indice = 0;
+
+		for (String archivoRepetido : duplicateList) {
+
+			for (int i = 0; i < Collections.frequency(listaImagenesSha, archivoRepetido) - 1; i++) {
+
+				indice = listaImagenesSha.indexOf(archivoRepetido);
+
+				Metodos.eliminarFichero(directorio + listaImagenes.get(indice));
+
+				listaImagenes.remove(indice);
+			}
+
+		}
+
+		return listaImagenes;
+	}
+
+	public static String extraerNombreFile(String archivo) {
+
+		return archivo.substring(archivo.lastIndexOf(MenuPrincipal.getSeparador()) + 1, archivo.length());
+	}
+
+	public static String extraerCarpeta(String ruta) {
+
+		return ruta.substring(0, ruta.lastIndexOf(MenuPrincipal.getSeparador()) + 1);
+	}
+
+	public static String calcularTiempo(int numImagenes) {
+
+		int minutos = 0;
+
+		int horas = 0;
+
+		int segundos = 30;
+
+		if (numImagenes > 1) {
+
+			for (int i = 0; i < numImagenes; i++) {
+				segundos += 5;
+			}
+
+			if (segundos == 60) {
+				minutos = 1;
+				segundos = 0;
+			}
+
+			minutos = segundos / 60;
+
+			int calculoSegundos = 0;
+
+			calculoSegundos = 60 * minutos;
+
+			segundos -= calculoSegundos;
+
+			if (minutos == 60) {
+				horas = 1;
+				minutos = 0;
+				segundos = 0;
+			}
+
+			if (minutos > 60) {
+
+				if (minutos % 60 == 0) {
+					horas = minutos / 60;
+					minutos = 0;
+					segundos = 0;
+				}
+
+				else {
+
+					int contador = 0;
+
+					int horaProxima = 120;
+
+					int siguienteHora = 0;
+
+					while (contador == 0) {
+
+						if (minutos < horaProxima) {
+							contador = horaProxima;
+						}
+
+						else {
+
+							siguienteHora = horaProxima + 60;
+
+							if (minutos > horaProxima && minutos < siguienteHora) {
+								contador = siguienteHora;
+							}
+
+							horaProxima = siguienteHora;
+
+						}
+					}
+
+					horas = minutos / 60;
+
+					minutos = 60 - (horaProxima - minutos);
+
+				}
+
+			}
+
+		}
+
+		String ceroHoras = "";
+		String ceroMinutos = "";
+
+		String ceroSegundos = "";
+
+		if (horas <= 9) {
+			ceroHoras = "0";
+		}
+
+		if (minutos <= 9) {
+			ceroMinutos = "0";
+		}
+
+		if (segundos <= 9) {
+			ceroSegundos = "0";
+		}
+
+		return ceroHoras + horas + " : " + ceroMinutos + minutos + " : " + ceroSegundos + segundos;
+
+	}
 
 	public static void generarExcel(String hoja, LinkedList<String> datos, LinkedList<String> lista)
 			throws IOException {
@@ -324,7 +515,7 @@ public abstract class Metodos {
 
 	public static boolean pingURL(String url) {
 
-		int timeout = 100000;
+		int timeout = 400000;
 
 		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
 
@@ -337,7 +528,13 @@ public abstract class Metodos {
 
 			int responseCode = connection.getResponseCode();
 
-			return (200 <= responseCode && responseCode <= 399);
+			if (responseCode == 404) {
+				return false;
+			}
+
+			else {
+				return (200 <= responseCode && responseCode <= 399);
+			}
 
 		} catch (IOException exception) {
 			return false;
@@ -374,9 +571,15 @@ public abstract class Metodos {
 
 	public static String eliminarPuntos(String cadena) {
 
-		String cadena2 = cadena.substring(0, cadena.length() - 4);
+		String cadena2 = cadena;
 
-		cadena = cadena2.replace(".", "_") + "." + extraerExtension(cadena);
+		try {
+			cadena2 = cadena.substring(0, cadena.length() - 4);
+
+			cadena = cadena2.replace(".", "_") + "." + extraerExtension(cadena);
+		} catch (Exception e) {
+
+		}
 
 		return cadena;
 	}
@@ -415,9 +618,13 @@ public abstract class Metodos {
 			String crlf = "\r\n";
 
 			URLConnection connection = new URL(url).openConnection();
+
 			connection.setDoOutput(true);
+
 			connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + limite);
+
 			OutputStream output = connection.getOutputStream();
+
 			PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
 
 			writer.append("--" + limite).append(crlf);
@@ -430,9 +637,13 @@ public abstract class Metodos {
 					.append(crlf);
 			writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(binaryFile.getName())).append(crlf);
 			writer.append("Content-Transfer-Encoding: binary").append(crlf);
+
 			writer.append(crlf).flush();
+
 			Files.copy(binaryFile.toPath(), output);
+
 			output.flush();
+
 			writer.append(crlf).flush();
 
 			writer.append("--" + limite + "--").append(crlf).flush();
@@ -701,8 +912,8 @@ public abstract class Metodos {
 		s.close();
 	}
 
-	public static void moverArchivos(LinkedList<String> files, String separador, String destino, boolean mensaje)
-			throws IOException {
+	public static void moverArchivos(LinkedList<String> files, String separador, String destino, boolean mensaje,
+			int tipo) throws IOException {
 
 		String imagen;
 		String comprobacion;
@@ -717,7 +928,6 @@ public abstract class Metodos {
 			String busqueda;
 
 			String salida;
-			boolean error = false;
 
 			for (int i = 0; i < files.size(); i++) {
 
@@ -725,16 +935,52 @@ public abstract class Metodos {
 
 				comprobacion = extraerExtension(imagen);
 
-				if (comprobacion.equals("jpg") || comprobacion.equals("JPG") || comprobacion.equals("peg")
-						|| comprobacion.equals("png") || comprobacion.equals("gif") || comprobacion.equals("avi")
-						|| comprobacion.equals("mp4") || comprobacion.equals("webp")) {
+				ArrayList<String> lista = new ArrayList<String>();
+
+				switch (tipo) {
+
+				case 1:
+
+					lista.add("jpg");
+					lista.add("peg");
+					lista.add("png");
+					lista.add("gif");
+
+					break;
+
+				case 2:
+
+					lista.add(".ts");
+					lista.add("mp4");
+					lista.add("avi");
+					lista.add("3gp");
+					lista.add("flv");
+					lista.add("m3u8");
+					lista.add("mkv");
+					lista.add("mov");
+					lista.add("wmv");
+
+					break;
+
+				default:
+
+					lista.add("jpg");
+					lista.add("peg");
+					lista.add("png");
+					lista.add("gif");
+					lista.add("webp");
+
+					break;
+				}
+
+				if (lista.contains(comprobacion)) {
 
 					origen = files.get(i);
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
 						i = files.size();
-						error = true;
+
 					}
 
 					else {
@@ -779,25 +1025,22 @@ public abstract class Metodos {
 
 			if (filtro) {
 				mensaje("Uno o varios archivos no tiene el formato correcto", 3);
-			} else {
-
-				if (!error && mensaje) {
-					mensaje("Los archivos se han movido correctamente", 2);
-				}
-
 			}
 
 		}
 
 	}
 
-	public static void moverArchivosDrop(java.io.File[] files, String separador) throws IOException {
+	public static void moverArchivosDrop(java.io.File[] files, String separador, String destino, int tipo)
+			throws IOException {
 
 		String imagen;
+
 		String extension;
+
 		boolean filtro = false;
+
 		String origen;
-		String destino;
 
 		if (files.length > 0) {
 
@@ -810,6 +1053,8 @@ public abstract class Metodos {
 
 			boolean error = false;
 
+			int indice = 0;
+
 			for (int i = 0; i < files.length; i++) {
 
 				imagen = files[i].getCanonicalPath().substring(files[i].getCanonicalPath().lastIndexOf(separador) + 1,
@@ -817,24 +1062,93 @@ public abstract class Metodos {
 
 				extension = extraerExtension(imagen);
 
-				if (extension.equals("jfif")) {
+				switch (extension) {
 
-					int indice = files[i].getCanonicalPath().indexOf(".jfif");
-					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_.jfif",
+				case "jfif":
+
+					indice = files[i].getCanonicalPath().indexOf("." + extension);
+
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_." + extension,
 							files[i].getCanonicalPath().substring(0, indice) + "_.jpg");
 
 					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.jpg");
 
 					extension = "jpg";
+
+					break;
+
+				case "webm":
+
+					indice = files[i].getCanonicalPath().indexOf("." + extension);
+
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_." + extension,
+							files[i].getCanonicalPath().substring(0, indice) + "_.mp4");
+
+					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.mp4");
+
+					extension = "mp4";
+
+					break;
+
+				case "webp":
+
+					indice = files[i].getCanonicalPath().indexOf("." + extension);
+
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_." + extension,
+							files[i].getCanonicalPath().substring(0, indice) + "_.png");
+
+					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.png");
+
+					extension = "png";
+
+					break;
+
+				default:
+					break;
+
 				}
 
-				if (extension.equals("jpg") || extension.equals("JPG") || extension.equals("peg")
-						|| extension.equals("png") || extension.equals("gif") || extension.equals("avi")
-						|| extension.equals("mp4") || extension.equals("webp")) {
+				ArrayList<String> lista = new ArrayList<String>();
+
+				switch (tipo) {
+
+				case 1:
+
+					lista.add("jpg");
+					lista.add("peg");
+					lista.add("png");
+					lista.add("gif");
+
+					break;
+
+				case 2:
+
+					lista.add(".ts");
+					lista.add("mp4");
+					lista.add("avi");
+					lista.add("3gp");
+					lista.add("flv");
+					lista.add("m3u8");
+					lista.add("mkv");
+					lista.add("mov");
+					lista.add("wmv");
+
+					break;
+
+				default:
+
+					lista.add("jpg");
+					lista.add("peg");
+					lista.add("png");
+					lista.add("gif");
+					lista.add("webp");
+
+					break;
+				}
+
+				if (lista.contains(extension)) {
 
 					origen = files[i].getCanonicalPath();
-
-					destino = MenuPrincipal.getDirectorioImagenes();
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
 						Metodos.mensaje("No puedes pegar archivos al mismo directorio", 3);
@@ -1616,10 +1930,8 @@ public abstract class Metodos {
 
 	}
 
-	public static void mostrarGaleriaSql(String busqueda, String sql, String sql2) throws SQLException, IOException {
-
-		int recuento;
-
+	public static Integer mostrarGaleriaSql(String busqueda, String sql, String sql2) throws SQLException, IOException {
+		int recuento = 0;
 		Connection conexion = Metodos.conexionBD();
 
 		Statement s = conexion.createStatement();
@@ -1671,17 +1983,24 @@ public abstract class Metodos {
 
 			} else {
 
-				if (recuento < 500) {
+				if (recuento <= 500) {
 
 					try {
 
 						new Galeria();
+
+						InterfazGaleria.setNumImagenes(recuento);
+
 						new InterfazGaleria().setVisible(true);
 					}
 
 					catch (Exception e1) {
 
+						e1.printStackTrace();
+
 						Metodos.mensaje("No se han podido cargar las imágenes", 1);
+
+						Metodos.mensaje("Por favor, revisa la configuración", 3);
 
 						new Config2().setVisible(true);
 
@@ -1695,18 +2014,19 @@ public abstract class Metodos {
 		else {
 			Metodos.mensaje("La búsqueda no tiene resultados", 3);
 		}
+		return recuento;
 	}
 
 	public static void mostrarGaleriaConWhere(String busqueda) {
 
 		try {
 
-			if (Metodos.comprobarConexionBd("SELECT COUNT(image_id) FROM " + MenuPrincipal.getLecturabd()[3] + "images",
+			if (comprobarConexionBd("SELECT COUNT(image_id) FROM " + MenuPrincipal.getLecturabd()[3] + "images",
 					"COUNT(image_id)")) {
 
 				try {
 
-					if (Metodos.comprobarConfiguracion()) {
+					if (comprobarConfiguracion()) {
 
 						String sql = "";
 
@@ -1933,6 +2253,19 @@ public abstract class Metodos {
 		return categorias;
 	}
 
+	public static void eliminarArchivos(String ruta) {
+
+		LinkedList<String> frames = Metodos.directorio(ruta, ".");
+
+		for (int i = 0; i < frames.size(); i++) {
+
+			if (!frames.get(i).isEmpty()) {
+				eliminarFichero(ruta + MenuPrincipal.getSeparador() + frames.get(i));
+			}
+
+		}
+	}
+
 	public static void eliminarArchivos(List<String> listaImagenes, String ruta) {
 
 		for (int i = 0; i < listaImagenes.size(); i++) {
@@ -1942,6 +2275,7 @@ public abstract class Metodos {
 			}
 
 		}
+
 	}
 
 	public static void eliminarFichero(String archivo) {
@@ -2031,7 +2365,7 @@ public abstract class Metodos {
 			File comprobacion = new File(ruta);
 
 			if (!comprobacion.exists()) {
-				Metodos.mensaje("Ruta inválida ", 1);
+				mensaje("Ruta inválida ", 1);
 				new Config().setVisible(true);
 			}
 
@@ -2279,8 +2613,11 @@ public abstract class Metodos {
 		int ocurrencias = 0;
 
 		String extension;
+
 		String nombreArchivo;
+
 		File folder;
+
 		for (final File ficheroEntrada : carpeta.listFiles()) {
 
 			nombreArchivo = ficheroEntrada.getName();
@@ -2320,6 +2657,18 @@ public abstract class Metodos {
 
 			if (extension.equals("ebp")) {
 				extension = "webp";
+			}
+
+			if (extension.equals("ebm")) {
+				extension = "webm";
+			}
+
+			if (extension.equals("3u8")) {
+				extension = "m3u8";
+			}
+
+			if (extension.equals(".ts")) {
+				extension = "ts";
 			}
 
 		}
@@ -2416,25 +2765,29 @@ public abstract class Metodos {
 
 				folder = new File(ruta + fichero);
 
-				extensionArchivo = extraerExtension(fichero);
+				comprobacion = folder.isDirectory();
 
-				comprobacion = !folder.isDirectory();
+				if (!comprobacion) {
 
-				if (comprobacion && fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
+					extensionArchivo = extraerExtension(fichero);
 
-					renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
+					if (fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
-				}
+						renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
 
-				if (comprobacion && extension.equals("webp") && extensionArchivo.equals("webp")
-						|| comprobacion && extension.equals("jpeg") && extensionArchivo.equals("jpeg")
-						|| comprobacion && extension.equals(".")
-						|| comprobacion && extension.equals(extensionArchivo)) {
+					}
 
-					lista.add(fichero);
+					if (extension.equals("webp") && extensionArchivo.equals("webp")
+							|| extension.equals("jpeg") && extensionArchivo.equals("jpeg") || extension.equals(".")
+							|| extension.equals(extensionArchivo)) {
+
+						lista.add(fichero);
+					}
+
 				}
 
 			}
+
 		}
 
 		return lista;

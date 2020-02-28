@@ -1,10 +1,13 @@
 package periquito;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -17,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
@@ -47,6 +51,15 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 	public void initComponents() throws IOException {
 
 		jTextField1 = new javax.swing.JTextField();
+		jTextField1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+					//
+				}
+			}
+		});
 		jTextField1.setHorizontalAlignment(SwingConstants.CENTER);
 		jTextField1.setToolTipText("");
 
@@ -161,8 +174,6 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 												+ "images WHERE " + busqueda;
 									}
 
-									int recuento;
-
 									if (!busqueda.isEmpty()) {
 
 										Metodos.mostrarGaleriaSql(busqueda, sql, sql2);
@@ -204,75 +215,65 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 		textField.setFont(new Font("Tahoma", Font.BOLD, 16));
 		textField.setColumns(10);
 
-		JLabel lblNewLabel = new JLabel("Buscar imagenes subidas por usuario");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JTextArea textArea = new JTextArea();
+		textArea.setText(" Arrastra los archivos aqui");
+		textArea.setForeground(Color.DARK_GRAY);
+		textArea.setFont(new Font("Tahoma", Font.BOLD, 26));
+		textArea.setEditable(false);
+		textArea.setBackground(Color.WHITE);
 
-		JLabel lblNewLabel_1 = new JLabel("Nº de imagenes subidas");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JLabel lblDragMode = new JLabel();
+		lblDragMode.setText("Drag Mode");
+		lblDragMode.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDragMode.setFont(new Font("Tahoma", Font.BOLD, 20));
 
-		JLabel lblNewLabel_2 = new JLabel("Drag and drop de magen y mostrar ");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JLabel lblNewLabel_3 = new JLabel("Buscar imágenes por");
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 20));
 
-		JLabel lblNewLabel_3 = new JLabel("informmación sobre el suario que subio ");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 16));
-
-		JLabel lblNewLabel_4 = new JLabel("la imagen y sus atributos");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(19)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addContainerGap())
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1)
-										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(btnNewButton).addGap(147))
-								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-												.addComponent(textField).addComponent(jTextField1)
-												.addGroup(layout.createSequentialGroup()
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addGroup(layout.createParallelGroup(Alignment.LEADING)
-																.addComponent(lblNewLabel_2)
-																.addGroup(layout.createSequentialGroup()
-																		.addComponent(rdbtnNewRadioButton)
-																		.addPreferredGap(ComponentPlacement.RELATED)
-																		.addComponent(jLabel1).addGap(34)
-																		.addComponent(rdbtnNewRadioButton_1)
-																		.addPreferredGap(ComponentPlacement.UNRELATED)
-																		.addComponent(lblNombre)))
-														.addGap(21)))
-										.addContainerGap(40, Short.MAX_VALUE)))))
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblNewLabel_3)
-						.addContainerGap(404, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblNewLabel_4)
-						.addContainerGap(330, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addGap(22).addComponent(lblNewLabel_2).addGap(27)
-						.addComponent(lblNewLabel_3).addGap(18).addComponent(lblNewLabel_4).addGap(12)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton).addGap(41))
-								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton_1).addGap(39))
-								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblNombre, GroupLayout.PREFERRED_SIZE, 64,
-														GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabel1))
-										.addGap(21)))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE).addGap(18)
-						.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-								.addGroup(layout.createSequentialGroup().addComponent(btnNewButton)
-										.addPreferredGap(ComponentPlacement.RELATED))
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1).addGap(36)))
-						.addComponent(lblNewLabel).addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(35).addComponent(rdbtnNewRadioButton)
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(jLabel1).addGap(26)
+								.addComponent(rdbtnNewRadioButton_1).addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(lblNombre).addGap(18).addComponent(rdbtnNewRadioButton_2)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblDragMode, GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addGap(31).addComponent(lblNewLabel_3,
+								GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)))
+						.addGap(189))
+				.addGroup(layout.createSequentialGroup().addGap(118)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
+								.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(jTextField1, Alignment.LEADING)
+										.addComponent(textField, Alignment.LEADING, 360, 360, Short.MAX_VALUE)))
+						.addGap(277))
+				.addGroup(Alignment.LEADING, layout.createSequentialGroup().addGap(254).addComponent(btnNewButton)
+						.addContainerGap(407, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(32).addComponent(lblNewLabel_3)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+						.addGap(11)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(21).addComponent(rdbtnNewRadioButton))
+								.addGroup(layout.createSequentialGroup().addGap(24).addComponent(rdbtnNewRadioButton_1))
+								.addComponent(jLabel1)
+								.addComponent(lblNombre, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblDragMode, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(layout.createSequentialGroup().addGap(34).addComponent(rdbtnNewRadioButton_2)))
+				.addGap(28).addComponent(textArea, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+				.addGap(35).addComponent(textField, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+				.addGap(18)
+				.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnNewButton)
+				.addContainerGap(49, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(402, 445));
+		setSize(new Dimension(588, 499));
 		setLocationRelativeTo(null);
 	}
 
@@ -283,5 +284,4 @@ public class Busqueda extends javax.swing.JFrame implements ActionListener, Chan
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
-
 }

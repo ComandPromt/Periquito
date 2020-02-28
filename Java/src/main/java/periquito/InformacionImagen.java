@@ -15,15 +15,16 @@ import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("all")
 
-public class CambiarSha extends javax.swing.JFrame implements ActionListener, ChangeListener {
+public class InformacionImagen extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
-	public CambiarSha() {
-
-		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
-		setTitle("Periquito v3 About");
+	public InformacionImagen() {
+		setIconImage(Toolkit.getDefaultToolkit()
+				.getImage(InformacionImagen.class.getResource("/imagenes/InformacionImagen.png")));
+		setTitle("Periquito v3 InformacionImagen");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
+
 	}
 
 	private void initComponents() {
@@ -38,7 +39,7 @@ public class CambiarSha extends javax.swing.JFrame implements ActionListener, Ch
 		txtrAdvertenciaLa.setEditable(false);
 		txtrAdvertenciaLa.setLineWrap(true);
 		txtrAdvertenciaLa.setText(
-				"-----------------------------------------------\r\n            Periquito GUI\r\n-----------------------------------------------\r\n\r\n Creado por: ComandPromt\n\r\n Email: smr2gocar@gmail.com\r\n\r\n Ramón Jesús Gómez Carmona");
+				"Ver usuario que le subió ,\r\n la hora que se subió\r\nver número de visitas, \r\nver numero de descargas,\r\nmetadatos,\r\n etc\r\n");
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21)
@@ -53,12 +54,16 @@ public class CambiarSha extends javax.swing.JFrame implements ActionListener, Ch
 		setLocationRelativeTo(null);
 	}
 
-	public void actionPerformed(ActionEvent arg0) {
-		//
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void stateChanged(ChangeEvent e) {
-		//
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

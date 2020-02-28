@@ -46,6 +46,18 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 	private JTextField direccion;
 	String servidorWeb = "1";
 
+	public static javax.swing.JTextField getjTextField1() {
+		return jTextField1;
+	}
+
+	public static void setjTextField1(javax.swing.JTextField jTextField1) {
+		Bd.jTextField1 = jTextField1;
+	}
+
+	public static JTextField getTextField() {
+		return textField;
+	}
+
 	@SuppressWarnings("all")
 	public void buscarArchivoConf() throws IOException, SQLException {
 
@@ -322,26 +334,16 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		setLocationRelativeTo(null);
 	}
 
-	public static javax.swing.JTextField getjTextField1() {
-		return jTextField1;
-	}
-
-	public static void setjTextField1(javax.swing.JTextField jTextField1) {
-		Bd.jTextField1 = jTextField1;
-	}
-
-	public static JTextField getTextField() {
-		return textField;
-	}
-
 	@Override
-	public void stateChanged(ChangeEvent arg0) {
+	public void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		//
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
 
 	}
+
 }

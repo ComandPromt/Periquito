@@ -99,7 +99,7 @@ public class DescargaThumb extends JFrame implements ActionListener, ChangeListe
 				urls = Metodos.obtenerEnlaces(url, 4, Metodos.eliminarEspacios(textField.getText()), "", limite);
 
 				// urls = Metodos.obtenerEnlaces(urls.get(0), 5, claseImagen, "", 1);
-				System.out.println(urls.size());
+
 				if (!urls.isEmpty()) {
 
 					/*

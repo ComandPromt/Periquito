@@ -44,6 +44,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	private LinkedList<String> imagenes;
 
 	public static LinkedList<String> comprobacionSha;
+
 	int x;
 
 	private JFrame getFrame() {
@@ -51,6 +52,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	}
 
 	@SuppressWarnings("all")
+
 	public void buscarArchivoConf() throws IOException {
 
 		File af = new File("Config/Config2.txt");
@@ -220,7 +222,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					try {
 
 						Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador(),
-								MenuPrincipal.getDirectorioImagenes(), true);
+								MenuPrincipal.getDirectorioImagenes(), true, 1);
 						frmShaImages.dispose();
 
 						Metodos.mensaje("Las imágenes se han movido correctamente", 2);

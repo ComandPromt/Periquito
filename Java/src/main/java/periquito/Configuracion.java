@@ -1,9 +1,9 @@
 package periquito;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +24,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
@@ -38,12 +37,11 @@ import utils.MyInterface;
 @SuppressWarnings("all")
 
 public class Configuracion extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
-
+	TextArea textArea = new TextArea();
 	static javax.swing.JTextField jTextField1;
 	private JTextField textField;
 	private JCheckBox chckbxNewCheckBox_1;
 	JComboBox comboBox;
-	JTextArea textArea;
 	JCheckBox chckbxEliminarImagenesLocales;
 	JCheckBox chckbxNewCheckBox;
 	String[] configuracion;
@@ -207,10 +205,6 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		lblNewLabel.setIcon(new ImageIcon(Configuracion.class.getResource("/imagenes/nota.png")));
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		JLabel lblNewLabel_2 = new JLabel("Valores por defecto");
-		lblNewLabel_2.setIcon(null);
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 18));
-
 		JLabel label = new JLabel("Descripción");
 		label.setIcon(new ImageIcon(Configuracion.class.getResource("/imagenes/name.png")));
 		label.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -224,9 +218,6 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		label_2.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		comboBox = new JComboBox();
-
-		JScrollPane scrollPane = new JScrollPane((Component) null);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
@@ -303,86 +294,90 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		JCheckBox chckbxNewCheckBox_3 = new JCheckBox("Eliminar imágenes duplicadas");
 		chckbxNewCheckBox_3.setFont(new Font("Tahoma", Font.BOLD, 16));
 
+		JLabel lblNewLabel_1 = new JLabel("Poner exif por defecto");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel_3 = new JLabel(
+				"Limitar subida de imágenes si el exif coincide con algún registro en la tabla notas");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 14));
+
+		JLabel lblNewLabel_4 = new JLabel("Elegir donde se mueven las imágenes por defecto");
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
+
+		JScrollPane scrollPane = new JScrollPane((Component) null);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(236).addComponent(lblNewLabel_2))
-						.addGroup(layout.createSequentialGroup().addGap(23).addGroup(layout
-								.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-												.addGap(21)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(23)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+								.addGap(21)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout
+										.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblNewLabel).addComponent(label_1,
+														GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE))
+										.addGap(70)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 265,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 269,
+														GroupLayout.PREFERRED_SIZE)))
+										.addGroup(layout.createSequentialGroup()
 												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(label, GroupLayout.PREFERRED_SIZE, 169,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 148,
-																GroupLayout.PREFERRED_SIZE)
 														.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 169,
 																GroupLayout.PREFERRED_SIZE)
-														.addComponent(lblNewLabel)))
-										.addComponent(chckbxNewCheckBox_3)).addPreferredGap(ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout
-												.createSequentialGroup().addGap(18)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 265,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 268,
-																GroupLayout.PREFERRED_SIZE)
-														.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-																.addComponent(button, GroupLayout.PREFERRED_SIZE, 63,
-																		GroupLayout.PREFERRED_SIZE)
-																.addComponent(textField, 269, 269, 269))))
-												.addGroup(layout.createSequentialGroup().addGap(14)
-														.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-																.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE,
-																		269, GroupLayout.PREFERRED_SIZE)
-																.addComponent(chckbxNewCheckBox_2)))))
-								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(chckbxNewCheckBox)
-										.addComponent(chckbxEliminarImagenesLocales)
-										.addComponent(chckbxNewCheckBox_1)))))
-						.addContainerGap(35, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_2).addGap(28)
-										.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)
-										.addGap(9))
-								.addComponent(lblNewLabel))
-						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(chckbxNewCheckBox_2)
+														.addComponent(label, GroupLayout.PREFERRED_SIZE, 169,
+																GroupLayout.PREFERRED_SIZE))
+												.addGap(36)
+												.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+														.addComponent(textField, 269, 269, 269).addComponent(scrollPane,
+																GroupLayout.PREFERRED_SIZE, 268,
+																GroupLayout.PREFERRED_SIZE)))))
+								.addComponent(chckbxNewCheckBox_3)
+								.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel_1)
+										.addGap(25).addComponent(lblNewLabel_3))
+								.addGroup(layout.createSequentialGroup().addGap(54).addComponent(lblNewLabel_4)))
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(8)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(27).addComponent(label,
-										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 167,
-												GroupLayout.PREFERRED_SIZE)))
-						.addGap(18)
-						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-						.addGap(18).addComponent(chckbxEliminarImagenesLocales)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(chckbxNewCheckBox_1).addPreferredGap(ComponentPlacement.UNRELATED).addGroup(
-								layout.createParallelGroup(Alignment.TRAILING)
-										.addGroup(layout.createSequentialGroup().addComponent(chckbxNewCheckBox)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(chckbxNewCheckBox_3).addGap(87))
-										.addGroup(layout
-												.createSequentialGroup().addComponent(button,
-														GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-												.addGap(61)))));
+								.addGroup(layout.createSequentialGroup().addGap(224).addComponent(button,
+										GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE))
+								.addGroup(layout.createSequentialGroup().addGap(16).addComponent(chckbxNewCheckBox_2))))
+						.addComponent(chckbxNewCheckBox).addComponent(chckbxEliminarImagenesLocales)
+						.addComponent(chckbxNewCheckBox_1))
+				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(41)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel).addComponent(
+						jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(chckbxNewCheckBox_2)
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+						.addGap(35).addComponent(label, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
+						.addGap(18).addComponent(label_2, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
+				.addGap(18).addComponent(chckbxEliminarImagenesLocales)
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(chckbxNewCheckBox_1).addPreferredGap(ComponentPlacement.UNRELATED)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(layout.createSequentialGroup().addComponent(chckbxNewCheckBox)
+								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(chckbxNewCheckBox_3)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
+										.addComponent(lblNewLabel_3))
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel_4).addGap(51))
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(button, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+								.addGap(61)))));
 
-		textArea = new JTextArea("", 0, 50);
-		textArea.setWrapStyleWord(true);
-		textArea.setLineWrap(true);
-		textArea.setFont(new Font("Monospaced", Font.PLAIN, 20));
-		textArea.setBackground(Color.WHITE);
 		scrollPane.setViewportView(textArea);
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(777, 674));

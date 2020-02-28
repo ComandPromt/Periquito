@@ -13,12 +13,14 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -45,6 +47,14 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 	private JMenuBar menuBar;
 	private JMenu mnNewMenu;
 	private JMenuItem mntmNewMenuItem;
+	private JMenu mnNewMenu_1;
+	private JRadioButtonMenuItem rdbtnmntmNewRadioItem;
+	private JRadioButtonMenuItem rdbtnmntmNewRadioItem_1;
+	private JMenuItem mntmNewMenuItem_1;
+	private JMenu mnNewMenu_2;
+	private JCheckBoxMenuItem chckbxmntmNewCheckItem;
+	private JCheckBoxMenuItem chckbxmntmNewCheckItem_1;
+	private JCheckBoxMenuItem chckbxmntmNewCheckItem_2;
 
 	public static void setError(boolean error) {
 		Descarga.error = error;
@@ -73,6 +83,30 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
+
+		mnNewMenu_1 = new JMenu("Modo");
+		mnNewMenu.add(mnNewMenu_1);
+
+		rdbtnmntmNewRadioItem = new JRadioButtonMenuItem("Simple");
+		mnNewMenu_1.add(rdbtnmntmNewRadioItem);
+
+		rdbtnmntmNewRadioItem_1 = new JRadioButtonMenuItem("Complejo");
+		mnNewMenu_1.add(rdbtnmntmNewRadioItem_1);
+
+		mntmNewMenuItem_1 = new JMenuItem("Importar desde archivo");
+		mnNewMenu.add(mntmNewMenuItem_1);
+
+		mnNewMenu_2 = new JMenu("Al terminar");
+		mnNewMenu.add(mnNewMenu_2);
+
+		chckbxmntmNewCheckItem = new JCheckBoxMenuItem("Mover imagenes");
+		mnNewMenu_2.add(chckbxmntmNewCheckItem);
+
+		chckbxmntmNewCheckItem_1 = new JCheckBoxMenuItem("Apagar equipo");
+		mnNewMenu_2.add(chckbxmntmNewCheckItem_1);
+
+		chckbxmntmNewCheckItem_2 = new JCheckBoxMenuItem("Cerrar aplicación");
+		mnNewMenu_2.add(chckbxmntmNewCheckItem_2);
 		initComponents();
 		this.setVisible(true);
 	}
@@ -248,29 +282,42 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 		lblExtension = new JLabel("Extensión");
 		lblExtension.setFont(new Font("Dialog", Font.BOLD, 20));
 
+		JButton btnNewButton_1 = new JButton("Limpiar campos");
+		btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGap(26)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(12).addComponent(txtpnElMtodosimple,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblExtension, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabel1)
-								.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblThumbnails)
-								.addComponent(lblSalto, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-										.addComponent(textField, 338, 338, Short.MAX_VALUE)
-										.addComponent(textField3, GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-										.addComponent(textField1, 338, 338, Short.MAX_VALUE).addComponent(jTextField1)
-										.addComponent(textField2)))
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-								.addGap(80).addComponent(rdbtnNewRadioButton).addGap(27)
-								.addComponent(getBotonRadio1())))
-				.addContainerGap(20, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addGap(26)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addGroup(layout.createSequentialGroup().addGap(12).addComponent(
+														txtpnElMtodosimple, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+												.addGroup(layout.createSequentialGroup()
+														.addGroup(layout.createParallelGroup(Alignment.LEADING)
+																.addComponent(lblExtension, GroupLayout.PREFERRED_SIZE,
+																		129, GroupLayout.PREFERRED_SIZE)
+																.addComponent(jLabel1)
+																.addComponent(lblFin, GroupLayout.PREFERRED_SIZE, 61,
+																		GroupLayout.PREFERRED_SIZE)
+																.addComponent(lblThumbnails).addComponent(lblSalto,
+																		GroupLayout.PREFERRED_SIZE, 61,
+																		GroupLayout.PREFERRED_SIZE))
+														.addPreferredGap(ComponentPlacement.RELATED)
+														.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+																.addComponent(textField, 338, 338, Short.MAX_VALUE)
+																.addComponent(textField3, GroupLayout.DEFAULT_SIZE, 338,
+																		Short.MAX_VALUE)
+																.addComponent(textField1, 338, 338, Short.MAX_VALUE)
+																.addComponent(jTextField1).addComponent(textField2))))
+										.addContainerGap(35, Short.MAX_VALUE))
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 106,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(80).addComponent(rdbtnNewRadioButton)
+										.addPreferredGap(ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+										.addComponent(btnNewButton_1).addGap(20)))));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
 				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
@@ -293,16 +340,16 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 						.addComponent(lblExtension, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(textField3, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
 				.addGap(20)
-				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-										.addComponent(rdbtnNewRadioButton).addComponent(getBotonRadio1()))
-								.addGap(18))
-						.addGroup(
-								layout.createSequentialGroup()
+				.addGroup(
+						layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup()
 										.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 51,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(5)))
+										.addGap(5))
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(btnNewButton_1).addComponent(rdbtnNewRadioButton))
+										.addGap(18)))
 				.addGap(18).addComponent(txtpnElMtodosimple, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(423)));
@@ -322,5 +369,4 @@ public class Descarga extends JFrame implements ActionListener, ChangeListener, 
 	public static JRadioButton getBotonRadio1() {
 		return botonRadio1;
 	}
-
 }

@@ -305,15 +305,21 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 							MenuPrincipal.hacerGIF();
 
-						} else {
+						} 
+						
+						else {
 							MenuPrincipal.mensaje170();
 						}
 
-					} catch (Exception e1) {
+					} 
+					
+					catch (Exception e1) {
 
 						try {
 							new Config().setVisible(true);
-						} catch (IOException e2) {
+						}
+						
+						catch (IOException e2) {
 							//
 						}
 
@@ -329,12 +335,19 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 						+ MenuPrincipal.getSeparador() + "recortes");
 			}
 
-		} else {
+		} 
+		
+		else {
 			Metodos.mensaje("Las imágenes deben estar en la carpeta imágenes_para_recortar", 2);
+			PhotoFrame.photoPanel.setBackground(Color.WHITE);
+			PhotoFrame.photoPanel.setForeground(Color.WHITE);
+			PhotoFrame.getjPanel1().add(PhotoFrame.photoPanel);
 		}
+		
 	}
 
 	@Override
+	
 	public void mouseDragged(MouseEvent e) {
 		x2 = (int) e.getPoint().getX();
 		y2 = (int) e.getPoint().getY();

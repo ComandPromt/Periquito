@@ -69,21 +69,8 @@ public class VerUser extends javax.swing.JFrame implements ActionListener, Chang
 		avatar.image_default = Toolkit.getDefaultToolkit()
 				.getImage(VerUser.class.getResource("/imagenes/GIF_Extract.png"));
 
-		avatar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				VerUser.avatar.imagenIcon = VerUser.icono;
-				VerUser.avatar.imagenIcon = VerUser.icono;
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				VerUser.avatar.imagenIcon = VerUser.icono;
-				VerUser.avatar.imagenIcon = VerUser.icono;
-			}
-		});
 		avatar.setImagenDefault(icono);
+
 		try {
 			avatar.image = Toolkit.getDefaultToolkit().getImage(VerUser.class.getResource("/imagenes/GIF_Extract.png"));
 			avatar.icono = new ImageIcon(VerUser.class.getResource("/imagenes/actualizar.png"));

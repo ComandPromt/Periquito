@@ -33,9 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import utils.DragAndDrop;
 import utils.Metodos;
 import utils.MyInterface;
@@ -53,8 +50,10 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 	private JLabel lblNombreDeImgenes = new JLabel("Nombre");
 	private JTextField nombre;
+	private final JLabel lblComprobarGifAnimado = new JLabel("Comprobar gif animado");
 
 	public Utilidades() {
+		lblComprobarGifAnimado.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/db.png")));
 
@@ -109,13 +108,15 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						.addComponent(lblNombreDeImgenes, GroupLayout.PREFERRED_SIZE, 207, GroupLayout.PREFERRED_SIZE)
 						.addGroup(layout.createSequentialGroup().addGap(29).addComponent(lblCategoraAInsertar,
 								GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblComprobarGifAnimado,
+								GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE))
 						.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblNewLabel)))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(comboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 								.addComponent(nombre).addComponent(imagenes, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(54, Short.MAX_VALUE)));
+						.addContainerGap(40, Short.MAX_VALUE)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGap(23)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNombreDeImgenes)
@@ -124,11 +125,16 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						.addGroup(layout.createSequentialGroup().addGap(18).addComponent(lblCategoraAInsertar))
 						.addGroup(layout.createSequentialGroup().addGap(33).addComponent(comboBox,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-				.addGap(18)
-				.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel))
-				.addGap(66)));
+				.addGap(18).addGroup(
+						layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 50,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(26))
+								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addGap(18)
+										.addComponent(lblComprobarGifAnimado, GroupLayout.PREFERRED_SIZE, 20,
+												GroupLayout.PREFERRED_SIZE)
+										.addContainerGap()))));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(578, 289));
 		setLocationRelativeTo(null);
@@ -200,38 +206,40 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 										files[i].toString().length()));
 							}
 
-							String parametros = Metodos.obtenerParametros(imagenes);
+//							String parametros = Metodos.obtenerParametros(imagenes);
+//
+//							JSONObject json;
+//
+//							json = Metodos.apiImagenes(parametros);
+//
+//							JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
 
-							JSONObject json;
-
-							json = Metodos.apiImagenes(parametros);
-
-							JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
-
-							int longitud = imagenesBD.length();
-
+//							int longitud = imagenesBD.length();
+							int longitud = 29063;
 							if (longitud > 0) {
 
 								/////////////////////////////////////////////////
 
+								// Recomponer metadatos
+								String archivo = "";
 								for (i = 0; i < longitud; i++) {
 
-									Metodos.renombrar(files[i].toString(), carpeta + imagenesBD.get(i));
+									// Metodos.renombrar(files[i].toString(), carpeta + imagenesBD.get(i));
 
 									// Comprobar si la imagen ya está subida y en la tabla metadatos
 
-									fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
-											+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
-											+ "',DEFAULT,'" + imagenesBD.get(i)
-											+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
-											+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
-									fS.newLine();
+//									fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
+//											+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
+//											+ "',DEFAULT,'" + imagenesBD.get(i)
+//											+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
+//											+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
+//									fS.newLine();
 
-									fS.write("INSERT INTO " + tabla + " VALUES('" + id + "','" + categoria + "','1','"
-											+ nombre_input + "',DEFAULT,DEFAULT,'" + objSDF.format(fecha)
-											+ "',DEFAULT,'" + imagenesBD.get(i)
-											+ "',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,'"
-											+ Metodos.getSHA256Checksum(files[i].toString()) + "',DEFAULT,DEFAULT);");
+									archivo = Metodos.extraerNombreFile(files[i].toString());
+
+									fS.write("UPDATE " + tabla + " SET sha256='"
+											+ Metodos.getSHA256Checksum(files[i].toString())
+											+ "' WHERE image_media_file='" + archivo + "';");
 									fS.newLine();
 
 									id++;
@@ -250,9 +258,9 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 
 							InputStream archivo = new FileInputStream("Config/SQL.sql");
 
-							Metodos.executeScript(conexion, archivo);
+							// Metodos.executeScript(conexion, archivo);
 
-							Metodos.eliminarFichero("Config/SQL.sql");
+							// Metodos.eliminarFichero("Config/SQL.sql");
 
 							if (i == 1) {
 								Metodos.mensaje("Se ha recuperado 1 registro", 2);
@@ -265,7 +273,8 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						}
 
 						catch (Exception e) {
-							Metodos.mensaje("Error al recuperar la BD", 1);
+							e.printStackTrace();
+							// Metodos.mensaje("Error al recuperar la BD", 1);
 						}
 					}
 
