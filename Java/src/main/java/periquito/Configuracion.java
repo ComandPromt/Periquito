@@ -307,6 +307,11 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 		JScrollPane scrollPane = new JScrollPane((Component) null);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+		JLabel lblNewLabel_2 = new JLabel("Administrador de archivos por defecto para linux");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		JCheckBox chckbxNewCheckBox_4 = new JCheckBox("Apagar PC al terminar");
+
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 				.addGap(23)
@@ -320,10 +325,12 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 														GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE))
 										.addGap(70)
 										.addGroup(layout.createParallelGroup(Alignment.LEADING)
-												.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 265,
-														GroupLayout.PREFERRED_SIZE)
 												.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 269,
-														GroupLayout.PREFERRED_SIZE)))
+														GroupLayout.PREFERRED_SIZE)
+												.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+														.addComponent(chckbxNewCheckBox_4).addComponent(comboBox,
+																GroupLayout.PREFERRED_SIZE, 265,
+																GroupLayout.PREFERRED_SIZE))))
 										.addGroup(layout.createSequentialGroup()
 												.addGroup(layout.createParallelGroup(Alignment.LEADING)
 														.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 169,
@@ -336,9 +343,12 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 																GroupLayout.PREFERRED_SIZE, 268,
 																GroupLayout.PREFERRED_SIZE)))))
 								.addComponent(chckbxNewCheckBox_3)
-								.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel_1)
-										.addGap(25).addComponent(lblNewLabel_3))
-								.addGroup(layout.createSequentialGroup().addGap(54).addComponent(lblNewLabel_4)))
+								.addGroup(layout.createSequentialGroup().addGap(54).addComponent(lblNewLabel_4))
+								.addGroup(layout.createSequentialGroup().addGap(21)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblNewLabel_2)
+												.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1)
+														.addGap(25).addComponent(lblNewLabel_3)))))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
 								.addGroup(layout.createSequentialGroup().addGap(224).addComponent(button,
@@ -364,7 +374,9 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(textField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)))
-				.addGap(18).addComponent(chckbxEliminarImagenesLocales)
+				.addGap(18)
+				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(chckbxEliminarImagenesLocales)
+						.addComponent(chckbxNewCheckBox_4))
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addComponent(chckbxNewCheckBox_1).addPreferredGap(ComponentPlacement.UNRELATED)
 				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
@@ -373,7 +385,8 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_1)
 										.addComponent(lblNewLabel_3))
-								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel_4).addGap(51))
+								.addPreferredGap(ComponentPlacement.RELATED).addComponent(lblNewLabel_4)
+								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblNewLabel_2).addGap(26))
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(button, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
 								.addGap(61)))));

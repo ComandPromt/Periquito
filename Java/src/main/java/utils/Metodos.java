@@ -79,7 +79,7 @@ public abstract class Metodos {
 
 		LinkedList<String> imagenes = new <String>LinkedList();
 
-		imagenes = directorio(ruta, ".");
+		imagenes = directorio(ruta, ".", 1);
 
 		String extension, imagen;
 
@@ -123,7 +123,7 @@ public abstract class Metodos {
 
 	public static List<String> borrarArchivosDuplicados(String directorio) {
 
-		LinkedList<String> listaImagenes = directorio(directorio, ".");
+		LinkedList<String> listaImagenes = directorio(directorio, ".", 1);
 
 		LinkedList<String> listaImagenesSha = new LinkedList<String>();
 
@@ -923,7 +923,7 @@ public abstract class Metodos {
 		if (!files.isEmpty()) {
 
 			LinkedList<String> listaImagenes = directorio(
-					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".");
+					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", 1);
 
 			String busqueda;
 
@@ -1045,7 +1045,7 @@ public abstract class Metodos {
 		if (files.length > 0) {
 
 			LinkedList<String> listaImagenes = directorio(
-					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".");
+					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", 1);
 
 			String busqueda;
 
@@ -1068,7 +1068,7 @@ public abstract class Metodos {
 
 					indice = files[i].getCanonicalPath().indexOf("." + extension);
 
-					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_." + extension,
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "." + extension,
 							files[i].getCanonicalPath().substring(0, indice) + "_.jpg");
 
 					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.jpg");
@@ -1081,7 +1081,7 @@ public abstract class Metodos {
 
 					indice = files[i].getCanonicalPath().indexOf("." + extension);
 
-					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_." + extension,
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "." + extension,
 							files[i].getCanonicalPath().substring(0, indice) + "_.mp4");
 
 					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.mp4");
@@ -1094,7 +1094,7 @@ public abstract class Metodos {
 
 					indice = files[i].getCanonicalPath().indexOf("." + extension);
 
-					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "_." + extension,
+					Metodos.renombrar(files[i].getCanonicalPath().substring(0, indice) + "." + extension,
 							files[i].getCanonicalPath().substring(0, indice) + "_.png");
 
 					files[i] = new File(files[i].getCanonicalPath().substring(0, indice) + "_.png");
@@ -1314,8 +1314,13 @@ public abstract class Metodos {
 	}
 
 	public static String eliminarEspacios(String cadena) {
+
 		cadena = cadena.trim();
+
 		cadena = cadena.replace("  ", " ");
+
+		cadena = cadena.trim();
+
 		return cadena;
 	}
 
@@ -2255,34 +2260,91 @@ public abstract class Metodos {
 
 	public static void eliminarArchivos(String ruta) {
 
-		LinkedList<String> frames = Metodos.directorio(ruta, ".");
+		LinkedList<String> frames = Metodos.directorio(ruta, ".", 1);
 
 		for (int i = 0; i < frames.size(); i++) {
 
 			if (!frames.get(i).isEmpty()) {
+
 				eliminarFichero(ruta + MenuPrincipal.getSeparador() + frames.get(i));
 			}
 
 		}
+
 	}
 
 	public static void eliminarArchivos(List<String> listaImagenes, String ruta) {
 
-		for (int i = 0; i < listaImagenes.size(); i++) {
+		File carpeta = new File(ruta);
 
-			if (!listaImagenes.get(i).isEmpty()) {
-				eliminarFichero(ruta + listaImagenes.get(i));
+		if (carpeta.isDirectory()) {
+
+			for (int i = 0; i < listaImagenes.size(); i++) {
+
+				if (!listaImagenes.get(i).isEmpty()) {
+					eliminarFichero(ruta + listaImagenes.get(i));
+				}
+
+			}
+
+			String separador = MenuPrincipal.getSeparador();
+
+			carpeta = new File(ruta);
+
+			LinkedList<String> archivos = new <String>LinkedList();
+
+			LinkedList<String> carpetas = new <String>LinkedList();
+
+			archivos = directorio(ruta, ".", 1);
+
+			carpetas = directorio(ruta, ".", 2);
+
+			boolean numeroArchivos = false;
+
+			if (carpetas.size() > 0) {
+
+				for (int i = 0; i < carpetas.size(); i++) {
+
+					if (!numeroArchivos && directorio(ruta + carpetas.get(i) + separador, ".", 1).size() > 0) {
+						numeroArchivos = true;
+						i = carpetas.size();
+					}
+
+				}
+
+			}
+
+			if (archivos.size() == 0 && !numeroArchivos) {
+
+				int resp = JOptionPane.showConfirmDialog(null,
+						"La carpeta se ha quedado vacía, ¿quiere borrar la carpeta?");
+
+				if (resp == 0) {
+
+					if (carpetas.size() > 0) {
+
+						for (int i = 0; i < carpetas.size(); i++) {
+							carpeta = new File(ruta + carpetas.get(i) + separador);
+							carpeta.delete();
+						}
+					}
+
+					carpeta = new File(ruta);
+
+					carpeta.delete();
+
+				}
+
 			}
 
 		}
-
 	}
 
 	public static void eliminarFichero(String archivo) {
 
 		File fichero = new File(archivo);
 
-		if (fichero.exists()) {
+		if (fichero.exists() && !fichero.isDirectory()) {
 			fichero.delete();
 		}
 
@@ -2739,7 +2801,7 @@ public abstract class Metodos {
 		}
 	}
 
-	public static LinkedList<String> directorio(String ruta, String extension) {
+	public static LinkedList<String> directorio(String ruta, String extension, int filtro) {
 
 		LinkedList<String> lista = new LinkedList<>();
 
@@ -2757,30 +2819,38 @@ public abstract class Metodos {
 
 			File folder;
 
-			boolean comprobacion;
-
 			for (int x = 0; x < ficheros.length; x++) {
 
 				fichero = ficheros[x].getName();
 
 				folder = new File(ruta + fichero);
 
-				comprobacion = folder.isDirectory();
+				if (filtro == 1) {
 
-				if (!comprobacion) {
+					if (folder.isFile()) {
 
-					extensionArchivo = extraerExtension(fichero);
+						extensionArchivo = extraerExtension(fichero);
 
-					if (fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
+						if (fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
-						renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
+							renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
+
+						}
+
+						if (extension.equals("webp") && extensionArchivo.equals("webp")
+								|| extension.equals("jpeg") && extensionArchivo.equals("jpeg") || extension.equals(".")
+								|| extension.equals(extensionArchivo)) {
+
+							lista.add(fichero);
+						}
 
 					}
 
-					if (extension.equals("webp") && extensionArchivo.equals("webp")
-							|| extension.equals("jpeg") && extensionArchivo.equals("jpeg") || extension.equals(".")
-							|| extension.equals(extensionArchivo)) {
+				}
 
+				else {
+
+					if (folder.isDirectory()) {
 						lista.add(fichero);
 					}
 
@@ -3086,7 +3156,7 @@ public abstract class Metodos {
 
 	public static void conversion(String extension, String salida, String carpeta) {
 
-		LinkedList<String> listaImagenes = Metodos.directorio(carpeta, extension);
+		LinkedList<String> listaImagenes = Metodos.directorio(carpeta, extension, 1);
 
 		int resto = 3;
 
@@ -3108,18 +3178,59 @@ public abstract class Metodos {
 		listaImagenes.clear();
 	}
 
-	public static void renombrarArchivos(List<String> list, String ruta) {
+	public static void renombrarArchivos(String ruta, String filtro, boolean api) throws IOException {
 
-		File f1;
-		File f2;
+		List<String> list = directorio(ruta, filtro, 1);
 
-		for (int x = 0; x < list.size(); x++) {
+		if (list.size() > 0) {
 
-			f1 = new File(ruta + list.get(x));
-			f2 = new File(ruta + Metodos.eliminarPuntos(list.get(x)));
-			f1.renameTo(f2);
+			File f1;
+
+			File f2;
+
+			File f3;
+
+			JSONArray imagenesBD = null;
+
+			if (api) {
+
+				JSONObject json;
+
+				String parametros = obtenerParametros(list);
+
+				json = apiImagenes(parametros);
+
+				imagenesBD = json.getJSONArray("imagenes_bd");
+			}
+
+			for (int x = 0; x < list.size(); x++) {
+
+				f1 = new File(ruta + list.get(x));
+
+				f2 = new File(ruta + Metodos.eliminarPuntos(list.get(x)));
+
+				if (f1.isFile() && f1.renameTo(f2)) {
+
+					if (api) {
+
+						f3 = new File(ruta + imagenesBD.get(x));
+
+						if (!f2.renameTo(f3)) {
+							x = list.size();
+						}
+
+					}
+
+				}
+
+				else {
+
+					x = list.size();
+
+				}
+
+			}
 		}
-
 	}
 
 	public static void renombrar(String ruta1, String ruta2) {
@@ -3146,17 +3257,16 @@ public abstract class Metodos {
 		return outputFilePath;
 	}
 
-	public static String obtenerParametros(LinkedList<String> listaImagenes) {
+	public static String obtenerParametros(List<String> list) {
 
 		StringBuilder bld = new StringBuilder();
 		String extension;
 
-		for (int i = 0; i < listaImagenes.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 
-			extension = listaImagenes.get(i).substring(listaImagenes.get(i).length() - 3,
-					listaImagenes.get(i).length());
+			extension = list.get(i).substring(list.get(i).length() - 3, list.get(i).length());
 
-			if (listaImagenes.size() == 1 || i + 1 == listaImagenes.size()) {
+			if (list.size() == 1 || i + 1 == list.size()) {
 				bld.append(i + "." + extension);
 
 			}

@@ -20,6 +20,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -34,12 +35,16 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import utils.Metodos;
 import utils.MetodosPdf;
 
 @SuppressWarnings("all")
 public class VerUrl extends javax.swing.JFrame implements ActionListener, ChangeListener {
+
+	JComboBox comboBox = new JComboBox();
 
 	String url;
 	private JTextField textField;
@@ -63,37 +68,6 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mnNewMenu.setIcon(new ImageIcon(VerUrl.class.getResource("/imagenes/utilities.png")));
 		menuBar.add(mnNewMenu);
-
-		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Poner URL en el target");
-		mntmNewMenuItem_7.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		mntmNewMenuItem_7.setIcon(new ImageIcon(VerUrl.class.getResource("/imagenes/insert.png")));
-		mntmNewMenuItem_7.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-				try {
-
-					String urlSeleccionada = list.getSelectedValue().toString();
-
-					if (Metodos.pingURL(urlSeleccionada)) {
-						Scrapt.jTextField1.setText(urlSeleccionada);
-						Metodos.mensaje("La URL ha sido copiada para hacer scrapting", 2);
-					}
-
-					else {
-						Metodos.mensaje("La URL no existe", 3);
-					}
-				}
-
-				catch (NullPointerException e1) {
-					Metodos.mensaje("Por favor, seleccione una URL", 2);
-				}
-			}
-		});
-		mnNewMenu.add(mntmNewMenuItem_7);
-
-		JSeparator separator_5 = new JSeparator();
-		mnNewMenu.add(separator_5);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Copiar lista");
 		mntmNewMenuItem.setIcon(new ImageIcon(VerUrl.class.getResource("/imagenes/copy.png")));
@@ -213,6 +187,14 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 
 		initComponents();
 
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		comboBox.addItem("Todo");
+
+		comboBox.addItem("URLs favoritas");
+
+		comboBox.addItem("URLs analizadas");
+
 		String urlTarget = Scrapt.jTextField1.getText();
 
 		if (!urlTarget.isEmpty() && !urlTarget.isBlank()) {
@@ -310,35 +292,107 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 		JButton button = new JButton("");
 		button.setIcon(new ImageIcon(VerUrl.class.getResource("/imagenes/copy.png")));
 		button.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(VerUrl.class.getResource("/imagenes/filtro.png")));
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Metodos.mensaje("Abrir carpeta de archivos exportados", 2);
+			}
+		});
+
+		JLabel lblNewLabel_1 = new JLabel("Buscador de archivos exportados");
+
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-						.addGap(42)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 540, GroupLayout.PREFERRED_SIZE)
-								.addGroup(layout.createSequentialGroup().addComponent(lblInsertarUrl).addGap(18)
-										.addComponent(textField).addGap(18).addComponent(btnNewButton_1,
-												GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(layout.createSequentialGroup().addGap(273).addComponent(button,
-								GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap(45, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(14)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblInsertarUrl)
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup().addGap(19)
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(
+												scrollPane, GroupLayout.PREFERRED_SIZE, 540, GroupLayout.PREFERRED_SIZE)
+										.addContainerGap())
+								.addGroup(layout.createSequentialGroup().addGroup(layout
+										.createParallelGroup(Alignment.TRAILING)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(button, GroupLayout.PREFERRED_SIZE, 72,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(47))
+										.addComponent(lblInsertarUrl)).addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+												.addGroup(layout.createSequentialGroup()
+														.addComponent(textField, GroupLayout.DEFAULT_SIZE, 329,
+																Short.MAX_VALUE)
+														.addGap(18).addComponent(btnNewButton_1,
+																GroupLayout.PREFERRED_SIZE, 70,
+																GroupLayout.PREFERRED_SIZE))
+												.addGroup(
+														layout.createSequentialGroup().addComponent(btnNewButton)
+																.addPreferredGap(ComponentPlacement.RELATED, 49,
+																		Short.MAX_VALUE)
+																.addComponent(lblNewLabel).addGap(18)
+																.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 197,
+																		GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(ComponentPlacement.RELATED)))
+										.addGap(23))))
+						.addGroup(layout.createSequentialGroup().addGap(55).addComponent(lblNewLabel_1)
+								.addContainerGap(481, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(14)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(btnNewButton_1)
+						.addGroup(layout
+								.createSequentialGroup()
+								.addGroup(layout
+										.createParallelGroup(Alignment.BASELINE).addComponent(lblInsertarUrl)
 										.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 												GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnNewButton_1))
-						.addGap(18)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE).addComponent(button)
-						.addGap(23)));
+								.addPreferredGap(ComponentPlacement.UNRELATED)))
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(button)
+										.addComponent(lblNewLabel))
+								.addGap(9))
+						.addGroup(layout.createSequentialGroup().addGap(18)
+								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)))
+						.addGroup(layout.createSequentialGroup().addGap(30).addComponent(btnNewButton)
+								.addPreferredGap(ComponentPlacement.RELATED)))
+				.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE).addGap(18)
+				.addComponent(lblNewLabel_1).addGap(38)));
 
 		list = new JList();
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				try {
+
+					String urlSeleccionada = list.getSelectedValue().toString();
+
+					if (Metodos.pingURL(urlSeleccionada)) {
+						Scrapt.setjTextField1(Metodos.eliminarEspacios(textField.getText()));
+					}
+
+					else {
+						Metodos.mensaje(" La URL no existe", 3);
+					}
+				}
+
+				catch (NullPointerException e1) {
+					//
+				}
+
+			}
+		});
 		list.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		scrollPane.setViewportView(list);
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(633, 530));
+		setSize(new Dimension(588, 544));
 		setLocationRelativeTo(null);
 	}
 

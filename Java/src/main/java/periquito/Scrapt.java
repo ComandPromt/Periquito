@@ -690,6 +690,14 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 		setLocationRelativeTo(null);
 	}
 
+	public static javax.swing.JTextField getjTextField1() {
+		return jTextField1;
+	}
+
+	public static void setjTextField1(String texto) {
+		Scrapt.jTextField1.setText(texto);
+	}
+
 	public void actionPerformed(ActionEvent arg0) {
 		//
 	}

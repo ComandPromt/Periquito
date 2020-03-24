@@ -10,6 +10,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -28,13 +29,29 @@ public class Usuario extends javax.swing.JFrame implements ActionListener, Chang
 	private void initComponents() {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
 		setResizable(false);
 
-		JLabel lblNewLabel = new JLabel("perfil del usuario");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-
 		JButton btnNewButton = new JButton("ver perfil");
+
+		btnNewButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					new VerUser().setVisible(true);
+				}
+
+				catch (Exception e1) {
+					//
+				}
+
+			}
+
+		});
+
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		JLabel lblNewLabel_1 = new JLabel("Mostrar datatable para ver los usuarios");
@@ -42,18 +59,34 @@ public class Usuario extends javax.swing.JFrame implements ActionListener, Chang
 
 		JLabel lblNewLabel_2 = new JLabel(" y buscarlos por nombre");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JButton btnNewButton_1 = new JButton("Crear Usuarios");
+
+		JLabel lblNewLabel = new JLabel("Tabla para mostrar todos los usuarios");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addGap(59).addComponent(lblNewLabel))
-						.addGroup(layout.createSequentialGroup().addGap(37)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel_1)
-										.addComponent(btnNewButton).addComponent(lblNewLabel_2))))
-						.addContainerGap(161, Short.MAX_VALUE)));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(37)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout
+								.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel_2)
+										.addComponent(lblNewLabel_1))
+								.addContainerGap(259, Short.MAX_VALUE))
+						.addGroup(layout.createSequentialGroup().addGap(22).addGroup(layout
+								.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addContainerGap())
+								.addGroup(layout.createSequentialGroup().addComponent(btnNewButton)
+										.addPreferredGap(ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
+										.addComponent(btnNewButton_1).addGap(145)))))));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(26).addComponent(lblNewLabel).addGap(87)
-						.addComponent(btnNewButton).addGap(39).addComponent(lblNewLabel_1).addGap(18)
-						.addComponent(lblNewLabel_2).addContainerGap(35, Short.MAX_VALUE)));
+				.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGap(51).addComponent(lblNewLabel).addGap(42)
+										.addComponent(btnNewButton).addGap(65).addComponent(lblNewLabel_1).addGap(18)
+										.addComponent(lblNewLabel_2))
+								.addGroup(layout.createSequentialGroup().addGap(124).addComponent(btnNewButton_1)))
+						.addContainerGap(17, Short.MAX_VALUE)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(623, 305));
 		setLocationRelativeTo(null);

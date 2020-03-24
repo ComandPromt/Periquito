@@ -179,42 +179,52 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 
 		JLabel lblNewLabel_1 = new JLabel("Nombre del archivo (sin extension)");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+
+		JRadioButton rdbtnNewRadioButton_2 = new JRadioButton("Usar mysqldump");
+		rdbtnNewRadioButton_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		JRadioButton rdbtnNewRadioButton_3 = new JRadioButton("Usar Select");
+		rdbtnNewRadioButton_3.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup().addGap(23)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblNewLabel).addGroup(
-								Alignment.TRAILING,
-								layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton)
-												.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(rdbtnNewRadioButton_1)
-														.addComponent(txtpnMostrartablasDeBd, GroupLayout.DEFAULT_SIZE,
-																283, Short.MAX_VALUE)))
-										.addGroup(Alignment.LEADING, layout.createSequentialGroup()
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(lblEscribeLasTablas).addComponent(lblNewLabel_1))
-												.addGap(26)
-												.addGroup(layout.createParallelGroup(Alignment.LEADING)
-														.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 153,
-																Short.MAX_VALUE)
-														.addComponent(textField, GroupLayout.DEFAULT_SIZE, 153,
-																Short.MAX_VALUE)
-														.addComponent(btnNewButton))))
-										.addGap(96)))
-						.addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
+				.addGap(23)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING).addComponent(lblNewLabel).addGroup(layout
+						.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(rdbtnNewRadioButton).addComponent(rdbtnNewRadioButton_2)
+										.addComponent(rdbtnNewRadioButton_3))
+								.addPreferredGap(ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(rdbtnNewRadioButton_1).addComponent(txtpnMostrartablasDeBd,
+												GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)))
+								.addGroup(layout.createSequentialGroup()
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lblEscribeLasTablas).addComponent(lblNewLabel_1))
+										.addGap(26)
+										.addGroup(layout.createParallelGroup(Alignment.LEADING)
+												.addComponent(textField_1, GroupLayout.DEFAULT_SIZE, 233,
+														Short.MAX_VALUE)
+												.addComponent(textField, GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+												.addComponent(btnNewButton))))
+						.addGap(96)))
+				.addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21)
 						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton).addGap(8))
 								.addGroup(layout.createSequentialGroup().addComponent(rdbtnNewRadioButton_1)
 										.addPreferredGap(ComponentPlacement.UNRELATED)))
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel).addGap(8))
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(txtpnMostrartablasDeBd, GroupLayout.PREFERRED_SIZE, 138,
 												GroupLayout.PREFERRED_SIZE)
-										.addGap(18)))
+										.addGap(18))
+								.addGroup(layout.createSequentialGroup().addGap(30).addComponent(rdbtnNewRadioButton_2)
+										.addGap(18).addComponent(rdbtnNewRadioButton_3)
+										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
+										.addComponent(lblNewLabel).addGap(8)))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblEscribeLasTablas)
 								.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -240,5 +250,4 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 		// TODO Auto-generated method stub
 
 	}
-
 }

@@ -17,7 +17,6 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -41,6 +40,8 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 	JMenuItem mntmNewMenuItem_1;
 
+	JMenuItem mntmNewMenuItem;
+
 	private LinkedList<String> imagenes;
 
 	public static LinkedList<String> comprobacionSha;
@@ -52,6 +53,22 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	}
 
 	@SuppressWarnings("all")
+
+	private void reabrir(JFrame frmShaImages) {
+		try {
+			mntmNewMenuItem.setEnabled(true);
+			mntmNewMenuItem_1.setEnabled(true);
+
+			imagenes.clear();
+
+			new ComprobarSha().setVisible(true);
+
+			frmShaImages.dispose();
+
+		} catch (Exception e1) {
+			//
+		}
+	}
 
 	public void buscarArchivoConf() throws IOException {
 
@@ -98,6 +115,11 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 		try {
 
+			String carpeta = "";
+			if (!MenuPrincipal.getLecturaurl()[1].isEmpty()) {
+				carpeta = "/" + MenuPrincipal.getLecturaurl()[1];
+			}
+
 			JFrame frmShaImages = new JFrame();
 			frmShaImages.setResizable(false);
 			frmShaImages.getContentPane().setEnabled(false);
@@ -137,21 +159,20 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 				if (extension.equals("jpg") || extension.equals("png") || extension.equals("gif")) {
 
-					if (ComprobarSha.getComboBox().getSelectedIndex() == 0) {
-						sentenciaFinal = "WHERE sha256='" + ComprobarSha.getShaimages().get(x) + "'";
+					sentenciaFinal = "WHERE sha256='" + ComprobarSha.getShaimages().get(x) + "'";
 
-					} else {
-						sentenciaFinal = "WHERE image_media_file='" + ComprobarSha.getLectura().get(x) + "'";
-
-					}
-
-					ResultSet rs = s.executeQuery("select COUNT(image_id),image_id from "
+					ResultSet rs = s.executeQuery("select COUNT(image_id),image_id,cat_id,image_media_file from "
 							+ MenuPrincipal.getLecturabd()[3] + "images " + sentenciaFinal);
 					rs.next();
 
 					int recuento = Integer.parseInt(rs.getString("count(image_id)"));
 
-					if (recuento > 0) {
+					if (recuento > 0
+							&& Metodos.pingURL("http://" + MenuPrincipal.getLecturaurl()[0] + carpeta + "/data/media/" +
+
+									rs.getString("cat_id")
+
+									+ "/" + rs.getString("image_media_file"))) {
 
 						comprobacionSha = separador + "SI , su image_id es: " + rs.getString("image_id");
 
@@ -185,13 +206,17 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			mnNewMenu.setForeground(Color.BLACK);
 			mnNewMenu.setBackground(Color.WHITE);
 			mnNewMenu.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/config.png")));
-			mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 18));
+			mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 16));
 			menuBar.add(mnNewMenu);
 
-			JMenuItem mntmNewMenuItem = new JMenuItem("Eliminar imágenes duplicadas");
+			mntmNewMenuItem = new JMenuItem("Eliminar imágenes duplicadas");
+
 			mntmNewMenuItem.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/delete.png")));
+
 			mntmNewMenuItem.addMouseListener(new MouseAdapter() {
+
 				@Override
+
 				public void mousePressed(MouseEvent e) {
 
 					Metodos.eliminarArchivos(imagenesRepetidas,
@@ -199,14 +224,19 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 									ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
 									+ MenuPrincipal.getSeparador());
 
-					if (imagenes.size() == 0) {
-						mntmNewMenuItem_1.setEnabled(false);
+					mntmNewMenuItem.setEnabled(false);
+
+					if (imagenesRepetidas.size() == ComprobarSha.getRutas().size()) {
+
+						reabrir(frmShaImages);
+
 					}
 
-					Metodos.mensaje("Se han borrado correctamente todas las imágenes que ya están en el CMS", 2);
 				}
+
 			});
-			mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
+
+			mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 16));
 			mnNewMenu.add(mntmNewMenuItem);
 
 			JSeparator separator_6 = new JSeparator();
@@ -214,7 +244,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 			mntmNewMenuItem_1 = new JMenuItem("Mover para subir al CMS");
 			mntmNewMenuItem_1.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
-			mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+			mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 16));
 			mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
@@ -225,7 +255,13 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 								MenuPrincipal.getDirectorioImagenes(), true, 1);
 						frmShaImages.dispose();
 
-						Metodos.mensaje("Las imágenes se han movido correctamente", 2);
+						mntmNewMenuItem_1.setEnabled(false);
+
+						if (imagenes.size() == ComprobarSha.getRutas().size()) {
+
+							reabrir(frmShaImages);
+						}
+
 					}
 
 					catch (IOException e1) {
@@ -253,22 +289,34 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 			});
 			mntmNewMenuItem_2.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/view.png")));
-			mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+			mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 16));
 			mnNewMenu.add(mntmNewMenuItem_2);
 
-			JButton btnNewButton_1 = new JButton("Abrir carpeta");
-			menuBar.add(btnNewButton_1);
-			btnNewButton_1.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/folder.png")));
-			btnNewButton_1.setFont(new Font("Tahoma", Font.BOLD, 18));
+			JMenuItem mntmNewMenuItem_3 = new JMenuItem("Abrir Carpeta");
+			mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 18));
+			mntmNewMenuItem_3.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/folder.png")));
+			mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					try {
+						Metodos.abrirCarpeta(ComprobarSha.getRutas().get(0).substring(0,
+								ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
+								+ MenuPrincipal.getSeparador());
+					}
 
-			JButton btnNewButton_3 = new JButton("Comprobar de nuevo");
-			btnNewButton_3.setFont(new Font("Tahoma", Font.BOLD, 18));
-			btnNewButton_3.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
+					catch (IOException e1) {
+						//
+					}
+				}
+			});
+			menuBar.add(mntmNewMenuItem_3);
 
-			btnNewButton_3.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-
+			JMenuItem mntmNewMenuItem_4 = new JMenuItem("Volver a comprobar");
+			mntmNewMenuItem_4.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
+			mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.BOLD, 16));
+			mntmNewMenuItem_4.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
 					try {
 
 						imagenes.clear();
@@ -283,33 +331,8 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 						//
 					}
 				}
-
 			});
-
-			JSeparator separator_1 = new JSeparator();
-			menuBar.add(separator_1);
-			menuBar.add(btnNewButton_3);
-
-			JSeparator separator_2 = new JSeparator();
-			menuBar.add(separator_2);
-
-			btnNewButton_1.addMouseListener(new MouseAdapter() {
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-
-					try {
-						Metodos.abrirCarpeta(ComprobarSha.getRutas().get(0).substring(0,
-								ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
-								+ MenuPrincipal.getSeparador());
-					}
-
-					catch (IOException e1) {
-						//
-					}
-
-				}
-			});
+			menuBar.add(mntmNewMenuItem_4);
 
 			frmShaImages.setVisible(true);
 

@@ -16,11 +16,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TooManyListenersException;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
@@ -43,7 +41,6 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 	static List<String> lectura = new LinkedList<>();
 	static List<String> rutas = new LinkedList<>();
 	static List<String> shaimages = new LinkedList<>();
-	static JComboBox<?> comboBox;
 	static int tipo = 0;
 
 	public static int getTipo() {
@@ -104,8 +101,8 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 			}
 
-			Metodos.renombrarArchivos(ComprobarSha.getLectura(), ComprobarSha.getRutas().get(0).substring(0,
-					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1));
+			Metodos.renombrarArchivos(ComprobarSha.getRutas().get(0).substring(0,
+					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1), ".", false);
 
 			if (!lectura.isEmpty()) {
 
@@ -114,8 +111,13 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				switch (tipo) {
 
 				case 0:
-					new ImagenesSha();
+					try {
 
+						new ImagenesSha();
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					break;
 
 				case 1:
@@ -188,33 +190,23 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 		lblNewLabel.setIcon(new ImageIcon(ComprobarSha.class.getResource("/imagenes/import.png")));
 
-		comboBox = new JComboBox();
-		comboBox.setFont(new Font("Tahoma", Font.BOLD, 22));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "SHA", "Nombre" }));
-
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
 						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 377, GroupLayout.PREFERRED_SIZE).addGap(18)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(25, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(layout.createSequentialGroup().addGap(22)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 41,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 40,
-												GroupLayout.PREFERRED_SIZE))))
-				.addContainerGap(16, Short.MAX_VALUE)));
+						.addComponent(imagenes, GroupLayout.PREFERRED_SIZE, 377, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(171, Short.MAX_VALUE)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap()
+						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(lblNewLabel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup().addGap(22).addComponent(imagenes,
+										GroupLayout.PREFERRED_SIZE, 41, GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(32, Short.MAX_VALUE)));
 
 		getContentPane().setLayout(layout);
-		setSize(new Dimension(641, 134));
+		setSize(new Dimension(496, 134));
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
@@ -236,10 +228,6 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 			//
 		}
 
-	}
-
-	public static JComboBox<?> getComboBox() {
-		return comboBox;
 	}
 
 	public void actionPerformed(ActionEvent arg0) {

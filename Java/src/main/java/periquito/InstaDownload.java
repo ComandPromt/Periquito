@@ -1,6 +1,6 @@
 package periquito;
 
-import InstagramDownloader.FromInstagram;
+//import InstagramDownloader.FromInstagram;
 
 public class InstaDownload {
 
@@ -10,7 +10,7 @@ public class InstaDownload {
 			String url = "https://www.instagram.com/p/B4VK1d7oDKc";
 
 			// Specify the URL on parameter 1, and filename on parameter 2.
-			FromInstagram.downloadVideo(url, "filename.mp4");
+			// FromInstagram.downloadVideo(url, "filename.mp4");
 
 		} catch (Exception e) {
 			e.printStackTrace();

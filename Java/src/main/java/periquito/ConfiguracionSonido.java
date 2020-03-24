@@ -64,7 +64,8 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 			checkBox_1.setSelected(true);
 		}
 
-		sonidos = Metodos.directorio(MenuPrincipal.directorioActual + "sonidos" + MenuPrincipal.getSeparador(), "wav");
+		sonidos = Metodos.directorio(MenuPrincipal.directorioActual + "sonidos" + MenuPrincipal.getSeparador(), "wav",
+				1);
 
 		sonidos.remove("advertencia.wav");
 
