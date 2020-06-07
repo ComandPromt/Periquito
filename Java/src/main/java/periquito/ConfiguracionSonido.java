@@ -65,7 +65,7 @@ public class ConfiguracionSonido extends javax.swing.JFrame implements ActionLis
 		}
 
 		sonidos = Metodos.directorio(MenuPrincipal.directorioActual + "sonidos" + MenuPrincipal.getSeparador(), "wav",
-				1);
+				true);
 
 		sonidos.remove("advertencia.wav");
 

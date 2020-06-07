@@ -14,7 +14,7 @@ public abstract class DriverSelenium {
 	}
 
 	public void esperarElementoEsteVisibleById(String id) {
-		final WebDriverWait wait = new WebDriverWait(DriverSelenium.driver, 110);
+		final WebDriverWait wait = new WebDriverWait(DriverSelenium.driver, 999999999);
 		wait.until(ExpectedConditions.elementToBeClickable(By.partialLinkText(id))).click();
 	}
 

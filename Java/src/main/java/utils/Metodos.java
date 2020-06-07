@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.math.RoundingMode;
 import java.net.HttpURLConnection;
@@ -79,7 +77,7 @@ public abstract class Metodos {
 
 		LinkedList<String> imagenes = new <String>LinkedList();
 
-		imagenes = directorio(ruta, ".", 1);
+		imagenes = directorio(ruta, ".", true);
 
 		String extension, imagen;
 
@@ -123,7 +121,7 @@ public abstract class Metodos {
 
 	public static List<String> borrarArchivosDuplicados(String directorio) {
 
-		LinkedList<String> listaImagenes = directorio(directorio, ".", 1);
+		LinkedList<String> listaImagenes = directorio(directorio, ".", true);
 
 		LinkedList<String> listaImagenesSha = new LinkedList<String>();
 
@@ -603,71 +601,6 @@ public abstract class Metodos {
 
 	}
 
-	public static void postFile(File binaryFile, String imageNameOnServer, String username, String pass, int catId) {
-
-		try {
-
-			String url = "http://" + MenuPrincipal.getLecturaurl()[0] + "/" + MenuPrincipal.getLecturaurl()[1]
-					+ "/utility/index.php?username=" + username + "&pass=" + pass + "&cat_id=" + catId
-					+ "&nombre_imagen=" + imageNameOnServer;
-
-			String charset = "UTF-8";
-
-			String limite = Long.toHexString(System.currentTimeMillis());
-
-			String crlf = "\r\n";
-
-			URLConnection connection = new URL(url).openConnection();
-
-			connection.setDoOutput(true);
-
-			connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + limite);
-
-			OutputStream output = connection.getOutputStream();
-
-			PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
-
-			writer.append("--" + limite).append(crlf);
-			writer.append("Content-Disposition: form-data; name=\"imgname\"").append(crlf);
-			writer.append("Content-Type: text/plain; charset=" + charset).append(crlf);
-			writer.append(crlf).append(imageNameOnServer).append(crlf).flush();
-
-			writer.append("--" + limite).append(crlf);
-			writer.append("Content-Disposition: form-data; name=\"archivo\"; filename=\"" + binaryFile.getName() + "\"")
-					.append(crlf);
-			writer.append("Content-Type: " + URLConnection.guessContentTypeFromName(binaryFile.getName())).append(crlf);
-			writer.append("Content-Transfer-Encoding: binary").append(crlf);
-
-			writer.append(crlf).flush();
-
-			Files.copy(binaryFile.toPath(), output);
-
-			output.flush();
-
-			writer.append(crlf).flush();
-
-			writer.append("--" + limite + "--").append(crlf).flush();
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-			String inputLine;
-
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-
-			in.close();
-
-		}
-
-		catch (Exception ex) {
-			//
-		}
-
-	}
-
 	public static void descargarFoto(String enlace) throws IOException {
 
 		String folder = MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + "Downloads"
@@ -923,7 +856,7 @@ public abstract class Metodos {
 		if (!files.isEmpty()) {
 
 			LinkedList<String> listaImagenes = directorio(
-					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", 1);
+					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", true);
 
 			String busqueda;
 
@@ -1045,7 +978,7 @@ public abstract class Metodos {
 		if (files.length > 0) {
 
 			LinkedList<String> listaImagenes = directorio(
-					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", 1);
+					MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", true);
 
 			String busqueda;
 
@@ -2260,7 +2193,7 @@ public abstract class Metodos {
 
 	public static void eliminarArchivos(String ruta) {
 
-		LinkedList<String> frames = Metodos.directorio(ruta, ".", 1);
+		LinkedList<String> frames = Metodos.directorio(ruta, ".", true);
 
 		for (int i = 0; i < frames.size(); i++) {
 
@@ -2295,9 +2228,9 @@ public abstract class Metodos {
 
 			LinkedList<String> carpetas = new <String>LinkedList();
 
-			archivos = directorio(ruta, ".", 1);
+			archivos = directorio(ruta, ".", true);
 
-			carpetas = directorio(ruta, ".", 2);
+			carpetas = directorio(ruta, ".", false);
 
 			boolean numeroArchivos = false;
 
@@ -2305,7 +2238,7 @@ public abstract class Metodos {
 
 				for (int i = 0; i < carpetas.size(); i++) {
 
-					if (!numeroArchivos && directorio(ruta + carpetas.get(i) + separador, ".", 1).size() > 0) {
+					if (!numeroArchivos && directorio(ruta + carpetas.get(i) + separador, ".", true).size() > 0) {
 						numeroArchivos = true;
 						i = carpetas.size();
 					}
@@ -2801,7 +2734,7 @@ public abstract class Metodos {
 		}
 	}
 
-	public static LinkedList<String> directorio(String ruta, String extension, int filtro) {
+	public static LinkedList<String> directorio(String ruta, String extension, boolean filtro) {
 
 		LinkedList<String> lista = new LinkedList<>();
 
@@ -2825,7 +2758,7 @@ public abstract class Metodos {
 
 				folder = new File(ruta + fichero);
 
-				if (filtro == 1) {
+				if (filtro) {
 
 					if (folder.isFile()) {
 
@@ -3087,9 +3020,6 @@ public abstract class Metodos {
 		directorio = new File("Config/imagenes/bn");
 		directorio.mkdir();
 
-		directorio = new File("Config/imagenes/imagenes_duplicadas");
-		directorio.mkdir();
-
 		directorio = new File("Config/imagenes/imagenes_subidas");
 		directorio.mkdir();
 
@@ -3156,7 +3086,7 @@ public abstract class Metodos {
 
 	public static void conversion(String extension, String salida, String carpeta) {
 
-		LinkedList<String> listaImagenes = Metodos.directorio(carpeta, extension, 1);
+		LinkedList<String> listaImagenes = Metodos.directorio(carpeta, extension, true);
 
 		int resto = 3;
 
@@ -3180,7 +3110,7 @@ public abstract class Metodos {
 
 	public static void renombrarArchivos(String ruta, String filtro, boolean api) throws IOException {
 
-		List<String> list = directorio(ruta, filtro, 1);
+		List<String> list = directorio(ruta, filtro, true);
 
 		if (list.size() > 0) {
 

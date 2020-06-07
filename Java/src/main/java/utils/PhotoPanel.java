@@ -180,7 +180,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		LinkedList<String> listaImagenes = new LinkedList<>();
 
 		listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
-				+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".", 1);
+				+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".", true);
 
 		listaImagenes.sort(String::compareToIgnoreCase);
 
@@ -189,7 +189,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			int vueltas = 1;
 
 			listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
-					+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".", 1);
+					+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".", true);
 
 			count = 1;
 
@@ -222,8 +222,10 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 			String numero = "";
 
 			int y = Metodos
-					.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
-							+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador(), ".", 1)
+					.directorio(
+							directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
+									+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador(),
+							".", true)
 					.size() + 1;
 
 			for (int x = 0; x < vueltas; x++) {
@@ -293,7 +295,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 					listaImagenes = Metodos.directorio(
 							directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar"
 									+ MenuPrincipal.getSeparador() + "recortes" + MenuPrincipal.getSeparador(),
-							".", 1);
+							".", true);
 
 					for (int x = 0; x < listaImagenes.size(); x++) {
 						Files.move(

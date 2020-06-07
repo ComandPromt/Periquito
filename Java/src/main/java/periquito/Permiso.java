@@ -44,7 +44,7 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 		initComponents();
 
-		permisos  = Metodos.leerArchivo("Permisos.txt",4,"2\r\n" + "1\r\n" + "1\r\n" + "1",false);
+		permisos = Metodos.leerArchivo("Permisos.txt", 4, "2\r\n" + "1\r\n" + "1\r\n" + "1", false);
 
 		try {
 
