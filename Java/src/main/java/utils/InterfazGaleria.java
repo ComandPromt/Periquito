@@ -23,7 +23,6 @@ import javax.swing.SwingConstants;
 
 import periquito.MenuPrincipal;
 
-@SuppressWarnings("serial")
 public class InterfazGaleria extends JFrame {
 
 	transient Galeria miGaleria = new Galeria();

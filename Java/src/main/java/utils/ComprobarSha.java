@@ -29,8 +29,6 @@ import javax.swing.event.ChangeListener;
 import periquito.MenuPrincipal;
 import periquito.ModificarDatos;
 
-@SuppressWarnings("serial")
-
 public class ComprobarSha extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
 
 	private JTextArea imagenes = new JTextArea();
@@ -111,6 +109,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				switch (tipo) {
 
 				case 0:
+
 					try {
 
 						new ImagenesSha();
@@ -118,6 +117,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+
 					break;
 
 				case 1:
@@ -159,23 +159,30 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 	}
 
-	@SuppressWarnings("all")
-
 	public void initComponents() throws IOException {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
 		setResizable(false);
+
 		imagenes.setText("  Arrastra los archivos aqui");
+
 		imagenes.setForeground(Color.DARK_GRAY);
+
 		imagenes.setFont(new Font("Tahoma", Font.BOLD, 24));
+
 		imagenes.setEditable(false);
+
 		imagenes.setBackground(Color.WHITE);
 
 		JLabel lblNewLabel = new JLabel("");
 
 		lblNewLabel.addMouseListener(new MouseAdapter() {
+
 			@Override
+
 			public void mousePressed(MouseEvent arg0) {
 
 				File[] files = Metodos.seleccionar(2, "Imagen & Video",
@@ -186,11 +193,13 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				}
 
 			}
+
 		});
 
 		lblNewLabel.setIcon(new ImageIcon(ComprobarSha.class.getResource("/imagenes/import.png")));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(21).addComponent(lblNewLabel)
 						.addPreferredGap(ComponentPlacement.RELATED)
@@ -206,7 +215,9 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 						.addContainerGap(32, Short.MAX_VALUE)));
 
 		getContentPane().setLayout(layout);
+
 		setSize(new Dimension(496, 134));
+
 		setLocationRelativeTo(null);
 
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");

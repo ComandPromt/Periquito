@@ -5,11 +5,11 @@ public class DriverSeleniumChrome extends DriverSelenium {
 	public DriverSeleniumChrome() {
 
 		if (MenuPrincipal.getOs().equals("Linux")) {
-			System.setProperty("webdriver.chrome.driver", "chromedriver/Linux/chromedriver");
+			System.setProperty("webdriver.gecko.driver", "geckodriver");
 		}
 
 		else {
-			System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
+			System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
 		}
 
 	}

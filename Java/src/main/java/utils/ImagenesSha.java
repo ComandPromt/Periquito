@@ -32,8 +32,6 @@ import javax.swing.table.DefaultTableModel;
 import periquito.Config2;
 import periquito.MenuPrincipal;
 
-@SuppressWarnings("all")
-
 public class ImagenesSha extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	static LinkedList<String> imagenesRepetidas = new LinkedList<>();
@@ -51,8 +49,6 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	private JFrame getFrame() {
 		return this;
 	}
-
-	@SuppressWarnings("all")
 
 	private void reabrir(JFrame frmShaImages) {
 		try {
@@ -145,6 +141,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			table.setRowHeight(60);
 
 			conexion = Metodos.conexionBD();
+
 			Statement s = conexion.createStatement();
 
 			String sentenciaFinal, comprobacionSha;

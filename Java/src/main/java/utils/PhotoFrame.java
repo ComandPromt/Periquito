@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.AffineTransformOp;
@@ -26,15 +28,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import periquito.MenuPrincipal;
 
 @SuppressWarnings("serial")
+
 public class PhotoFrame extends javax.swing.JFrame {
 
 	static JRadioButtonMenuItem rdbtnmntmNewRadioItem = new JRadioButtonMenuItem("Simple");
 
 	static JRadioButtonMenuItem rdbtnmntmNewRadioItem_2 = new JRadioButtonMenuItem("Multiple");
+
 	static PhotoPanel photoPanel = new PhotoPanel();
+
 	javax.swing.JMenu jMenu1;
+
 	javax.swing.JMenuBar jMenuBar1;
+
 	javax.swing.JMenuItem jMenuItem1;
+
 	static javax.swing.JPanel jPanel1;
 
 	public static javax.swing.JPanel getjPanel1() {
@@ -46,7 +54,9 @@ public class PhotoFrame extends javax.swing.JFrame {
 	static JFileChooser fileChooser = new JFileChooser();
 
 	int angulo = 90;
+
 	transient BufferedImage img;
+
 	transient BufferedImage dst;
 
 	public static BufferedImage rotacionImagen(BufferedImage origen, double grados) {
@@ -107,8 +117,23 @@ public class PhotoFrame extends javax.swing.JFrame {
 	}
 
 	public PhotoFrame() {
-		setResizable(false);
-		setType(Type.POPUP);
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						photoPanel.guardar();
+					}
+
+				}
+
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+
 		photoPanel.setBackground(Color.WHITE);
 		photoPanel.setForeground(Color.WHITE);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PhotoFrame.class.getResource("/imagenes/crop.png")));
@@ -126,7 +151,42 @@ public class PhotoFrame extends javax.swing.JFrame {
 	private void initComponents() {
 
 		jScrollPane1 = new javax.swing.JScrollPane();
+		jScrollPane1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						photoPanel.guardar();
+					}
+
+				}
+
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		});
 		jPanel1 = new javax.swing.JPanel();
+		jPanel1.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				try {
+
+					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+						photoPanel.guardar();
+					}
+
+				}
+
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		});
 		jMenuBar1 = new javax.swing.JMenuBar();
 		jMenuBar1.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		jMenu1 = new javax.swing.JMenu();
@@ -325,7 +385,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 			public void mousePressed(MouseEvent e) {
 				try {
 					Metodos.abrirCarpeta(MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador()
-							+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + "recortes");
+							+ "imagenes_para_recortar");
 				} catch (IOException e1) {
 					//
 				}
@@ -437,5 +497,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 			}
 
 		});
+
 	}
+
 }

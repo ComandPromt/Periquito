@@ -18,12 +18,12 @@ import javax.swing.event.ChangeListener;
 public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	public About() {
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
 		setTitle("Periquito v3 About");
 		setType(Type.UTILITY);
 		initComponents();
 		this.setVisible(true);
-
 	}
 
 	private void initComponents() {

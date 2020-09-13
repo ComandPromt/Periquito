@@ -1,9 +1,6 @@
 package periquito;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class DriverSelenium {
 
@@ -11,11 +8,6 @@ public abstract class DriverSelenium {
 
 	public WebDriver getDriver() {
 		return DriverSelenium.driver;
-	}
-
-	public void esperarElementoEsteVisibleById(String id) {
-		final WebDriverWait wait = new WebDriverWait(DriverSelenium.driver, 999999999);
-		wait.until(ExpectedConditions.elementToBeClickable(By.partialLinkText(id))).click();
 	}
 
 }

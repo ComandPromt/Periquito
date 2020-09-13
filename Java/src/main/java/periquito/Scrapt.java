@@ -454,12 +454,14 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 							paso = 1;
 						}
 
-						if (imagen > 0 && de > 0 && hasta > 0 && paso > 0) {
+						if (imagen > 0 && de >= 0 && hasta > 0 && paso > 0) {
 
 							for (int contador = de; contador <= hasta; contador += paso) {
 
-								obtenerEnlaces(Metodos.eliminarEspacios(jTextField1.getText() + contador), 2,
-										"tbl-border", "tbl1");
+								obtenerEnlaces(Metodos.eliminarEspacios(
+										"http://www.hoopfetish.com/forum/viewthread.php?thread_id=72&rowstart="
+												+ contador),
+										2, "tbl-border", "tbl1");
 
 							}
 
@@ -505,6 +507,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 										+ txtHttp.getText() + "%' AND tag='" + etiqueta + "' ORDER BY comment_id ASC");
 
 								Metodos.mensaje("Se han insertado " + urls.size() + " URLs!", 2);
+
 							}
 
 							conexion.close();
@@ -523,12 +526,8 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 				}
 
-				catch (NumberFormatException e1) {
-					Metodos.mensaje("Por favor, inserta los campos con su valor adecuado", 3);
-				}
-
 				catch (Exception e1) {
-					//
+					e1.printStackTrace();
 				}
 
 			}
