@@ -192,9 +192,9 @@ public class PhotoFrame extends javax.swing.JFrame {
 		jMenu1 = new javax.swing.JMenu();
 		jMenu1.setForeground(Color.BLACK);
 		jMenu1.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/insert.png")));
-		jMenu1.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		jMenu1.setFont(new Font("Dialog", Font.BOLD, 24));
 		jMenuItem1 = new javax.swing.JMenuItem();
-		jMenuItem1.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		jMenuItem1.setFont(new Font("Dialog", Font.PLAIN, 16));
 		jMenuItem1.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/abrir.png")));
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

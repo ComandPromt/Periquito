@@ -790,16 +790,19 @@ public abstract class Metodos {
 
 	public static boolean probarconexion(String web) throws IOException {
 
-		String dirWeb = web;
 		int puerto = 80;
-		Socket s = new Socket(dirWeb, puerto);
+
+		Socket s = new Socket(web, puerto);
+
 		boolean resultado = false;
 
 		try {
 
 			if (s.isConnected()) {
 				resultado = true;
-			} else {
+			}
+
+			else {
 				resultado = false;
 			}
 
@@ -845,11 +848,16 @@ public abstract class Metodos {
 	}
 
 	public static void moverArchivos(LinkedList<String> files, String separador, String destino, boolean mensaje,
+
 			int tipo) throws IOException {
 		try {
+
 			String imagen;
+
 			String comprobacion;
+
 			boolean filtro = false;
+
 			String origen;
 
 			if (!files.isEmpty()) {
@@ -876,7 +884,6 @@ public abstract class Metodos {
 						lista.add("jpg");
 						lista.add("peg");
 						lista.add("png");
-						lista.add("gif");
 						lista.add("webp");
 						break;
 
@@ -892,6 +899,10 @@ public abstract class Metodos {
 						lista.add("mov");
 						lista.add("wmv");
 
+						break;
+
+					case 3:
+						lista.add("gif");
 						break;
 
 					default:
@@ -918,6 +929,7 @@ public abstract class Metodos {
 						else {
 
 							busqueda = origen.substring(origen.lastIndexOf(separador) + 1, origen.length());
+
 							busqueda = eliminarPuntos(busqueda);
 
 							salida = origen.substring(0, origen.lastIndexOf(separador)) + separador + busqueda;
@@ -963,7 +975,7 @@ public abstract class Metodos {
 		}
 
 		catch (Exception e) {
-
+			//
 		}
 
 	}
@@ -2512,8 +2524,11 @@ public abstract class Metodos {
 	public static int numeroLineas(String fichero) throws FileNotFoundException {
 
 		File input = new File("Config/" + fichero);
+
 		Scanner iterate;
+
 		int numLines = 0;
+
 		iterate = new Scanner(input);
 
 		try {
@@ -2596,80 +2611,90 @@ public abstract class Metodos {
 	}
 
 	public static void crearCarpetasConfig() {
+		try {
+			if (!MenuPrincipal.getLectura()[0].isEmpty()) {
 
-		if (!MenuPrincipal.getLectura()[0].isEmpty()) {
+				String carpeta = formatearRuta();
 
-			String carpeta = formatearRuta();
+				String ruta = carpeta + MenuPrincipal.getSeparador() + "Hacer_gif";
 
-			String ruta = carpeta + MenuPrincipal.getSeparador() + "Hacer_gif";
+				File directorio = new File(ruta);
 
-			File directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Hacer_gif" + MenuPrincipal.getSeparador() + "frames";
 
-			ruta = carpeta + MenuPrincipal.getSeparador() + "Hacer_gif" + MenuPrincipal.getSeparador() + "frames";
+				directorio = new File(ruta);
 
-			directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Hacer_gif" + MenuPrincipal.getSeparador() + "Output";
 
-			ruta = carpeta + MenuPrincipal.getSeparador() + "Hacer_gif" + MenuPrincipal.getSeparador() + "Output";
+				directorio = new File(ruta);
 
-			directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Gif_extractor";
 
-			ruta = carpeta + MenuPrincipal.getSeparador() + "Gif_extractor";
+				directorio = new File(ruta);
 
-			directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Gif_extractor" + MenuPrincipal.getSeparador()
+						+ "output";
 
-			ruta = carpeta + MenuPrincipal.getSeparador() + "Gif_extractor" + MenuPrincipal.getSeparador() + "output";
+				directorio = new File(ruta);
 
-			directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Frame_Extractor";
 
-			ruta = carpeta + MenuPrincipal.getSeparador() + "Frame_Extractor";
+				directorio = new File(ruta);
 
-			directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Frame_Extractor" + MenuPrincipal.getSeparador()
+						+ "output";
 
-			ruta = carpeta + MenuPrincipal.getSeparador() + "Frame_Extractor" + MenuPrincipal.getSeparador() + "output";
+				directorio = new File(ruta);
 
-			directorio = new File(ruta);
+				directorio.mkdir();
 
-			directorio.mkdir();
-
+			}
+		} catch (Exception e) {
 		}
-
 	}
 
 	public static void crearFichero(String ruta, String texto, boolean carpeta) throws IOException {
 
 		File archivo = new File(ruta);
+		try {
+			if (carpeta) {
 
-		if (carpeta) {
+				if (!archivo.exists()) {
+					archivo.mkdir();
+				}
 
-			if (!archivo.exists()) {
-				archivo.mkdir();
 			}
 
-		}
+			else {
 
-		else {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
 
-			BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
+				try {
+					bw.write(texto);
+				}
 
-			try {
-				bw.write(texto);
+				finally {
+					bw.close();
+				}
 			}
+		} catch (Exception e) {
 
-			finally {
-				bw.close();
-			}
+			Metodos.crearCarpetas();
+
+			Metodos.crearCarpetasConfig();
+
 		}
 	}
 
@@ -2871,7 +2896,13 @@ public abstract class Metodos {
 						}
 
 						else {
-							lista.add(fichero);
+
+							fichero = fichero.trim();
+
+							if (!fichero.isEmpty()) {
+								lista.add(fichero);
+							}
+
 						}
 
 					}
@@ -3096,6 +3127,9 @@ public abstract class Metodos {
 		directorio.mkdir();
 
 		directorio = new File("Config/imagenes/bn");
+		directorio.mkdir();
+
+		directorio = new File("Config/imagenes/Gif_extractor");
 		directorio.mkdir();
 
 		directorio = new File("Config/imagenes/imagenes_subidas");
@@ -3427,7 +3461,9 @@ public abstract class Metodos {
 	public static String saberCategoria(int categoria) {
 
 		ResultSet rs;
+
 		Connection conexion;
+
 		Statement s;
 
 		String resultado = "";

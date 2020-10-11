@@ -227,177 +227,184 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 	}
 
 	private void saveImage() throws Exception {
+		try {
+			listaImagenes.clear();
 
-		listaImagenes.clear();
+			listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
+					+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".", true, false);
 
-		listaImagenes = Metodos.directorio(directorioActual + "Config" + MenuPrincipal.getSeparador()
-				+ "imagenes_para_recortar" + MenuPrincipal.getSeparador(), ".", true, false);
+			listaImagenes.sort(String::compareToIgnoreCase);
 
-		listaImagenes.sort(String::compareToIgnoreCase);
+			if (!listaImagenes.isEmpty()) {
 
-		if (!listaImagenes.isEmpty()) {
+				int vueltas = 1;
 
-			int vueltas = 1;
+				count = 1;
 
-			count = 1;
+				int numeroImagen = Metodos.listarFicherosPorCarpeta(new File(carpetaRecortes));
 
-			int numeroImagen = Metodos.listarFicherosPorCarpeta(new File(carpetaRecortes));
+				if (numeroImagen > 0) {
 
-			if (numeroImagen > 0) {
-
-				count += numeroImagen;
-			}
-
-			if (PhotoFrame.rdbtnmntmNewRadioItem_2.isSelected()) {
-
-				vueltas = listaImagenes.size();
-			}
-
-			else {
-
-				String imagenSelecionada = PhotoFrame.fileChooser.getSelectedFile().toString();
-
-				imagenSelecionada = imagenSelecionada.substring(
-						imagenSelecionada.lastIndexOf(MenuPrincipal.getSeparador()) + 1, imagenSelecionada.length());
-
-				listaImagenes.set(0, imagenSelecionada);
-			}
-
-			String extension;
-
-			String numero = "";
-
-			int y = Metodos.directorio(carpetaRecortes + MenuPrincipal.getSeparador(), ".", true, false).size() + 1;
-
-			for (int x = 0; x < vueltas; x++) {
-
-				extension = listaImagenes.get(x).substring(listaImagenes.get(x).length() - 3,
-						listaImagenes.get(x).length());
-
-				if (extension.equals("peg")) {
-					extension = "jpg";
+					count += numeroImagen;
 				}
 
-				photo = ImageIO.read(new File(directorioActual + "Config" + MenuPrincipal.getSeparador()
-						+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + listaImagenes.get(x)));
-				tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
-						(int) clipHeight);
+				if (PhotoFrame.rdbtnmntmNewRadioItem_2.isSelected()) {
 
-				if (y < 10) {
-					numero = "000" + y;
+					vueltas = listaImagenes.size();
 				}
 
 				else {
 
-					if (y >= 10 && y < 100) {
-						numero = "00" + y;
-					} else {
+					String imagenSelecionada = PhotoFrame.fileChooser.getSelectedFile().toString();
 
-						if (y >= 100 && y < 1000) {
-							numero = "0" + y;
+					imagenSelecionada = imagenSelecionada.substring(
+							imagenSelecionada.lastIndexOf(MenuPrincipal.getSeparador()) + 1,
+							imagenSelecionada.length());
+
+					listaImagenes.set(0, imagenSelecionada);
+				}
+
+				String extension;
+
+				String numero = "";
+
+				int y = Metodos.directorio(carpetaRecortes + MenuPrincipal.getSeparador(), ".", true, false).size() + 1;
+
+				for (int x = 0; x < vueltas; x++) {
+
+					extension = listaImagenes.get(x).substring(listaImagenes.get(x).length() - 3,
+							listaImagenes.get(x).length());
+
+					if (extension.equals("peg")) {
+						extension = "jpg";
+					}
+
+					photo = ImageIO.read(new File(directorioActual + "Config" + MenuPrincipal.getSeparador()
+							+ "imagenes_para_recortar" + MenuPrincipal.getSeparador() + listaImagenes.get(x)));
+					tmpRecorte = ((BufferedImage) photo).getSubimage((int) clipX, (int) clipY, (int) clipWidth,
+							(int) clipHeight);
+
+					if (y < 10) {
+						numero = "000" + y;
+					}
+
+					else {
+
+						if (y >= 10 && y < 100) {
+							numero = "00" + y;
 						} else {
-							numero = "" + y;
+
+							if (y >= 100 && y < 1000) {
+								numero = "0" + y;
+							} else {
+								numero = "" + y;
+							}
 						}
 					}
+
+					y++;
+
+					ImageIO.write(tmpRecorte, extension, new File(
+							carpetaRecortes + MenuPrincipal.getSeparador() + "Image_" + numero + "." + extension));
 				}
 
-				y++;
+				PhotoFrame.photoPanel.photo = null;
 
-				ImageIO.write(tmpRecorte, extension,
-						new File(carpetaRecortes + MenuPrincipal.getSeparador() + "Image_" + numero + "." + extension));
-			}
+				int n = 2;
 
-			PhotoFrame.photoPanel.photo = null;
+				Metodos.renombrarArchivos(MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".",
+						true);
 
-			int n = 2;
+				--y;
 
-			Metodos.renombrarArchivos(MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), ".", true);
+				if (PhotoFrame.rdbtnmntmNewRadioItem_2.isSelected() && y > 0 && y <= 170) {
 
-			--y;
+					int numerOpcion = 0;
 
-			if (PhotoFrame.rdbtnmntmNewRadioItem_2.isSelected() && y > 1 && y <= 170) {
+					listaImagenes.clear();
 
-				int numerOpcion = 0;
+					listaImagenes = Metodos.directorio(carpetaRecortes + MenuPrincipal.getSeparador(), ".", true, true);
 
-				listaImagenes.clear();
+					String[] options = { "<html><h2>[1] Subir al CMS</h2></html>",
+							"<html><h2>[2] Mover a la carpeta imagenes</h2></html>",
+							"<html><h2>[3] Hacer GIF</h2></html>",
+							"<html><h2>[4] Abrir imagenes para recortar</h2></html>",
+							"<html><h2>[5] Abrir carpeta de salida</h2></html>",
+							"<html><h2>[6] Borrar imagenes para recortar</h2></html>" };
 
-				listaImagenes = Metodos.directorio(carpetaRecortes + MenuPrincipal.getSeparador(), ".", true, true);
+					ImageIcon icon = new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png"));
 
-				String[] options = { "<html><h2>[1] Subir al CMS</h2></html>",
-						"<html><h2>[2] Mover a la carpeta imagenes</h2></html>", "<html><h2>[3] Hacer GIF</h2></html>",
-						"<html><h2>[4] Abrir imagenes para recortar</h2></html>",
-						"<html><h2>[5] Abrir carpeta de salida</h2></html>",
-						"<html><h2>[6] Borrar imagenes para recortar</h2></html>" };
+					String opcion = (String) JOptionPane.showInputDialog(null, "", "Seleccione una opcion",
+							JOptionPane.QUESTION_MESSAGE, icon, options, options[0]);
 
-				ImageIcon icon = new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png"));
+					opcion = opcion.replace("<html><h2>[", "");
 
-				String opcion = (String) JOptionPane.showInputDialog(null, "", "Seleccione una opcion",
-						JOptionPane.QUESTION_MESSAGE, icon, options, options[0]);
+					numerOpcion = Integer.parseInt(opcion.substring(0, 1));
 
-				opcion = opcion.replace("<html><h2>[", "");
+					switch (numerOpcion) {
 
-				numerOpcion = Integer.parseInt(opcion.substring(0, 1));
+					case 1:
 
-				switch (numerOpcion) {
+						Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(),
+								MenuPrincipal.getDirectorioImagenes(), false, 1);
 
-				case 1:
+						MenuPrincipal.uploadImages();
 
-					Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(),
-							MenuPrincipal.getDirectorioImagenes(), false, 1);
+						break;
 
-					MenuPrincipal.uploadImages();
+					case 2:
 
-					break;
+						Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(),
+								MenuPrincipal.getDirectorioImagenes(), false, 1);
+						break;
 
-				case 2:
+					case 3:
 
-					Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(),
-							MenuPrincipal.getDirectorioImagenes(), false, 1);
-					break;
+						prepararGif(directorioActual);
 
-				case 3:
+						break;
 
-					prepararGif(directorioActual);
+					case 4:
+						Metodos.abrirCarpeta(
+								directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
+						break;
 
-					break;
+					case 5:
+						numerOpcion = 0;
+						break;
 
-				case 4:
-					Metodos.abrirCarpeta(
-							directorioActual + "Config" + MenuPrincipal.getSeparador() + "imagenes_para_recortar");
-					break;
+					case 6:
+						Metodos.eliminarArchivos(directorioActual + "Config" + MenuPrincipal.getSeparador()
+								+ "imagenes_para_recortar" + MenuPrincipal.getSeparador());
+						break;
 
-				case 5:
-					numerOpcion = 0;
-					break;
+					}
 
-				case 6:
-					Metodos.eliminarArchivos(directorioActual + "Config" + MenuPrincipal.getSeparador()
-							+ "imagenes_para_recortar" + MenuPrincipal.getSeparador());
-					break;
+					if (n > 0 && numerOpcion == 0) {
 
-				}
+						Metodos.abrirCarpeta(carpetaRecortes);
 
-				if (n > 0 && numerOpcion == 0) {
-
-					Metodos.abrirCarpeta(carpetaRecortes);
+					}
 
 				}
 
-			}
+				else {
 
-			else {
+					Metodos.mensaje("Las imágenes deben estar en la carpeta imágenes_para_recortar", 2);
 
-				Metodos.mensaje("Las imágenes deben estar en la carpeta imágenes_para_recortar", 2);
+					PhotoFrame.photoPanel.setBackground(Color.WHITE);
 
-				PhotoFrame.photoPanel.setBackground(Color.WHITE);
+					PhotoFrame.photoPanel.setForeground(Color.WHITE);
 
-				PhotoFrame.photoPanel.setForeground(Color.WHITE);
+					PhotoFrame.getjPanel1().add(PhotoFrame.photoPanel);
 
-				PhotoFrame.getjPanel1().add(PhotoFrame.photoPanel);
-
+				}
 			}
 		}
 
+		catch (Exception e) {
+
+		}
 	}
 
 	private void prepararGif(String directorioActual) throws IOException {

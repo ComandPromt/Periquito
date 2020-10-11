@@ -52,7 +52,6 @@ import javax.swing.event.ChangeListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -237,6 +236,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JSeparator separator_16;
 
+	private static boolean subir = false;
+
 	private JMenuItem mntmNewMenuItem_13;
 
 	private JSeparator separator_17;
@@ -276,6 +277,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem_23;
 
 	private JSeparator separator_24;
+	private JMenuItem mntmNewMenuItem_24;
+	private JSeparator separator_25;
+	private JSeparator separator_26;
 
 	private void abrirCarpetaGif() throws IOException {
 
@@ -441,51 +445,54 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	public static void uploadImages() throws IOException {
 
-		Runtime.getRuntime().exec("python web_to_png.py");
+		try {
 
-		task.cancel();
-
-		task = new CronWebp();
-		timer = new Timer();
-		timer.schedule(task, 0, 1000);
-
-		if (crontabWebp != null && crontabWebp.equals("finish")) {
+			Runtime.getRuntime().exec("python web_to_png.py");
 
 			task.cancel();
 
-			timer.cancel();
+			task = new CronWebp();
 
-			timer.purge();
+			timer = new Timer();
 
-			claves.clear();
+			timer.schedule(task, 0, 1000);
 
-			valores.clear();
+			if (crontabWebp != null && crontabWebp.equals("finish")) {
 
-			imagenesMeta.clear();
+				task.cancel();
 
-			Metodos.crearCarpetas();
+				timer.cancel();
 
-			File file = new File(directorioActual + "geckodriver.exe");
+				timer.purge();
 
-			if (os.contains("Win") && !file.exists()) {
+				claves.clear();
 
-				Metodos.mensaje("Debes tener el archivo geckodriver.exe en la raíz del programa", 3);
-			}
+				valores.clear();
 
-			file = new File(directorioActual + "geckodriver");
+				imagenesMeta.clear();
 
-			if (os.contains("Linux") && !file.exists()) {
+				Metodos.crearCarpetas();
 
-				Metodos.mensaje("Debes tener el archivo geckodriver en la raíz del programa", 3);
-			}
+				File file = new File(directorioActual + "geckodriver.exe");
 
-			if (MenuPrincipal.textField.getText().isEmpty()) {
-				Metodos.mensaje("Por favor, introduzca el nombre común de las imágenes", 3);
-			}
+				if (os.contains("Win") && !file.exists()) {
 
-			else {
+					Metodos.mensaje("Debes tener el archivo geckodriver.exe en la raíz del programa", 3);
+				}
 
-				try {
+				file = new File(directorioActual + "geckodriver");
+
+				if (os.contains("Linux") && !file.exists()) {
+
+					Metodos.mensaje("Debes tener el archivo geckodriver en la raíz del programa", 3);
+				}
+
+				if (MenuPrincipal.textField.getText().isEmpty()) {
+
+					Metodos.mensaje("Por favor, introduzca el nombre común de las imágenes", 3);
+				}
+
+				else {
 
 					Metodos.borrarArchivosDuplicados(directorioImagenes + separador);
 
@@ -561,6 +568,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 							if (resp == 0) {
 
+								subir = true;
+
 								Metodos.cerrarNavegador();
 
 								configuracion = Metodos.leerFicheroArray("Configuracion.txt", 7);
@@ -607,6 +616,11 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 								}
 							}
+
+							else {
+								subir = false;
+							}
+
 						}
 
 					}
@@ -615,12 +629,22 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					MenuPrincipal.imagenesSubidas.clear();
 
-				} catch (Exception e2) {
-					//
 				}
 			}
-		}
 
+			if (subir && Metodos.listarFicherosPorCarpeta(new File(directorioImagenes), ".") > 0) {
+
+				progreso = new Progreso();
+
+				progreso.setVisible(false);
+
+				uploadImages();
+				subir = false;
+			}
+
+		} catch (Exception e2) {
+			Metodos.mensaje("Error al subir las imágenes", 1);
+		}
 	}
 
 	public static void setCategorias(String string) {
@@ -1461,6 +1485,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				try {
 
+					Metodos.mensaje("Espere mientras se hacen los gifs", 2);
+
 					Runtime.getRuntime().exec("python video_gif.py");
 
 					task.cancel();
@@ -1744,7 +1770,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		mnNewMenu_4 = new JMenu("Administrar");
 		mnNewMenu_4.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		mnNewMenu_4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
+		mnNewMenu_4.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/user_pass.png")));
 		mnAcciones.add(mnNewMenu_4);
 
 		mntmNewMenuItem_3 = new JMenuItem("Categorías");
@@ -1851,22 +1877,67 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mnAcciones.add(separator_23);
 
 		mnNewMenu_7 = new JMenu("Utilidades");
+		mnNewMenu_7.setFont(new Font("Dialog", Font.PLAIN, 20));
+		mnNewMenu_7.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
 		mnAcciones.add(mnNewMenu_7);
 
 		mntmNewMenuItem_20 = new JMenuItem("Crear carpetas");
+		mntmNewMenuItem_20.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
 		mnNewMenu_7.add(mntmNewMenuItem_20);
 		mntmNewMenuItem_20.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+
+		separator_25 = new JSeparator();
+		mnNewMenu_7.add(separator_25);
 
 		mntmNewMenuItem_21 = new JMenuItem("Descomprimir zip");
 		mntmNewMenuItem_21.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		mnNewMenu_7.add(mntmNewMenuItem_21);
 
+		separator_26 = new JSeparator();
+		mnNewMenu_7.add(separator_26);
+
 		mntmNewMenuItem_22 = new JMenuItem("Actualizar");
-		mnNewMenu_7.add(mntmNewMenuItem_22);
-		mntmNewMenuItem_20.addMouseListener(new MouseAdapter() {
+		mntmNewMenuItem_22.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//
+
+				try {
+					actualizar();
+				}
+
+				catch (IOException e1) {
+
+					// ;
+				}
+
+			}
+
+		});
+
+		mntmNewMenuItem_22.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/actualizar.png")));
+
+		mnNewMenu_7.add(mntmNewMenuItem_22);
+
+		mntmNewMenuItem_20.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				try {
+
+					ArrayList<String> categorias = Metodos.verCategorias();
+
+					for (int i = 0; i < categorias.size(); i++) {
+
+						File directorio = new File(directorioImagenes + separador + categorias.get(i));
+
+						directorio.mkdir();
+					}
+
+				} catch (Exception e1) {
+					//
+				}
+
 			}
 		});
 
@@ -2037,6 +2108,34 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		separator10 = new JSeparator();
 		mnNewMenu1.add(separator10);
 
+		mntmNewMenuItem_24 = new JMenuItem("Video 2 GIF");
+
+		mntmNewMenuItem_24.addMouseListener(new MouseAdapter() {
+
+			@Override
+
+			public void mousePressed(MouseEvent e) {
+
+				try {
+
+					String carpeta = Metodos.formatearRuta();
+
+					carpeta += separador + "Video_2_Gif";
+
+					Metodos.comprobarConexion("Config/Config.txt", carpeta);
+
+				} catch (IOException e1) {
+					//
+				}
+
+			}
+
+		});
+
+		mntmNewMenuItem_24.setFont(new Font("Dialog", Font.PLAIN, 20));
+		mntmNewMenuItem_24.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/video_2_gif.gif")));
+		mnNewMenu1.add(mntmNewMenuItem_24);
+
 		mnNewMenu_6 = new JMenu("Ver");
 		mnNewMenu_6.setFont(new Font("Segoe UI", Font.PLAIN, 24));
 		mnNewMenu_6.setForeground(Color.BLACK);
@@ -2060,7 +2159,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mnNewMenu_6.add(mntmNewMenuItem_18);
 
 		mnConfig = new JMenu("Config  ");
-		mnConfig.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/fix.png")));
+		mnConfig.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/config.png")));
 		mnConfig.setForeground(Color.BLACK);
 		mnConfig.setFont(new Font("Segoe UI", Font.PLAIN, 24));
 		mnConfig.setBackground(Color.BLACK);
@@ -2513,22 +2612,16 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 									s = conexion.createStatement();
 
+									json = Metodos.apiImagenes(parametros);
+
+									JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
+
 									if (!soloGif.isSelected()) {
-
-										json = Metodos.apiImagenes(parametros);
-
-										JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
-
 										subirImagenes(categoria, imagenesBD, s);
-
-										if (rdbtnNewRadioButton.isSelected()) {
-											rs = subirGif(categoria, rs, s);
-										}
 									}
 
 									else {
-
-										rs = subirGif(categoria, rs, s);
+										subirImagenCms(categoria, imagenesBD, s, "gif");
 
 									}
 
@@ -2625,83 +2718,21 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
-	private static ResultSet subirGif(int categoria, ResultSet rs, Statement s) throws IOException, SQLException {
+	private static void subirImagenes(int categoria, JSONArray imagenesBD, Statement s) throws SQLException, Exception {
 
-		String imagenActual;
-
-		listaImagenes = Metodos.directorio(directorioImagenes + separador, "gif", true, false);
-
-		int total = listaImagenes.size();
-
-		if (total > 0) {
-
-			WebDriver chrome = new FirefoxDriver();
-
-			int y;
-
-			for (int i = 0; i < total; i++) {
-
-				y = i;
-
-				progreso.setProgressBarRecorrido("Imagen " + (++y) + " de " + total);
-
-				progreso.setProgressBar(Metodos.calcularPorcentaje(y, total));
-
-				imagenActual = directorioImagenes + separador + listaImagenes.get(i);
-
-				if (!Metodos.extraerExtension(imagenActual).equals("ini")) {
-
-					obtenerCarpeta();
-
-					chrome.manage().addCookie(new Cookie("4images_userid", user[0]));
-
-					chrome.manage().addCookie(new Cookie("pass", user[1]));
-
-					chrome.get("http://" + lecturaurl[0] + carpeta + "/upload_images/input.php?cat_id=" + categoria
-							+ "&nombre=" + nombreSubida);
-
-					chrome.findElement(By.id("file")).sendKeys(imagenActual);
-
-				}
-
-				gif = true;
-
-				imagenesSubidas.add(imagenActual);
-			}
-
-			int resp = JOptionPane.showConfirmDialog(null, "¿Ha terminado la subida?");
-
-			if (resp == 0) {
-
-				chrome.close();
-
-				Metodos.cerrarNavegador();
-			}
-
-		}
-
-		rs.close();
-
-		s.close();
-
-		return rs;
+		subirImagenCms(categoria, imagenesBD, s, "jpg");
+		subirImagenCms(categoria, imagenesBD, s, "png");
+		subirImagenCms(categoria, imagenesBD, s, "gif");
 
 	}
 
-	private static void subirImagenes(int categoria, JSONArray imagenesBD, Statement s) throws SQLException, Exception {
+	private static void subirImagenCms(int categoria, JSONArray imagenesBD, Statement s, String extension)
+			throws SQLException, Exception {
 
-		listaImagenes = Metodos.directorio(directorioImagenes + separador, "png", true, false);
-
-		if (listaImagenes.size() > 0) {
-			subirArchivos(s, categoria, imagenesBD, "png");
-		}
-
-		listaImagenes = Metodos.directorio(directorioImagenes + separador, "jpg", true, false);
+		listaImagenes = Metodos.directorio(directorioImagenes + separador, extension, true, false);
 
 		if (listaImagenes.size() > 0) {
-
-			subirArchivos(s, categoria, imagenesBD, "jpg");
-
+			subirArchivos(s, categoria, imagenesBD, extension);
 		}
 
 	}
@@ -2873,11 +2904,12 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		catch (Exception e) {
 
-			progreso.setProgressBarRecorrido("Error");
+			progreso = new Progreso();
 
-			progreso.setProgressBar(0);
+			progreso.setVisible(false);
 
 			return 0;
+
 		}
 
 		return maximo;
