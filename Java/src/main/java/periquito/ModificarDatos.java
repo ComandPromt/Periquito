@@ -411,7 +411,7 @@ public class ModificarDatos extends JFrame {
 		lblSubidoPor.setText("Subido por");
 		lblSubidoPor.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		JComboBox comboBox = new JComboBox();
+		JComboBox<String> comboBox = new JComboBox<String>();
 		comboBox.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		JLabel lblNewLabel_1 = new JLabel("Descripción");
@@ -427,7 +427,7 @@ public class ModificarDatos extends JFrame {
 		lblCategora.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCategora.setFont(new Font("Tahoma", Font.BOLD, 16));
 
-		JComboBox comboBox_1 = new JComboBox();
+		JComboBox<?> comboBox_1 = new JComboBox<Object>();
 		comboBox_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		nombre = new JTextField();
@@ -448,13 +448,13 @@ public class ModificarDatos extends JFrame {
 		label.setIcon(new ImageIcon(ModificarDatos.class.getResource("/imagenes/nota.png")));
 		label.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-		JComboBox comboBox_3 = new JComboBox();
+		JComboBox<?> comboBox_3 = new JComboBox<Object>();
 		comboBox_3.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-		JComboBox comboBox_4 = new JComboBox();
+		JComboBox<?> comboBox_4 = new JComboBox<Object>();
 		comboBox_4.setFont(new Font("Tahoma", Font.BOLD, 14));
 
-		JComboBox comboBox_2 = new JComboBox();
+		JComboBox<?> comboBox_2 = new JComboBox<Object>();
 		comboBox_2.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		JLabel lblNivelDescarga = new JLabel("Nivel descarga");

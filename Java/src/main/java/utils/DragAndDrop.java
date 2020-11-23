@@ -13,6 +13,7 @@ public class DragAndDrop {
 			final Listener listener) throws TooManyListenersException {
 
 		dropListener = new java.awt.dnd.DropTargetListener() {
+
 			public void dragEnter(java.awt.dnd.DropTargetDragEvent evt) {
 
 				if (isDragOk(evt)) {

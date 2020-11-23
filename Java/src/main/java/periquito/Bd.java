@@ -163,6 +163,26 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		base.setHorizontalAlignment(SwingConstants.CENTER);
 		base.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		textField = new javax.swing.JPasswordField();
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
+					try {
+						guardarDatos(true);
+					} 
+					
+					catch (Exception e1) {
+						//
+					}
+					
+				}
+				
+			}
+			
+		});
+		
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));

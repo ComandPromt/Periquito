@@ -197,7 +197,7 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 
 		String urlTarget = Scrapt.jTextField1.getText();
 
-		if (!urlTarget.isEmpty() && !urlTarget.isBlank()) {
+		if (!urlTarget.isEmpty()) {
 
 			textField.setText(Metodos.eliminarEspacios(urlTarget));
 		}

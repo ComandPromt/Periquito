@@ -6,11 +6,12 @@ import urllib as urllib2
 def gifMaker(inputPath,outputPath):
 
     reader = imageio.get_reader(inputPath)
+
     fps = reader.get_meta_data()['fps']
 
     writer = imageio.get_writer(outputPath, fps=fps)
 
-    for frames in reader: 
+    for frames in reader:
         writer.append_data(frames)
 
     writer.close()
@@ -78,10 +79,11 @@ if(len(lista_de_archivos)>0):
 				gifMaker(carpeta+separador+nombre_nuevo,carpeta+separador+'output'+separador+nombre_nuevo[0:-4]+'.gif')
 
 			except:
-				print ''
+
+				print('')
 
 fic = open(path+separador+"llamada_python.txt","w")
 
 fic.write('video_gif')
-    
+
 fic.close()

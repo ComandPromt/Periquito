@@ -65,7 +65,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		return lectura;
 	}
 
-	private void comprobarSha(java.io.File[] files) {
+	public static void comprobarSha(java.io.File[] files) {
 
 		try {
 
@@ -76,12 +76,27 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 			shaimages.clear();
 
 			String nombreArchivo;
+
 			String ruta;
+
 			String extension;
 
 			for (int x = 0; x < files.length; x++) {
 
 				ruta = files[x].getCanonicalPath();
+
+				if (x == 0) {
+
+					try {
+						Metodos.convertir(ruta.substring(0, ruta.lastIndexOf(MenuPrincipal.getSeparador()) + 1));
+
+					}
+
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				}
 
 				extension = Metodos.extraerExtension(ruta);
 
@@ -103,8 +118,6 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1), ".", false);
 
 			if (!lectura.isEmpty()) {
-
-				dispose();
 
 				switch (tipo) {
 

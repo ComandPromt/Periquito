@@ -21,11 +21,11 @@ public class CronWebp extends TimerTask {
 
 			if (MenuPrincipal.crontabWebp != null) {
 
-				switch (MenuPrincipal.crontabWebp) {
+				try {
 
-				case "gif":
+					switch (MenuPrincipal.crontabWebp) {
 
-					try {
+					case "gif":
 
 						File af = new File("Config/Config.txt");
 
@@ -33,16 +33,9 @@ public class CronWebp extends TimerTask {
 							MenuPrincipal.subida();
 						}
 
-					}
+						break;
 
-					catch (Exception e) {
-					}
-
-					break;
-
-				case "video_gif":
-
-					try {
+					case "video_gif":
 
 						Metodos.moverArchivos(
 								Metodos.directorio(MenuPrincipal.getLectura()[0] + "Video_2_Gif"
@@ -54,130 +47,142 @@ public class CronWebp extends TimerTask {
 
 						Metodos.abrirCarpeta(MenuPrincipal.directorioImagenes);
 
-					} catch (Exception e) {
-
-					}
-
-					break;
-
-				case "gif_frames":
-
-					Metodos.mensaje("Los GIFs se han extraido correctamente", 2);
-
-					String[] options = { "<html><h2>[1] Subir al CMS</h2></html>",
-							"<html><h2>[2] Mover a la carpeta imagenes</h2></html>",
-							"<html><h2>[3] Abrir carpeta de salida</h2></html>",
-							"<html><h2>[4] Borrar Gifs</h2></html>" };
-
-					ImageIcon icon = new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png"));
-
-					String opcion = (String) JOptionPane.showInputDialog(null, "", "Seleccione una opcion",
-							JOptionPane.QUESTION_MESSAGE, icon, options, options[0]);
-
-					opcion = opcion.replace("<html><h2>[", "");
-
-					int numerOpcion = Integer.parseInt(opcion.substring(0, 1));
-
-					LinkedList<String> listaImagenes = new LinkedList<>();
-
-					String carpeta = "";
-
-					carpeta = MenuPrincipal.getLectura()[0] + "Gif_extractor" + MenuPrincipal.getSeparador() + "output"
-							+ MenuPrincipal.getSeparador();
-
-					switch (numerOpcion) {
-
-					case 1:
-
-						listaImagenes = Metodos.directorio(carpeta, ".", true, false);
-
-						Metodos.moverArchivos(listaImagenes, carpeta, MenuPrincipal.getDirectorioImagenes(), false, 1);
-
-						MenuPrincipal.uploadImages();
-
 						break;
 
-					case 2:
+					case "gif_frames":
 
-						LinkedList<String> directorios = new LinkedList<>();
+						Metodos.mensaje("Los GIFs se han extraido correctamente", 2);
 
-						directorios = Metodos.directorio(carpeta, ".", false, false);
+						String[] options = { "<html><h2>[1] Subir al CMS</h2></html>",
+								"<html><h2>[2] Mover a la carpeta imagenes</h2></html>",
+								"<html><h2>[3] Abrir carpeta de salida</h2></html>",
+								"<html><h2>[4] Borrar Gifs</h2></html>" };
 
-						String folder = "";
+						ImageIcon icon = new ImageIcon(MenuPrincipal.class.getResource("/imagenes/utilities.png"));
 
-						for (int i = 0; i < directorios.size(); i++) {
+						String opcion = (String) JOptionPane.showInputDialog(null, "", "Seleccione una opcion",
+								JOptionPane.QUESTION_MESSAGE, icon, options, options[0]);
 
-							folder = carpeta + directorios.get(i) + MenuPrincipal.getSeparador();
+						opcion = opcion.replace("<html><h2>[", "");
 
-							listaImagenes = Metodos.directorio(folder, ".", true, true);
+						int numerOpcion = Integer.parseInt(opcion.substring(0, 1));
 
-							String salida = MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador()
-									+ "Gif_extractor" + MenuPrincipal.getSeparador() + directorios.get(i)
-									+ MenuPrincipal.getSeparador();
+						LinkedList<String> listaImagenes = new LinkedList<>();
 
-							File directorio = new File(salida);
+						String carpeta = "";
 
-							directorio.mkdir();
+						carpeta = MenuPrincipal.getLectura()[0] + "Gif_extractor" + MenuPrincipal.getSeparador()
+								+ "output" + MenuPrincipal.getSeparador();
 
-							if (!listaImagenes.isEmpty()) {
-								Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(), salida, false, 1);
+						switch (numerOpcion) {
+
+						case 1:
+
+							listaImagenes = Metodos.directorio(carpeta, ".", true, false);
+
+							Metodos.moverArchivos(listaImagenes, carpeta, MenuPrincipal.getDirectorioImagenes(), false,
+									1);
+
+							MenuPrincipal.uploadImages();
+
+							break;
+
+						case 2:
+
+							LinkedList<String> directorios = new LinkedList<>();
+
+							directorios = Metodos.directorio(carpeta, ".", false, false);
+
+							String folder = "";
+
+							for (int i = 0; i < directorios.size(); i++) {
+
+								folder = carpeta + directorios.get(i) + MenuPrincipal.getSeparador();
+
+								listaImagenes = Metodos.directorio(folder, ".", true, true);
+
+								String salida = MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador()
+										+ "Gif_extractor" + MenuPrincipal.getSeparador() + directorios.get(i)
+										+ MenuPrincipal.getSeparador();
+
+								File directorio = new File(salida);
+
+								directorio.mkdir();
+
+								if (!listaImagenes.isEmpty()) {
+									Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(), salida, false,
+											1);
+								}
+
+								directorio = new File(folder);
+
+								directorio.delete();
+
 							}
 
-							directorio = new File(folder);
+							Metodos.mensaje("Todos los frames se han movido correctamente", 2);
 
-							directorio.delete();
+							break;
+
+						case 3:
+							Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
+									+ "Gif_extractor" + MenuPrincipal.getSeparador() + "output");
+							break;
+
+						case 4:
+							Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
+									+ "Gif_extractor" + MenuPrincipal.getSeparador());
+
+							break;
 
 						}
 
-						Metodos.mensaje("Todos los frames se han movido correctamente", 2);
+						int resp = JOptionPane.showConfirmDialog(null,
+								"<html><h2>¿Quieres borrar el/los GIF/s?</h2></html>");
+
+						if (resp == 0) {
+							Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
+									+ "Gif_extractor" + MenuPrincipal.getSeparador());
+						}
 
 						break;
 
-					case 3:
+					case "video_frames":
+
+						Metodos.mensaje("Los videos se han pasado correctamente a fotogramas", 2);
+
 						Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador() + "output");
+								+ "Frame_Extractor" + MenuPrincipal.getSeparador() + "output");
+
 						break;
 
-					case 4:
-						Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador());
+					case "color":
+
+						Metodos.mensaje("Imagenes colorizadas correctamente", 2);
+
+						Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
+								+ "colorization" + MenuPrincipal.getSeparador() + "imgs_out");
 
 						break;
 
 					}
 
-					int resp = JOptionPane.showConfirmDialog(null,
-							"<html><h2>¿Quieres borrar el/los GIF/s?</h2></html>");
+					MenuPrincipal.timer.cancel();
 
-					if (resp == 0) {
-						Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador());
-					}
+					MenuPrincipal.timer.purge();
 
-					break;
+					Metodos.crearFichero("Config/llamada_python.txt", "", false);
 
-				case "video_frames":
-
-					Metodos.mensaje("Los videos se han pasado correctamente a fotogramas", 2);
-
-					Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-							+ "Frame_Extractor" + MenuPrincipal.getSeparador() + "output");
-
-					break;
+				} catch (Exception e) {
 
 				}
-
-				MenuPrincipal.timer.cancel();
-
-				MenuPrincipal.timer.purge();
-
-				Metodos.crearFichero("Config/llamada_python.txt", "", false);
-
 			}
 
 		}
 
-		catch (IOException e) {
+		catch (
+
+		IOException e) {
 			//
 		}
 

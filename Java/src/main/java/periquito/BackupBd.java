@@ -66,7 +66,7 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 
 				nombreArchivo = Metodos.eliminarEspacios(textField_1.getText());
 
-				if (nombreArchivo.isBlank() || nombreArchivo.isEmpty()) {
+				if (nombreArchivo.isEmpty()) {
 					nombreArchivo = "backup-BD";
 				}
 

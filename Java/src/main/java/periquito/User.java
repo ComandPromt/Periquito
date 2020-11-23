@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -113,6 +115,26 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 		jTextField1.setToolTipText("");
 
 		txtHttplocalhost = new JPasswordField();
+
+		txtHttplocalhost.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+					try {
+						guardarDatos(true);
+					}
+
+					catch (Exception e1) {
+						//
+					}
+
+				}
+
+			}
+		});
 		txtHttplocalhost.setToolTipText("");
 		txtHttplocalhost.setHorizontalAlignment(SwingConstants.CENTER);
 		txtHttplocalhost.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -138,10 +160,7 @@ public class User extends javax.swing.JFrame implements ActionListener, ChangeLi
 		lblContrasea.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+
 		btnNewButton_1.setIcon(new ImageIcon(Config.class.getResource("/imagenes/save.png")));
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override

@@ -73,6 +73,21 @@ import periquito.MenuPrincipal;
 
 public abstract class Metodos {
 
+	public static void verFicheros(String carpeta) {
+
+		File dir = new File(carpeta);
+
+		if (dir.exists()) {
+
+			File[] ficheros = dir.listFiles();
+			for (int x = 0; x < ficheros.length; x++) {
+				System.out.println(ficheros[x].length());
+			}
+
+		}
+
+	}
+
 	public static void borrarArchivosSubidos(String ruta) {
 
 		LinkedList<String> imagenes = new LinkedList<String>();
@@ -596,7 +611,7 @@ public abstract class Metodos {
 			}
 
 		} catch (Exception e) {
-			mensaje("Error al cerrar el navegador", 1);
+			//
 		}
 
 	}
@@ -705,12 +720,19 @@ public abstract class Metodos {
 			sonido = leerFicheroArray(archivo, longitud);
 		}
 
-		catch (Exception e) {
+		catch (Exception e1) {
 
-			crearFichero(MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + archivo,
-					contenido, carpeta);
+			try {
 
-			sonido = leerFicheroArray(archivo, longitud);
+				crearFichero(MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador() + archivo,
+						contenido, carpeta);
+
+				sonido = leerFicheroArray(archivo, longitud);
+			}
+
+			catch (Exception e2) {
+				//
+			}
 
 		}
 
@@ -718,6 +740,7 @@ public abstract class Metodos {
 	}
 
 	private static void descargar(String imagen, int x) {
+
 		try {
 
 			String extension = Descarga.textField3.getText().trim();
@@ -770,6 +793,10 @@ public abstract class Metodos {
 		conversion("JPG", "jpg", carpeta);
 
 		conversion("PNG", "png", carpeta);
+
+		conversion("webp", "png", carpeta);
+
+		conversion("GIF", "gif", carpeta);
 
 		conversion("GIF", "gif", carpeta);
 
@@ -885,6 +912,7 @@ public abstract class Metodos {
 						lista.add("peg");
 						lista.add("png");
 						lista.add("webp");
+						lista.add("gif");
 						break;
 
 					case 2:
@@ -899,10 +927,6 @@ public abstract class Metodos {
 						lista.add("mov");
 						lista.add("wmv");
 
-						break;
-
-					case 3:
-						lista.add("gif");
 						break;
 
 					default:
@@ -1100,8 +1124,11 @@ public abstract class Metodos {
 					origen = files[i].getCanonicalPath();
 
 					if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
+
 						mensaje("No puedes pegar archivos al mismo directorio", 3);
+
 						i = files.length;
+
 						error = true;
 					}
 
@@ -2094,51 +2121,55 @@ public abstract class Metodos {
 
 	public static void crearScript(String archivo, String contenido, boolean opcional, String os) throws IOException {
 
-		Process aplicacion = null;
+		try {
 
-		if (os.equals("Linux")) {
-			aplicacion = Runtime.getRuntime().exec("bash " + contenido);
-			aplicacion.destroy();
-		}
+			Process aplicacion = null;
 
-		else {
+			if (os.equals("Linux")) {
+				aplicacion = Runtime.getRuntime().exec("bash " + contenido);
 
-			String iniciar = "";
-
-			if (opcional) {
-				iniciar = "start";
 			}
 
-			FileWriter flS = new FileWriter(archivo);
+			else {
 
-			BufferedWriter fS = new BufferedWriter(flS);
+				String iniciar = "";
 
-			try {
-				Runtime aplicacion2 = Runtime.getRuntime();
-				fS.write("@echo off");
-				fS.newLine();
-				fS.write(contenido);
-				fS.newLine();
-				fS.write("exit");
-				aplicacion2 = Runtime.getRuntime();
+				if (opcional) {
+					iniciar = "start";
+				}
+
+				FileWriter flS = new FileWriter(archivo);
+
+				BufferedWriter fS = new BufferedWriter(flS);
 
 				try {
+
+					Runtime aplicacion2 = Runtime.getRuntime();
+					fS.write("@echo off");
+					fS.newLine();
+					fS.write(contenido);
+					fS.newLine();
+					fS.write("exit");
+					aplicacion2 = Runtime.getRuntime();
+
 					aplicacion2.exec("cmd.exe /K " + iniciar + " " + System.getProperty("user.dir") + "\\" + archivo);
+
 				}
 
-				catch (Exception e) {
-//
+				finally {
+					fS.close();
+					flS.close();
+
 				}
 
 			}
 
-			finally {
-				fS.close();
-				flS.close();
+			aplicacion.destroy();
 
-			}
 		}
 
+		catch (Exception e) {
+		}
 	}
 
 	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {
@@ -2273,7 +2304,7 @@ public abstract class Metodos {
 			if (!comprobacion && archivos.size() == 0 && !numeroArchivos) {
 
 				int resp = JOptionPane.showConfirmDialog(null,
-						"La carpeta se ha quedado vacía, ¿quiere borrar la carpeta?");
+						"<html><h2>La carpeta se ha quedado vacía, ¿quiere borrar la carpeta?</h2></html>");
 
 				if (resp == 0) {
 
@@ -2608,10 +2639,13 @@ public abstract class Metodos {
 		}
 
 		return carpeta;
+
 	}
 
 	public static void crearCarpetasConfig() {
+
 		try {
+
 			if (!MenuPrincipal.getLectura()[0].isEmpty()) {
 
 				String carpeta = formatearRuta();
@@ -2660,9 +2694,44 @@ public abstract class Metodos {
 
 				directorio.mkdir();
 
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Video_2_Gif";
+
+				directorio = new File(ruta);
+
+				directorio.mkdir();
+
+				ruta = carpeta + MenuPrincipal.getSeparador() + "Video_2_Gif" + MenuPrincipal.getSeparador() + "output";
+
+				directorio = new File(ruta);
+
+				directorio.mkdir();
+
+				ruta = carpeta + MenuPrincipal.getSeparador() + "colorization";
+
+				directorio = new File(ruta);
+
+				directorio.mkdir();
+
+				ruta = carpeta + MenuPrincipal.getSeparador() + "colorization" + MenuPrincipal.getSeparador() + "imgs";
+
+				directorio = new File(ruta);
+
+				directorio.mkdir();
+
+				ruta = carpeta + MenuPrincipal.getSeparador() + "colorization" + MenuPrincipal.getSeparador()
+						+ "imgs_out";
+
+				directorio = new File(ruta);
+
+				directorio.mkdir();
+
 			}
-		} catch (Exception e) {
+
 		}
+
+		catch (Exception e) {
+		}
+
 	}
 
 	public static void crearFichero(String ruta, String texto, boolean carpeta) throws IOException {
@@ -3129,7 +3198,7 @@ public abstract class Metodos {
 		directorio = new File("Config/imagenes/bn");
 		directorio.mkdir();
 
-		directorio = new File("Config/imagenes/Gif_extractor");
+		directorio = new File("Config/Gif_extractor");
 		directorio.mkdir();
 
 		directorio = new File("Config/imagenes/imagenes_subidas");
@@ -3144,7 +3213,7 @@ public abstract class Metodos {
 		directorio = new File("Config/Downloads");
 		directorio.mkdir();
 
-		directorio = new File("Config/Image_rotate");
+		directorio = new File("Config/imagenes_para_recortar/recortes/Image_rotate");
 		directorio.mkdir();
 
 		directorio = new File("sonidos");
@@ -3251,7 +3320,7 @@ public abstract class Metodos {
 
 				f2 = new File(ruta + eliminarPuntos(list.get(x)));
 
-				if (f1.isFile() && f1.renameTo(f2)) {
+				if (!f1.isDirectory() && f1.renameTo(f2)) {
 
 					if (api) {
 
@@ -3278,6 +3347,7 @@ public abstract class Metodos {
 	public static void renombrar(String ruta1, String ruta2) {
 
 		File f1 = new File(ruta1);
+
 		File f2 = new File(ruta2);
 
 		f1.renameTo(f2);
@@ -3285,23 +3355,28 @@ public abstract class Metodos {
 	}
 
 	public static JSONObject apiImagenes(String parametros) throws IOException {
+
 		JSONObject json = readJsonFromUrl("https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=" + parametros);
+
 		return json;
 	}
 
 	public static String extraerNombreArchivo(String extension) throws IOException {
+
 		JSONObject json = apiImagenes("archivo." + extension);
 
 		JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
 
 		String outputFilePath = MenuPrincipal.getDirectorioActual() + "Scrapting" + MenuPrincipal.getSeparador()
 				+ imagenesBD.get(0).toString();
+
 		return outputFilePath;
 	}
 
 	public static String obtenerParametros(List<String> list) {
 
 		StringBuilder bld = new StringBuilder();
+
 		String extension;
 
 		for (int i = 0; i < list.size(); i++) {
@@ -3534,9 +3609,51 @@ public abstract class Metodos {
 
 			Files.move(FileSystems.getDefault().getPath(origen), FileSystems.getDefault().getPath(destino),
 					StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
+		}
+
+		catch (IOException e) {
 			//
 		}
+
+	}
+
+	public static boolean comprobarFirefox(String os) {
+
+		Process aplicacion = null;
+
+		boolean resultado = false;
+
+		if (os.equals("Linux")) {
+
+			try {
+				aplicacion = Runtime.getRuntime().exec("firefox");
+				resultado = true;
+			}
+
+			catch (IOException e) {
+			}
+
+		}
+
+		else {
+
+			try {
+				aplicacion = Runtime.getRuntime().exec("cmd.exe start firefox");
+				resultado = true;
+			}
+
+			catch (IOException e) {
+				//
+			}
+
+		}
+
+		if (aplicacion != null) {
+
+			aplicacion.destroy();
+		}
+
+		return resultado;
 
 	}
 
