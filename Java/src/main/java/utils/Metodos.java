@@ -1,6 +1,11 @@
 package utils;
 
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -42,6 +47,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -85,6 +91,29 @@ public abstract class Metodos {
 			}
 
 		}
+
+	}
+
+	public static void resizeImage(String inputImagePath, String outputImagePath, int scaledWidth, int scaledHeight)
+			throws IOException {
+
+		// reads input image
+		File inputFile = new File(inputImagePath);
+		BufferedImage inputImage = ImageIO.read(inputFile);
+
+		// creates output image
+		BufferedImage outputImage = new BufferedImage(scaledWidth, scaledHeight, inputImage.getType());
+
+		// scales the input image to the output image
+		Graphics2D g2d = outputImage.createGraphics();
+		g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
+		g2d.dispose();
+
+		// extracts extension of output file
+		String formatName = outputImagePath.substring(outputImagePath.lastIndexOf(".") + 1);
+
+		// writes to output file
+		ImageIO.write(outputImage, formatName, new File(outputImagePath));
 
 	}
 
@@ -377,7 +406,7 @@ public abstract class Metodos {
 						break;
 					}
 
-					location = eliminarEspacios(location);
+					location = eliminarEspacios(location, false);
 
 					location = limpiarCadena(location);
 
@@ -1289,7 +1318,7 @@ public abstract class Metodos {
 
 	}
 
-	public static String eliminarEspacios(String cadena) {
+	public static String eliminarEspacios(String cadena, boolean filtro) {
 
 		cadena = cadena.trim();
 
@@ -1297,7 +1326,12 @@ public abstract class Metodos {
 
 		cadena = cadena.trim();
 
+		if (filtro) {
+			cadena = cadena.replace(" ", "");
+		}
+
 		return cadena;
+
 	}
 
 	public static void muestraContenido(String archivo, String tipo, String descripcion) throws IOException {
@@ -1317,7 +1351,7 @@ public abstract class Metodos {
 			LinkedList<String> contenido = new LinkedList<>();
 
 			while ((linea = br.readLine()) != null) {
-				linea = eliminarEspacios(linea);
+				linea = eliminarEspacios(linea, false);
 				contenido.add(convertToUTF8(linea));
 			}
 
@@ -2908,57 +2942,60 @@ public abstract class Metodos {
 
 		LinkedList<String> lista = new LinkedList<String>();
 
-		File f = new File(ruta);
+		try {
 
-		if (f.exists()) {
+			File f = new File(ruta);
 
-			File[] ficheros = f.listFiles();
+			if (f.exists()) {
 
-			String fichero = "";
+				File[] ficheros = f.listFiles();
 
-			String extensionArchivo;
+				String fichero = "";
 
-			File folder;
+				String extensionArchivo;
 
-			for (int x = 0; x < ficheros.length; x++) {
+				File folder;
 
-				fichero = ficheros[x].getName();
+				for (int x = 0; x < ficheros.length; x++) {
 
-				folder = new File(ruta + fichero);
+					fichero = ficheros[x].getName();
 
-				if (filtro) {
+					folder = new File(ruta + fichero);
 
-					if (folder.isFile()) {
+					extensionArchivo = extraerExtension(fichero);
 
-						extensionArchivo = extraerExtension(fichero);
+					if (filtro) {
 
-						if (fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
+						if (folder.isFile()) {
 
-							renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
+							if (fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
 
-						}
+								renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
 
-						if (extension.equals("webp") && extensionArchivo.equals("webp")
-								|| extension.equals("jpeg") && extensionArchivo.equals("jpeg") || extension.equals(".")
-								|| extension.equals(extensionArchivo)) {
-
-							if (carpeta) {
-								lista.add(ruta + fichero);
 							}
 
-							else {
-								lista.add(fichero);
+							if ((extension.equals("images")
+									&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")
+											|| extensionArchivo.equals("gif") || extensionArchivo.equals("jpeg")))
+									|| (extension.equals("webp") && extensionArchivo.equals("webp")
+											|| extension.equals("jpeg") && extensionArchivo.equals("jpeg")
+											|| extension.equals(".") || extension.equals(extensionArchivo))) {
+
+								if (carpeta) {
+									lista.add(ruta + fichero);
+								}
+
+								else {
+									lista.add(fichero);
+								}
+
 							}
 
 						}
 
 					}
 
-				}
-
-				else {
-
-					if (folder.isDirectory()) {
+					else {
 
 						if (carpeta) {
 							lista.add(ruta + fichero);
@@ -2966,10 +3003,12 @@ public abstract class Metodos {
 
 						else {
 
-							fichero = fichero.trim();
+							if (folder.isDirectory()) {
 
-							if (!fichero.isEmpty()) {
-								lista.add(fichero);
+								if (!fichero.isEmpty()) {
+									lista.add(fichero);
+								}
+
 							}
 
 						}
@@ -2979,8 +3018,13 @@ public abstract class Metodos {
 				}
 
 			}
+		}
+
+		catch (Exception e) {
 
 		}
+
+		Collections.sort(lista);
 
 		return lista;
 
@@ -3113,52 +3157,54 @@ public abstract class Metodos {
 	}
 
 	public static void mensaje(String mensaje, int titulo) {
-
-		String tituloSuperior = "", sonido = "";
-
-		int tipo = 0;
-
-		switch (titulo) {
-
-		case 1:
-			tipo = JOptionPane.ERROR_MESSAGE;
-			tituloSuperior = "Error";
-			sonido = "duck-quack.wav";
-			break;
-
-		case 2:
-			tipo = JOptionPane.INFORMATION_MESSAGE;
-			tituloSuperior = "Informacion";
-			sonido = "gong.wav";
-			break;
-
-		case 3:
-			tipo = JOptionPane.WARNING_MESSAGE;
-			tituloSuperior = "Advertencia";
-			sonido = "advertencia.wav";
-			break;
-
-		default:
-			break;
-
-		}
-
 		try {
+			String tituloSuperior = "";
+
+			String sonido = "";
+
+			int tipo = 0;
+
+			switch (titulo) {
+
+			case 1:
+				tipo = JOptionPane.ERROR_MESSAGE;
+				tituloSuperior = "Error";
+				sonido = "duck-quack.wav";
+				break;
+
+			case 2:
+				tipo = JOptionPane.INFORMATION_MESSAGE;
+				tituloSuperior = "Informacion";
+				sonido = "gong.wav";
+				break;
+
+			case 3:
+				tipo = JOptionPane.WARNING_MESSAGE;
+				tituloSuperior = "Advertencia";
+				sonido = "advertencia.wav";
+				break;
+
+			default:
+				break;
+
+			}
 
 			if (MenuPrincipal.getSonido()[1].equals("1")) {
 				reproducirSonido(
 						MenuPrincipal.getDirectorioActual() + "sonidos" + MenuPrincipal.getSeparador() + sonido, true);
 			}
 
-		} catch (Exception e) {
-			//
+			JLabel alerta = new JLabel(mensaje);
+
+			alerta.setFont(new Font("Arial", Font.BOLD, 18));
+
+			JOptionPane.showMessageDialog(null, alerta, tituloSuperior, tipo);
+
 		}
 
-		JLabel alerta = new JLabel(mensaje);
-
-		alerta.setFont(new Font("Arial", Font.BOLD, 18));
-
-		JOptionPane.showMessageDialog(null, alerta, tituloSuperior, tipo);
+		catch (Exception e) {
+			//
+		}
 
 	}
 
@@ -3258,11 +3304,19 @@ public abstract class Metodos {
 	}
 
 	public static String saberSeparador(String os) {
+
 		if (os.equals("Linux")) {
+
 			return "/";
-		} else {
-			return "\\";
+
 		}
+
+		else {
+
+			return "\\";
+
+		}
+
 	}
 
 	public static void conversion(String extension, String salida, String carpeta) {
@@ -3603,6 +3657,38 @@ public abstract class Metodos {
 
 	}
 
+	private static Clipboard getSystemClipboard() {
+
+		Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+
+		Clipboard systemClipboard = defaultToolkit.getSystemClipboard();
+
+		return systemClipboard;
+	}
+
+	public static String saberExtension(String text) {
+
+		String resultado = "";
+
+		try {
+			resultado = text.substring(text.length() - 4, text.length());
+
+		}
+
+		catch (Exception e) {
+		}
+
+		return resultado;
+
+	}
+
+	public static void copy(String text) {
+
+		Clipboard clipboard = getSystemClipboard();
+
+		clipboard.setContents(new StringSelection(text), null);
+	}
+
 	public static void moverArchivo(String origen, String destino) {
 
 		try {
@@ -3614,6 +3700,60 @@ public abstract class Metodos {
 		catch (IOException e) {
 			//
 		}
+
+	}
+
+	public static void renombrar(String ruta, int numFrames) {
+
+		int frame = Integer.parseInt(ruta.substring(ruta.indexOf("frame-") + 6, ruta.indexOf(".")));
+
+		String resultado = calcularCeros(frame, numFrames);
+
+		renombrar(ruta,
+				ruta.substring(0, ruta.lastIndexOf(MenuPrincipal.getSeparador()) + 1) + "Imagen_" + resultado + ".png");
+
+	}
+
+	public static String pintarCeros(int frames) {
+
+		String ceros = "";
+
+		for (int i = 0; i < frames; i++) {
+
+			ceros += "0";
+
+		}
+
+		return ceros;
+
+	}
+
+	public static String calcularCeros(int frame, int numFrames) {
+
+		String numeroDigitos = "";
+
+		int totalFrames = ("" + numFrames).length();
+
+		int digitos = ("" + frame).length();
+
+		numeroDigitos = pintarCeros(totalFrames);
+
+		if (totalFrames > 0) {
+
+			if (frame == 1) {
+
+				numeroDigitos = pintarCeros(totalFrames);
+			}
+
+			else {
+
+				numeroDigitos = pintarCeros(totalFrames -= (--digitos));
+
+			}
+
+		}
+
+		return numeroDigitos + frame;
 
 	}
 

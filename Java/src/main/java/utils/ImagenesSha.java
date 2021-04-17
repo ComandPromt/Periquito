@@ -51,6 +51,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	}
 
 	private void reabrir(JFrame frmShaImages) {
+
 		try {
 			mntmNewMenuItem.setEnabled(true);
 			mntmNewMenuItem_1.setEnabled(true);
@@ -61,9 +62,12 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 			frmShaImages.dispose();
 
-		} catch (Exception e1) {
+		}
+
+		catch (Exception e1) {
 			//
 		}
+
 	}
 
 	public void buscarArchivoConf() throws IOException {
@@ -86,6 +90,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 				}
 
 				lectura[0] = Metodos.eliminarUltimoElemento(lectura[0]);
+
 				lectura[1] = Metodos.eliminarUltimoElemento(lectura[1]);
 
 			} catch (ArrayIndexOutOfBoundsException e) {
@@ -250,6 +255,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 						Metodos.moverArchivos(imagenes, MenuPrincipal.getSeparador(),
 								MenuPrincipal.getDirectorioImagenes(), true, 1);
+
 						frmShaImages.dispose();
 
 						mntmNewMenuItem_1.setEnabled(false);

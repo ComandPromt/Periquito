@@ -64,7 +64,7 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 
 				String nombreArchivo = "";
 
-				nombreArchivo = Metodos.eliminarEspacios(textField_1.getText());
+				nombreArchivo = Metodos.eliminarEspacios(textField_1.getText(), false);
 
 				if (nombreArchivo.isEmpty()) {
 					nombreArchivo = "backup-BD";
@@ -104,7 +104,7 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 
 				else {
 
-					String tablasBackup = Metodos.eliminarEspacios(textField.getText());
+					String tablasBackup = Metodos.eliminarEspacios(textField.getText(), false);
 
 					if (tablasBackup.indexOf(",") > 0) {
 
@@ -113,7 +113,7 @@ public class BackupBd extends javax.swing.JFrame implements ActionListener, Chan
 						String[] elementos = tablasBackup.split(",");
 
 						for (int i = 0; i < elementos.length; i++) {
-							tablas.add(Metodos.eliminarEspacios(elementos[i]));
+							tablas.add(Metodos.eliminarEspacios(elementos[i], false));
 						}
 					}
 				}

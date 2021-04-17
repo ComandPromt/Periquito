@@ -1,6 +1,5 @@
 import os  
 from PIL import Image
-from playsound import playsound
 import json 
 import urllib as urllib2
 

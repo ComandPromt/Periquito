@@ -199,7 +199,7 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 
 		if (!urlTarget.isEmpty()) {
 
-			textField.setText(Metodos.eliminarEspacios(urlTarget));
+			textField.setText(Metodos.eliminarEspacios(urlTarget, false));
 		}
 
 		this.setVisible(true);
@@ -263,7 +263,7 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 
 				modelo.clear();
 
-				url = Metodos.eliminarEspacios(textField.getText());
+				url = Metodos.eliminarEspacios(textField.getText(), false);
 
 				urls = Metodos.obtenerEnlaces(url, 1, "", "", 0);
 
@@ -375,7 +375,7 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 					String urlSeleccionada = list.getSelectedValue().toString();
 
 					if (Metodos.pingURL(urlSeleccionada)) {
-						Scrapt.setjTextField1(Metodos.eliminarEspacios(textField.getText()));
+						Scrapt.setjTextField1(Metodos.eliminarEspacios(textField.getText(), false));
 					}
 
 					else {

@@ -55,10 +55,12 @@ public class DragAndDrop {
 						evt.getDropTargetContext().dropComplete(true);
 
 					}
-				} catch (Exception io) {
-					io.printStackTrace();
-					Metodos.mensaje("Error", 1);
 				}
+
+				catch (Exception io) {
+
+				}
+
 			}
 
 			public void dragExit(DropTargetEvent dte) {

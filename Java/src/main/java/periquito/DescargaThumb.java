@@ -84,19 +84,19 @@ public class DescargaThumb extends JFrame implements ActionListener, ChangeListe
 
 				LinkedList<String> urls = new LinkedList<String>();
 				LinkedList<String> urlsResultado = new LinkedList<String>();
-				String url = Metodos.eliminarEspacios(jTextField1.getText());
+				String url = Metodos.eliminarEspacios(jTextField1.getText(), false);
 
 				int limite = 0;
 
-				String limiteDescarga = Metodos.eliminarEspacios(textField_1.getText());
+				String limiteDescarga = Metodos.eliminarEspacios(textField_1.getText(), false);
 
 				if (!limiteDescarga.isEmpty()) {
 					limite = Integer.parseInt(limiteDescarga);
 				}
 
-				String claseImagen = Metodos.eliminarEspacios(textField1.getText());
+				String claseImagen = Metodos.eliminarEspacios(textField1.getText(), false);
 
-				urls = Metodos.obtenerEnlaces(url, 4, Metodos.eliminarEspacios(textField.getText()), "", limite);
+				urls = Metodos.obtenerEnlaces(url, 4, Metodos.eliminarEspacios(textField.getText(), false), "", limite);
 
 				// urls = Metodos.obtenerEnlaces(urls.get(0), 5, claseImagen, "", 1);
 

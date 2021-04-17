@@ -111,11 +111,11 @@ public class Permiso extends javax.swing.JFrame implements ActionListener, Chang
 
 				try {
 
-					String nivelDescarga = Metodos.eliminarEspacios(nvDescarga.getText());
+					String nivelDescarga = Metodos.eliminarEspacios(nvDescarga.getText(), false);
 
-					String nivelComentario = Metodos.eliminarEspacios(nvComentario.getText());
+					String nivelComentario = Metodos.eliminarEspacios(nvComentario.getText(), false);
 
-					String nivelVisibilidad = Metodos.eliminarEspacios(visibilidad.getText());
+					String nivelVisibilidad = Metodos.eliminarEspacios(visibilidad.getText(), false);
 
 					int numDescarga = Integer.parseInt(nivelDescarga);
 

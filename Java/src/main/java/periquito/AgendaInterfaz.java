@@ -98,28 +98,38 @@ public class AgendaInterfaz extends JFrame {
 				new Agregar().setVisible(true);
 			}
 		});
+
 		mntmNewMenuItem_1.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/name.png")));
+
 		mnNewMenu.add(mntmNewMenuItem_1);
 
 		JSeparator separator_2 = new JSeparator();
+
 		mnNewMenu.add(separator_2);
 
 		JMenuItem mntmNewMenuItem = new JMenuItem("Desde Archivo");
+
 		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
+
 			@Override
+
 			public void mousePressed(MouseEvent e) {
+
 				try {
 					new LeerArchivo().setVisible(true);
 				} catch (IOException e1) {
 					//
 				}
+
 			}
 		});
+
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		mntmNewMenuItem.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/nota.png")));
 		mnNewMenu.add(mntmNewMenuItem);
 
 		JButton editarContacto = new JButton();
+
 		menuBar.add(editarContacto);
 
 		editarContacto.setIcon(new ImageIcon(AgendaInterfaz.class.getResource("/imagenes/edit_1.png")));

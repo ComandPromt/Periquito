@@ -117,7 +117,7 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 
 		try {
 
-			fS.write(Metodos.eliminarEspacios(jTextField1.getText()));
+			fS.write(Metodos.eliminarEspacios(jTextField1.getText(), false));
 
 			fS.newLine();
 
@@ -129,11 +129,11 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 
 			fS.newLine();
 
-			fS.write(Metodos.eliminarEspacios(textArea.getText()));
+			fS.write(Metodos.eliminarEspacios(textArea.getText(), false));
 
 			fS.newLine();
 
-			fS.write(Metodos.eliminarEspacios(textField.getText()));
+			fS.write(Metodos.eliminarEspacios(textField.getText(), false));
 
 			fS.newLine();
 

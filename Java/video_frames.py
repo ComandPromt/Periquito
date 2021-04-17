@@ -1,11 +1,13 @@
 __author__ = 'vfdev'
 
 import argparse
+import matplotlib.pyplot as plt
 import os, sys
 import shutil
 import subprocess
 import json
 import urllib as urllib2
+import urllib.request
 import cv2
 
 lectura=[]
@@ -31,43 +33,43 @@ if "\\" in folder:
 
 def main(args):
 
-    if(len(lista_de_archivos)>0):
+	if(len(lista_de_archivos)>0):
 
 		imagenes=[]
 
 		indice=-1
 
-    for file in lista_de_archivos:
+	for file in lista_de_archivos:
 
-			if file[-4:]==".mp4" or file[-4:]==".avi":
+		if file[-4:]==".mp4" or file[-4:]==".avi":
 
-				extension=file[-4:]
+			extension=file[-4:]
 
-				++indice
+			++indice
 
-				imagenes.append(file)
+			imagenes.append(file)
 
-				filename = imagenes[indice]
+			filename = imagenes[indice]
 
-				api_url = "https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=loop."+extension;
+			api_url = "https://apiperiquito.herokuapp.com/recibo-json.php?imagenes=loop"+extension;
 
-				data = json.load(urllib2.urlopen(api_url))
+			data = json.load(urllib2.request.urlopen(api_url))
 
-				json_str = json.dumps(data)
+			json_str = json.dumps(data)
 
-				y = json.loads(json_str)
+			y = json.loads(json_str)
 
-				nombre_nuevo=y["imagenes_bd"][0]
+			nombre_nuevo=y["imagenes_bd"][0]
 
-				os.rename(carpeta+separador+filename, carpeta+separador+nombre_nuevo)
+			os.rename(carpeta+separador+filename, carpeta+separador+nombre_nuevo)
 
-				imagenes[indice]=nombre_nuevo
+			imagenes[indice]=nombre_nuevo
 
-				outputdir=carpeta+separador+'output'+separador+nombre_nuevo[0:-4]
+			outputdir=carpeta+separador+'output'+separador+nombre_nuevo[0:-4]
 
-				if not os.path.exists(outputdir):
+			if not os.path.exists(outputdir):
 
-					os.makedirs(outputdir)
+				os.makedirs(outputdir)
 
 				cap = cv2.VideoCapture()
 
@@ -130,7 +132,7 @@ def main(args):
 
 					cap.set(cv2.CAP_PROP_POS_FRAMES, frameId)
 
-    return 0
+	return 0
 
 def write_exif_model(folder_path, model, fields=None):
 

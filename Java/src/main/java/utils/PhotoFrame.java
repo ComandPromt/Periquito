@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -58,13 +59,13 @@ public class PhotoFrame extends javax.swing.JFrame {
 	public static String directorio = MenuPrincipal.getDirectorioActual() + "Config" + MenuPrincipal.getSeparador()
 			+ "imagenes_para_recortar";
 
-	public static String carpetaRecortes = directorio + MenuPrincipal.getSeparador() + "recortes";
+	static String carpetaRecortes = directorio + MenuPrincipal.getSeparador() + "recortes";
+
+	String carpetaImagenesRotadas = carpetaRecortes + MenuPrincipal.getSeparador() + "Image_rotate";
 
 	static JCheckBoxMenuItem reemplazar = new JCheckBoxMenuItem("Reemplazar");
 
 	private static boolean rotar = false;
-
-	private static int contador = 0;
 
 	public static LinkedList<String> listaImagenes = new LinkedList<>();
 
@@ -89,6 +90,8 @@ public class PhotoFrame extends javax.swing.JFrame {
 	private static JTextField ir;
 
 	private static LinkedList<String> comprobacion = new LinkedList<String>();
+
+	public static JSlider positionSlider;
 
 	public JTextField getRecorrido() {
 		return recorrido;
@@ -364,25 +367,29 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				photoPanel.guardar();
 
-				PhotoPanel.paso = PhotoPanel.entrada;
+				if (rdbtnmntmNormal.isSelected()) {
 
-				if (PhotoPanel.paso > PhotoPanel.entrada) {
-					--PhotoPanel.paso;
-				}
-
-				if (PhotoPanel.entrada < PhotoPanel.paso) {
 					PhotoPanel.paso = PhotoPanel.entrada;
-				}
 
-				if (PhotoPanel.entrada == listaImagenes.size()) {
-					PhotoPanel.paso = listaImagenes.size() - 1;
-				}
+					if (PhotoPanel.paso > PhotoPanel.entrada) {
+						--PhotoPanel.paso;
+					}
 
-				if (PhotoPanel.entrada == listaImagenes.size() - 1 || PhotoPanel.paso == listaImagenes.size()) {
+					if (PhotoPanel.entrada < PhotoPanel.paso) {
+						PhotoPanel.paso = PhotoPanel.entrada;
+					}
 
-					PhotoPanel.paso = listaImagenes.size() - 1;
+					if (PhotoPanel.entrada == listaImagenes.size()) {
+						PhotoPanel.paso = listaImagenes.size() - 1;
+					}
 
-					verFoto(PhotoPanel.paso);
+					if (PhotoPanel.entrada == listaImagenes.size() - 1 || PhotoPanel.paso == listaImagenes.size()) {
+
+						PhotoPanel.paso = listaImagenes.size() - 1;
+
+						verFoto(PhotoPanel.paso);
+					}
+
 				}
 
 			}
@@ -429,7 +436,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 		posicionImagen = PhotoPanel.paso;
 
-		--PhotoFrame.posicionImagen;
+		--posicionImagen;
 
 	}
 
@@ -484,7 +491,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 			comprobarImagenes(directorio + MenuPrincipal.getSeparador(), false);
 
-			int destino = Integer.parseInt(Metodos.eliminarEspacios(ir.getText()));
+			int destino = Integer.parseInt(Metodos.eliminarEspacios(ir.getText(), false));
 
 			if (destino > 0 && destino <= listaImagenes.size()) {
 
@@ -559,7 +566,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 		setMinimumSize(new Dimension(900, 300));
 
-		PhotoFrame.this.setTitle("Periquito - Crop");
+		PhotoFrame.this.setTitle("Recortador Multiple De Imagenes");
 
 		PhotoFrame.this.setLocationRelativeTo(null);
 
@@ -1000,16 +1007,43 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				try {
 
-					Metodos.abrirCarpeta(directorio);
+					Metodos.abrirCarpeta(carpetaRecortes);
 				}
 
-				catch (IOException e1) {
+				catch (Exception e1) {
 					//
 				}
 
 			}
 
 		});
+
+		JMenuItem mntmNewMenuItem_7 = new JMenuItem("A recortar");
+		mntmNewMenuItem_7.setForeground(Color.BLACK);
+		mntmNewMenuItem_7.setFont(new Font("Dialog", Font.PLAIN, 20));
+		mntmNewMenuItem_7.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/crop.png")));
+
+		mntmNewMenuItem_7.addMouseListener(new MouseAdapter() {
+
+			@Override
+
+			public void mousePressed(MouseEvent e) {
+
+				try {
+					Metodos.abrirCarpeta(directorio);
+				} catch (IOException e1) {
+					//
+				}
+
+			}
+
+		});
+
+		mnAbrir.add(mntmNewMenuItem_7);
+
+		JSeparator separator_9 = new JSeparator();
+
+		mnAbrir.add(separator_9);
 
 		mntmNewMenuItem.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/crop.png")));
 		mntmNewMenuItem.setFont(new Font("Dialog", Font.PLAIN, 20));
@@ -1027,7 +1061,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 			public void mousePressed(MouseEvent e) {
 
 				try {
-					Metodos.abrirCarpeta(carpetaRecortes + MenuPrincipal.getSeparador() + "Image_rotate");
+					Metodos.abrirCarpeta(carpetaImagenesRotadas);
 				}
 
 				catch (IOException e1) {
@@ -1180,6 +1214,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 					}
 
 					else {
+
 						Metodos.mensaje("No hay imagenes en la carpeta para recorar", 2);
 
 						Metodos.abrirCarpeta(directorio);
@@ -1201,6 +1236,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 		mnNewMenu_2.add(separator_4);
 
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Eliminar Imagen");
+		mnNewMenu_2.add(mntmNewMenuItem_3);
 		mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -1213,14 +1249,101 @@ public class PhotoFrame extends javax.swing.JFrame {
 		mntmNewMenuItem_3.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/delete.png")));
 		mntmNewMenuItem_3.setHorizontalAlignment(SwingConstants.CENTER);
 		mntmNewMenuItem_3.setFont(new Font("Dialog", Font.PLAIN, 20));
-		mnNewMenu_2.add(mntmNewMenuItem_3);
 
 		JSeparator separator_2 = new JSeparator();
 		mnNewMenu_2.add(separator_2);
+		reemplazar.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/utilities.png")));
 		reemplazar.setHorizontalAlignment(SwingConstants.CENTER);
 		reemplazar.setFont(new Font("Dialog", Font.PLAIN, 20));
 
 		mnNewMenu_2.add(reemplazar);
+
+		JSeparator separator_7 = new JSeparator();
+		mnNewMenu_2.add(separator_7);
+
+		JMenu mnNewMenu_3 = new JMenu("Vaciar");
+
+		mnNewMenu_3.setFont(new Font("Dialog", Font.PLAIN, 20));
+
+		mnNewMenu_3.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/clean.png")));
+
+		mnNewMenu_2.add(mnNewMenu_3);
+
+		JSeparator separator_5 = new JSeparator();
+
+		mnNewMenu_3.add(separator_5);
+
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Imagenes a recortar");
+
+		mntmNewMenuItem_4.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				int resp = JOptionPane.showConfirmDialog(null, "Desea vaciar la carpeta de las imágenes a recortar?");
+
+				if (resp == 0) {
+
+					Metodos.eliminarArchivos(directorio + MenuPrincipal.getSeparador());
+
+				}
+
+			}
+
+		});
+
+		mntmNewMenuItem_4.setFont(new Font("Dialog", Font.PLAIN, 20));
+		mntmNewMenuItem_4.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/clean.png")));
+		mnNewMenu_3.add(mntmNewMenuItem_4);
+
+		JSeparator separator_6 = new JSeparator();
+		mnNewMenu_3.add(separator_6);
+
+		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Recortes");
+
+		mntmNewMenuItem_5.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				int resp = JOptionPane.showConfirmDialog(null, "Desea vaciar la carpeta de las imágenes recortadas?");
+
+				if (resp == 0) {
+
+					Metodos.eliminarArchivos(carpetaRecortes + MenuPrincipal.getSeparador());
+				}
+
+			}
+
+		});
+
+		mntmNewMenuItem_5.setFont(new Font("Dialog", Font.PLAIN, 20));
+		mntmNewMenuItem_5.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/clean.png")));
+		mnNewMenu_3.add(mntmNewMenuItem_5);
+
+		JSeparator separator_8 = new JSeparator();
+		mnNewMenu_3.add(separator_8);
+
+		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Rotadas");
+		mntmNewMenuItem_6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println(carpetaImagenesRotadas);
+				int resp = JOptionPane.showConfirmDialog(null, "Desea vaciar la carpeta de las imágenes rotadas?");
+
+				if (resp == 0) {
+					try {
+						Metodos.eliminarArchivos(carpetaImagenesRotadas + MenuPrincipal.getSeparador());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+		});
+		mntmNewMenuItem_6.setFont(new Font("Dialog", Font.PLAIN, 20));
+		mntmNewMenuItem_6.setIcon(new ImageIcon(PhotoFrame.class.getResource("/imagenes/clean.png")));
+		mnNewMenu_3.add(mntmNewMenuItem_6);
 
 	}
 
@@ -1259,7 +1382,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 		return imagen;
 	}
 
-	public static void main(String[] args) {
+	public static void MenuPrincipal(String[] args) {
 
 		try {
 

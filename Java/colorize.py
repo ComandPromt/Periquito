@@ -58,7 +58,7 @@ if(len(lista_de_archivos)>0):
 		
 		extension=file[-4:]
 
-		if extension==".jpg" or extension==".png":
+		if extension==".jpg" or extension==".png" or extension==".JPG" or extension==".PNG":
 		
 			++indice
 

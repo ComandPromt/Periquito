@@ -115,7 +115,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 					location = element.attr("href");
 				}
 
-				location = Metodos.eliminarEspacios(location);
+				location = Metodos.eliminarEspacios(location, false);
 
 				location = Metodos.limpiarCadena(location);
 
@@ -440,13 +440,13 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 					if (respuesta == 0) {
 
-						int imagen = Integer.parseInt(Metodos.eliminarEspacios(textField_6.getText()));
+						int imagen = Integer.parseInt(Metodos.eliminarEspacios(textField_6.getText(), false));
 
-						int de = Integer.parseInt(Metodos.eliminarEspacios(textField_4.getText()));
+						int de = Integer.parseInt(Metodos.eliminarEspacios(textField_4.getText(), false));
 
-						int hasta = Integer.parseInt(Metodos.eliminarEspacios(textField_5.getText()));
+						int hasta = Integer.parseInt(Metodos.eliminarEspacios(textField_5.getText(), false));
 
-						int paso = Integer.parseInt(Metodos.eliminarEspacios(textField_1.getText()));
+						int paso = Integer.parseInt(Metodos.eliminarEspacios(textField_1.getText(), false));
 
 						if (!checkBox.isSelected()) {
 							de = 1;
@@ -460,8 +460,8 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 								obtenerEnlaces(Metodos.eliminarEspacios(
 										"http://www.hoopfetish.com/forum/viewthread.php?thread_id=72&rowstart="
-												+ contador),
-										2, "tbl-border", "tbl1");
+												+ contador,
+										false), 2, "tbl-border", "tbl1");
 
 							}
 
@@ -473,7 +473,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 							s = conexion.createStatement();
 
-							String etiqueta = Metodos.eliminarEspacios(textField.getText());
+							String etiqueta = Metodos.eliminarEspacios(textField.getText(), false);
 
 							int recuento = 0;
 
