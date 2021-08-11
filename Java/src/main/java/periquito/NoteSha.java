@@ -48,7 +48,7 @@ public class NoteSha extends javax.swing.JFrame implements ActionListener, Chang
 
 		setTitle("Periquito v3 Notes Sha");
 
-		setType(Type.UTILITY);
+		setType(Type.NORMAL);
 
 		comboBox = new JComboBox();
 

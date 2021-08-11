@@ -368,39 +368,53 @@ public class VerUrl extends javax.swing.JFrame implements ActionListener, Change
 				.addComponent(lblNewLabel_1).addGap(38)));
 
 		list = new JList();
+
 		list.addListSelectionListener(new ListSelectionListener() {
+
 			public void valueChanged(ListSelectionEvent e) {
+
 				try {
 
 					String urlSeleccionada = list.getSelectedValue().toString();
 
-					if (Metodos.pingURL(urlSeleccionada)) {
+					if (Metodos.probarConexion(urlSeleccionada)) {
+
 						Scrapt.setjTextField1(Metodos.eliminarEspacios(textField.getText(), false));
+
 					}
 
 					else {
 						Metodos.mensaje(" La URL no existe", 3);
 					}
+
 				}
 
-				catch (NullPointerException e1) {
+				catch (Exception e1) {
 					//
 				}
 
 			}
+
 		});
+
 		list.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
 		scrollPane.setViewportView(list);
+
 		getContentPane().setLayout(layout);
+
 		setSize(new Dimension(588, 544));
+
 		setLocationRelativeTo(null);
+
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-//
+
 	}
 
 	public void stateChanged(ChangeEvent e) {
-		//
+
 	}
+
 }

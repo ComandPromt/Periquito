@@ -153,7 +153,7 @@ public class CronWebp extends TimerTask {
 
 					case 4:
 						Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador());
+								+ "Gif_extractor" + MenuPrincipal.getSeparador(), ".");
 
 						break;
 
@@ -164,7 +164,7 @@ public class CronWebp extends TimerTask {
 
 					if (resp == 0) {
 						Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador());
+								+ "Gif_extractor" + MenuPrincipal.getSeparador(), ".");
 					}
 
 					break;
@@ -189,9 +189,9 @@ public class CronWebp extends TimerTask {
 
 				}
 
-				MenuPrincipal.timer.cancel();
+				Metodos.timer.cancel();
 
-				MenuPrincipal.timer.purge();
+				Metodos.timer.purge();
 
 				Metodos.crearFichero("Config/llamada_python.txt", "", false);
 

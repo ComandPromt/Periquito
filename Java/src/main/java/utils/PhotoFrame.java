@@ -1284,7 +1284,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				if (resp == 0) {
 
-					Metodos.eliminarArchivos(directorio + MenuPrincipal.getSeparador());
+					Metodos.eliminarArchivos(directorio + MenuPrincipal.getSeparador(), ".");
 
 				}
 
@@ -1310,7 +1310,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				if (resp == 0) {
 
-					Metodos.eliminarArchivos(carpetaRecortes + MenuPrincipal.getSeparador());
+					Metodos.eliminarArchivos(carpetaRecortes + MenuPrincipal.getSeparador(), ".");
 				}
 
 			}
@@ -1333,7 +1333,7 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				if (resp == 0) {
 					try {
-						Metodos.eliminarArchivos(carpetaImagenesRotadas + MenuPrincipal.getSeparador());
+						Metodos.eliminarArchivos(carpetaImagenesRotadas + MenuPrincipal.getSeparador(), ".");
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

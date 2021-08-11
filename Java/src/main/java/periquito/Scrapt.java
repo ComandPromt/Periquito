@@ -411,7 +411,7 @@ public class Scrapt extends javax.swing.JFrame implements ActionListener, Change
 
 					String url = jTextField1.getText() + textField_4.getText();
 
-					if (Metodos.pingURL(url)) {
+					if (Metodos.probarConexion(url)) {
 						Metodos.abrirCarpeta(url);
 					}
 

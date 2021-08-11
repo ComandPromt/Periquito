@@ -49,19 +49,31 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 	transient BufferedImage tmpRecorte;
 
 	private float clipX = 0;
+
 	private float clipY = 0;
+
 	private float clipWidth;
+
 	private float clipHeight;
+
 	public static int paso = 1;
 
 	public static boolean penultimaFoto = false;
+
 	private int x1 = 0;
+
 	private int y1 = 0;
+
 	private int dx1x2 = 0;
+
 	private int dy1y2 = 0;
+
 	private int x2 = 0;
+
 	private int y2 = 0;
+
 	public static int entrada;
+
 	boolean band = true;
 
 	private JPopupMenu popupMenu = new JPopupMenu();
@@ -303,8 +315,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 				String numero = "";
 
-				int y = Metodos
-						.directorio(PhotoFrame.carpetaRecortes + MenuPrincipal.getSeparador(), ".", true, false)
+				int y = Metodos.directorio(PhotoFrame.carpetaRecortes + MenuPrincipal.getSeparador(), ".", true, false)
 						.size() + 1;
 
 				int inicio = 0;
@@ -343,17 +354,23 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 					else {
 
 						if (y >= 10 && y < 100) {
+
 							numero = "00" + y;
+
 						}
 
 						else {
 
 							if (y >= 100 && y < 1000) {
+
 								numero = "0" + y;
+
 							}
 
 							else {
+
 								numero = "" + y;
+
 							}
 
 						}
@@ -374,16 +391,25 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 					--ultimaFoto;
 
 					if (paso == entrada && ++entrada == ultimaFoto) {
+
 						--paso;
+
 						penultimaFoto = true;
-					} else {
+
+					}
+
+					else {
+
 						penultimaFoto = false;
+
 					}
 
 					++paso;
 
 					if (paso == listaImagenes.size()) {
+
 						--paso;
+
 					}
 
 					if (penultimaFoto && PhotoFrame.recortar) {
@@ -407,9 +433,11 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 							++paso;
 
 						}
+
 					}
 
 					PhotoFrame.verFoto(paso);
+
 				}
 
 				Metodos.renombrarArchivos(PhotoFrame.carpetaRecortes + MenuPrincipal.getSeparador(), ".", true);
@@ -466,6 +494,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 						Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(),
 								MenuPrincipal.getDirectorioImagenes(), false, 1);
+
 						break;
 
 					case 3:
@@ -475,21 +504,28 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 						break;
 
 					case 4:
+
 						Metodos.abrirCarpeta(PhotoFrame.carpetaRecortes);
+
 						break;
 
 					case 5:
+
 						Metodos.abrirCarpeta(PhotoFrame.directorio);
 
 						break;
 
 					case 6:
+
 						Metodos.abrirCarpeta(
 								PhotoFrame.carpetaRecortes + MenuPrincipal.getSeparador() + "Image_rotate");
+
 						break;
 
 					case 7:
-						Metodos.eliminarArchivos(PhotoFrame.directorio + MenuPrincipal.getSeparador());
+
+						Metodos.eliminarArchivos(PhotoFrame.directorio + MenuPrincipal.getSeparador(), ".");
+
 						break;
 
 					}
@@ -526,6 +562,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 
 			imagenSelecionada = imagenSelecionada.substring(
 					imagenSelecionada.lastIndexOf(MenuPrincipal.getSeparador()) + 1, imagenSelecionada.length());
+
 		}
 
 		catch (NullPointerException e) {
@@ -552,6 +589,7 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		}
 
 		return imagenSelecionada;
+
 	}
 
 	@Override
@@ -563,11 +601,15 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 		y2 = (int) e.getPoint().getY();
 
 		if (x2 < 0) {
+
 			x2 = 0;
+
 		}
 
 		if (y2 < 0) {
+
 			y2 = 0;
+
 		}
 
 		dx1x2 = x2 - x1;
@@ -585,7 +627,9 @@ public class PhotoPanel extends JPanel implements MouseMotionListener, MouseList
 	}
 
 	public void mouseClicked(MouseEvent e) {
+
 		showPopup(e);
+
 	}
 
 	@Override

@@ -87,14 +87,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 				if (x == 0) {
 
-					try {
-						Metodos.convertir(ruta.substring(0, ruta.lastIndexOf(MenuPrincipal.getSeparador()) + 1));
-
-					}
-
-					catch (Exception e) {
-						e.printStackTrace();
-					}
+					Metodos.convertir(ruta.substring(0, ruta.lastIndexOf(MenuPrincipal.getSeparador()) + 1));
 
 				}
 
@@ -127,7 +120,9 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 						new ImagenesSha();
 
-					} catch (Exception e) {
+					}
+
+					catch (Exception e) {
 						e.printStackTrace();
 					}
 
@@ -140,6 +135,7 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 					break;
 
 				default:
+
 					break;
 
 				}
@@ -149,7 +145,9 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		}
 
 		catch (Exception e) {
-			//
+
+			e.printStackTrace();
+
 		}
 
 	}

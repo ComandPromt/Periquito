@@ -100,7 +100,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 		}
 	}
 
-	public ImagenesSha() throws IOException {
+	public ImagenesSha() {
 
 		setAlwaysOnTop(true);
 		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -155,6 +155,9 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 			String extension;
 
+			String ruta = ComprobarSha.getRutas().get(0).substring(0,
+					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1);
+
 			for (int x = 0; x < ComprobarSha.getLectura().size(); x++) {
 
 				extension = Metodos.extraerExtension(ComprobarSha.getLectura().get(x));
@@ -178,7 +181,8 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 						comprobacionSha = separador + "SI , su image_id es: " + rs.getString("image_id");
 
-						imagenesRepetidas.add(ComprobarSha.getLectura().get(x));
+						imagenesRepetidas.add(ruta + ComprobarSha.getLectura().get(x));
+
 					}
 
 					else {
@@ -235,20 +239,26 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					}
 
 				}
-
 			});
 
 			mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
 			mnNewMenu.add(mntmNewMenuItem);
 
 			JSeparator separator_6 = new JSeparator();
+
 			mnNewMenu.add(separator_6);
 
 			mntmNewMenuItem_1 = new JMenuItem("Mover para subir al CMS");
+
 			mntmNewMenuItem_1.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
+
 			mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
 			mntmNewMenuItem_1.addMouseListener(new MouseAdapter() {
+
 				@Override
+
 				public void mousePressed(MouseEvent e) {
 
 					try {
@@ -272,15 +282,21 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					}
 
 				}
+
 			});
+
 			mnNewMenu.add(mntmNewMenuItem_1);
 
 			JSeparator separator = new JSeparator();
+
 			mnNewMenu.add(separator);
 
 			JMenuItem mntmNewMenuItem_2 = new JMenuItem("Ver imágenes subidas");
+
 			mntmNewMenuItem_2.addMouseListener(new MouseAdapter() {
+
 				@Override
+
 				public void mousePressed(MouseEvent e) {
 
 					String busqueda = "";
@@ -288,20 +304,31 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					busqueda = Metodos.separarPorComas(ComprobarSha.getShaimages());
 
 					Metodos.mostrarGaleriaConWhere(busqueda);
+
 				}
 
 			});
+
 			mntmNewMenuItem_2.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/view.png")));
+
 			mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
 			mnNewMenu.add(mntmNewMenuItem_2);
 
 			JMenuItem mntmNewMenuItem_3 = new JMenuItem("Abrir Carpeta");
+
 			mntmNewMenuItem_3.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
 			mntmNewMenuItem_3.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/folder.png")));
+
 			mntmNewMenuItem_3.addMouseListener(new MouseAdapter() {
+
 				@Override
+
 				public void mousePressed(MouseEvent e) {
+
 					try {
+
 						Metodos.abrirCarpeta(ComprobarSha.getRutas().get(0).substring(0,
 								ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
 								+ MenuPrincipal.getSeparador());
@@ -310,16 +337,25 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					catch (IOException e1) {
 						//
 					}
+
 				}
+
 			});
+
 			menuBar.add(mntmNewMenuItem_3);
 
 			JMenuItem mntmNewMenuItem_4 = new JMenuItem("Volver a comprobar");
+
 			mntmNewMenuItem_4.setIcon(new ImageIcon(ImagenesSha.class.getResource("/imagenes/actualizar.png")));
+
 			mntmNewMenuItem_4.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
 			mntmNewMenuItem_4.addMouseListener(new MouseAdapter() {
+
 				@Override
+
 				public void mousePressed(MouseEvent e) {
+
 					try {
 
 						imagenes.clear();
@@ -333,8 +369,11 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 					catch (IOException e1) {
 						//
 					}
+
 				}
+
 			});
+
 			menuBar.add(mntmNewMenuItem_4);
 
 			frmShaImages.setVisible(true);
@@ -343,7 +382,7 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 		catch (Exception e) {
 
-			//
+			e.printStackTrace();
 		}
 
 	}

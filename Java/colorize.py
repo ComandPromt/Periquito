@@ -26,7 +26,7 @@ if "\\" in folder:
 
 	separador="\\"
 
-carpeta=folder+"colorization"+separador;
+carpeta=folder+separador+"colorization"+separador;
 
 parser = argparse.ArgumentParser()
 

@@ -45,6 +45,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -71,13 +73,105 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import io.github.biezhi.webp.WebpIO;
 import periquito.Bd;
 import periquito.Config;
 import periquito.Config2;
+import periquito.CronWebp;
 import periquito.Descarga;
 import periquito.MenuPrincipal;
 
 public abstract class Metodos {
+
+	public static Timer timer = new Timer();
+
+	public static TimerTask task = new CronWebp();
+
+	public static void borrarArchivosSubidos() {
+
+		LinkedList<String> lista = new LinkedList<String>();
+
+		if (!MenuPrincipal.imagenesSubidas.isEmpty()) {
+
+			lista = MenuPrincipal.imagenesSubidas;
+
+		}
+
+		else {
+
+			lista = directorio(MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador(), "images", true,
+					false);
+
+		}
+
+		if (MenuPrincipal.configuracion[4].equals("1")) {
+
+			moverListaImagenes(lista, true);
+
+		}
+
+		else {
+
+			moverListaImagenes(lista, false);
+
+		}
+
+	}
+
+	public static void moverListaImagenes(LinkedList<String> lista, boolean borrar) {
+
+		try {
+
+			JSONObject json;
+
+			int respuesta;
+
+			for (int i = 0; i < lista.size(); i++) {
+
+				String server = MenuPrincipal.getLecturaurl()[0];
+
+				if (!MenuPrincipal.getLecturaurl()[1].isEmpty()) {
+
+					server += "/" + MenuPrincipal.getLecturaurl()[1];
+
+				}
+
+				json = Metodos.readJsonFromUrl("http://" + server + "/api/api.php?sha256='"
+						+ Metodos.getSHA256Checksum(
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + lista.get(i))
+						+ "'");
+
+				respuesta = json.getInt("respuesta");
+
+				if (respuesta == 202) {
+
+					if (borrar) {
+
+						Metodos.eliminarFichero(
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + lista.get(i));
+
+					}
+
+					else {
+
+						Metodos.moverArchivo(
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + lista.get(i),
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador()
+										+ "imagenes_subidas" + MenuPrincipal.getSeparador() + lista.get(i));
+
+					}
+
+				}
+
+			}
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+	}
 
 	public static void verFicheros(String carpeta) {
 
@@ -86,9 +180,28 @@ public abstract class Metodos {
 		if (dir.exists()) {
 
 			File[] ficheros = dir.listFiles();
+
 			for (int x = 0; x < ficheros.length; x++) {
+
 				System.out.println(ficheros[x].length());
+
 			}
+
+		}
+
+	}
+
+	public static void webp_png(boolean png, String src, String dest) {
+
+		if (png) {
+
+			WebpIO.create().toNormalImage(src, dest);
+
+		}
+
+		else {
+
+			WebpIO.create().toWEBP(src, dest);
 
 		}
 
@@ -114,52 +227,6 @@ public abstract class Metodos {
 
 		// writes to output file
 		ImageIO.write(outputImage, formatName, new File(outputImagePath));
-
-	}
-
-	public static void borrarArchivosSubidos(String ruta) {
-
-		LinkedList<String> imagenes = new LinkedList<String>();
-
-		imagenes = directorio(ruta, ".", true, false);
-
-		String extension, imagen;
-
-		try {
-
-			Connection conexion = conexionBD();
-
-			Statement s = conexion.createStatement();
-
-			for (int x = 0; x < imagenes.size(); x++) {
-
-				imagen = ruta + imagenes.get(x);
-
-				extension = extraerExtension(imagenes.get(x));
-
-				if (extension.equals("jpg") || extension.equals("png") || extension.equals("gif")) {
-
-					ResultSet rs = s
-							.executeQuery("select COUNT(image_id),image_id from " + MenuPrincipal.getLecturabd()[3]
-									+ "images " + "WHERE sha256='" + getSHA256Checksum(imagen) + "'");
-
-					rs.next();
-
-					int recuento = Integer.parseInt(rs.getString("count(image_id)"));
-
-					if (recuento > 0) {
-						eliminarFichero(imagen);
-					}
-
-				}
-
-			}
-
-		}
-
-		catch (Exception e) {
-			//
-		}
 
 	}
 
@@ -555,34 +622,6 @@ public abstract class Metodos {
 
 	}
 
-	public static boolean pingURL(String url) {
-
-		int timeout = 400000;
-
-		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
-
-		try {
-
-			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-			connection.setConnectTimeout(timeout);
-			connection.setReadTimeout(timeout);
-			connection.setRequestMethod("HEAD");
-
-			int responseCode = connection.getResponseCode();
-
-			if (responseCode == 404) {
-				return false;
-			}
-
-			else {
-				return (200 <= responseCode && responseCode <= 399);
-			}
-
-		} catch (IOException exception) {
-			return false;
-		}
-	}
-
 	public static int calcularPorcentaje(int valor, int total) {
 
 		float resultado = (valor * 100) / total;
@@ -616,19 +655,32 @@ public abstract class Metodos {
 		String cadena2 = cadena;
 
 		try {
+
 			cadena2 = cadena.substring(0, cadena.length() - 4);
 
 			cadena = cadena2.replace(".", "_") + "." + extraerExtension(cadena);
-		} catch (Exception e) {
+
+		}
+
+		catch (Exception e) {
 
 		}
 
 		return cadena;
+
 	}
 
 	public static void cerrarNavegador() {
 
 		try {
+
+			if (MenuPrincipal.chrome != null || MenuPrincipal.chrome instanceof WebDriver) {
+
+				MenuPrincipal.chrome.quit();
+
+				MenuPrincipal.chrome.close();
+
+			}
 
 			if (!MenuPrincipal.getOs().equals("Linux")) {
 				crearScript("cerrar.bat", "taskkill /F /IM geckodriver.exe /T", true, MenuPrincipal.getOs());
@@ -838,13 +890,42 @@ public abstract class Metodos {
 		BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
 		String jsonText = readAll(rd);
+
 		is.close();
 
 		return new JSONObject(jsonText);
 
 	}
 
-	public static boolean probarconexion(String web) throws IOException {
+	public static boolean pingURL(String url) {
+
+		int timeout = 400000;
+
+		url = url.replaceFirst("^https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
+
+		try {
+
+			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+			connection.setConnectTimeout(timeout);
+			connection.setReadTimeout(timeout);
+			connection.setRequestMethod("HEAD");
+
+			int responseCode = connection.getResponseCode();
+
+			if (responseCode == 404) {
+				return false;
+			}
+
+			else {
+				return (200 <= responseCode && responseCode <= 399);
+			}
+
+		} catch (IOException exception) {
+			return false;
+		}
+	}
+
+	public static boolean probarConexion(String web) throws IOException {
 
 		int puerto = 80;
 
@@ -1485,6 +1566,48 @@ public abstract class Metodos {
 
 	}
 
+	public static void verConfig(int tipo, boolean mensaje) {
+
+		try {
+
+			MenuPrincipal.notificacion = true;
+
+			if (mensaje) {
+
+				Metodos.mensaje("Por favor, revisa la configuración", 3);
+
+			}
+
+			switch (tipo) {
+
+			case 1:
+
+				new Config().setVisible(true);
+
+				break;
+
+			case 2:
+
+				new Config2().setVisible(true);
+
+				break;
+
+			case 3:
+
+				new Bd().setVisible(true);
+
+				break;
+
+			}
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+	}
+
 	public static void exportarBd(String archivo, List<String> tablas) throws IOException {
 
 		String[] backup = leerFicheroArray("Backup.txt", 1);
@@ -1664,7 +1787,9 @@ public abstract class Metodos {
 			File file = new File(ruta);
 
 			if (!file.exists()) {
+
 				file.createNewFile();
+
 			}
 
 			String prefix = MenuPrincipal.getLecturabd()[3];
@@ -1676,209 +1801,330 @@ public abstract class Metodos {
 			bw.write(contenido);
 
 			bw.newLine();
+
 			int columnas = 0;
+
 			String tabla = "";
+
 			for (int i = 0; i < tablas.size(); i++) {
 
 				switch (tablas.get(i)) {
 
 				case "users":
+
 					tabla = prefix + "users";
+
 					columnas = 10;
+
 					break;
 
 				case "comments":
+
 					tabla = prefix + "comments";
+
 					columnas = 8;
+
 					break;
 
 				case "categories":
+
 					tabla = prefix + "categories";
+
 					columnas = 15;
+
 					break;
 
 				case "etiquetas":
+
 					tabla = prefix + "etiquetas";
+
 					columnas = 2;
+
 					break;
 
 				case "groups":
+
 					tabla = prefix + "groups";
+
 					columnas = 2;
+
 					break;
 
 				case "images":
+
 					tabla = prefix + "images";
+
 					columnas = 19;
+
 					break;
 
 				case "imgroups":
+
 					tabla = prefix + "imgroups";
+
 					columnas = 8;
+
 					break;
 
 				case "imv":
+
 					tabla = prefix + "imv";
+
 					columnas = 2;
+
 					break;
 
 				case "lightboxes":
+
 					tabla = prefix + "lightboxes";
+
 					columnas = 3;
+
 					break;
 
 				case "msgroups":
+
 					tabla = prefix + "msgroups";
+
 					columnas = 4;
+
 					break;
 
 				case "musugroup":
+
 					tabla = prefix + "musugroup";
+
 					columnas = 2;
+
 					break;
 
 				case "scrapting":
+
 					tabla = prefix + "scrapting";
+
 					columnas = 9;
+
 					break;
 
 				case "tags":
+
 					tabla = prefix + "tags";
+
 					columnas = 2;
+
 					break;
 
 				case "video":
+
 					tabla = prefix + "video";
+
 					columnas = 4;
+
 					break;
 
 				case "videocomments":
+
 					tabla = prefix + "videocomments";
+
 					columnas = 8;
+
 					break;
 
 				case "antispam":
+
 					tabla = prefix + "antispam";
+
 					columnas = 2;
+
 					break;
 
 				case "bots":
+
 					tabla = "bots";
+
 					columnas = 2;
+
 					break;
 
 				case "descargas":
+
 					tabla = "descargas";
+
 					columnas = 2;
+
 					break;
 
 				case "grupos":
+
 					tabla = "grupos";
+
 					columnas = 2;
+
 					break;
 
 				case "mensajes":
+
 					tabla = "mensajes";
+
 					columnas = 7;
+
 					break;
 
 				case "notas":
+
 					tabla = "notas";
+
 					columnas = 4;
+
 					break;
 
 				case "tbl_tracking":
+
 					tabla = "tbl_tracking";
+
 					columnas = 8;
+
 					break;
 
 				case "aleman":
+
 					tabla = "aleman";
+
 					columnas = 3;
+
 					break;
 
 				case "arabe":
+
 					tabla = "arabe";
+
 					columnas = 3;
+
 					break;
 
 				case "bengali":
+
 					tabla = "bengali";
+
 					columnas = 3;
+
 					break;
 
 				case "catalan":
+
 					tabla = "catalan";
+
 					columnas = 3;
+
 					break;
 
 				case "chino":
+
 					tabla = "chino";
+
 					columnas = 3;
+
 					break;
 
 				case "coreano":
+
 					tabla = "coreano";
+
 					columnas = 3;
+
 					break;
 
 				case "euskera":
+
 					tabla = "euskera";
+
 					columnas = 3;
+
 					break;
 
 				case "frances":
+
 					tabla = "frances";
+
 					columnas = 3;
+
 					break;
 
 				case "hindu":
+
 					tabla = "hindu";
+
 					columnas = 3;
+
 					break;
 
 				case "ingles":
+
 					tabla = "ingles";
+
 					columnas = 3;
+
 					break;
 
 				case "italiano":
+
 					tabla = "italiano";
+
 					columnas = 3;
+
 					break;
 
 				case "japones":
+
 					tabla = "japones";
+
 					columnas = 3;
+
 					break;
 
 				case "polaco":
+
 					tabla = "polaco";
+
 					columnas = 3;
+
 					break;
 
 				case "portuges":
+
 					tabla = "portuges";
+
 					columnas = 3;
+
 					break;
 
 				case "ruso":
+
 					tabla = "ruso";
+
 					columnas = 3;
+
 					break;
 
 				case "spanish":
+
 					tabla = "spanish";
+
 					columnas = 3;
+
 					break;
 
 				case "vietnamita":
+
 					tabla = "vietnamita";
+
 					columnas = 3;
+
 					break;
 
 				default:
 					break;
+
 				}
 
 				datos = mostrarDatosTabla(tabla, columnas);
@@ -1899,6 +2145,7 @@ public abstract class Metodos {
 		mensaje("Backup realizado correctamente", 2);
 
 		abrirCarpeta(backup[0]);
+
 	}
 
 	private static String escribirInserts(String tabla, LinkedList<String> datos, int filas) {
@@ -1922,14 +2169,19 @@ public abstract class Metodos {
 			i++;
 
 			if (y == filas && i < datos.size()) {
+
 				sentencia += espaciador;
+
 				y = 1;
+
 			}
 
 			else {
 
 				if (i < datos.size()) {
+
 					sentencia += ",";
+
 				}
 
 				y++;
@@ -1946,7 +2198,9 @@ public abstract class Metodos {
 	}
 
 	public static Integer mostrarGaleriaSql(String busqueda, String sql, String sql2) throws SQLException, IOException {
+
 		int recuento = 0;
+
 		Connection conexion = conexionBD();
 
 		Statement s = conexion.createStatement();
@@ -1962,6 +2216,7 @@ public abstract class Metodos {
 			if (recuento > 500) {
 
 				mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+
 				mensaje("Por favor,introduce un nombre con menos registros para mostrarlos", 2);
 
 				abrirCarpeta(obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0], MenuPrincipal.getLecturaurl()[1])
@@ -1980,7 +2235,9 @@ public abstract class Metodos {
 				while (rs.next()) {
 
 					MenuPrincipal.getListaImagenes().add(rs.getString("image_media_file"));
+
 					MenuPrincipal.getCategorias().add(rs.getString("cat_id"));
+
 				}
 
 			}
@@ -1995,7 +2252,9 @@ public abstract class Metodos {
 
 				mensaje("No hay resultados, intente con otro nombre", 2);
 
-			} else {
+			}
+
+			else {
 
 				if (recuento <= 500) {
 
@@ -2019,13 +2278,17 @@ public abstract class Metodos {
 					}
 
 				}
+
 			}
 
 		}
 
 		else {
+
 			mensaje("La búsqueda no tiene resultados", 3);
+
 		}
+
 		return recuento;
 	}
 
@@ -2069,6 +2332,7 @@ public abstract class Metodos {
 								if (recuento > 500) {
 
 									mensaje("Has introducido un nombre que está en más de 500 imágenes", 3);
+
 									mensaje("Por favor,introduce un nombre con menos registros para mostrarlos", 2);
 
 									abrirCarpeta(obtenerEnlaceCms(MenuPrincipal.getLecturaurl()[0],
@@ -2087,40 +2351,44 @@ public abstract class Metodos {
 									while (rs.next()) {
 
 										MenuPrincipal.getListaImagenes().add(rs.getString("image_media_file"));
+
 										MenuPrincipal.getCategorias().add(rs.getString("cat_id"));
-									}
-
-								}
-
-								s.close();
-
-								rs.close();
-
-								conexion.close();
-
-								if (recuento == 0) {
-
-									mensaje("No hay resultados, intente con otro nombre", 2);
-
-								} else {
-
-									if (recuento < 500) {
-
-										try {
-
-											new Galeria();
-											new InterfazGaleria().setVisible(true);
-										}
-
-										catch (Exception e1) {
-
-											mensaje("No se han podido cargar las imágenes", 1);
-
-											new Config2().setVisible(true);
-
-										}
 
 									}
+
+									s.close();
+
+									rs.close();
+
+									conexion.close();
+
+									if (recuento == 0) {
+
+										mensaje("No hay resultados, intente con otro nombre", 2);
+
+									}
+
+									else {
+
+										if (recuento < 500) {
+
+											try {
+
+												new Galeria();
+												new InterfazGaleria().setVisible(true);
+											}
+
+											catch (Exception e1) {
+
+												mensaje("No se han podido cargar las imágenes", 1);
+
+												new Config2().setVisible(true);
+
+											}
+
+										}
+									}
+
 								}
 
 							}
@@ -2132,6 +2400,7 @@ public abstract class Metodos {
 						}
 
 					}
+
 				}
 
 				catch (Exception e1) {
@@ -2179,11 +2448,17 @@ public abstract class Metodos {
 				try {
 
 					Runtime aplicacion2 = Runtime.getRuntime();
+
 					fS.write("@echo off");
+
 					fS.newLine();
+
 					fS.write(contenido);
+
 					fS.newLine();
+
 					fS.write("exit");
+
 					aplicacion2 = Runtime.getRuntime();
 
 					aplicacion2.exec("cmd.exe /K " + iniciar + " " + System.getProperty("user.dir") + "\\" + archivo);
@@ -2191,7 +2466,9 @@ public abstract class Metodos {
 				}
 
 				finally {
+
 					fS.close();
+
 					flS.close();
 
 				}
@@ -2206,13 +2483,31 @@ public abstract class Metodos {
 		}
 	}
 
+	public static void python(String script) throws IOException {
+
+		Runtime.getRuntime().exec(script);
+
+		task.cancel();
+
+		task = new CronWebp();
+
+		timer = new Timer();
+
+		timer.schedule(task, 0, 1000);
+
+	}
+
 	public static void ponerCategoriasBd(JComboBox<String> combobox) throws SQLException, IOException {
 
 		combobox.setFont(new Font("Tahoma", Font.BOLD, 24));
 
 		ArrayList<String> categorias = verCategorias();
 
+		MenuPrincipal.countCategorias = false;
+
 		if (!categorias.isEmpty()) {
+
+			MenuPrincipal.countCategorias = true;
 
 			try {
 
@@ -2225,7 +2520,9 @@ public abstract class Metodos {
 			catch (Exception e) {
 				mensaje("Error al cargar las categorías", 1);
 			}
+
 		}
+
 	}
 
 	public static ArrayList<String> verCategorias() throws SQLException, IOException {
@@ -2268,9 +2565,9 @@ public abstract class Metodos {
 		return categorias;
 	}
 
-	public static void eliminarArchivos(String ruta) {
+	public static void eliminarArchivos(String ruta, String extension) {
 
-		LinkedList<String> frames = directorio(ruta, ".", true, false);
+		LinkedList<String> frames = directorio(ruta, extension, true, false);
 
 		for (int i = 0; i < frames.size(); i++) {
 
@@ -2283,16 +2580,18 @@ public abstract class Metodos {
 
 	}
 
-	public static void eliminarArchivos(List<String> listaImagenes, String ruta) {
+	public static void eliminarArchivos(LinkedList<String> lista, String ruta) {
 
 		File carpeta = new File(ruta);
 
 		if (carpeta.isDirectory()) {
 
-			for (int i = 0; i < listaImagenes.size(); i++) {
+			for (int i = 0; i < lista.size(); i++) {
 
-				if (!listaImagenes.get(i).isEmpty()) {
-					eliminarFichero(ruta + listaImagenes.get(i));
+				if (!lista.get(i).isEmpty()) {
+
+					eliminarFichero(lista.get(i));
+
 				}
 
 			}
@@ -2518,7 +2817,7 @@ public abstract class Metodos {
 
 		else {
 
-			if (!probarconexion("www.google.com")) {
+			if (!probarConexion("www.google.com")) {
 				mensaje("No tienes Internet", 1);
 			}
 
@@ -2836,31 +3135,11 @@ public abstract class Metodos {
 
 		if (nombreArchivo.length() >= 3) {
 
-			extension = nombreArchivo.substring(nombreArchivo.length() - 3, nombreArchivo.length());
+			extension = nombreArchivo.substring(nombreArchivo.lastIndexOf(".") + 1, nombreArchivo.length());
 
 			extension = extension.toLowerCase();
 
-			if (extension.equals("peg")) {
-				extension = "jpeg";
-			}
-
-			if (extension.equals("fif")) {
-				extension = "jfif";
-			}
-
-			if (extension.equals("ebp")) {
-				extension = "webp";
-			}
-
-			if (extension.equals("ebm")) {
-				extension = "webm";
-			}
-
-			if (extension.equals("3u8")) {
-				extension = "m3u8";
-			}
-
-			if (extension.equals(".ts")) {
+			if (extension.endsWith(".ts")) {
 				extension = "ts";
 			}
 
@@ -2907,35 +3186,46 @@ public abstract class Metodos {
 			try {
 
 				if (MenuPrincipal.getOs().contentEquals("Linux")) {
+
 					Runtime.getRuntime().exec("xdg-open " + ruta);
+
 				}
 
 				else {
-					Runtime.getRuntime().exec("cmd /c explorer " + "\"" + ruta + "\"");
+
+					Runtime.getRuntime().exec("cmd /c C:\\Windows\\explorer.exe " + "\"" + ruta + "\"");
+
 				}
 
 			}
 
 			catch (IOException e) {
+
 				mensaje("Ruta inválida", 1);
+
 			}
 		}
 
 		else {
+
 			new Config().setVisible(true);
+
 		}
 
 	}
 
-	public static void notificacion(int salida, String directorio, String tipo, Boolean abrir) throws IOException {
+	public static void notificacion(String directorio, String tipo, boolean abrir) throws IOException {
 
-		if (salida <= 0) {
-			mensaje("No hay archivos " + tipo + " en la carpeta " + directorio, 1);
+		MenuPrincipal.notificacion = true;
 
-			if (Boolean.TRUE.equals(abrir)) {
-				abrirCarpeta(directorio);
-			}
+		mensaje("No hay archivos " + tipo + " en la carpeta", 1);
+
+		if (abrir) {
+
+			abrirCarpeta(directorio);
+
 		}
+
 	}
 
 	public static LinkedList<String> directorio(String ruta, String extension, boolean filtro, boolean carpeta) {
@@ -2968,25 +3258,22 @@ public abstract class Metodos {
 
 						if (folder.isFile()) {
 
-							if (fichero.length() > 5 && fichero.substring(0, fichero.length() - 5).contains(".")) {
+							if ((extension.equals("images") && (extensionArchivo.equals("jpg")
 
-								renombrar(ruta + fichero, ruta + eliminarPuntos(fichero));
+									|| extensionArchivo.equals("png")))
 
-							}
-
-							if ((extension.equals("images")
-									&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")
-											|| extensionArchivo.equals("gif") || extensionArchivo.equals("jpeg")))
-									|| (extension.equals("webp") && extensionArchivo.equals("webp")
-											|| extension.equals("jpeg") && extensionArchivo.equals("jpeg")
-											|| extension.equals(".") || extension.equals(extensionArchivo))) {
+									|| extension.equals(".") || extension.equals(extensionArchivo)) {
 
 								if (carpeta) {
+
 									lista.add(ruta + fichero);
+
 								}
 
 								else {
+
 									lista.add(fichero);
+
 								}
 
 							}
@@ -3157,7 +3444,11 @@ public abstract class Metodos {
 	}
 
 	public static void mensaje(String mensaje, int titulo) {
+
 		try {
+
+			MenuPrincipal.notificacion = true;
+
 			String tituloSuperior = "";
 
 			String sonido = "";
@@ -3438,6 +3729,7 @@ public abstract class Metodos {
 			extension = list.get(i).substring(list.get(i).length() - 3, list.get(i).length());
 
 			if (list.size() == 1 || i + 1 == list.size()) {
+
 				bld.append(i + "." + extension);
 
 			}
@@ -3445,6 +3737,7 @@ public abstract class Metodos {
 			else {
 
 				bld.append(i + "." + extension + ",");
+
 			}
 
 		}

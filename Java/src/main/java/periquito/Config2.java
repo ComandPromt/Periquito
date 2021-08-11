@@ -211,14 +211,12 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(layout.createSequentialGroup().addGap(28)
-								.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblThumbnails)
-										.addComponent(jLabel1))
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addGroup(layout.createSequentialGroup().addGap(10).addComponent(textField,
-												GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE))
-										.addGroup(layout.createSequentialGroup()
-												.addPreferredGap(ComponentPlacement.RELATED).addComponent(jTextField1)))
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addGroup(layout.createSequentialGroup().addGap(28).addComponent(jLabel1).addGap(60)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(jTextField1))
+								.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(lblThumbnails)
+										.addPreferredGap(ComponentPlacement.RELATED).addComponent(textField,
+												GroupLayout.PREFERRED_SIZE, 267, GroupLayout.PREFERRED_SIZE)))
 								.addPreferredGap(ComponentPlacement.UNRELATED))
 						.addGroup(
 								layout.createSequentialGroup()
@@ -232,14 +230,12 @@ public class Config2 extends javax.swing.JFrame implements ActionListener, Chang
 				.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(jLabel1).addComponent(jTextField1,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(38)
-				.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(lblThumbnails)
-						.addGroup(layout.createSequentialGroup().addGap(10)
-								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(button, GroupLayout.PREFERRED_SIZE, 43,
-												GroupLayout.PREFERRED_SIZE)
-										.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE))))
+				.addGap(43)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(button, GroupLayout.PREFERRED_SIZE, 43, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblThumbnails))
 				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnNewButton).addGap(174)));
 		getContentPane().setLayout(layout);
 		setSize(new Dimension(643, 303));

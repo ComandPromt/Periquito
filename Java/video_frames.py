@@ -21,15 +21,15 @@ with open('Config/Config.txt') as f:
 
 folder=lectura[0].strip();
 
-carpeta=folder+'Frame_Extractor'
-
-lista_de_archivos = os.listdir(carpeta);
-
 separador="/"
 
 if "\\" in folder:
 
 	separador="\\"
+
+carpeta=folder+separador+'Frame_Extractor'
+
+lista_de_archivos = os.listdir(carpeta);
 
 def main(args):
 
