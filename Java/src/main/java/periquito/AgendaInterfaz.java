@@ -467,7 +467,7 @@ public class AgendaInterfaz extends JFrame {
 								.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE)
 								.addContainerGap()));
 
-		nota = new JTextArea("", 0, 50);
+		nota = new JTextArea("dfgfdgdf ñkñiko  gfhfghfghfghgfhgfhgfhlñ", 0, 50);
 		scrollPane.setViewportView(nota);
 		nota.setBackground(new Color(255, 255, 255));
 		nota.setEditable(false);

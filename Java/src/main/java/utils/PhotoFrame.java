@@ -1284,7 +1284,13 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				if (resp == 0) {
 
-					Metodos.eliminarArchivos(directorio + MenuPrincipal.getSeparador(), ".");
+					try {
+						Metodos.eliminarArchivos(directorio + MenuPrincipal.getSeparador(), ".");
+					}
+
+					catch (IOException e1) {
+						//
+					}
 
 				}
 
@@ -1310,7 +1316,14 @@ public class PhotoFrame extends javax.swing.JFrame {
 
 				if (resp == 0) {
 
-					Metodos.eliminarArchivos(carpetaRecortes + MenuPrincipal.getSeparador(), ".");
+					try {
+						Metodos.eliminarArchivos(carpetaRecortes + MenuPrincipal.getSeparador(), ".");
+					}
+
+					catch (IOException e1) {
+						//
+					}
+
 				}
 
 			}

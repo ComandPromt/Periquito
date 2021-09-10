@@ -107,8 +107,13 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 
 			}
 
-			Metodos.renombrarArchivos(ComprobarSha.getRutas().get(0).substring(0,
-					ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1), ".", false);
+			if (!ComprobarSha.getRutas().isEmpty()) {
+
+				Metodos.renombrarArchivos(
+						ComprobarSha.getRutas().get(0).substring(0,
+								ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()) + 1),
+						".", false);
+			}
 
 			if (!lectura.isEmpty()) {
 
@@ -145,8 +150,6 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 		}
 
 		catch (Exception e) {
-
-			e.printStackTrace();
 
 		}
 

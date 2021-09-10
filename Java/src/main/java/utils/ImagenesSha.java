@@ -225,10 +225,14 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 				public void mousePressed(MouseEvent e) {
 
-					Metodos.eliminarArchivos(imagenesRepetidas,
-							ComprobarSha.getRutas().get(0).substring(0,
-									ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
-									+ MenuPrincipal.getSeparador());
+					try {
+						Metodos.eliminarArchivos(imagenesRepetidas,
+								ComprobarSha.getRutas().get(0).substring(0,
+										ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
+										+ MenuPrincipal.getSeparador());
+					} catch (IOException e1) {
+						//
+					}
 
 					mntmNewMenuItem.setEnabled(false);
 
