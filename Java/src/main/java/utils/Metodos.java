@@ -61,6 +61,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -68,6 +69,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.numixproject.colorextractor.image.Color;
+import org.numixproject.colorextractor.image.ColorPicker;
+import org.numixproject.colorextractor.image.KMeansColorPicker;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -85,7 +89,457 @@ public abstract class Metodos {
 
 	public static Timer timer = new Timer();
 
-	public static TimerTask task = new CronWebp();
+	static TimerTask task = new CronWebp();
+
+	public static boolean filtroSize(String archivo, double filtro, int unidad) {
+
+		File file = new File(MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + archivo);
+
+		boolean resultado = false;
+
+		double unit = 0;
+
+		try {
+
+			if (file.exists()) {
+
+				switch (unidad) {
+
+				default:
+
+				case 1:
+
+					unit = file.length();
+
+					break;
+
+				case 2:
+
+					unit = file.length() / 1024d;
+
+					break;
+
+				case 3:
+
+					unit = (file.length() / 1024d) / 1024;
+
+					break;
+
+				case 4:
+
+					unit = ((file.length() / 1024d) / 1024) / 1024;
+
+					break;
+
+				case 5:
+
+					unit = (((file.length() / 1024d) / 1024) / 1024) / 1024d;
+
+					break;
+
+				}
+
+				if (unit <= filtro) {
+
+					resultado = true;
+
+				}
+
+				else {
+
+					resultado = false;
+
+				}
+
+			}
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+		return resultado;
+
+	}
+
+	public static boolean genHtml(File file) throws IOException {
+
+		LinkedList<String> colores = new LinkedList<String>();
+
+		colores.add("#151313");
+		colores.add("#383737");
+		colores.add("#53565a");
+		colores.add("#63666a");
+		colores.add("#75787b");
+		colores.add("#888b8d");
+		colores.add("#b1b3b3");
+		colores.add("#929289");
+		colores.add("#494845");
+		colores.add("#515150");
+		colores.add("#404049");
+		colores.add("#444340");
+		colores.add("#d8d8d6");
+		colores.add("#454040");
+		colores.add("#b1ada8");
+		colores.add("#d1d1d2");
+		colores.add("#c5c4c4");
+		colores.add("#b3afab");
+		colores.add("#4b4d4b");
+		colores.add("#6c6d71");
+		colores.add("#dddedd");
+		colores.add("#222125");
+		colores.add("#706e71");
+		colores.add("#2a3033");
+		colores.add("#3b3c40");
+		colores.add("#c2c2c1");
+		colores.add("#57504c");
+		colores.add("#36312e");
+		colores.add("#000000");
+		colores.add("#ffffff");
+		colores.add("#939290");
+		colores.add("#151515");
+		colores.add("#1c1c1c");
+		colores.add("#2e2e2e");
+		colores.add("#424242");
+		colores.add("#585858");
+		colores.add("#6e6e6e");
+		colores.add("#848484");
+		colores.add("#484848");
+		colores.add("#606060");
+		colores.add("#a8a8a8");
+		colores.add("#303030");
+		colores.add("#909090");
+		colores.add("#787878");
+		colores.add("#c0c0c0");
+		colores.add("#181818");
+		colores.add("#f0f0f0");
+		colores.add("#d8d8d8");
+		colores.add("#a4a4a4");
+		colores.add("#bdbdbd");
+		colores.add("#e6e6e6");
+		colores.add("#f2f2f2");
+		colores.add("#fafafa");
+		colores.add("#4f4e4e");
+		colores.add("#a09d9d");
+		colores.add("#fcfbff");
+		colores.add("#aeaeae");
+		colores.add("#f8f9fb");
+		colores.add("#5d5e62");
+		colores.add("#f3f2f7");
+		colores.add("#fbfbfb");
+		colores.add("#444446");
+		colores.add("#fffeff");
+		colores.add("#212224");
+		colores.add("#f9f9f9");
+		colores.add("#f0eff4");
+		colores.add("#18191b");
+		colores.add("#fdfdfd");
+		colores.add("#fefefe");
+		colores.add("#fcfcfc");
+		colores.add("#d3d3d3");
+		colores.add("#747474");
+		colores.add("#d1d1d1");
+		colores.add("#dddddd");
+		colores.add("#878787");
+		colores.add("#141414");
+		colores.add("#1a1a1a");
+		colores.add("#ebebeb");
+		colores.add("#dfdfdf");
+		colores.add("#e4e4e4");
+		colores.add("#d4d4d4");
+		colores.add("#6b6b6b");
+		colores.add("#f4f4f4");
+		colores.add("#dbdbdb");
+		colores.add("#cccccc");
+		colores.add("#b6b6b6");
+		colores.add("#d7d7d7");
+		colores.add("#c6c6c6");
+		colores.add("#c8c8c8");
+		colores.add("#353535");
+		colores.add("#5d5d5d");
+		colores.add("#515151");
+		colores.add("#686868");
+		colores.add("#838383");
+		colores.add("#e0e0e0");
+		colores.add("#d6d6d6");
+		colores.add("#c4c4c4");
+		colores.add("#646464");
+		colores.add("#b8b8b8");
+		colores.add("#3a3a3a");
+		colores.add("#343434");
+		colores.add("#252525");
+		colores.add("#c3c3c3");
+		colores.add("#999999");
+		colores.add("#9e9e9e");
+		colores.add("#cacaca");
+		colores.add("#949494");
+		colores.add("#161616");
+		colores.add("#121212");
+		colores.add("#171717");
+		colores.add("#4a4a4a");
+		colores.add("#d2d2d2");
+		colores.add("#cdcdcd");
+		colores.add("#767676");
+		colores.add("#2a2a2a");
+		colores.add("#2d2d2d");
+		colores.add("#3f3f3f");
+		colores.add("#b0b0b0");
+		colores.add("#f6f6f6");
+		colores.add("#bababa");
+		colores.add("#c2c2c2");
+		colores.add("#b7b7b7");
+		colores.add("#f7f7f7");
+		colores.add("#242424");
+		colores.add("#acacac");
+		colores.add("#ababab");
+		colores.add("#aaaaaa");
+		colores.add("#b4b4b4");
+		colores.add("#b3b3b3");
+		colores.add("#c5c5c5");
+		colores.add("#494949");
+		colores.add("#b9b9b9");
+		colores.add("#b2b2b2");
+		colores.add("#b5b5b5");
+		colores.add("#adadad");
+		colores.add("#a6a6a6");
+		colores.add("#afafaf");
+		colores.add("#bebebe");
+		colores.add("#c7c7c7");
+		colores.add("#c1c1c1");
+		colores.add("#a3a3a3");
+		colores.add("#979797");
+		colores.add("#414141");
+		colores.add("#7e7e7e");
+		colores.add("#474747");
+		colores.add("#363636");
+		colores.add("#313131");
+		colores.add("#444444");
+		colores.add("#555555");
+		colores.add("#676767");
+		colores.add("#f5f5f5");
+		colores.add("#272727");
+		colores.add("#3b3b3b");
+		colores.add("#282828");
+		colores.add("#202020");
+		colores.add("#5b5b5b");
+		colores.add("#969696");
+		colores.add("#919191");
+		colores.add("#939393");
+		colores.add("#bcbcbc");
+		colores.add("#696969");
+		colores.add("#656565");
+		colores.add("#7a7a7a");
+		colores.add("#545454");
+		colores.add("#404040");
+		colores.add("#454545");
+		colores.add("#535353");
+		colores.add("#4d4d4d");
+		colores.add("#5f5f5f");
+		colores.add("#9d9d9d");
+		colores.add("#989898");
+		colores.add("#787878");
+		colores.add("#a5a5a5");
+		colores.add("#a0a0a0");
+		colores.add("#262626");
+		colores.add("#333333");
+		colores.add("#464646");
+		colores.add("#505050");
+		colores.add("#9f9f9f");
+		colores.add("#a9a9a9");
+		colores.add("#cfcfcf");
+		colores.add("#4b4b4b");
+		colores.add("#3c3c3c");
+		colores.add("#1b1b1b");
+		colores.add("#757575");
+		colores.add("#6c6c6c");
+		colores.add("#8f8f8f");
+		colores.add("#9b9b9b");
+		colores.add("#2f2f2f");
+		colores.add("#373737");
+		colores.add("#323232");
+		colores.add("#6d6d6d");
+		colores.add("#a1a1a1");
+		colores.add("#848484");
+		colores.add("#4e4e4e");
+		colores.add("#4c4c4c");
+		colores.add("#9c9c9c");
+		colores.add("#d0d0d0");
+		colores.add("#9a9a9a");
+		colores.add("#bfbfbf");
+		colores.add("#292929");
+		colores.add("#b1b1b1");
+		colores.add("#cecece");
+		colores.add("#dadada");
+		colores.add("#e2e2e2");
+		colores.add("#e1e1e1");
+		colores.add("#dedede");
+		colores.add("#e7e7e7");
+		colores.add("#8c8c8c");
+		colores.add("#d9d9d9");
+		colores.add("#dcdcdc");
+		colores.add("#6a6a6a");
+		colores.add("#6f6f6f");
+		colores.add("#8d8d8d");
+		colores.add("#959595");
+		colores.add("#393939");
+		colores.add("#808080");
+		colores.add("#797979");
+		colores.add("#434343");
+		colores.add("#3d3d3d");
+		colores.add("#707070");
+		colores.add("#8a8a8a");
+		colores.add("#909090");
+		colores.add("#737373");
+		colores.add("#2b2b2b");
+		colores.add("#bdbdbd");
+		colores.add("#232323");
+		colores.add("#7c7c7c");
+		colores.add("#60606");
+		colores.add("#80808");
+		colores.add("#222222");
+		colores.add("#626262");
+		colores.add("#575757");
+		colores.add("#30303");
+		colores.add("#b0b0b");
+		colores.add("#d0d0d");
+		colores.add("#191919");
+		colores.add("#40404");
+		colores.add("#717171");
+		colores.add("#727272");
+		colores.add("#50505");
+		colores.add("#a0a0a");
+		colores.add("#e0e0e");
+		colores.add("#90909");
+		colores.add("#898989");
+		colores.add("#111111");
+		colores.add("#101010");
+		colores.add("#f0f0f");
+		colores.add("#c0c0c");
+		colores.add("#7d7d7d");
+		colores.add("#20202");
+		colores.add("#212121");
+		colores.add("#70707");
+		colores.add("#7f7f7f");
+		colores.add("#8e8e8e");
+		colores.add("#888888");
+		colores.add("#525252");
+		colores.add("#7b7b7b");
+		colores.add("#c9c9c9");
+		colores.add("#929292");
+		colores.add("#858585");
+		colores.add("#8b8b8b");
+		colores.add("#616161");
+		colores.add("#5a5a5a");
+		colores.add("#595959");
+		colores.add("#1d1d1d");
+		colores.add("#565656");
+		colores.add("#2c2c2c");
+		colores.add("#f8f8f8");
+		colores.add("#818181");
+		colores.add("#777777");
+		colores.add("#5c5c5c");
+		colores.add("#636363");
+		colores.add("#383838");
+		colores.add("#4f4f4f");
+		colores.add("#131313");
+		colores.add("#1f1f1f");
+		colores.add("#1e1e1e");
+		colores.add("#bbbbbb");
+		colores.add("#e9e9e9");
+		colores.add("#e8e8e8");
+		colores.add("#5e5e5e");
+		colores.add("#e5e5e5");
+		colores.add("#e3e3e3");
+		colores.add("#a2a2a2");
+		colores.add("#3e3e3e");
+		colores.add("#cacaca");
+		colores.add("#cbcbcb");
+		colores.add("#d5d5d5");
+		colores.add("#666666");
+		colores.add("#f1f1f1");
+		colores.add("#ededed");
+		colores.add("#eaeaea");
+		colores.add("#eeeeee");
+		colores.add("#efefef");
+		colores.add("#ececec");
+		colores.add("#828282");
+		colores.add("#a7a7a7");
+		colores.add("#868686");
+		colores.add("#f3f3f3");
+		colores.add("#10101");
+		colores.add("#0f0f0f");
+		colores.add("#0C0C0C");
+		colores.add("#090909");
+		colores.add("#060606");
+		colores.add("#030303");
+		colores.add("#9b9a98");
+		colores.add("#b6b5b3");
+		colores.add("#6d6c6a");
+		colores.add("#626260");
+		colores.add("#222221");
+		colores.add("#797977");
+		colores.add("#92918f");
+		colores.add("#d0d1d1");
+
+		boolean resultado = false;
+
+		try {
+
+			org.numixproject.colorextractor.image.Image img = new AWTImage(file);
+
+			ColorPicker km = new KMeansColorPicker();
+
+			java.util.List<Color> l = km.getUsefulColors(img, 1);
+
+			java.util.List<Color> t = new ArrayList<Color>();
+
+			for (Color c : l) {
+
+				float f[] = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue());
+
+				t.add(new Color(Color.HSBtoRGB(f[0], f[1], f[2])));
+
+			}
+
+			String color;
+
+			LinkedList<String> imagenColoareada = new LinkedList<String>();
+
+			for (Color c : l) {
+
+				color = "#" + String.format("%06x", c.getRGB() & 0x00FFFFFF);
+
+				if (!colores.contains(color)) {
+
+					System.out.println(color);
+
+					imagenColoareada.add(color);
+				}
+
+			}
+
+			if (imagenColoareada.isEmpty()) {
+
+				resultado = true;
+
+			}
+
+			else {
+
+				resultado = false;
+
+			}
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+		return resultado;
+
+	}
 
 	public static void borrarArchivosSubidos() {
 
@@ -191,7 +645,7 @@ public abstract class Metodos {
 
 	}
 
-	public static void webp_png(boolean png, String src, String dest) {
+	public static void webp_png(boolean png, String src, String dest, boolean eliminarArchivo) throws IOException {
 
 		if (png) {
 
@@ -202,6 +656,12 @@ public abstract class Metodos {
 		else {
 
 			WebpIO.create().toWEBP(src, dest);
+
+		}
+
+		if (eliminarArchivo) {
+
+			Metodos.eliminarFichero(src);
 
 		}
 
@@ -230,7 +690,7 @@ public abstract class Metodos {
 
 	}
 
-	public static List<String> borrarArchivosDuplicados(String directorio) {
+	public static List<String> borrarArchivosDuplicados(String directorio) throws IOException {
 
 		LinkedList<String> listaImagenes = directorio(directorio, ".", true, false);
 
@@ -254,9 +714,13 @@ public abstract class Metodos {
 
 				indice = listaImagenesSha.indexOf(archivoRepetido);
 
-				eliminarFichero(directorio + listaImagenes.get(indice));
+				if (indice < listaImagenes.size()) {
 
-				listaImagenes.remove(indice);
+					eliminarFichero(directorio + listaImagenes.get(indice));
+
+					listaImagenes.remove(indice);
+
+				}
 			}
 
 		}
@@ -678,21 +1142,14 @@ public abstract class Metodos {
 
 				MenuPrincipal.chrome.quit();
 
-				MenuPrincipal.chrome.close();
-
 			}
 
-			if (!MenuPrincipal.getOs().equals("Linux")) {
-				crearScript("cerrar.bat", "taskkill /F /IM geckodriver.exe /T", true, MenuPrincipal.getOs());
+		}
 
-			}
+		catch (Exception e) {
 
-			else {
-				crearScript("cerrar.sh", "kilall geckodriver", true, MenuPrincipal.getOs());
-			}
+//
 
-		} catch (Exception e) {
-			//
 		}
 
 	}
@@ -741,13 +1198,17 @@ public abstract class Metodos {
 		}
 
 		catch (MalformedURLException e) {
+
 			mensaje("la URL: " + enlace + " no es valida!", 1);
+
 		}
 
 		catch (Exception e) {
+
 			abrirCarpeta(folder);
 
 		}
+
 	}
 
 	public static void descargar(String imagen, int inicio, int fin, int salto) throws IOException {
@@ -987,6 +1448,7 @@ public abstract class Metodos {
 	public static void moverArchivos(LinkedList<String> files, String separador, String destino, boolean mensaje,
 
 			int tipo) throws IOException {
+
 		try {
 
 			String imagen;
@@ -1019,22 +1481,35 @@ public abstract class Metodos {
 					case 1:
 
 						lista.add("jpg");
+
 						lista.add("peg");
+
 						lista.add("png");
+
 						lista.add("webp");
+
 						lista.add("gif");
+
 						break;
 
 					case 2:
 
 						lista.add(".ts");
+
 						lista.add("mp4");
+
 						lista.add("avi");
+
 						lista.add("3gp");
+
 						lista.add("flv");
+
 						lista.add("m3u8");
+
 						lista.add("mkv");
+
 						lista.add("mov");
+
 						lista.add("wmv");
 
 						break;
@@ -1042,12 +1517,17 @@ public abstract class Metodos {
 					default:
 
 						lista.add("jpg");
+
 						lista.add("peg");
+
 						lista.add("png");
+
 						lista.add("gif");
+
 						lista.add("webp");
 
 						break;
+
 					}
 
 					if (lista.contains(comprobacion)) {
@@ -1055,7 +1535,9 @@ public abstract class Metodos {
 						origen = files.get(i);
 
 						if (origen.substring(0, origen.lastIndexOf(separador)).equals(destino)) {
+
 							mensaje("No puedes pegar archivos al mismo directorio", 3);
+
 							i = files.size();
 
 						}
@@ -1079,6 +1561,7 @@ public abstract class Metodos {
 								salida = origen.substring(0, origen.lastIndexOf(separador) + 1);
 
 								salida += busqueda.substring(0, busqueda.length() - 4) + "_" + i + "." + comprobacion;
+
 								renombrar(origen, salida);
 
 								origen = salida;
@@ -1096,13 +1579,18 @@ public abstract class Metodos {
 
 						}
 
-					} else {
+					}
+
+					else {
 						filtro = true;
 					}
+
 				}
 
 				if (filtro) {
+
 					mensaje("Uno o varios archivos no tiene el formato correcto", 3);
+
 				}
 
 			}
@@ -1519,12 +2007,15 @@ public abstract class Metodos {
 			try {
 
 				flE = new FileReader(fichero);
+
 				fE = new BufferedReader(flE);
+
 				texto = fE.readLine();
 
 				while (texto != null && i < longitud) {
 
 					salida[i] = texto;
+
 					i++;
 
 					texto = fE.readLine();
@@ -1532,25 +2023,38 @@ public abstract class Metodos {
 				}
 
 				fE.close();
+
 				flE.close();
 
-			} catch (Exception e) {
+			}
+
+			catch (Exception e) {
 				//
-			} finally {
+			}
+
+			finally {
 
 				if (fE != null) {
+
 					try {
 						fE.close();
-					} catch (IOException e) {
+					}
+
+					catch (IOException e) {
 						//
 					}
+
 				}
 
 				if (flE != null) {
 
 					try {
+
 						flE.close();
-					} catch (IOException e) {
+
+					}
+
+					catch (IOException e) {
 						//
 					}
 
@@ -1559,7 +2063,9 @@ public abstract class Metodos {
 		}
 
 		else {
+
 			throw new IOException();
+
 		}
 
 		return salida;
@@ -1569,8 +2075,6 @@ public abstract class Metodos {
 	public static void verConfig(int tipo, boolean mensaje) {
 
 		try {
-
-			MenuPrincipal.notificacion = true;
 
 			if (mensaje) {
 
@@ -2503,11 +3007,7 @@ public abstract class Metodos {
 
 		ArrayList<String> categorias = verCategorias();
 
-		MenuPrincipal.countCategorias = false;
-
 		if (!categorias.isEmpty()) {
-
-			MenuPrincipal.countCategorias = true;
 
 			try {
 
@@ -2565,7 +3065,7 @@ public abstract class Metodos {
 		return categorias;
 	}
 
-	public static void eliminarArchivos(String ruta, String extension) {
+	public static void eliminarArchivos(String ruta, String extension) throws IOException {
 
 		LinkedList<String> frames = directorio(ruta, extension, true, false);
 
@@ -2580,7 +3080,7 @@ public abstract class Metodos {
 
 	}
 
-	public static void eliminarArchivos(LinkedList<String> lista, String ruta) {
+	public static void eliminarArchivos(LinkedList<String> lista, String ruta) throws IOException {
 
 		File carpeta = new File(ruta);
 
@@ -2660,12 +3160,21 @@ public abstract class Metodos {
 		}
 	}
 
-	public static void eliminarFichero(String archivo) {
+	public static void eliminarFichero(String archivo) throws IOException {
 
 		File fichero = new File(archivo);
 
-		if (fichero.exists() && !fichero.isDirectory()) {
-			fichero.delete();
+		if (fichero.exists()) {
+
+			if (!fichero.isDirectory()) {
+
+				fichero.delete();
+
+			} else {
+
+				FileUtils.deleteDirectory(new File(archivo));
+
+			}
 		}
 
 	}
@@ -2951,7 +3460,9 @@ public abstract class Metodos {
 			break;
 
 		case 4:
+
 			crearCarpetasConfig();
+
 			break;
 
 		default:
@@ -3070,7 +3581,9 @@ public abstract class Metodos {
 	public static void crearFichero(String ruta, String texto, boolean carpeta) throws IOException {
 
 		File archivo = new File(ruta);
+
 		try {
+
 			if (carpeta) {
 
 				if (!archivo.exists()) {
@@ -3084,7 +3597,9 @@ public abstract class Metodos {
 				BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
 
 				try {
+
 					bw.write(texto);
+
 				}
 
 				finally {
@@ -3216,8 +3731,6 @@ public abstract class Metodos {
 
 	public static void notificacion(String directorio, String tipo, boolean abrir) throws IOException {
 
-		MenuPrincipal.notificacion = true;
-
 		mensaje("No hay archivos " + tipo + " en la carpeta", 1);
 
 		if (abrir) {
@@ -3254,27 +3767,37 @@ public abstract class Metodos {
 
 					extensionArchivo = extraerExtension(fichero);
 
+					if (filtro && extensionArchivo.equals("webp")) {
+
+						webp_png(true, ruta + fichero, ruta + fichero.substring(0, fichero.lastIndexOf(".")) + ".png",
+								true);
+
+					}
+
 					if (filtro) {
 
-						if (folder.isFile()) {
+						if (folder.isFile() && (extension.equals(".") || extension.equals(extensionArchivo)
 
-							if ((extension.equals("images") && (extensionArchivo.equals("jpg")
+								||
 
-									|| extensionArchivo.equals("png")))
+								(extension.equals("images")
+										&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")))
 
-									|| extension.equals(".") || extension.equals(extensionArchivo)) {
+								|| (extension.equals("allimages") && (extensionArchivo.equals("jpg")
 
-								if (carpeta) {
+										|| extensionArchivo.equals("png") || extensionArchivo.equals("gif")))
 
-									lista.add(ruta + fichero);
+						)) {
 
-								}
+							if (carpeta) {
 
-								else {
+								lista.add(ruta + fichero);
 
-									lista.add(fichero);
+							}
 
-								}
+							else {
+
+								lista.add(fichero);
 
 							}
 
@@ -3284,22 +3807,32 @@ public abstract class Metodos {
 
 					else {
 
-						if (carpeta) {
+						if (folder.isDirectory() && carpeta) {
+
 							lista.add(ruta + fichero);
 						}
 
 						else {
 
-							if (folder.isDirectory()) {
+							if (folder.isDirectory() && !fichero.isEmpty()) {
 
-								if (!fichero.isEmpty()) {
-									lista.add(fichero);
-								}
+								lista.add(fichero);
 
 							}
 
 						}
 
+					}
+
+					if (!lista.isEmpty() && !filtroSize(lista.getLast(), 2d, 3)) {
+
+						Metodos.moverArchivo(
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + lista.getLast(),
+
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + "filtroImages"
+										+ MenuPrincipal.getSeparador() + lista.getLast());
+
+						lista.removeLast();
 					}
 
 				}
@@ -3308,7 +3841,7 @@ public abstract class Metodos {
 		}
 
 		catch (Exception e) {
-
+			//
 		}
 
 		Collections.sort(lista);
@@ -3447,8 +3980,6 @@ public abstract class Metodos {
 
 		try {
 
-			MenuPrincipal.notificacion = true;
-
 			String tituloSuperior = "";
 
 			String sonido = "";
@@ -3458,31 +3989,46 @@ public abstract class Metodos {
 			switch (titulo) {
 
 			case 1:
+
 				tipo = JOptionPane.ERROR_MESSAGE;
+
 				tituloSuperior = "Error";
+
 				sonido = "duck-quack.wav";
+
 				break;
 
 			case 2:
+
 				tipo = JOptionPane.INFORMATION_MESSAGE;
+
 				tituloSuperior = "Informacion";
+
 				sonido = "gong.wav";
+
 				break;
 
 			case 3:
+
 				tipo = JOptionPane.WARNING_MESSAGE;
+
 				tituloSuperior = "Advertencia";
+
 				sonido = "advertencia.wav";
+
 				break;
 
 			default:
+
 				break;
 
 			}
 
 			if (MenuPrincipal.getSonido()[1].equals("1")) {
+
 				reproducirSonido(
 						MenuPrincipal.getDirectorioActual() + "sonidos" + MenuPrincipal.getSeparador() + sonido, true);
+
 			}
 
 			JLabel alerta = new JLabel(mensaje);
@@ -3512,12 +4058,16 @@ public abstract class Metodos {
 			StringBuilder bld = new StringBuilder();
 
 			for (int i = 0; i < b.length; i++) {
+
 				bld.append(Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1));
+
 			}
 
 			result = bld.toString();
 
-		} catch (Exception e) {
+		}
+
+		catch (Exception e) {
 			//
 		}
 
@@ -3533,6 +4083,9 @@ public abstract class Metodos {
 		directorio.mkdir();
 
 		directorio = new File("Config/imagenes/bn");
+		directorio.mkdir();
+
+		directorio = new File("Config/imagenes/filtroImages");
 		directorio.mkdir();
 
 		directorio = new File("Config/Gif_extractor");
@@ -3592,6 +4145,7 @@ public abstract class Metodos {
 		directorio = new File("Categorias");
 
 		directorio.mkdir();
+
 	}
 
 	public static String saberSeparador(String os) {

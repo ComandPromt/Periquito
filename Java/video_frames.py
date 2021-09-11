@@ -1,5 +1,6 @@
 __author__ = 'vfdev'
-
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import argparse
 import matplotlib.pyplot as plt
 import os, sys

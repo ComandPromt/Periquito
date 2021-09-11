@@ -47,13 +47,17 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 	int x;
 
 	private JFrame getFrame() {
+
 		return this;
+
 	}
 
 	private void reabrir(JFrame frmShaImages) {
 
 		try {
+
 			mntmNewMenuItem.setEnabled(true);
+
 			mntmNewMenuItem_1.setEnabled(true);
 
 			imagenes.clear();
@@ -122,6 +126,8 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 			}
 
 			JFrame frmShaImages = new JFrame();
+			frmShaImages.setAlwaysOnTop(true);
+			frmShaImages.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frmShaImages.setResizable(false);
 			frmShaImages.getContentPane().setEnabled(false);
 			frmShaImages.setAutoRequestFocus(false);
@@ -225,10 +231,14 @@ public class ImagenesSha extends javax.swing.JFrame implements ActionListener, C
 
 				public void mousePressed(MouseEvent e) {
 
-					Metodos.eliminarArchivos(imagenesRepetidas,
-							ComprobarSha.getRutas().get(0).substring(0,
-									ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
-									+ MenuPrincipal.getSeparador());
+					try {
+						Metodos.eliminarArchivos(imagenesRepetidas,
+								ComprobarSha.getRutas().get(0).substring(0,
+										ComprobarSha.getRutas().get(0).lastIndexOf(MenuPrincipal.getSeparador()))
+										+ MenuPrincipal.getSeparador());
+					} catch (IOException e1) {
+						//
+					}
 
 					mntmNewMenuItem.setEnabled(false);
 
