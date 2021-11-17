@@ -89,12 +89,103 @@ public abstract class Metodos {
 
 	public static Timer timer = new Timer();
 
-	public static TimerTask task = new CronWebp();
+	static TimerTask task = new CronWebp();
+
+	public static boolean filtroSize(String archivo, double filtro, int unidad) {
+
+		File file = new File(MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + archivo);
+
+		boolean resultado = false;
+
+		double unit = 0;
+
+		try {
+
+			if (file.exists()) {
+
+				System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+				switch (unidad) {
+
+				default:
+
+				case 1:
+
+					unit = file.length();
+
+					break;
+
+				case 2:
+
+					unit = file.length() / 1024d;
+
+					break;
+
+				case 3:
+
+					unit = (file.length() / 1024d) / 1024;
+
+					break;
+
+				case 4:
+
+					unit = ((file.length() / 1024d) / 1024) / 1024;
+
+					break;
+
+				case 5:
+
+					unit = (((file.length() / 1024d) / 1024) / 1024) / 1024d;
+
+					break;
+
+				}
+
+				if (unit <= filtro) {
+
+					resultado = true;
+
+				}
+
+				else {
+
+					resultado = false;
+
+				}
+
+			}
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+		return resultado;
+
+	}
 
 	public static boolean genHtml(File file) throws IOException {
 
 		LinkedList<String> colores = new LinkedList<String>();
 
+		colores.add("#151313");
+		colores.add("#383737");
+		colores.add("#53565a");
+		colores.add("#63666a");
+		colores.add("#75787b");
+		colores.add("#888b8d");
+		colores.add("#b1b3b3");
+		colores.add("#929289");
+		colores.add("#494845");
+		colores.add("#515150");
+		colores.add("#404049");
+		colores.add("#444340");
+		colores.add("#d8d8d6");
+		colores.add("#454040");
+		colores.add("#b1ada8");
+		colores.add("#d1d1d2");
+		colores.add("#c5c4c4");
 		colores.add("#b3afab");
 		colores.add("#4b4d4b");
 		colores.add("#6c6d71");
@@ -1987,8 +2078,6 @@ public abstract class Metodos {
 
 		try {
 
-			MenuPrincipal.notificacion = true;
-
 			if (mensaje) {
 
 				Metodos.mensaje("Por favor, revisa la configuración", 3);
@@ -2920,11 +3009,7 @@ public abstract class Metodos {
 
 		ArrayList<String> categorias = verCategorias();
 
-		MenuPrincipal.countCategorias = false;
-
 		if (!categorias.isEmpty()) {
-
-			MenuPrincipal.countCategorias = true;
 
 			try {
 
@@ -3377,7 +3462,9 @@ public abstract class Metodos {
 			break;
 
 		case 4:
+
 			crearCarpetasConfig();
+
 			break;
 
 		default:
@@ -3646,8 +3733,6 @@ public abstract class Metodos {
 
 	public static void notificacion(String directorio, String tipo, boolean abrir) throws IOException {
 
-		MenuPrincipal.notificacion = true;
-
 		mensaje("No hay archivos " + tipo + " en la carpeta", 1);
 
 		if (abrir) {
@@ -3693,25 +3778,28 @@ public abstract class Metodos {
 
 					if (filtro) {
 
-						if (folder.isFile()) {
+						if (folder.isFile() && (extension.equals(".") || extension.equals(extensionArchivo)
 
-							if ((extension.equals("images") &&
+								||
 
-									(extensionArchivo.equals("jpg") || extensionArchivo.equals("png")))
+								(extension.equals("images")
+										&& (extensionArchivo.equals("jpg") || extensionArchivo.equals("png")))
 
-									|| extension.equals(".") || extension.equals(extensionArchivo)) {
+								|| (extension.equals("allimages") && (extensionArchivo.equals("jpg")
 
-								if (carpeta) {
+										|| extensionArchivo.equals("png") || extensionArchivo.equals("gif")))
 
-									lista.add(ruta + fichero);
+						)) {
 
-								}
+							if (carpeta) {
 
-								else {
+								lista.add(ruta + fichero);
 
-									lista.add(fichero);
+							}
 
-								}
+							else {
+
+								lista.add(fichero);
 
 							}
 
@@ -3738,12 +3826,27 @@ public abstract class Metodos {
 
 					}
 
+					if (!lista.isEmpty() && !filtroSize(lista.getLast(), 2d, 3)) {
+
+						Metodos.moverArchivo(
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + lista.getLast(),
+
+								MenuPrincipal.getDirectorioImagenes() + MenuPrincipal.getSeparador() + "filtroImages"
+										+ MenuPrincipal.getSeparador() + lista.getLast());
+
+						System.out.println(lista.getLast() + " - " + filtroSize(lista.getLast(), 2d, 3));
+
+						lista.removeLast();
+					}
+
 				}
 
 			}
 		}
 
-		catch (Exception e) {
+		catch (
+
+		Exception e) {
 			e.printStackTrace();
 		}
 
@@ -3883,8 +3986,6 @@ public abstract class Metodos {
 
 		try {
 
-			MenuPrincipal.notificacion = true;
-
 			String tituloSuperior = "";
 
 			String sonido = "";
@@ -3894,31 +3995,46 @@ public abstract class Metodos {
 			switch (titulo) {
 
 			case 1:
+
 				tipo = JOptionPane.ERROR_MESSAGE;
+
 				tituloSuperior = "Error";
+
 				sonido = "duck-quack.wav";
+
 				break;
 
 			case 2:
+
 				tipo = JOptionPane.INFORMATION_MESSAGE;
+
 				tituloSuperior = "Informacion";
+
 				sonido = "gong.wav";
+
 				break;
 
 			case 3:
+
 				tipo = JOptionPane.WARNING_MESSAGE;
+
 				tituloSuperior = "Advertencia";
+
 				sonido = "advertencia.wav";
+
 				break;
 
 			default:
+
 				break;
 
 			}
 
 			if (MenuPrincipal.getSonido()[1].equals("1")) {
+
 				reproducirSonido(
 						MenuPrincipal.getDirectorioActual() + "sonidos" + MenuPrincipal.getSeparador() + sonido, true);
+
 			}
 
 			JLabel alerta = new JLabel(mensaje);
@@ -3948,12 +4064,16 @@ public abstract class Metodos {
 			StringBuilder bld = new StringBuilder();
 
 			for (int i = 0; i < b.length; i++) {
+
 				bld.append(Integer.toString((b[i] & 0xff) + 0x100, 16).substring(1));
+
 			}
 
 			result = bld.toString();
 
-		} catch (Exception e) {
+		}
+
+		catch (Exception e) {
 			//
 		}
 
@@ -3969,6 +4089,9 @@ public abstract class Metodos {
 		directorio.mkdir();
 
 		directorio = new File("Config/imagenes/bn");
+		directorio.mkdir();
+
+		directorio = new File("Config/imagenes/filtroImages");
 		directorio.mkdir();
 
 		directorio = new File("Config/Gif_extractor");
@@ -4028,6 +4151,7 @@ public abstract class Metodos {
 		directorio = new File("Categorias");
 
 		directorio.mkdir();
+
 	}
 
 	public static String saberSeparador(String os) {
