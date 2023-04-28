@@ -25,13 +25,16 @@ public class Text_Extractor {
 		LinkedList<String> listaImagenes = new LinkedList<String>();
 
 		if (modo == 1) {
+
 			listaImagenes.add(input);
+
 		}
 
 		else {
 
 			listaImagenes = Metodos.directorio(Img2Txt.getRuta().getText() + MenuPrincipal.getSeparador(), ".", true,
 					true);
+
 		}
 
 		for (int i = 0; i < listaImagenes.size(); i++) {
