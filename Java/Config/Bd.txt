@@ -1,6 +1,0 @@
-cms
-root
-ratonatqm71114
-4images_
-3306
-192.168.1.100
