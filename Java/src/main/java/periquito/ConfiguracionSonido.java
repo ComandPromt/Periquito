@@ -31,28 +31,43 @@ import utils.Metodos;
 public class ConfiguracionSonido extends javax.swing.JFrame implements ActionListener, ChangeListener {
 
 	JCheckBox checkBox_1;
+
 	JComboBox comboBox;
+
 	static String[] sonido;
+
 	public static LinkedList<String> sonidos = new LinkedList<>();
 
 	public ConfiguracionSonido() throws IOException {
+
 		addKeyListener(new KeyAdapter() {
+
 			@Override
+
 			public void keyPressed(KeyEvent e) {
+
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
 					try {
+
 						guardarDatos(true);
+
 					}
 
 					catch (IOException e1) {
 						//
 					}
+
 				}
+
 			}
+
 		});
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ConfiguracionSonido.class.getResource("/imagenes/wav.png")));
+
 		setTitle("Periquito v3 Conf.Sonido");
+
 		setType(Type.UTILITY);
 
 		initComponents();

@@ -40,19 +40,29 @@ import utils.MyInterface;
 @SuppressWarnings("serial")
 
 public class Utilidades extends javax.swing.JFrame implements ActionListener, ChangeListener, MyInterface {
+
 	private JTextArea imagenes = new JTextArea();
+
 	String comprobacion;
+
 	transient Statement s;
+
 	boolean filtro = false;
+
 	transient ResultSet rs;
+
 	String[] categorias;
+
 	static JComboBox<String> comboBox = new JComboBox<>();
 
 	private JLabel lblNombreDeImgenes = new JLabel("Nombre");
+
 	private JTextField nombre;
+
 	private final JLabel lblComprobarGifAnimado = new JLabel("Comprobar gif animado");
 
 	public Utilidades() {
+
 		lblComprobarGifAnimado.setFont(new Font("Tahoma", Font.BOLD, 16));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Utilidades.class.getResource("/imagenes/db.png")));
@@ -65,6 +75,7 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 			}
 
 			setTitle("Periquito v3 Recomponer Imágenes");
+
 			initComponents();
 
 			this.setVisible(true);
@@ -72,12 +83,15 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 		}
 
 		catch (SQLException | IOException e3) {
+
 			this.dispose();
+
 		}
 
 	}
 
 	@SuppressWarnings("all")
+
 	public void initComponents() {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -154,8 +168,11 @@ public class Utilidades extends javax.swing.JFrame implements ActionListener, Ch
 						try {
 
 							String imagen;
+
 							Date fecha = new Date();
+
 							String strDateFormat = "y-MM-dd";
+
 							SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
 
 							String tabla = MenuPrincipal.getLecturabd()[3] + "images";

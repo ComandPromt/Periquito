@@ -2,9 +2,19 @@ package periquito;
 
 public class Periquito {
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 
-		new MenuPrincipal();
+		try {
+
+			new MenuPrincipal();
+
+		}
+
+		catch (Exception e) {
+
+			//
+
+		}
 
 	}
 

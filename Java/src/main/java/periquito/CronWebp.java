@@ -12,12 +12,19 @@ import utils.Metodos;
 
 public class CronWebp extends TimerTask {
 
+	String carpetaConfig = "";
+
 	@Override
+
 	public void run() {
 
 		try {
 
 			MenuPrincipal.crontabWebp = Metodos.leerFicheroArray("llamada_python.txt", 1)[0];
+
+			carpetaConfig = MenuPrincipal.getLectura()[0];
+
+			carpetaConfig = Metodos.ponerSeparador(MenuPrincipal.getLectura()[0]);
 
 			if (MenuPrincipal.crontabWebp != null) {
 
@@ -28,22 +35,10 @@ public class CronWebp extends TimerTask {
 					File af = new File("Config/Config.txt");
 
 					if (af.exists()) {
+
 						MenuPrincipal.subida();
+
 					}
-
-					break;
-
-				case "video_gif":
-
-					Metodos.moverArchivos(
-							Metodos.directorio(MenuPrincipal.getLectura()[0] + "Video_2_Gif"
-									+ MenuPrincipal.getSeparador() + "output" + MenuPrincipal.getSeparador(), "gif",
-									true, true),
-							MenuPrincipal.getSeparador(), MenuPrincipal.getDirectorioImagenes(), false, 3);
-
-					Metodos.mensaje("Video 2 GIF terminado correctamente", 2);
-
-					Metodos.abrirCarpeta(MenuPrincipal.directorioImagenes);
 
 					break;
 
@@ -56,7 +51,7 @@ public class CronWebp extends TimerTask {
 
 					int numeroFrames = 0;
 
-					LinkedList carpetas = Metodos.directorio(carpetaGif, ".", false, true);
+					LinkedList<String> carpetas = Metodos.directorio(carpetaGif, ".", false, true);
 
 					Collections.sort(carpetas);
 
@@ -93,18 +88,15 @@ public class CronWebp extends TimerTask {
 
 					LinkedList<String> listaImagenes = new LinkedList<>();
 
-					String carpeta = "";
-
-					carpeta = MenuPrincipal.getLectura()[0] + "Gif_extractor" + MenuPrincipal.getSeparador() + "output"
-							+ MenuPrincipal.getSeparador();
-
 					switch (numerOpcion) {
 
 					case 1:
 
-						listaImagenes = Metodos.directorio(carpeta, ".", true, false);
+						listaImagenes = Metodos.directorio(
+								carpetaConfig + "Gif_extractor" + MenuPrincipal.getSeparador(), ".", true, false);
 
-						Metodos.moverArchivos(listaImagenes, carpeta, MenuPrincipal.getDirectorioImagenes(), false, 1);
+						Metodos.moverArchivos(listaImagenes, carpetaConfig, MenuPrincipal.getDirectorioImagenes(),
+								false, 1, 0);
 
 						MenuPrincipal.uploadImages();
 
@@ -114,13 +106,13 @@ public class CronWebp extends TimerTask {
 
 						LinkedList<String> directorios = new LinkedList<>();
 
-						directorios = Metodos.directorio(carpeta, ".", false, false);
+						directorios = Metodos.directorio(carpetaConfig, ".", false, false);
 
 						String folder = "";
 
 						for (int i = 0; i < directorios.size(); i++) {
 
-							folder = carpeta + directorios.get(i) + MenuPrincipal.getSeparador();
+							folder = carpetaConfig + directorios.get(i) + MenuPrincipal.getSeparador();
 
 							listaImagenes = Metodos.directorio(folder, ".", true, true);
 
@@ -133,7 +125,9 @@ public class CronWebp extends TimerTask {
 							directorio.mkdir();
 
 							if (!listaImagenes.isEmpty()) {
-								Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(), salida, false, 1);
+
+								Metodos.moverArchivos(listaImagenes, MenuPrincipal.getSeparador(), salida, false, 1, 0);
+
 							}
 
 							directorio = new File(folder);
@@ -147,13 +141,14 @@ public class CronWebp extends TimerTask {
 						break;
 
 					case 3:
-						Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador() + "output");
+
+						Metodos.abrirCarpeta(carpetaConfig + "Gif_extractor" + MenuPrincipal.getSeparador() + "output");
+
 						break;
 
 					case 4:
-						Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador(), ".");
+
+						Metodos.eliminarArchivos(carpetaConfig + "Gif_extractor" + MenuPrincipal.getSeparador(), ".");
 
 						break;
 
@@ -163,8 +158,9 @@ public class CronWebp extends TimerTask {
 							"<html><h2>¿Quieres borrar el/los GIF/s?</h2></html>");
 
 					if (resp == 0) {
-						Metodos.eliminarArchivos(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-								+ "Gif_extractor" + MenuPrincipal.getSeparador(), ".");
+
+						Metodos.eliminarArchivos(carpetaConfig + "Gif_extractor" + MenuPrincipal.getSeparador(), ".");
+
 					}
 
 					break;
@@ -173,8 +169,7 @@ public class CronWebp extends TimerTask {
 
 					Metodos.mensaje("Los videos se han pasado correctamente a fotogramas", 2);
 
-					Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador()
-							+ "Frame_Extractor" + MenuPrincipal.getSeparador() + "output");
+					Metodos.abrirCarpeta(carpetaConfig + "Frame_Extractor" + MenuPrincipal.getSeparador() + "output");
 
 					break;
 
@@ -182,8 +177,7 @@ public class CronWebp extends TimerTask {
 
 					Metodos.mensaje("Imagenes colorizadas correctamente", 2);
 
-					Metodos.abrirCarpeta(MenuPrincipal.getLectura()[0] + MenuPrincipal.getSeparador() + "colorization"
-							+ MenuPrincipal.getSeparador() + "imgs_out");
+					Metodos.abrirCarpeta(carpetaConfig + "colorization" + MenuPrincipal.getSeparador() + "imgs_out");
 
 					break;
 

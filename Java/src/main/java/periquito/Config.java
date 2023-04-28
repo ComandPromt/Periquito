@@ -1,10 +1,13 @@
 package periquito;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -167,6 +170,12 @@ public class Config extends javax.swing.JFrame implements ActionListener, Change
 		label.setFont(new Font("Tahoma", Font.BOLD, 20));
 
 		JButton btnNewButton_1 = new JButton("");
+		btnNewButton_1.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+		btnNewButton_1.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+			}
+		});
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}

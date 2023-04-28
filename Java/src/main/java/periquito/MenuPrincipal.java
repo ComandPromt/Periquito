@@ -3,7 +3,6 @@ package periquito;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,19 +30,14 @@ import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -53,31 +47,30 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
+import com.buttons.round.ButtonRoundedWithImage;
+import com.comboBox.comboSuggestion.ComboBoxSuggestion;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.spinner.simple.Spinner;
+import com.textField.suggestion.TextFieldSuggestion;
 
+import drag_and_drop.DragAndDrop;
+import drag_and_drop.UtilDragAndDrop;
+import radio_button.RadioButtonCustom;
 import utils.ComprobarSha;
-import utils.DragAndDrop;
 import utils.Img2Txt;
 import utils.Metodos;
 import utils.MyInterface;
-import utils.PhotoFrame;
 
 @SuppressWarnings("serial")
 
 public class MenuPrincipal extends JFrame implements ActionListener, ChangeListener, MyInterface {
-
-	static LinkedList<String> idCategorias = new LinkedList<>();
-
-	static String pagina;
-
-	static boolean countCategorias = false;
-
-	static boolean notificacion;
 
 	static JSONObject json;
 
@@ -85,19 +78,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	static JCheckBox chckbxNewCheckBox;
 
-	private int tecla1;
-
-	private int tecla2;
-
-	private int vuelta;
-
 	private JMenuBar menuopciones;
 
 	private JMenu mnAcciones, menu1, menu2, menu3, menu4, mnConfig;
-
-	static int y;
-
-	static int total;
 
 	private JMenuItem menuItem, menuItem1, menuItem4;
 
@@ -119,19 +102,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JMenuItem menuItem18, menuItem19;
 
-	private static JTextField textField;
+	private static TextFieldSuggestion textField;
 
-	private static JRadioButton subirGif = new JRadioButton(" Subir GIF");
-
-	private static String[] lectura;
-
-	private static String[] user;
-
-	static String[] sonido;
-
-	public static String[] configuracion;
-
-	private static String carpeta = "";
+	private static RadioButtonCustom subirGif;
 
 	private JMenuItem mntmNewMenuItem, mntmNewMenuItem1, mntmDownloads, mntmComentarios;
 
@@ -139,69 +112,23 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JMenuItem mmenu1, mmenu2, mmenu3, mmenu5;
 
-	static LinkedList<String> listaImagenes = new LinkedList<>();
-
-	static LinkedList<String> imagesBn = new LinkedList<>();
-
-	static LinkedList<String> listaImagenesMover = new LinkedList<>();
-
-	static int vueltasMaximas = 0;
-
-	static LinkedList<String> carpetas = new LinkedList<String>();
-
 	private static JLabel lblNewLabel_2 = new JLabel("");
 
-	public static LinkedList<String> imagenesSubidas = new LinkedList<>();
+	static ButtonRoundedWithImage button = new ButtonRoundedWithImage("");
 
-	private String carpetaBn;
-
-	static LinkedList<String> categorias = new LinkedList<>();
-
-	static String os = System.getProperty("os.name");
-
-	static String separador = Metodos.saberSeparador(os);
-
-	static String[] lecturaurl;
-
-	static String[] permisos;
-
-	static String[] lecturabd;
-
-	static JButton button = new JButton("");
-
-	static String[] lecturabackup;
-
-	static String url;
-
-	static String directorioActual;
-
-	static String directorioImagenes;
-
-	private static String etiqueta = "";
-
-	static JComboBox<String> comboBox = new JComboBox<>();
-
-	static String nombreSubida;
-
-	static boolean gif = false;
+	static ComboBoxSuggestion<String> comboBoxCategorias;
 
 	JSeparator miSeparator9;
 
-	JComboBox<String> comboBox_1 = new JComboBox<String>();
+	public static ComboBoxSuggestion<String> comboBox_1 = new ComboBoxSuggestion<String>();
 
 	public static WebDriver chrome;
-
-	private static LinkedList<String> claves = new LinkedList<String>();
-
-	private static LinkedList<String> valores = new LinkedList<String>();
-
-	private static LinkedList<String> imagenesMeta = new LinkedList<String>();
 
 	private JMenu mnNewMenu_1;
 
 	private JMenu mnNewMenu_3;
 
-	private static JRadioButton soloGif;
+	private static RadioButtonCustom soloGif;
 
 	private JSeparator separator_2;
 
@@ -231,8 +158,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JSeparator separator_10;
 
-	static String nombreImagenes = "";
-
 	private JMenuItem mntmNewMenuItem_7;
 
 	private JMenuItem mntmNewMenuItem_8;
@@ -254,8 +179,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem_12;
 
 	private JSeparator separator_16;
-
-	private static boolean subir = false;
 
 	private JMenuItem mntmNewMenuItem_13;
 
@@ -307,12 +230,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	private JSeparator separator_27;
 
-	static String categoria = "";
-
-	static int idCategoria = 0;
-
-	public static String crontabWebp;
-
 	private JMenuItem mntmNewMenuItem_26;
 
 	private JMenuItem mntmNewMenuItem_27;
@@ -340,8 +257,90 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	private JMenuItem mntmNewMenuItem_33;
 
 	private JSeparator separator_36;
+
 	private JMenuItem mntmNewMenuItem_34;
+
 	private JSeparator separator_37;
+
+	private static LinkedList<String> claves = new LinkedList<String>();
+
+	private static LinkedList<String> valores = new LinkedList<String>();
+
+	private static LinkedList<String> imagenesMeta = new LinkedList<String>();
+
+	static LinkedList<String> idCategorias = new LinkedList<>();
+
+	static LinkedList<String> listaImagenes = new LinkedList<>();
+
+	static LinkedList<String> listaFiltroImagenes = new LinkedList<>();
+
+	static LinkedList<String> imagesBn = new LinkedList<>();
+
+	static LinkedList<String> listaImagenesMover = new LinkedList<>();
+
+	static LinkedList<String> carpetas = new LinkedList<String>();
+
+	public static LinkedList<String> imagenesSubidas = new LinkedList<>();
+
+	static LinkedList<String> categorias = new LinkedList<>();
+
+	static LinkedList<String> carpetasCategoriasPorSubir = new LinkedList<>();
+
+	private static ComboBoxSuggestion<String> tipoSubida;
+
+	public static String crontabWebp;
+
+	static String nombreSubida;
+
+	static boolean gif = false;
+
+	private int tecla1;
+
+	private int tecla2;
+
+	private int vuelta;
+
+	static int y;
+
+	static int total;
+
+	private static String[] lectura;
+
+	private static String[] user;
+
+	static String[] sonido;
+
+	public static String[] configuracion;
+
+	static int vueltasMaximas = 0;
+
+	private String carpetaBn;
+
+	static String os;
+
+	static String separador;
+
+	static String[] lecturaurl;
+
+	static String[] permisos;
+
+	static String[] lecturabd;
+
+	static String[] lecturabackup;
+
+	static String url;
+
+	static String directorioActual;
+
+	static String directorioImagenes;
+
+	private static String etiqueta = "";
+
+	static String categoria = "";
+
+	static int idCategoria = 0;
+
+	public static Spinner numeroCms;
 
 	public static String[] getPermisos() {
 
@@ -451,45 +450,87 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	}
 
-	private int saberTipoDrop() {
+	public static void setCategorias(String string) {
 
-		int tipo = 0;
+		categorias.add(string);
 
-		switch (comboBox_1.getSelectedIndex()) {
+	}
 
-		case 0:
+	public static LinkedList<String> getListaImagenes() {
 
-		case 1:
+		return listaImagenes;
 
-		case 3:
+	}
 
-			tipo = 1;
+	public static String[] getLectura() {
 
-			break;
+		return lectura;
 
-		case 2:
+	}
 
-			tipo = 3;
+	private static void calcularDirectorioImagenes() {
 
-			break;
+		try {
 
-		case 4:
+			switch (tipoSubida.getSelectedIndex()) {
 
-		case 5:
+			case 0:
 
-			tipo = 2;
+				directorioImagenes = directorioActual + "Config" + separador + "imagenes" + separador
+						+ comboBoxCategorias.getSelectedItem().toString();
 
-			break;
+				break;
 
-		default:
+			case 1:
 
-			tipo = 1;
+				for (int i = 0; i < comboBoxCategorias.getItemCount(); i++) {
 
-			break;
+					carpetasCategoriasPorSubir = Metodos.leerDirectorio(directorioActual + "Config" + separador
+							+ "imagenes" + separador + comboBoxCategorias.getItemAt(i) + separador, "images", true);
+
+				}
+
+				if (!carpetasCategoriasPorSubir.isEmpty()) {
+
+					directorioImagenes = carpetasCategoriasPorSubir.get(0);
+
+				}
+
+				break;
+
+			case 2:
+
+				directorioImagenes = directorioActual + "Config" + separador + "imagenes";
+
+				break;
+
+			}
 
 		}
 
-		return tipo;
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	static void leerImagenes() {
+
+		Metodos.convertir(directorioImagenes + separador);
+
+		webp_convert(directorioImagenes + separador, "webp");
+
+		if (soloGif.isSelected()) {
+
+			listaImagenes = Metodos.directorio(directorioImagenes + separador, "gif", true, true);
+
+		}
+
+		else {
+
+			listaImagenes = Metodos.directorio(directorioImagenes + separador, "images", true, true);
+
+		}
 
 	}
 
@@ -505,32 +546,36 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		case 1:
 
-			Metodos.renombrarArchivos(lectura[0] + "Hacer_gif" + separador + "frames", ".", true);
+			Metodos.renombrarArchivos(directorioImagenes + separador, ".", true);
 
 			break;
 
 		case 2:
 
-			Metodos.renombrarArchivos(lectura[0] + "Gif_extractor", ".", true);
+			Metodos.renombrarArchivos(lectura[0] + "Hacer_gif" + separador + "frames", ".", true);
 
 			break;
 
 		case 3:
 
-			Metodos.renombrarArchivos(directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
-					+ "recortes" + separador, ".", true);
-
-			new PhotoFrame().setVisible(true);
+			Metodos.renombrarArchivos(lectura[0] + "Gif_extractor", ".", true);
 
 			break;
 
 		case 4:
 
-			Metodos.renombrarArchivos(lectura[0] + "FrameExtractor", ".", true);
+			Metodos.renombrarArchivos(directorioActual + "Config" + separador + "imagenes_para_recortar" + separador
+					+ "recortes" + separador, ".", true);
 
 			break;
 
 		case 5:
+
+			Metodos.renombrarArchivos(lectura[0] + "FrameExtractor", ".", true);
+
+			break;
+
+		case 6:
 
 			Metodos.renombrarArchivos(lectura[0] + "Video_2_Gif", ".", true);
 
@@ -546,21 +591,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	protected static void extraerNombreComun() {
 
-		nombreImagenes = textField.getText().trim();
+		if (!configuracion[0].isEmpty()) {
 
-		if (!nombreImagenes.isEmpty()) {
-
-			nombreSubida = nombreImagenes;
+			nombreSubida = Metodos.eliminarEspacios(configuracion[0], false);
 
 		}
 
 		else {
 
-			if (!configuracion[0].isEmpty()) {
-
-				nombreSubida = Metodos.eliminarEspacios(configuracion[0], false);
-
-			}
+			nombreSubida = Metodos.eliminarEspacios(textField.getText(), false);
 
 		}
 
@@ -586,23 +625,59 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		try {
 
+			for (int i = 0; i < imagenesSubidas.size(); i++) {
+
+				Metodos.moverArchivo(directorioImagenes + separador + imagenesSubidas.get(i),
+						"C:\\Users\\Yeah\\Documents\\Periquito\\Java\\Config\\imagenes\\imagenes_subidas" + separador
+								+ imagenesSubidas.get(i));
+			}
+
+			imagenesSubidas.clear();
+
+			extraerNombreComun();
+
+			calcularDirectorioImagenes();
+
 			leerImagenes();
 
-			if (!subir && listaImagenes.isEmpty()) {
+			if (!Metodos.comprobarFirefox(os)) {
 
-				subir = false;
+				Metodos.mensaje("Por favor, instala el navegador Firefox", 3);
+
+			}
+
+			if (configuracion.length == 0) {
+
+				Metodos.verConfig(1, true);
+
+			}
+
+			if (lecturabd.length == 0) {
+
+				Metodos.verConfig(3, true);
+
+			}
+
+			if (listaImagenes.isEmpty()) {
 
 				Metodos.notificacion(directorioImagenes, "de imagen", true);
 
 			}
 
-			else {
+			File file = new File(
+					directorioActual + "Programs" + separador + "geckodriver" + separador + "geckodriver.exe");
 
-				subir = true;
+			if (!file.exists()) {
+
+				Metodos.mensaje("Debes tener el archivo geckodriver.exe en la raíz del programa", 3);
 
 			}
 
-			while (!listaImagenes.isEmpty() && subir) {
+			// comprobarImagenesSubidas();
+
+			leerImagenes();
+
+			while (!listaImagenes.isEmpty() && imagenesSubidas.size() != listaImagenes.size()) {
 
 				if (!chckbxNewCheckBox.isSelected() && !soloGif.isSelected()) {
 
@@ -610,48 +685,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				}
 
-				dividirImagenes();
-
-				moverDeCarpetasParaSubir();
-
-				leerImagenes();
-
-				Metodos.borrarArchivosDuplicados(directorioImagenes + separador);
-
-				Metodos.borrarArchivosSubidos();
-
-				notificacion = false;
-
 				configuracion = Metodos.leerFicheroArray("Configuracion.txt", 7);
 
 				lecturabd = Metodos.leerArchivo("Bd.txt", 6,
 						"4images\r\n" + "root\r\n" + "root\r\n" + "4images_\r\n" + "3306\r\n" + "localhost", false);
 
-				if (!Metodos.comprobarFirefox(os)) {
-
-					Metodos.mensaje("Por favor, instala el navegador Firefox", 3);
-
-				}
-
-				if (configuracion.length == 0) {
-
-					Metodos.verConfig(1, true);
-
-				}
-
-				if (!MenuPrincipal.countCategorias || lecturabd.length == 0) {
-
-					Metodos.verConfig(3, true);
-
-				}
-
-				if (MenuPrincipal.textField.getText().isEmpty()) {
+				if (nombreSubida.isEmpty()) {
 
 					Metodos.mensaje("Por favor, introduzca el nombre común de las imágenes", 3);
 
 				}
 
-				if (!notificacion && configuracion.length > 0 && lecturabd.length > 0) {
+				if (configuracion.length > 0 && lecturabd.length > 0) {
 
 					String web = lecturaurl[0];
 
@@ -663,33 +708,15 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					imagenesMeta.clear();
 
-					File file = new File(directorioActual + "geckodriver.exe");
+					if (!listaImagenes.isEmpty()) {
 
-					if (os.contains("Win") && !file.exists()) {
-
-						Metodos.mensaje("Debes tener el archivo geckodriver.exe en la raíz del programa", 3);
-
-					}
-
-					file = new File(directorioActual + "geckodriver");
-
-					if (os.contains("Linux") && !file.exists()) {
-
-						Metodos.mensaje("Debes tener el archivo geckodriver en la raíz del programa", 3);
-
-					}
-
-					if (!notificacion && !listaImagenes.isEmpty()) {
-
-						if (comboBox.getItemCount() == 0) {
+						if (comboBoxCategorias.getItemCount() == 0) {
 
 							new Bd().setVisible(true);
 
 						}
 
 						else {
-
-							extraerNombreComun();
 
 							boolean subirImagen = true;
 
@@ -713,15 +740,45 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 								else {
 
-									idCategoria = Metodos.saberIdCategoria(comboBox.getSelectedItem().toString());
+									idCategoria = Metodos
+											.saberIdCategoria(comboBoxCategorias.getSelectedItem().toString());
 
-									categoria = categorias.get(comboBox.getSelectedIndex());
+									categoria = categorias.get(comboBoxCategorias.getSelectedIndex());
 
 								}
 
 								MenuPrincipal.lblNewLabel_2.setText(Metodos.calcularTiempo(listaImagenes.size()));
 
-								if (subir) {
+								int resp = JOptionPane.showConfirmDialog(null,
+										"Las imágenes se subirán a la categoría : " + categoria + " ¿Está seguro?");
+
+								if (resp == 0) {
+
+									Metodos.cerrarNavegador();
+
+									if (configuracion[3].isEmpty()) {
+
+										etiqueta = JOptionPane.showInputDialog(null, "Escribe la/s etiqueta/s");
+
+									}
+
+									else {
+
+										etiqueta = configuracion[3];
+
+									}
+
+									if (!web.substring(web.length() - 1).equals("7")) {
+
+										web += "/";
+
+									}
+
+									if (!lecturaurl[1].trim().isEmpty()) {
+
+										web += lecturaurl[1] + "/";
+
+									}
 
 									if (!(progreso instanceof Progreso)) {
 
@@ -731,101 +788,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 									subirFotos(idCategoria, web);
 
-									lblNewLabel_2.setText("");
-
-								}
-
-								else {
-
-									int resp = JOptionPane.showConfirmDialog(null,
-											"Las imágenes se subirán a la categoría : " + categoria + " ¿Está seguro?");
-
-									if (resp == 0) {
-
-										subir = true;
-
-										Metodos.cerrarNavegador();
-
-										if (configuracion[3].isEmpty()) {
-
-											etiqueta = JOptionPane.showInputDialog(null, "Escribe la/s etiqueta/s");
-
-										}
-
-										else {
-
-											etiqueta = configuracion[3];
-
-										}
-
-										if (!web.substring(web.length() - 1).equals("7")) {
-
-											web += "/";
-
-										}
-
-										if (!lecturaurl[1].trim().isEmpty()) {
-
-											web += lecturaurl[1] + "/";
-
-										}
-
-										if (!(progreso instanceof Progreso)) {
-
-											progreso = new Progreso();
-
-										}
-
-										subirFotos(idCategoria, web);
-
-										lblNewLabel_2.setText("");
-
-									}
-
-									else {
-
-										subir = false;
-
-									}
-
 								}
 
 							}
-
-						}
-
-						MenuPrincipal.lblNewLabel_2.setText("");
-
-					}
-
-					if (!notificacion && subir
-							&& Metodos.listarFicherosPorCarpeta(new File(directorioImagenes), ".") > 0) {
-
-						if (progreso instanceof Progreso) {
-
-							Metodos.cerrarNavegador();
-
-						}
-
-						else {
-
-							progreso = new Progreso();
-
-						}
-
-						if (listaImagenes.isEmpty()) {
-
-							y = 0;
-
-							subir = false;
-
-							Metodos.cerrarNavegador();
-
-						}
-
-						else {
-
-							moverDeCarpetasParaSubir();
 
 						}
 
@@ -833,17 +798,39 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				}
 
+				if (Metodos.listarFicherosPorCarpeta(new File(directorioImagenes), ".") > 0) {
+
+					if (progreso instanceof Progreso) {
+
+						Metodos.cerrarNavegador();
+
+					}
+
+					else {
+
+						progreso = new Progreso();
+
+					}
+
+					if (listaImagenes.isEmpty()) {
+
+						y = 0;
+
+						Metodos.cerrarNavegador();
+
+					}
+
+					else {
+
+						moverDeCarpetasParaSubir();
+
+					}
+
+				}
+
 			}
 
-			if (!subir) {
-
-				lblNewLabel_2.setText("");
-
-				resultadoSubida();
-
-				imagenesSubidas.clear();
-
-			}
+			resultadoSubida();
 
 		}
 
@@ -855,69 +842,91 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	}
 
-	private static void moverDeCarpetasParaSubir() {
-
-		subir = false;
+	private static void comprobarImagenesSubidas() {
 
 		try {
 
-			int indice = 0;
-
-			int diferencia = 0;
-
-			String carpeta;
-
 			String imagen;
 
-			while (vueltasMaximas > 0 && listaImagenes.size() < 300 && indice < vueltasMaximas) {
+			File file;
 
-				diferencia = 300 - listaImagenes.size();
+			Connection conexionSubida = Metodos.conexionBD();
 
-				carpeta = carpetas.get(indice);
+			ResultSet rs = null;
 
-				listaImagenesMover = Metodos.directorio(carpeta + separador, "images", true, false);
+			Statement s;
 
-				if (listaImagenesMover.size() >= diferencia) {
+			int comprobarSha = 0;
 
-					subir = true;
+			s = conexionSubida.createStatement();
 
-					for (int y = 0; y < diferencia; y++) {
+			carpetas = Metodos.directorio(
+					directorioActual + "Config" + separador + "imagenes" + separador + "folders" + separador, "", false,
+					true);
 
-						imagen = directorioImagenes + separador + listaImagenesMover.get(y);
+			vueltasMaximas = carpetas.size();
 
-						listaImagenes.add(imagen);
+			if (listaImagenes.size() > 300) {
 
-						Metodos.moverArchivo(carpeta + listaImagenesMover.get(y), imagen);
+				dividirImagenes();
+
+			}
+
+			else {
+
+				moverDeCarpetasParaSubir();
+
+			}
+
+			for (int x = 0; x < carpetas.size(); x++) {
+
+				for (int i = 0; i < listaImagenes.size(); i++) {
+
+					imagen = listaImagenes.get(i);
+
+					file = new File(imagen);
+
+					if (file.exists()) {
+
+						rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images" + " WHERE sha256='"
+								+ Metodos.getSHA256Checksum(imagen) + "'");
+
+						rs.next();
+
+						comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
+
+						if (comprobarSha != 0) {
+
+							Metodos.moverArchivo(imagen,
+									directorioActual + "Config" + separador + "imagenes" + separador
+											+ "imagenes_subidas" + separador
+											+ imagen.substring(imagen.lastIndexOf(separador), imagen.length()));
+
+							listaImagenes.remove(i);
+
+						}
 
 					}
 
-					indice++;
+				}
+
+				if (listaImagenes.size() < 300) {
+
+					moverDeCarpetasParaSubir();
 
 				}
 
 				else {
 
-					listaImagenesMover = Metodos.directorio(carpeta + separador, ".", true, false);
-
-					carpeta = carpetas.get(indice);
-
-					listaImagenesMover = Metodos.directorio(carpeta + separador, "images", true, true);
-
-					Metodos.moverArchivos(listaImagenesMover, separador, directorioImagenes, false, 1);
-
-					listaImagenesMover = Metodos.directorio(carpeta + separador, ".", true, false);
-
-					if (listaImagenesMover.isEmpty()) {
-
-						Metodos.eliminarFichero(carpeta);
-
-					}
-
-					indice++;
+					x = carpetas.size();
 
 				}
 
 			}
+
+			s.close();
+
+			conexionSubida.close();
 
 		}
 
@@ -927,31 +936,93 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	}
 
-	static void leerImagenes() {
+	private static void moverDeCarpetasParaSubir() {
 
-		Metodos.convertir(directorioImagenes + separador);
+		try {
 
-		webp_convert(directorioImagenes + separador, "webp");
+			int diferencia = 0;
 
-		if (soloGif.isSelected()) {
+			String carpeta;
 
-			listaImagenes = Metodos.directorio(directorioImagenes + separador, "gif", true, false);
+			if (listaImagenes.size() < 300) {
+
+				for (int i = 0; i < carpetas.size(); i++) {
+
+					listaImagenesMover = Metodos.directorio(carpetas.get(i) + separador, "images", true, true);
+
+					if (!listaImagenesMover.isEmpty()) {
+
+						if (listaImagenes.size() >= 300) {
+
+							i = carpetas.size();
+
+						}
+
+						else {
+
+							if (listaImagenes.isEmpty()
+									|| (!listaImagenesMover.isEmpty() && (vueltasMaximas > 0 && i < vueltasMaximas))) {
+
+								diferencia = 300 - listaImagenes.size();
+
+								carpeta = carpetas.get(i);
+
+								if (i > 0) {
+
+									listaImagenesMover = Metodos.directorio(carpeta + separador, "images", true, true);
+
+								}
+
+								if (!listaImagenesMover.isEmpty() && listaImagenes.size() < 300) {
+
+									if (listaImagenesMover.size() >= diferencia) {
+
+										for (int y = 0; y < diferencia; y++) {
+
+											Metodos.moverArchivo(
+													carpeta + listaImagenesMover.get(y).substring(
+															listaImagenesMover.get(y).lastIndexOf(separador),
+															listaImagenesMover.get(y).length()),
+													directorioImagenes + listaImagenesMover.get(y).substring(
+															listaImagenesMover.get(y).lastIndexOf(separador),
+															listaImagenesMover.get(y).length()));
+
+											listaImagenes.add(directorioImagenes + listaImagenesMover.get(y).substring(
+													listaImagenesMover.get(y).lastIndexOf(separador),
+													listaImagenesMover.get(y).length()));
+
+										}
+
+									}
+
+									else {
+
+										Metodos.moverArchivos(listaImagenesMover, separador, directorioImagenes, false,
+												1, 300);
+
+										listaImagenesMover = Metodos.directorio(carpeta + separador, "images", true,
+												true);
+
+										for (int x = 0; x < listaImagenesMover.size(); x++) {
+
+											listaImagenes.add(listaImagenesMover.get(x));
+
+										}
+
+									}
+
+								}
+
+							}
+
+						}
+					}
+				}
+			}
 
 		}
 
-		else {
-
-			if (subirGif.isSelected()) {
-
-				listaImagenes = Metodos.directorio(directorioImagenes + separador, "allimages", true, false);
-
-			}
-
-			else {
-
-				listaImagenes = Metodos.directorio(directorioImagenes + separador, "images", true, false);
-
-			}
+		catch (Exception e) {
 
 		}
 
@@ -965,47 +1036,58 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			for (int i = 1; i < dividir; i++) {
 
-				Metodos.crearFichero(directorioImagenes + separador + "folders" + separador + i, "", true);
+				Metodos.crearFichero(
+						directorioActual + "Config" + separador + "imagenes" + separador + "folders" + separador + i,
+						"", true);
 
 			}
 
 			vueltasMaximas = 0;
 
-			for (int i = 299; i < listaImagenes.size();) {
+			int diferencia = 0;
 
-				for (int y = 0; y < 300; y++) {
+			int diferenciaFiltro = 0;
+
+			for (int i = 0; i < dividir; i++) {
+
+				if (listaImagenes.size() <= 300) {
+
+					i = dividir;
+
+				}
+
+				else {
 
 					++vueltasMaximas;
 
-					if (i == listaImagenes.size()) {
+					listaFiltroImagenes = Metodos.directorio(directorioActual + "Config" + separador + "imagenes"
+							+ separador + "folders" + separador + vueltasMaximas + separador, "images", true, true);
 
-						y = 300;
+					diferencia = listaImagenes.size() - 300;
 
-					}
+					diferenciaFiltro = 300 - listaFiltroImagenes.size();
 
-					else {
+					if (diferenciaFiltro >= diferencia) {
 
-						Metodos.moverArchivo(directorioImagenes + separador + listaImagenes.get(i),
-								directorioImagenes + separador + "folders" + separador + vueltasMaximas + separador
-										+ listaImagenes.get(i));
+						for (int y = 0; y < diferencia; y++) {
 
-						i++;
+							Metodos.moverArchivo(listaImagenes.get(y),
+
+									directorioActual + "Config" + separador + "imagenes" + separador + "folders"
+											+ separador + vueltasMaximas
+											+ listaImagenes.get(y).substring(
+													listaImagenes.get(y).lastIndexOf(separador),
+													listaImagenes.get(y).length()));
+
+						}
+
+						leerImagenes();
 
 					}
 
 				}
 
 			}
-
-			leerImagenes();
-
-		}
-
-		if (vueltasMaximas == 0) {
-
-			carpetas = Metodos.directorio(directorioImagenes + separador + "folders" + separador, "", false, true);
-
-			vueltasMaximas = carpetas.size();
 
 		}
 
@@ -1052,13 +1134,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			total = 0;
 
-			if (!listaImagenes.isEmpty()) {
+			if (!listaImagenes.isEmpty() && (y > 0 && total > 0)) {
 
 				total = listaImagenes.size();
-
-			}
-
-			if (y > 0 && total > 0) {
 
 				if (total < y) {
 
@@ -1067,21 +1145,34 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				progreso.setProgressBarRecorrido("Imagen " + y + " de " + total);
 
-				progreso.setProgressBar(Metodos.calcularPorcentaje(y, total));
+			}
+
+			else {
+
+				if (!imagenesSubidas.isEmpty()) {
+
+					total = imagenesSubidas.size();
+
+					if (total < y) {
+
+						total = y;
+					}
+
+					progreso.setProgressBarRecorrido("Imagen " + y + " de " + total);
+
+				}
 
 			}
+
+			lblNewLabel_2.setText("");
+
+			carpetasCategoriasPorSubir.clear();
 
 		}
 
 		catch (Exception e) {
-
+			e.printStackTrace();
 		}
-
-	}
-
-	public static void setCategorias(String string) {
-
-		categorias.add(string);
 
 	}
 
@@ -1092,12 +1183,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		String carpeta = Metodos.formatearRuta();
 
 		switch (comboBox_1.getSelectedIndex()) {
-
-		case 0:
-
-			destino = directorioImagenes;
-
-			break;
 
 		case 1:
 
@@ -1140,10 +1225,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		return destino;
 	}
 
-	protected void comprobarExif() throws IOException {
-
-	}
-
 	protected static void comprobarBN() throws IOException {
 
 		try {
@@ -1154,7 +1235,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			for (int i = 0; i < listaImagenes.size(); i++) {
 
-				imagen = directorioImagenes + separador + listaImagenes.get(i);
+				imagen = listaImagenes.get(i);
 
 				if (Metodos.genHtml(new File(imagen))) {
 
@@ -1193,18 +1274,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			listaImagenes = Metodos.directorio(
 					directorioActual + "Config" + separador + "imagenes_para_recortar" + separador, "images", true,
-					false);
+					true);
 
-			new PhotoFrame().setVisible(true);
 		}
 
 		catch (Exception e1) {
 
 		}
-	}
-
-	public static LinkedList<String> getListaImagenes() {
-		return listaImagenes;
 	}
 
 	private void abrirNotas() {
@@ -1269,7 +1345,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			Metodos.moverArchivos(Metodos.directorio(
 					Metodos.formatearRuta() + separador + "Hacer_gif" + separador + "Output" + separador, "gif", true,
-					true), separador, directorioImagenes, false, 3);
+					true), separador, directorioImagenes, false, 3, 300);
 
 			Metodos.abrirCarpeta(directorioImagenes);
 
@@ -1321,12 +1397,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					Metodos.mensaje("Debes tener un vídeo para poder crear los fotogramas", 3);
 
-					Metodos.abrirCarpeta(carpeta);
 				}
 
 				else {
-
-					Metodos.python("python video_frames.py");
 
 				}
 
@@ -1392,8 +1465,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			if (recuento <= 170) {
 
-				Metodos.python("python run.py");
-
 			}
 
 			else {
@@ -1457,30 +1528,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 	}
 
 	public MenuPrincipal() throws Exception {
-
-		addKeyListener(new KeyAdapter() {
-
-			@Override
-
-			public void keyPressed(KeyEvent e) {
-
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-
-					try {
-
-						uploadImages();
-
-					}
-
-					catch (IOException e1) {
-//
-					}
-
-				}
-
-			}
-
-		});
 
 		getContentPane().setBackground(Color.WHITE);
 
@@ -1577,7 +1624,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					}
 
 					else {
-						Metodos.python("python gif_frames.py");
 
 					}
 
@@ -1669,8 +1715,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					Metodos.mensaje("Espere mientras se colorizan las imagenes", 2);
 
 					Metodos.convertir(carpetaBn);
-
-					Metodos.python("python colorize.py");
 
 				}
 
@@ -1976,11 +2020,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					Metodos.mensaje("Espere mientras se hacen los gifs", 2);
 
-					Metodos.python("python video_gif.py");
-
 				}
 
-				catch (IOException e1) {
+				catch (Exception e1) {
 
 				}
 
@@ -2112,7 +2154,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		mntmNewMenuItem_13.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				new ImportarSql().setVisible(true);
 			}
 		});
 		mntmNewMenuItem_13.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -2283,8 +2324,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				try {
 
 					lecturaurl = Metodos.leerFicheroArray("Config2.txt", 2);
-
-					obtenerCarpeta();
 
 					if (Metodos.probarConexion(url)) {
 
@@ -2605,7 +2644,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			public void mousePressed(MouseEvent e) {
 
 				try {
-
+					System.out.println(directorioImagenes);
 					Metodos.abrirCarpeta(directorioImagenes);
 
 				}
@@ -2617,6 +2656,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 				}
 
 			}
+
 		});
 
 		menuItem8.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/folder.png")));
@@ -3130,7 +3170,6 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		menuItem19.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				new About().setVisible(true);
 			}
 		});
 
@@ -3150,6 +3189,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
+		comboBox_1.addItem("Categorias");
+
 		comboBox_1.addItem("Imagenes");
 
 		comboBox_1.addItem("Hacer GIF");
@@ -3168,28 +3209,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	}
 
-	static void obtenerCarpeta() throws IOException {
-
-		try {
-
-			if (!lecturaurl[1].isEmpty()) {
-
-				carpeta = "/" + lecturaurl[1];
-
-			}
-
-		}
-
-		catch (NullPointerException e) {
-
-			new Config2().setVisible(true);
-
-		}
-
-	}
-
 	public static String getDirectorioActual() {
+
 		return directorioActual;
+
 	}
 
 	private static void comprobarUsuario(String directorioImagenes) throws IOException {
@@ -3206,7 +3229,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			else {
 
-				if (configuracion[0].isEmpty() && nombreImagenes.isEmpty()) {
+				if (configuracion[0].isEmpty() && nombreSubida.isEmpty()) {
 					Metodos.mensaje("Por favor, rellene el nombre", 3);
 				}
 
@@ -3227,8 +3250,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 	}
 
-	private static int subirArchivos(Statement s, int categoria, JSONArray imagenesBD, String extension, boolean subir,
-			boolean cerrarNavegador) throws SQLException, Exception {
+	private static int subirArchivos(Statement s, int categoria, JSONArray imagenesBD, boolean cerrarNavegador)
+			throws SQLException, Exception {
 
 		int retorno = 0;
 
@@ -3242,7 +3265,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			if (!listaImagenes.isEmpty()) {
 
-				retorno = subirImagenes(maximo, s, categoria, imagenesBD, extension, maximoMeta, subir);
+				retorno = subirImagenes(maximo, categoria, maximoMeta);
 			}
 
 			ResultSet rs;
@@ -3253,22 +3276,29 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 				if (x < claves.size() && x < valores.size()) {
 
-					rs = s.executeQuery("SELECT image_id FROM " + lecturabd[3] + "images" + " WHERE image_media_file='"
-							+ imagenesMeta.get(x) + "'");
+					// SELECT image_id FROM 4images_images WHERE
+					// image_media_file='C:\Users\Yeah\Documents\Periquito\Java\Config\imagenes\Girls\20.jpg'
+					// rs = s.executeQuery("SELECT image_id FROM " + lecturabd[3] + "images" + "
+					// WHERE image_media_file='"
+					// + imagenesMeta.get(x) + "'");
 
-					rs.next();
+					// rs.next();
 
-					idImagen = Integer.parseInt(rs.getString("image_id"));
-
-					s.executeUpdate("INSERT INTO " + lecturabd[3] + "metadatos (Imagen,Tipo,Valor) VALUES('" + idImagen
+//					idImagen = Integer.parseInt(rs.getString("image_id"));
+					System.out.println("INSERT INTO " + lecturabd[3] + "metadatos (Imagen,Tipo,Valor) VALUES('1,"
 							+ "','" + claves.get(x) + "','" + valores.get(x) + "')");
+//					s.executeUpdate("INSERT INTO " + lecturabd[3] + "metadatos (Imagen,Tipo,Valor) VALUES('" + idImagen
+//							+ "','" + claves.get(x) + "','" + valores.get(x) + "')");
 
 				}
 
 			}
 
-		} catch (Exception e) {
+		}
 
+		catch (Exception e) {
+			e.printStackTrace();
+			listaImagenes.clear();
 		}
 
 		return retorno;
@@ -3281,9 +3311,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			Metodos.cerrarNavegador();
 
-			pagina = web;
-
-			if (comboBox.getSelectedIndex() == -1) {
+			if (comboBoxCategorias.getSelectedIndex() == -1) {
 
 				Metodos.mensaje("Comprueba que tengas al menos una categoría en la base de datos", 3);
 
@@ -3293,7 +3321,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			else {
 
-				if (!textField.getText().trim().isEmpty()) {
+				if (!nombreSubida.isEmpty()) {
 
 					if (listaImagenes.isEmpty() || user.length != 2) {
 
@@ -3334,8 +3362,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 									s = conexion.createStatement();
 
 									json = Metodos.apiImagenes(parametros);
-
-									JSONArray imagenesBD = json.getJSONArray("imagenes_bd");
+									System.out.println(json + " - " + json.toString());
+									JSONArray imagenesBD = json.getJSONArray("respuesta");
 
 									if (!soloGif.isSelected()) {
 
@@ -3345,7 +3373,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 									else {
 
-										subirImagenCms(categoria, imagenesBD, s, "gif", true, true);
+										subirImagenCms(categoria, imagenesBD, s, true, true);
 
 									}
 
@@ -3380,7 +3408,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 								}
 
 								catch (Exception e1) {
-
+									e1.printStackTrace();
 								}
 
 							}
@@ -3424,49 +3452,36 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		Metodos.cerrarNavegador();
 
-		subirImagenCms(categoria, imagenesBD, s, "jpg", subir, cerrarNavegador);
-
-		subirImagenCms(categoria, imagenesBD, s, "png", subir, cerrarNavegador);
-
-		subirImagenCms(categoria, imagenesBD, s, "gif", subir, cerrarNavegador);
+		subirImagenCms(categoria, imagenesBD, s, subir, cerrarNavegador);
 
 	}
 
-	private static void subirImagenCms(int categoria, JSONArray imagenesBD, Statement s, String extension,
-			boolean subir, boolean cerrarNavegador) throws SQLException, Exception {
+	private static void subirImagenCms(int categoria, JSONArray imagenesBD, Statement s, boolean subir,
+			boolean cerrarNavegador) throws SQLException, Exception {
 
 		Metodos.cerrarNavegador();
 
-		subirArchivos(s, categoria, imagenesBD, extension, subir, cerrarNavegador);
+		subirArchivos(s, categoria, imagenesBD, cerrarNavegador);
 
 	}
 
-	private static int subirImagenes(int maximo, Statement s, int categoria, JSONArray imagenesBD, String extension,
-			int maximoMeta, boolean subir) throws Exception {
+	private static int subirImagenes(int maximo, int categoria, int maximoMeta) {
 
 		try {
 
 			String descripcion = "";
+
+			String imagen;
 
 			// Poner descripción en imágenes
 
 			configuracion[2] = Metodos.eliminarEspacios(configuracion[2], false);
 
 			if (!configuracion[2].isEmpty()) {
+
 				descripcion = configuracion[2];
+
 			}
-
-			String imagen;
-
-			Connection conexionSubida = Metodos.conexionBD();
-
-			ResultSet rs = null;
-
-			int comprobarSha = 0;
-
-			String imagenbd = "";
-
-			File file;
 
 			Metodos.cerrarNavegador();
 
@@ -3474,144 +3489,149 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			chrome.get(url + "/index.php");
 
+			Thread.sleep(500);
+
 			chrome.findElement(By.id("user_name")).sendKeys(user[0]);
 
 			chrome.findElement(By.id("user_password")).sendKeys(user[1]);
 
 			chrome.findElement(By.id("login")).click();
 
-			for (int i = 0; i < listaImagenes.size(); i++) {
+			if (carpetasCategoriasPorSubir.isEmpty()) {
 
-				imagen = directorioImagenes + separador + listaImagenes.get(i);
+				maximo = subirImagenesAlServer(maximo);
 
-				file = new File(imagen);
+			}
 
-				if (file.exists()) {
+			else {
 
-					rs = s.executeQuery("SELECT COUNT(sha256) FROM " + lecturabd[3] + "images" + " WHERE sha256='"
-							+ Metodos.getSHA256Checksum(imagen) + "'");
+				for (int i = 0; i < carpetasCategoriasPorSubir.size(); i++) {
 
-					rs.next();
+					if (i > 0) {
 
-					comprobarSha = Integer.parseInt(rs.getString("COUNT(sha256)"));
+						System.out.println(carpetasCategoriasPorSubir.get(i) + separador);
 
-					if (comprobarSha == 0) {
+						listaImagenes = Metodos.leerDirectorio(carpetasCategoriasPorSubir.get(i) + separador, "images",
+								true);
 
-						resultadoSubida();
-
-						imagenbd = imagenesBD.get(i).toString().substring(0, imagenesBD.get(i).toString().length() - 3)
-								+ extension;
-
-						File f1 = new File(imagen);
-
-						File f2 = new File(directorioImagenes + separador + imagenbd);
-
-						f1.renameTo(f2);
-
-						imagen = directorioImagenes + separador + imagenbd;
-
-						lecturaurl[1] = lecturaurl[1].trim();
-
-						lecturaurl[1] = lecturaurl[1].replace("  ", " ");
-
-						try {
-
-							InputStream inputstream = new FileInputStream(imagen);
-
-							Metadata metadata = ImageMetadataReader.readMetadata(inputstream);
-
-							String etiqueta = "";
-
-							for (Directory directory : metadata.getDirectories()) {
-
-								for (Tag tag : directory.getTags()) {
-
-									etiqueta = tag.toString();
-
-									verValor(etiqueta, "[IPTC] Special Instructions - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] By-line - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] By-line Title - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] Headline - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] Credit - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] Source - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] Copyright Notice - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] Caption/Abstract - ", imagenbd);
-
-									verValor(etiqueta, "[IPTC] Caption Writer/Editor - ", imagenbd);
-
-									verValor(etiqueta, "[JpegComment] JPEG Comment - ", imagenbd);
-
-									verValor(etiqueta, "[PNG-tEXt] Textual Data - Comment: ", imagenbd);
-
-								}
-							}
-
-							// Comprobar si la categoria admite gif
-
-							if (subir) {
-
-								chrome.get("http:192.168.1.100/hoopfetish/upload_images/input.php?cat_id=" + categoria
-										+ "&nombre=" + nombreImagenes + "&periquito=si");
-
-								chrome.findElement(By.id("file")).sendKeys(imagen);
-
-								imagenesSubidas
-										.add(imagen.substring(imagen.lastIndexOf(separador) + 1, imagen.length()));
-
-							}
-
-							maximo++;
-
-							y++;
-
-						}
-
-						catch (Exception e) {
-
-							progreso.dispose();
-
-							i = total;
-
-						}
 					}
+
+					maximo = subirImagenesAlServer(maximo);
 
 				}
 
 			}
 
-			chrome.close();
-
 			Metodos.cerrarNavegador();
-
-			conexionSubida.close();
 
 			imagenesSubidas.clear();
 
 			imagenesSubidas = Metodos.directorio(directorioImagenes + separador, ".", true, false);
 
-			Metodos.borrarArchivosSubidos();
-
 		}
 
-		catch (Exception e) {
+		catch (
 
-			y = 0;
+		Exception e) {
 
-			total = 1;
+			e.printStackTrace();
 
-			return 0;
+			subirImagenes(maximo, categoria, maximoMeta);
 
 		}
 
 		return maximo;
 
+	}
+
+	private static int subirImagenesAlServer(int maximo) {
+		String imagen;
+		for (int i = 0; i < listaImagenes.size(); i++) {
+
+			imagen = listaImagenes.get(i);
+
+			try {
+
+				InputStream inputstream = new FileInputStream(imagen);
+
+				Metadata metadata = ImageMetadataReader.readMetadata(inputstream);
+
+				String etiqueta = "";
+
+				WebElement p;
+
+				Select sel;
+
+				for (Directory directory : metadata.getDirectories()) {
+
+					for (Tag tag : directory.getTags()) {
+
+						etiqueta = tag.toString();
+
+						verValor(etiqueta, "[IPTC] Special Instructions - ", imagen);
+
+						verValor(etiqueta, "[IPTC] By-line - ", imagen);
+
+						verValor(etiqueta, "[IPTC] By-line Title - ", imagen);
+
+						verValor(etiqueta, "[IPTC] Headline - ", imagen);
+
+						verValor(etiqueta, "[IPTC] Credit - ", imagen);
+
+						verValor(etiqueta, "[IPTC] Source - ", imagen);
+
+						verValor(etiqueta, "[IPTC] Copyright Notice - ", imagen);
+
+						verValor(etiqueta, "[IPTC] Caption/Abstract - ", imagen);
+
+						verValor(etiqueta, "[IPTC] Caption Writer/Editor - ", imagen);
+
+						verValor(etiqueta, "[JpegComment] JPEG Comment - ", imagen);
+
+						verValor(etiqueta, "[PNG-tEXt] Textual Data - Comment: ", imagen);
+
+					}
+
+				}
+
+				if (i == 0) {
+
+					chrome.get("http:192.168.1.100/hoopfetish/upload_images/index.php");
+
+					chrome.findElement(By.id("nombre_subida")).sendKeys(nombreSubida);
+
+					p = chrome.findElement(By.id("categoria"));
+
+					sel = new Select(p);
+
+					sel.selectByVisibleText(comboBoxCategorias.getSelectedItem().toString());
+
+					chrome.findElement(By.id("enviar")).click();
+
+				}
+
+				chrome.findElement(By.id("file")).sendKeys(imagen);
+
+				Thread.sleep(1000);
+
+				imagenesSubidas.add(imagen);
+
+				maximo++;
+
+				y++;
+
+			}
+
+			catch (Exception e) {
+
+				progreso.dispose();
+
+				i = total;
+
+			}
+
+		}
+		return maximo;
 	}
 
 	private static void conectarSelenium() {
@@ -3657,11 +3677,19 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	}
 
+	@Override
 	public void initComponents() throws IOException {
 
-		directorioActual = new File(".").getCanonicalPath() + separador;
+		Metodos.connectSqlite();
 
-		directorioImagenes = directorioActual + "Config" + separador + "imagenes";
+		subirGif = new RadioButtonCustom(" Subir GIF");
+		subirGif.setText("Subir GIF");
+
+		os = System.getProperty("os.name");
+
+		separador = Metodos.saberSeparador(os);
+
+		directorioActual = new File(".").getCanonicalPath() + separador;
 
 		lecturabd = Metodos.leerArchivo("Bd.txt", 6,
 				"4images\r\n" + "root\r\n" + "root\r\n" + "4images_\r\n" + "3306\r\n" + "localhost", false);
@@ -3685,7 +3713,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		lecturabackup = Metodos.leerArchivo("Backup.txt", 1, directorioActual, false);
 
-		url = "http:" + lecturaurl[0] + carpeta;
+		url = "http://" + lecturaurl[0] + "/" + lecturaurl[1];
 
 		if (lectura[0] == null || lectura[0].equals("")) {
 
@@ -3730,8 +3758,10 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		}
 
 		if (configuracion[0] == null) {
+
 			Metodos.crearFichero("Config/Configuracion.txt",
 					" \r\n" + "0\r\n" + " \r\n" + " \r\n" + "0\r\n" + "0\r\n" + "0", false);
+
 		}
 
 		if (!Metodos.comprobarConexion(false) || lecturabd[0] == null || lecturabd[0].equals("")) {
@@ -3756,6 +3786,22 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 			}
 		}
 
+		comboBoxCategorias = new ComboBoxSuggestion<>();
+
+		try {
+
+			if (Metodos.comprobarConexion(true)) {
+
+				Metodos.ponerCategoriasBd(comboBoxCategorias);
+
+			}
+
+		}
+
+		catch (SQLException e3) {
+
+		}
+
 		Metodos.crearCarpetasConfig();
 
 		Metodos.crearFichero("Config/llamada_python.txt", "", false);
@@ -3768,9 +3814,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		Metodos.crearCarpetas();
 
-		obtenerCarpeta();
-
-		System.setProperty("webdriver.gecko.driver", "C:\\Users\\Yeah\\Periquito\\Java\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver",
+				directorioActual + "Programs" + separador + "geckodriver" + separador + "geckodriver.exe");
 
 		if (Metodos.comprobarArchivo("Config/Config.txt", true)) {
 
@@ -3797,7 +3842,8 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		label2.setIcon(new ImageIcon(MenuPrincipal.class.getResource("/imagenes/name.png")));
 
-		textField = new JTextField();
+		textField = new TextFieldSuggestion();
+		textField.setToolTipText("Introduce el nombre común");
 
 		textField.addKeyListener(new KeyAdapter() {
 
@@ -3953,7 +3999,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		JLabel label3 = new JLabel();
 
@@ -3973,6 +4019,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 					uploadImages();
 
+					for (int i = 0; i < imagenesSubidas.size(); i++) {
+
+						Metodos.moverArchivo(directorioImagenes + separador + imagenesSubidas.get(i),
+								"C:\\Users\\Yeah\\Documents\\Periquito\\Java\\Config\\imagenes\\imagenes_subidas"
+										+ separador + imagenesSubidas.get(i));
+					}
+
+					imagenesSubidas.clear();
 				}
 
 				catch (Exception e1) {
@@ -3987,17 +4041,13 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		button.setFont(new Font("Tahoma", Font.PLAIN, 6));
 
-		JTextArea imagenes = new JTextArea();
+		DragAndDrop imagenes = new DragAndDrop("", "");
 
-		imagenes.setText("    Arrastra los archivos aqui");
+		imagenes.setHorizontalAlignment(SwingConstants.CENTER);
 
-		imagenes.setForeground(SystemColor.desktop);
+		imagenes.setText("Arrastra aquí los archivos");
 
-		imagenes.setFont(new Font("Tahoma", Font.PLAIN, 26));
-
-		imagenes.setEditable(false);
-
-		imagenes.setBackground(SystemColor.menu);
+		imagenes.setBackground(Color.WHITE);
 
 		JLabel label4 = new JLabel("");
 
@@ -4022,11 +4072,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 						else {
 
-							Metodos.moverArchivosDrop(files, separador, saberDondeSeMueve(), saberTipoDrop());
+							Metodos.moverArchivosDrop(files, separador, saberDondeSeMueve());
 
 							if (comboBox_1.getSelectedIndex() == 3) {
-
-								new PhotoFrame().setVisible(true);
 
 							}
 
@@ -4064,9 +4112,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
-		soloGif = new JRadioButton("Solo GIF");
+		soloGif = new RadioButtonCustom("Solo GIF");
 
-		soloGif.setBackground(Color.WHITE);
+		soloGif.setBackground(Color.BLUE);
 
 		soloGif.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
@@ -4087,89 +4135,126 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
 
 		JLabel lblCategora = new JLabel("Categoría");
+		lblCategora.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+		});
 
 		lblCategora.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		lblCategora.setHorizontalAlignment(SwingConstants.CENTER);
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		tipoSubida = new ComboBoxSuggestion<String>();
 
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(layout.createSequentialGroup()
+		tipoSubida.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		tipoSubida.setBackground(Color.WHITE);
+
+		tipoSubida.addItem("Todas las categorias");
+
+		tipoSubida.addItem("Solo la categoria");
+
+		tipoSubida.addItem("Imagenes");
+
+		calcularDirectorioImagenes();
+
+		numeroCms = new Spinner();
+
+		numeroCms.setMinValor(1);
+
+		numeroCms.setValor(1);
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.TRAILING).addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+						.addGap(19).addComponent(label2)
 						.addGroup(layout.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(19).addComponent(label2)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(lblNewLabel_3, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
-								.addGroup(layout.createSequentialGroup().addGap(21)
-										.addGroup(layout.createParallelGroup(Alignment.LEADING)
-												.addGroup(layout.createSequentialGroup()
-														.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 64,
-																GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.RELATED)
-														.addGroup(layout.createParallelGroup(Alignment.LEADING)
-																.addComponent(soloGif).addComponent(subirGif)))
-												.addGroup(layout.createSequentialGroup()
-														.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70,
-																GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(ComponentPlacement.UNRELATED)
-														.addComponent(comboBox_1, 0, 187, Short.MAX_VALUE))))
-								.addGroup(layout.createSequentialGroup().addContainerGap()
-										.addComponent(label3, GroupLayout.PREFERRED_SIZE, 85,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(lblCategora, GroupLayout.PREFERRED_SIZE, 193,
-												GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE))
-								.addComponent(comboBox, 0, 440, Short.MAX_VALUE)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
-								.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(button, GroupLayout.PREFERRED_SIZE, 266,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED).addComponent(chckbxNewCheckBox,
-												GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-										.addGap(16)))
-						.addGap(42)));
+								.addGroup(layout.createSequentialGroup().addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(lblNewLabel_3, GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE))
+								.addGroup(layout.createSequentialGroup().addGap(43).addComponent(numeroCms,
+										GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(layout.createSequentialGroup().addGap(21)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 64,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addGroup(layout.createParallelGroup(Alignment.LEADING)
+														.addComponent(soloGif, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+														.addComponent(subirGif, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(label4, GroupLayout.PREFERRED_SIZE, 70,
+														GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
+												.addComponent(comboBox_1, 0, 193, Short.MAX_VALUE))))
+						.addGroup(layout.createSequentialGroup().addContainerGap()
+								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblCategora, GroupLayout.PREFERRED_SIZE, 193,
+										GroupLayout.PREFERRED_SIZE)))
+				.addPreferredGap(ComponentPlacement.RELATED)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addComponent(lblNewLabel_1)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(lblNewLabel_2, GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))
+						.addComponent(imagenes, GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+						.addGroup(layout.createSequentialGroup().addGap(62)
+								.addComponent(button, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup().addGap(80).addComponent(
+												chckbxNewCheckBox, GroupLayout.PREFERRED_SIZE, 125,
+												GroupLayout.PREFERRED_SIZE))
+										.addGroup(layout.createSequentialGroup().addGap(13).addComponent(tipoSubida,
+												GroupLayout.PREFERRED_SIZE, 233, GroupLayout.PREFERRED_SIZE)))
+								.addGap(29))
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(textField, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(comboBoxCategorias, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 438,
+										Short.MAX_VALUE)))
+				.addGap(42)));
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout
-								.createParallelGroup(Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addGap(26).addComponent(label2,
-										GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
-								.addGroup(
-										layout.createSequentialGroup().addGap(45).addComponent(textField,
-												GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup().addGap(53).addComponent(lblNewLabel_3)))
+				.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addGap(26).addComponent(label2,
+								GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addContainerGap()
+								.addComponent(numeroCms, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(Alignment.BASELINE).addComponent(lblNewLabel_3)
+										.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE))))
 						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout
 								.createSequentialGroup().addPreferredGap(ComponentPlacement.UNRELATED)
 								.addComponent(label3, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout
-										.createSequentialGroup().addGap(36)
+								.addGroup(layout.createSequentialGroup().addGap(36)
 										.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-												.addComponent(comboBox, GroupLayout.PREFERRED_SIZE,
+												.addComponent(comboBoxCategorias, GroupLayout.PREFERRED_SIZE,
 														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 												.addComponent(lblCategora))
-										.addPreferredGap(ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE,
+												Short.MAX_VALUE)
 										.addGroup(layout.createParallelGroup(Alignment.TRAILING)
 												.addComponent(lblNewLabel_1).addComponent(lblNewLabel_2,
 														GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(ComponentPlacement.RELATED)))
 						.addGap(13)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-								.addComponent(chckbxNewCheckBox, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addPreferredGap(ComponentPlacement.RELATED))
-								.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-										.addGroup(layout.createSequentialGroup().addGap(37).addComponent(soloGif)
-												.addPreferredGap(ComponentPlacement.RELATED))
-										.addComponent(lblNewLabel).addComponent(
-												button, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 71,
-												Short.MAX_VALUE)))
+						.addGroup(layout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(button, GroupLayout.PREFERRED_SIZE, 71, Short.MAX_VALUE)
+								.addGroup(layout.createSequentialGroup().addGap(37)
+										.addComponent(soloGif, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED))
+								.addComponent(lblNewLabel)
+								.addGroup(layout.createSequentialGroup()
+										.addComponent(tipoSubida, GroupLayout.PREFERRED_SIZE, 28,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+										.addComponent(chckbxNewCheckBox)))
 						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
 								.addGap(18)
 								.addGroup(layout.createParallelGroup(Alignment.TRAILING)
@@ -4186,12 +4271,14 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 										GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
 										GroupLayout.PREFERRED_SIZE)))
 						.addGap(26))
-				.addGroup(layout.createSequentialGroup().addGap(202).addComponent(subirGif).addContainerGap(177,
-						Short.MAX_VALUE)));
+				.addGroup(layout
+						.createSequentialGroup().addGap(202).addComponent(subirGif, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(178, Short.MAX_VALUE)));
 
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
 
-		subirGif.setBackground(Color.WHITE);
+		subirGif.setBackground(Color.BLUE);
 
 		subirGif.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
@@ -4201,31 +4288,18 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 		setLocationRelativeTo(null);
 
-		try {
-
-			if (Metodos.comprobarConexion(true)) {
-
-				Metodos.ponerCategoriasBd(comboBox);
-
-			}
-
-		}
-
-		catch (SQLException e3) {
-//
-		}
-
 		javax.swing.border.TitledBorder dragBorder = new javax.swing.border.TitledBorder("Drop 'em");
 
 		try {
 
-			new DragAndDrop(imagenes, dragBorder, rootPaneCheckingEnabled, new DragAndDrop.Listener() {
+			new UtilDragAndDrop(imagenes, imagenes.dragBorder, true, new UtilDragAndDrop.Listener() {
 
+				@Override
 				public void filesDropped(java.io.File[] files) {
 
 					try {
 
-						if (comboBox_1.getSelectedIndex() == 6) {
+						if (comboBox_1.getSelectedIndex() == comboBox_1.getItemCount() - 1) {
 
 							ComprobarSha.comprobarSha(files);
 
@@ -4236,7 +4310,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 							String carpeta = files[0].getCanonicalPath().substring(0,
 									files[0].getCanonicalPath().lastIndexOf(separador) + 1);
 
-							Metodos.moverArchivosDrop(files, separador, saberDondeSeMueve(), saberTipoDrop());
+							Metodos.moverArchivosDrop(files, separador, saberDondeSeMueve());
 
 							Metodos.convertir(carpeta);
 
@@ -4247,7 +4321,9 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 					}
 
 					catch (Exception e) {
+
 						Metodos.mensaje("Error", 1);
+
 					}
 
 				}
@@ -4288,7 +4364,7 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 			if (Metodos.comprobarConexion(true)) {
 
-				Metodos.ponerCategoriasBd(comboBox);
+				Metodos.ponerCategoriasBd(comboBoxCategorias);
 			}
 
 		}
@@ -4299,16 +4375,29 @@ public class MenuPrincipal extends JFrame implements ActionListener, ChangeListe
 
 	}
 
-	public static String[] getLectura() {
-		return lectura;
-	}
-
+	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		//
 	}
 
+	@Override
 	public void stateChanged(ChangeEvent e) {
 		//
 	}
 
+	public static String getCarpetaImagenes() {
+
+		if (listaImagenes.isEmpty()) {
+
+			return null;
+
+		}
+
+		else {
+
+			return listaImagenes.get(0).substring(0, listaImagenes.get(0).lastIndexOf(separador));
+
+		}
+
+	}
 }

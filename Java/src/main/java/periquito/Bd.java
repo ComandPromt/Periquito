@@ -122,10 +122,6 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 			if (mensaje) {
 
 				Metodos.mensaje("Archivo guardado con exito!", 2);
-
-				MenuPrincipal.comboBox.removeAllItems();
-
-				Metodos.ponerCategoriasBd(MenuPrincipal.comboBox);
 			}
 
 		} catch (IOException e) {
@@ -146,6 +142,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		this.setVisible(true);
 	}
 
+	@Override
 	@SuppressWarnings("all")
 	public void initComponents() throws IOException {
 
@@ -166,23 +163,23 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
+
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					
+
 					try {
 						guardarDatos(true);
-					} 
-					
+					}
+
 					catch (Exception e1) {
 						//
 					}
-					
+
 				}
-				
+
 			}
-			
+
 		});
-		
+
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setToolTipText("");
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 24));
@@ -250,6 +247,7 @@ public class Bd extends javax.swing.JFrame implements ActionListener, ChangeList
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setIcon(new ImageIcon(Bd.class.getResource("/imagenes/save.png")));
 		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
 			@SuppressWarnings("all")
 			public void mousePressed(MouseEvent arg0) {
 

@@ -1,67 +1,146 @@
 package periquito;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("all")
 
-public class About extends javax.swing.JFrame implements ActionListener, ChangeListener {
+public class About extends Thread implements ActionListener, ChangeListener {
+
+	static JLabel lab = new JLabel("Ramón Jesús Gómez Carmona");
+
+	static JLabel email = new JLabel("smr2gocar@gmail.com");
+
+	static boolean andar = true;
+
+	@Override
+
+	public void run() {
+
+		try {
+
+			scrollEffect();
+		}
+
+		catch (InterruptedException e) {
+			//
+		}
+
+	}
 
 	public About() {
 
-		setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
-		setTitle("Periquito v3 About");
-		setType(Type.UTILITY);
-		initComponents();
-		this.setVisible(true);
+		JFrame jf = new JFrame("Scroll Effect");
+
+		jf.addWindowListener(new WindowAdapter() {
+
+			@Override
+
+			public void windowClosing(WindowEvent e) {
+
+				andar = false;
+
+			}
+
+		});
+
+		jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		jf.setAlwaysOnTop(true);
+
+		jf.setTitle("Sobre");
+
+		jf.setIconImage(Toolkit.getDefaultToolkit().getImage(About.class.getResource("/imagenes/about.png")));
+
+		JPanel jp = new JPanel();
+
+		jf.setSize(600, 350);
+
+		jp.setSize(800, 600);
+
+		lab.setIcon(new ImageIcon(About.class.getResource("/imagenes/dev.png")));
+
+		lab.setBounds(184, 251, 340, 48);
+
+		lab.setHorizontalAlignment(SwingConstants.CENTER);
+
+		lab.setFont(new Font("Arial", Font.PLAIN, 20));
+
+		jp.setLayout(null);
+
+		jp.add(lab);
+
+		jf.getContentPane().add(jp);
+
+		email.setHorizontalAlignment(SwingConstants.CENTER);
+
+		email.setIcon(new ImageIcon(About.class.getResource("/imagenes/email.png")));
+
+		email.setFont(new Font("Arial", Font.PLAIN, 20));
+
+		email.setBounds(194, 319, 330, 42);
+
+		jp.add(email);
+
+		JLabel lblNewLabel_1 = new JLabel("Programa creado por");
+
+		lblNewLabel_1.setIcon(new ImageIcon(About.class.getResource("/imagenes/created.png")));
+
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+
+		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 20));
+
+		lblNewLabel_1.setBounds(184, 12, 340, 53);
+
+		jp.add(lblNewLabel_1);
+
+		jf.setVisible(true);
+
+		jf.setLocationRelativeTo(null);
+
 	}
 
-	private void initComponents() {
+	public static void scrollEffect() throws InterruptedException {
 
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-		setResizable(false);
+		int x = -80;
 
-		JTextArea txtrAdvertenciaLa = new JTextArea();
-		txtrAdvertenciaLa.setFont(new Font("Dialog", Font.BOLD, 16));
-		txtrAdvertenciaLa.setWrapStyleWord(true);
-		txtrAdvertenciaLa.setEditable(false);
-		txtrAdvertenciaLa.setLineWrap(true);
-		txtrAdvertenciaLa.setText(
-				"-----------------------------------------------\r\n            Periquito GUI\r\n-----------------------------------------------\r\n\r\n Creado por: ComandPromt\n\r\n Email: smr2gocar@gmail.com\r\n\r\n Ramón Jesús Gómez Carmona");
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(21)
-						.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 252, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(23, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(27)
-						.addComponent(txtrAdvertenciaLa, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(31, Short.MAX_VALUE)));
-		getContentPane().setLayout(layout);
-		setSize(new Dimension(309, 305));
-		setLocationRelativeTo(null);
-	}
+		while (andar) {
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
+			if (x == -196) {
+
+				x = -80;
+
+			}
+
+			x--;
+
+			lab.setBounds(-120, x, 800, 600);
+
+			email.setBounds(170, x, 300, 700);
+
+			Thread.sleep(20);
+
+		}
 
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+	public void stateChanged(ChangeEvent arg0) {
+
+	}
+
+	public void actionPerformed(ActionEvent arg0) {
 
 	}
 

@@ -113,7 +113,7 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 
 		BufferedWriter fS = new BufferedWriter(flS);
 
-		String idCategoria = "0";
+		int idCategoria = 0;
 
 		try {
 
@@ -122,7 +122,9 @@ public class Configuracion extends javax.swing.JFrame implements ActionListener,
 			fS.newLine();
 
 			if (!chckbxNewCheckBox_2.isSelected()) {
-				idCategoria = MenuPrincipal.getIdCategorias().get(comboBox.getSelectedIndex());
+
+				idCategoria = Integer.parseInt(MenuPrincipal.getIdCategorias().get(comboBox.getSelectedIndex()));
+
 			}
 
 			fS.write(idCategoria);

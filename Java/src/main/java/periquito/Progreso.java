@@ -28,13 +28,28 @@ public class Progreso extends javax.swing.JFrame implements ActionListener, Chan
 
 	RSProgressBar progressBar = new RSProgressBar();
 
-	public Progreso() throws IOException {
-		setAlwaysOnTop(true);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
-		setTitle("Periquito v3 Uploading");
-		setType(Type.UTILITY);
-		initComponents();
-		this.setVisible(true);
+	public Progreso() {
+
+		try {
+
+			setAlwaysOnTop(true);
+
+			setIconImage(Toolkit.getDefaultToolkit().getImage(Config2.class.getResource("/imagenes/config.png")));
+
+			setTitle("Periquito v3 Uploading");
+
+			setType(Type.UTILITY);
+
+			initComponents();
+
+			this.setVisible(true);
+
+		}
+
+		catch (Exception e) {
+
+		}
+
 	}
 
 	@SuppressWarnings("all")

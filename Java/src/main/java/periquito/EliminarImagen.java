@@ -141,8 +141,11 @@ public class EliminarImagen extends javax.swing.JFrame implements ActionListener
 						try {
 
 							String imagen;
+
 							Date fecha = new Date();
+
 							String strDateFormat = "y-MM-dd";
+
 							SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
 
 							String tabla = MenuPrincipal.getLecturabd()[3] + "images";
