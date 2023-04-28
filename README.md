@@ -78,7 +78,7 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 
 - Escribir el nombre común de las imágenes (En este caso subiremos varias imágenes de perros)
 
-![Preview](previews/0.png)
+![Preview](previews/preview.png)
 
 - Seleccionar la categoría correspondiente y pulsar el botón "Play"
 
@@ -94,19 +94,13 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 
 - Hacer clic en la acción que queramos
 
-![Preview](previews/2.png)
-
 - Frames a GIF
 
 - GIF a frames
 
-![Preview](previews/2_1.png)
-
 - Video a Frames
 
 - Video a Gif
-
-![Preview](previews/2_2.png)
 
 ----
 
@@ -115,8 +109,6 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 - En la sección ayuda se nos muestran los pasos para las configuraciones del programa
 
 - Enlace a una página web para convertir fotos en blanco y negro a color
-
-![Preview](previews/3.png)
 
 ----
 
@@ -132,32 +124,10 @@ Ejecutar "Empezar.java" , el ".JAR" o ".EXE" de la aplicación
 
 - Recortar imágenes: utilidad para recortar la misma zona en todas las imágenes
 
-![Preview](previews/4.png)
-
-----
-
-## GIF 2 Frames
-
-[GIF 2 Frames](https://gifframes.herokuapp.com/)
-
-[Source](https://github.com/ComandPromt/GifFrames-API)
-
----
-## Frames 2 GIF
-
-[Source](https://github.com/ComandPromt/Frames-to-GIF)
-
----
-## Video 2 Frames
-
-[Source](https://github.com/ComandPromt/Video-to-frames-php)
-
----
-
 # Image API
 
 *Nota: se usa esta API para asegurar que las imágenes se suben en orden alfabético, es decir, en el mismo orden que tenían antes de ser renombradas. Esta API se usará en el programa Java para que el usuario sólo tenga en el servidor web las utilidades del programa
 
-[API](https://dashboard.heroku.com/apps/apiperiquito)
+[API](http://images-periquito-api.vercel.app/)
 
 [Source](https://github.com/ComandPromt/Images-Periquito-API)
