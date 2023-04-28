@@ -35,7 +35,9 @@ public abstract class MetodosPdf {
 		List<Url> users = new ArrayList<Url>();
 
 		for (int i = 0; i < urls.size(); i++) {
+
 			users.add(createUrl(urls.get(i)));
+
 		}
 
 		return users;

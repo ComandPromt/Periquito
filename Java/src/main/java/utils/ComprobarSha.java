@@ -243,6 +243,9 @@ public class ComprobarSha extends javax.swing.JFrame implements ActionListener, 
 				public void filesDropped(java.io.File[] files) {
 
 					comprobarSha(files);
+
+					dispose();
+
 				}
 
 			});
