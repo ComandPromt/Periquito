@@ -1,0 +1,7 @@
+*.avi
+*.jpg
+*.png
+in
+out
+*.mp4
+__pycache__
