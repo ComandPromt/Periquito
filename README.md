@@ -22,7 +22,7 @@
 
 ### Sistemas Operativos soportados
 
--Windows Vista o posterior
+-Windows
 
 -Linux
 
